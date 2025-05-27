@@ -1,7 +1,13 @@
-import React from 'react'
+import "./globals.css"
+import React, { ReactNode } from "react";
+import Sidebar from "./components/Sidebar";
 
-export default function layout() {
+export default function layout({ children }: { children: ReactNode }) {
   return (
-    <div>layout</div>
-  )
+    <html>
+      <body className="flex h-screen">
+        <Sidebar /> {children}
+      </body>
+    </html>
+  );
 }
