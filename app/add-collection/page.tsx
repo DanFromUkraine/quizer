@@ -1,14 +1,11 @@
 "use client";
 
 import clsx from "clsx";
+import { useSetAtom } from "jotai";
+import { redirect } from "next/navigation";
 import { FormEventHandler } from "react";
-import {
-  FieldValues,
-  SubmitHandler,
-  useForm,
-  UseFormRegister,
-} from "react-hook-form";
-
+import { SubmitHandler, useForm, UseFormRegister } from "react-hook-form";
+import { collectionDataAtom } from "./atoms";
 
 type Data = {
   collectionName: string;
@@ -22,8 +19,11 @@ export default function page() {
       cardsText: "",
     },
   });
-  const onSubmit: SubmitHandler<Data> = (data) => {
-    const cardsDivided = data.cardsText.split(/\d+\./g).slice(1);
+
+  const setCollectionCreationData = useSetAtom(collectionDataAtom);
+
+  const onSubmit: SubmitHandler<Data> = ({ collectionName, cardsText }) => {
+    const cardsDivided = cardsText.split(/\d+\./g).slice(1);
 
     const result = cardsDivided.map((card) => {
       const [questionText, optionsText] = card.split(/[:?]/);
@@ -40,7 +40,8 @@ export default function page() {
       };
     });
 
-    console.log({ result });
+    setCollectionCreationData({ collectionName, cards: result });
+    redirect("/add-collection/choose-correct");
   };
 
   return (
@@ -87,126 +88,3 @@ function CardsInput({ register }: { register: UseFormRegister<Data> }) {
     />
   );
 }
-
-
-
-// import React from "react";
-// import { useForm, FormProvider, useFieldArray, useFormContext, useController } from "react-hook-form";
-// import { MdOutlineAddBox } from "react-icons/md";
-// import clsx from "clsx";
-
-// Якщо використовуєш Next.js 13+ у app/директорії, файл може бути app/page.tsx
-// Якщо класичний Next.js або CRA — це може бути src/components/NestedFormExample.jsx
-
-// Типізація (необовʼязково, якщо без TypeScript)
-// interface Option {
-//   text: string;
-// }
-// interface CardData {
-//   textQuestion: string;
-//   options: Option[];
-// }
-// interface FormValues {
-//   collectionName: string;
-//   cards: CardData[];
-// }
-
-// export default function NestedFormExample() {
-//   // ініціалізуємо defaultValues для всіх масивів і полів
-//   const methods = useForm({
-//     defaultValues: {
-//       collectionName: "",
-//       cards: [],
-//     },
-//   });
-
-//   const onSubmit = (data) => {
-//     console.log("submitted data:", data);
-//   };
-
-//   return (
-//     <main className="w-full p-4">
-//       <FormProvider {...methods}>
-//         <form onSubmit={methods.handleSubmit(onSubmit)}>
-//           <Header />
-//           <Cards />
-//           <div className="mt-6">
-//             <button
-//               type="submit"
-//               className="bg-green-600 text-white px-4 py-2 rounded"
-//             >
-//               Зберегти колекцію
-//             </button>
-//           </div>
-//         </form>
-//       </FormProvider>
-//     </main>
-//   );
-// }
-
-// function Cards() {
-//   const { control } = useFormContext();
-//   const { fields, append } = useFieldArray({ control, name: "cards" });
-
-//   return (
-//     <div className="space-y-6">
-//       {fields.map((field, index) => (
-//         <Card key={field.id} index={index} />
-//       ))}
-//       <button
-//         type="button"
-//         onClick={() => append({ textQuestion: "", options: [] })}
-//         className="flex items-center text-blue-600"
-//       >
-//         <MdOutlineAddBox className="mr-1" /> Додати картку
-//       </button>
-//     </div>
-//   );
-// }
-
-// function Card({ index }) {
-//   const { register, control } = useFormContext();
-//   const {
-//     fields: optionFields,
-//     append: appendOption,
-//     remove: removeOption,
-//   } = useFieldArray({ control, name: `cards.${index}.options` });
-
-//   return (
-//     <section className="border rounded-lg p-4">
-//       <div className="mb-4">
-//         <input
-//           {...register(`cards.${index}.textQuestion`)}
-//           placeholder={`Питання #${index + 1}`}
-//           className="w-full border p-2 rounded"
-//         />
-//       </div>
-
-//       <div className="space-y-2">
-//         {optionFields.map((opt, optIndex) => (
-//           <div key={opt.id} className="flex items-center">
-//             <input
-//               {...register(`cards.${index}.options.${optIndex}.text`)}
-//               placeholder={`Варіант ${optIndex + 1}`}
-//               className="flex-grow border p-2 rounded mr-2"
-//             />
-//             <button
-//               type="button"
-//               onClick={() => removeOption(optIndex)}
-//               className="text-red-500"
-//             >
-//               Видалити
-//             </button>
-//           </div>
-//         ))}
-//         <button
-//           type="button"
-//           onClick={() => appendOption({ text: "" })}
-//           className="text-blue-600"
-//         >
-//           Додати варіант
-//         </button>
-//       </div>
-//     </section>
-//   );
-// }
