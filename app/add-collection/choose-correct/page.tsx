@@ -125,7 +125,7 @@ function Cards() {
   );
 }
 
-function Card({ index }: { index: number }) {
+function QuestionCard({ index }: { index: number }) {
   const { register, control } = useFormContext();
   const {
     fields: optionFields,

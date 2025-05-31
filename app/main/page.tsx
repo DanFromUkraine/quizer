@@ -1,5 +1,5 @@
-import Header from "./components/Header";
-import RenderCollections from "./components/RenderCollections";
+import Header from "../components/Header";
+import RenderCollections from "../components/RenderCollections";
 
 export default function page() {
   return (

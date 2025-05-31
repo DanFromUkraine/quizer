@@ -1,13 +1,9 @@
-import "./globals.css"
-import React, { ReactNode } from "react";
-import Sidebar from "./components/Sidebar";
+import { ReactNode } from "react";
 
 export default function layout({ children }: { children: ReactNode }) {
   return (
     <html>
-      <body className="flex h-screen">
-        <Sidebar /> {children}
-      </body>
+      <body></body>
     </html>
   );
 }

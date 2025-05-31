@@ -30,7 +30,7 @@ export default function Sidebar() {
       </Link>
       <Link href="/add-collection">
         <BiSolidAddToQueue
-          className={clsx("navIcon text-myBlue", {
+          className={clsx("navIcon text-blueAccent", {
             "bg-lightBg": pathname === "/add-collection",
           })}
         />

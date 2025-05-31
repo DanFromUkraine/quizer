@@ -5,7 +5,11 @@
   --color-lightestGray: #fafafa;
   --color-lightBg: #f6f6f6;
   --color-icon: #5c5e64;
-  --color-myBlue: #396eff;
+  --color-blueAccent: #396eff;
+
+  --color-lightBgV2: #e5e5e5;
+  --color-blueAccentV2: #3b82f6;
+  --color-secondary: #737373;
 }
 
 @layer components {
