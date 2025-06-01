@@ -1,9 +1,13 @@
+import { Provider } from "jotai";
 import { ReactNode } from "react";
+import "./globals.css";
 
 export default function layout({ children }: { children: ReactNode }) {
   return (
-    <html>
-      <body></body>
+    <html lang="en">
+      <body>
+        <Provider>{children}</Provider>
+      </body>
     </html>
   );
 }

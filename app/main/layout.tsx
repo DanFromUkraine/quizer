@@ -1,6 +1,5 @@
-import "./globals.css";
-import React, { ReactNode } from "react";
-import Sidebar from "../components/Sidebar";
+import { ReactNode } from "react";
+import Sidebar from "./Sidebar";
 
 export default function layout({ children }: { children: ReactNode }) {
   return (
@@ -9,3 +8,4 @@ export default function layout({ children }: { children: ReactNode }) {
     </div>
   );
 }
+

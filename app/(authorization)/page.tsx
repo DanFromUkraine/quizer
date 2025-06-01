@@ -3,6 +3,8 @@ import { FaApple, FaFacebook, FaLock } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
 import { Poppins } from "next/font/google";
 import clsx from "clsx";
+import Link from "next/link";
+import { SkipBtn } from "./client";
 
 const poppinsFont = Poppins({
   subsets: ["latin"],
@@ -57,9 +59,7 @@ function Heading() {
   );
 }
 
-function SkipBtn() {
-  return <button className="text-secondary">Skip for now</button>;
-}
+
 
 export default function page() {
   return (
