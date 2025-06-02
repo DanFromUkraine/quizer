@@ -10,6 +10,8 @@
   --color-lightBgV2: #e5e5e5;
   --color-blueAccentV2: #3b82f6;
   --color-secondary: #737373;
+
+  --container-sidebarNavTextVisible: 200px;
 }
 
 @layer components {
