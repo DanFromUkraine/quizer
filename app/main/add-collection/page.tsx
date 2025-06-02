@@ -1,35 +1,83 @@
 "use client";
 
-import { Card, cardsAtom } from "@/app/lib/jotai/collections";
-import { useAtom } from "jotai";
+import { Reducer, ReducerState, useEffect, useReducer, useState } from "react";
 
 export type Data = {
   collectionName: string;
   cardsText: string;
 };
 
+type Card = {
+  questionTitle: string;
+  options: string[];
+};
+
+type Option = {
+  isCorrect: boolean;
+  optionText: string;
+};
+
+function getOrInit(key: string, initData: unknown) {
+  const storage = typeof window !== "undefined" ? sessionStorage : null;
+
+  const rawData = storage?.getItem(key);
+  if (rawData) {
+    return JSON.parse(rawData);
+  } else {
+    storage?.setItem(key, JSON.stringify(initData));
+    return initData;
+  }
+}
+
+function getOrInitCardByID(id: string): Card {
+  return getOrInit(id, {
+    questionTitle: "",
+    options: [],
+  });
+}
+
+function updateCardByID(id: string, newVal: Card) {
+  const storage = typeof window !== "undefined" ? sessionStorage : null;
+
+  storage?.setItem(id, JSON.stringify(newVal));
+}
+
+enum ID_REDUCER_TYPES {
+  GET = "GET",
+  ADD = "ADD",
+  REMOVE = "REMOVE",
+  CLEAR_ALL = "CLEAR_ALL",
+}
+
+function useCardIDReducer() {
+  function reducer(
+    state: string[],
+    { type, payload }: { type: string; payload: string }
+  ) {
+    const newIDs = [...state];
+
+    if (type === ID_REDUCER_TYPES.ADD) {
+      const newID = crypto.randomUUID();
+      newIDs.push(newID);
+      sessionStorage.setItem("cardIDs", JSON.stringify(newIDs));
+    } else if (type === ID_REDUCER_TYPES.REMOVE) {
+      newIDs.filter((id) => id !== payload);
+      sessionStorage.removeItem(payload);
+    } else if (type === ID_REDUCER_TYPES.CLEAR_ALL) {
+      sessionStorage.clear();
+    }
+    return newIDs;
+  }
+
+  const [state, dispatch] = useReducer(
+    reducer,
+    getOrInit("cardIDs", []) as string[]
+  );
+  return [state, dispatch] as const;
+}
+
 export default function page() {
-  const [cards, setCards] = useAtom(cardsAtom);
-
-  const addCard = () => {
-    setCards([
-      ...cards,
-      {
-        questionTitle: "",
-        options: [],
-        id: crypto.randomUUID(),
-      },
-    ]);
-  };
-
-  const changeCard = debounce((newVal: Card) => {
-    const newCards = cards.map((card) =>
-      card.id === newVal.id ? newVal : card
-    );
-    setCards(newCards);
-  }, 500);
-
-  console.log("render");
+  const [cardIDs, dispatch] = useCardIDReducer();
 
   return (
     <main className="w-full p-8 flex flex-col">
@@ -37,43 +85,52 @@ export default function page() {
         <h1>Create a collection with cards</h1>
         <p></p>
       </div>
-      <ul>
-        {cards.map(({ questionTitle, id }) => (
-          <MyCard
-            key={id}
-            questionTitle={questionTitle}
-            id={id}
-            changeCard={changeCard}
-          />
+      <section>
+        {cardIDs.map((id) => (
+          <MyCard key={id} id={id} />
         ))}
-      </ul>
+      </section>
 
-      <button onClick={() => addCard()}>Додати карточку</button>
+      <button onClick={() => dispatch({ type: "ADD", payload: "" })}>
+        Додати карточку
+      </button>
     </main>
   );
 }
 
-function MyCard({
-  questionTitle,
-  id,
-  changeCard,
-}: {
-  questionTitle: string;
-  id: string;
-  changeCard: (newVal: Card) => void;
-}) {
+function MyCard({ id }: { id: string }) {
+  const [questionTitle, setQuestionTitle] = useState("");
+
+  useEffect(() => {
+    setQuestionTitle(getOrInitCardByID(id).questionTitle);
+  }, []);
+
+  const [options, setOptions] = useState<Option[]>([]);
+
+  const addOption = () => {
+    setOptions((prev) => [...prev, { optionText: "", isCorrect: false }]);
+  };
+
+  const removeOption = (index: number) => {
+    setOptions((prev) => prev.splice(index, 1));
+  };
+
+  const onChange = (data: unknown) => {
+    console.log({ data });
+  };
+
   return (
-    <input
-      placeholder="Введіть якусь інфу"
-      onInput={(event) =>
-        changeCard({
-          questionTitle: event.currentTarget.value,
-          options: [],
-          id,
-        })
-      }
-      defaultValue={questionTitle}
-    />
+    <form className="flex flex-col" onChange={onChange}>
+      <input placeholder="Введіть якусь інфу" defaultValue={questionTitle} />
+      <div className="flex flex-col">
+        {options.map(({}, id) => (
+          <div key={id} className="flex ">
+            <input type="text" />
+            <input type="checkbox" />
+          </div>
+        ))}
+      </div>
+    </form>
   );
 }
 

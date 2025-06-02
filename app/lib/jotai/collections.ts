@@ -13,9 +13,14 @@ export type Card = {
   id: string;
 };
 
-export const cardsAtom = atomWithStorage<Card[]>("collectionCards", []);
-
 export const collectionTitleAtom = atomWithStorage<string>(
   "collectionTitle",
   ""
 );
+
+export const cardsIDsAtom = atomWithStorage<string[]>("IDs", []);
+
+export const addIDAtom = atom(null, (get, set, newVal: string) => {
+  const newIDs = [...get(cardsIDsAtom), newVal];
+  set(cardsIDsAtom, newIDs);
+});
