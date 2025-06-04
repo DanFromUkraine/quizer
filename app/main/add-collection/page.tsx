@@ -1,6 +1,21 @@
 "use client";
 
-import { Reducer, ReducerState, useEffect, useReducer, useState } from "react";
+import {
+  memo,
+  useEffect,
+  useMemo,
+  useState,
+  useSyncExternalStore,
+} from "react";
+import { useSyncIDs, useSyncQuestionCard } from "./Header/client";
+import {
+  Control,
+  FieldValues,
+  useFieldArray,
+  useForm,
+  UseFormRegister,
+} from "react-hook-form";
+import { register } from "module";
 
 export type Data = {
   collectionName: string;
@@ -15,6 +30,14 @@ type Card = {
 type Option = {
   isCorrect: boolean;
   optionText: string;
+};
+
+export type QuestionCard = {
+  questionTitle: string;
+  options: {
+    isCorrect: boolean;
+    optionText: string;
+  }[];
 };
 
 function getOrInit(key: string, initData: unknown) {
@@ -36,48 +59,26 @@ function getOrInitCardByID(id: string): Card {
   });
 }
 
-function updateCardByID(id: string, newVal: Card) {
-  const storage = typeof window !== "undefined" ? sessionStorage : null;
+const QuestionCard = memo(function QuestionCard({ id }: { id: string }) {
+  const { questionCard, deleteQuestionCard, setQuestionCardNewValue } =
+    useSyncQuestionCard(id);
 
-  storage?.setItem(id, JSON.stringify(newVal));
-}
+  useEffect(() => () => deleteQuestionCard(), []);
 
-enum ID_REDUCER_TYPES {
-  GET = "GET",
-  ADD = "ADD",
-  REMOVE = "REMOVE",
-  CLEAR_ALL = "CLEAR_ALL",
-}
+  const { register, control, watch } = useForm({
+    defaultValues: questionCard,
+  });
 
-function useCardIDReducer() {
-  function reducer(
-    state: string[],
-    { type, payload }: { type: string; payload: string }
-  ) {
-    const newIDs = [...state];
-
-    if (type === ID_REDUCER_TYPES.ADD) {
-      const newID = crypto.randomUUID();
-      newIDs.push(newID);
-      sessionStorage.setItem("cardIDs", JSON.stringify(newIDs));
-    } else if (type === ID_REDUCER_TYPES.REMOVE) {
-      newIDs.filter((id) => id !== payload);
-      sessionStorage.removeItem(payload);
-    } else if (type === ID_REDUCER_TYPES.CLEAR_ALL) {
-      sessionStorage.clear();
-    }
-    return newIDs;
-  }
-
-  const [state, dispatch] = useReducer(
-    reducer,
-    getOrInit("cardIDs", []) as string[]
+  return (
+    <form className="flex flex-col">
+      <input placeholder="Введіть якусь інфу" {...register("questionTitle")} />
+      <RenderOptions control={control} register={register} />
+    </form>
   );
-  return [state, dispatch] as const;
-}
+});
 
 export default function page() {
-  const [cardIDs, dispatch] = useCardIDReducer();
+  const { IDs, addID } = useSyncIDs();
 
   return (
     <main className="w-full p-8 flex flex-col">
@@ -86,51 +87,40 @@ export default function page() {
         <p></p>
       </div>
       <section>
-        {cardIDs.map((id) => (
-          <MyCard key={id} id={id} />
+        {IDs?.map((id) => (
+          <QuestionCard key={id} id={id} />
         ))}
       </section>
 
-      <button onClick={() => dispatch({ type: "ADD", payload: "" })}>
-        Додати карточку
-      </button>
+      <button onClick={() => addID()}>Додати карточку</button>
     </main>
   );
 }
 
-function MyCard({ id }: { id: string }) {
-  const [questionTitle, setQuestionTitle] = useState("");
-
-  useEffect(() => {
-    setQuestionTitle(getOrInitCardByID(id).questionTitle);
-  }, []);
-
-  const [options, setOptions] = useState<Option[]>([]);
-
-  const addOption = () => {
-    setOptions((prev) => [...prev, { optionText: "", isCorrect: false }]);
-  };
-
-  const removeOption = (index: number) => {
-    setOptions((prev) => prev.splice(index, 1));
-  };
-
-  const onChange = (data: unknown) => {
-    console.log({ data });
-  };
+function RenderOptions({
+  control,
+  register,
+}: {
+  control: Control<QuestionCard, any, QuestionCard>;
+  register: UseFormRegister<QuestionCard>;
+}) {
+  const { fields, append } = useFieldArray({ control, name: "options" });
+  const onAddBtnClick = () => append({ isCorrect: false, optionText: "" });
 
   return (
-    <form className="flex flex-col" onChange={onChange}>
-      <input placeholder="Введіть якусь інфу" defaultValue={questionTitle} />
-      <div className="flex flex-col">
-        {options.map(({}, id) => (
-          <div key={id} className="flex ">
-            <input type="text" />
-            <input type="checkbox" />
-          </div>
-        ))}
-      </div>
-    </form>
+    <div className="flex flex-col">
+      {fields.map((_, index) => (
+        <div key={index} className="flex ">
+          <input
+            type="text"
+            placeholder=""
+            {...register(`options.${index}.optionText`)}
+          />
+          <input type="checkbox" {...register(`options.${index}.isCorrect`)} />
+        </div>
+      ))}
+      <button onClick={onAddBtnClick}>Add option</button>
+    </div>
   );
 }
 
