@@ -57,8 +57,14 @@ export function useSyncQuestionCard(id: string) {
   };
   const questionCard = useRef<QuestionCard>(dumbObjQC);
 
-  const { updateRef, emitChange, getSnapshot, getServerSnapshot, subscribe } =
-    useSyncInterface<QuestionCard>(questionCard, dumbObjQC, getQC);
+  const {
+    updateRef,
+    emitChange,
+    getSnapshot,
+    getServerSnapshot,
+    subscribe,
+    listeners,
+  } = useSyncInterface<QuestionCard>(questionCard, dumbObjQC, getQC);
 
   const setQuestionCardNewValue = (newVal: QuestionCard) => {
     storage?.setItem(id, JSON.stringify(newVal));
@@ -95,7 +101,7 @@ function useSyncInterface<T>(
     listeners.current.push(listener);
 
     return () => {
-      listeners.current.filter((l) => l !== listener);
+      listeners.current = listeners.current.filter((l) => l !== listener);
     };
   }, []);
 
@@ -109,5 +115,6 @@ function useSyncInterface<T>(
     getSnapshot,
     getServerSnapshot,
     updateRef,
+    listeners,
   };
 }

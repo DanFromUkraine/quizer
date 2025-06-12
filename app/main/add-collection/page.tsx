@@ -2,12 +2,13 @@
 
 import {
   memo,
+  Profiler,
+  ProfilerOnRenderCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
-  useSyncExternalStore,
 } from "react";
-import { useSyncIDs, useSyncQuestionCard } from "./Header/client";
 import {
   Control,
   FieldValues,
@@ -15,7 +16,12 @@ import {
   useForm,
   UseFormRegister,
 } from "react-hook-form";
-import { register } from "module";
+import { useSyncIDs, useSyncQuestionCard } from "./Header/client";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { TiDelete } from "react-icons/ti";
+import { FaCheck } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
+import clsx from "clsx";
 
 export type Data = {
   collectionName: string;
@@ -27,18 +33,33 @@ type Card = {
   options: string[];
 };
 
-type Option = {
+type OptionType = {
   isCorrect: boolean;
   optionText: string;
 };
 
 export type QuestionCard = {
   questionTitle: string;
-  options: {
-    isCorrect: boolean;
-    optionText: string;
-  }[];
+  options: OptionType[];
 };
+
+function onRenderCallback(
+  id: string,
+  phase: unknown,
+  actualDuration: unknown,
+  baseDuration: unknown,
+  startTime: unknown,
+  commitTime: unknown
+) {
+  console.log("Profiler:", {
+    id, // ідентифікатор компонента
+    phase, // "mount" або "update"
+    actualDuration, // час рендеру
+    baseDuration, // час без мемоізації
+    startTime,
+    commitTime,
+  });
+}
 
 function getOrInit(key: string, initData: unknown) {
   const storage = typeof window !== "undefined" ? sessionStorage : null;
@@ -59,44 +80,6 @@ function getOrInitCardByID(id: string): Card {
   });
 }
 
-const QuestionCard = memo(function QuestionCard({ id }: { id: string }) {
-  const { questionCard, deleteQuestionCard, setQuestionCardNewValue } =
-    useSyncQuestionCard(id);
-
-  useEffect(() => () => deleteQuestionCard(), []);
-
-  const { register, control, watch } = useForm({
-    defaultValues: questionCard,
-  });
-
-  return (
-    <form className="flex flex-col">
-      <input placeholder="Введіть якусь інфу" {...register("questionTitle")} />
-      <RenderOptions control={control} register={register} />
-    </form>
-  );
-});
-
-export default function page() {
-  const { IDs, addID } = useSyncIDs();
-
-  return (
-    <main className="w-full p-8 flex flex-col">
-      <div className="flex justify-center gap-2">
-        <h1>Create a collection with cards</h1>
-        <p></p>
-      </div>
-      <section>
-        {IDs?.map((id) => (
-          <QuestionCard key={id} id={id} />
-        ))}
-      </section>
-
-      <button onClick={() => addID()}>Додати карточку</button>
-    </main>
-  );
-}
-
 function RenderOptions({
   control,
   register,
@@ -104,23 +87,145 @@ function RenderOptions({
   control: Control<QuestionCard, any, QuestionCard>;
   register: UseFormRegister<QuestionCard>;
 }) {
-  const { fields, append } = useFieldArray({ control, name: "options" });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "options",
+  });
   const onAddBtnClick = () => append({ isCorrect: false, optionText: "" });
 
   return (
-    <div className="flex flex-col">
-      {fields.map((_, index) => (
-        <div key={index} className="flex ">
-          <input
-            type="text"
-            placeholder=""
-            {...register(`options.${index}.optionText`)}
-          />
-          <input type="checkbox" {...register(`options.${index}.isCorrect`)} />
-        </div>
+    <div className="flex flex-col gap-3">
+      {fields.map((data, index) => (
+        <Option
+          key={index}
+          optionData={data}
+          index={index}
+          register={register}
+        />
       ))}
-      <button onClick={onAddBtnClick}>Add option</button>
+      <button type="button" onClick={onAddBtnClick}>
+        Add option
+      </button>
     </div>
+  );
+}
+
+function Option({
+  index,
+  register,
+  optionData: { isCorrect },
+}: {
+  index: number;
+  register: UseFormRegister<QuestionCard>;
+  optionData: OptionType;
+}) {
+  return (
+    <div className="flex justify-between bg-fillbg rounded-normal overflow-hidden w-full text-questTextColor font-semibold">
+      <label className="w-8 h-full relative rounded-l-normal flex justify-center items-center bg-red-500 has-checked:bg-green-500 hover:bg-red-300 has-checked:hover:bg-green-300 duration-150">
+        <input
+          type="checkbox"
+          {...register(`options.${index}.isCorrect`)}
+          className="absolute top-0 left-0 w-full h-full opacity-0 z-20 peer "
+        />
+        <FaCheck className="hidden peer-checked:flex" />
+        <ImCross className="flex peer-checked:hidden " />
+      </label>
+
+      <input
+        type="text"
+        placeholder=""
+        {...register(`options.${index}.optionText`)}
+        className={clsx(
+          "w-full p-3 bg-fillbg duration-150 not-focus:bg-red-300",
+          {
+            "bg-green-300": isCorrect,
+          }
+        )}
+      />
+      <div className="bg-questTextColor h-full min-w-8 flex justify-center items-center hover:bg-red-500 duration-150">
+        <span className="w-2/3 h-1.5 bg-white " />
+      </div>
+    </div>
+  );
+}
+
+function QuestionCard({ id, index }: { id: string; index: number }) {
+  const { questionCard, deleteQuestionCard, setQuestionCardNewValue } =
+    useSyncQuestionCard(id);
+
+  useEffect(() => () => deleteQuestionCard(), []);
+
+  console.log({ questionCard });
+
+  const {
+    register,
+    control,
+    watch,
+    formState: { isDirty },
+    reset,
+  } = useForm({
+    defaultValues: questionCard,
+  });
+
+  console.log("render");
+
+  const data = watch();
+
+  useEffect(() => {
+    if (isDirty) {
+      console.log(data);
+      setQuestionCardNewValue(data);
+      reset();
+    }
+  }, [data]);
+
+  return (
+    <form className="flex flex-col gap-3 w-full border border-lightGray p-6 rounded-normal">
+      <div className="flex justify-between items-center">
+        <p className="px-3 py-1.5 text-darker w-fit font-semibold bg-fillbg rounded-normal">
+          Картка №{index}
+        </p>
+        <FaRegTrashAlt className="text-xl text-questTextColor" />
+      </div>
+      <input
+        placeholder="Введіть якусь інфу"
+        {...register("questionTitle")}
+        value={questionCard.questionTitle}
+        className="text-questTextColor font-semibold focus:outline-none"
+      />
+      <RenderOptions control={control} register={register} />
+    </form>
+  );
+}
+
+export default function page() {
+  const { IDs, addID, deleteID } = useSyncIDs();
+
+  console.log("render page");
+
+  return (
+    <main className="w-full p-8 flex flex-col">
+      <input
+        type="text"
+        placeholder="Введіть заголовок"
+        className="px-6 py-1.5 text-[#5C5E64] text-2xl font-semibold focus:outline-none mb-8"
+      />
+      <section className="flex flex-col gap-2.5">
+        {IDs?.map((id, ind) => (
+          <QuestionCard key={id} id={id} index={ind + 1} />
+        ))}
+      </section>
+
+      <section className="w-full flex justify-center pt-4">
+        <button
+          type="button"
+          className="bg-blueAccent rounded-normal w-min py-2 px-3 whitespace-nowrap text-white font-semibold "
+          onClick={() => addID()}
+        >
+          Додати карточку
+        </button>
+      </section>
+    </main>
   );
 }
 

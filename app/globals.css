@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@theme {
+@theme static {
   --color-lightGray: #d9d9d9;
   --color-lightestGray: #fafafa;
   --color-lightBg: #f6f6f6;
@@ -10,8 +10,20 @@
   --color-lightBgV2: #e5e5e5;
   --color-blueAccentV2: #3b82f6;
   --color-secondary: #737373;
+  --color-fillbg: #e6e6e6;
 
+  --color-darker: #7a7289;
+  --color-questTextColor: #444444;
+}
+
+@theme {
   --container-sidebarNavTextVisible: 200px;
+  --radius-normal: 8px;
+}
+@layer {
+  input:focus {
+    @apply outline-none;
+  }
 }
 
 @layer components {
