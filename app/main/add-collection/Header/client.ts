@@ -44,51 +44,6 @@ export function useSyncIDs() {
   };
 }
 
-export function useSyncQuestionCard(id: string) {
-  const dumbObjQC: QuestionCard = {
-    questionTitle: "",
-    options: [],
-  };
-
-  const storage = typeof window !== "undefined" ? sessionStorage : null;
-  const getQC = (): QuestionCard => {
-    const rawQC = storage?.getItem(id);
-    return rawQC ? JSON.parse(rawQC) : dumbObjQC;
-  };
-  const questionCard = useRef<QuestionCard>(dumbObjQC);
-
-  const {
-    updateRef,
-    emitChange,
-    getSnapshot,
-    getServerSnapshot,
-    subscribe,
-    listeners,
-  } = useSyncInterface<QuestionCard>(questionCard, dumbObjQC, getQC);
-
-  const setQuestionCardNewValue = (newVal: QuestionCard) => {
-    storage?.setItem(id, JSON.stringify(newVal));
-    updateRef();
-    emitChange();
-  };
-
-  const deleteQuestionCard = () => {
-    storage?.removeItem(id);
-  };
-
-  const resultQC = useSyncExternalStore(
-    subscribe,
-    getSnapshot,
-    getServerSnapshot
-  );
-
-  return {
-    questionCard: resultQC,
-    setQuestionCardNewValue,
-    deleteQuestionCard,
-  };
-}
-
 function useSyncInterface<T>(
   resultRef: RefObject<T>,
   serverDumbObj: T,

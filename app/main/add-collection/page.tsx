@@ -16,7 +16,7 @@ import {
   useForm,
   UseFormRegister,
 } from "react-hook-form";
-import { useSyncIDs, useSyncQuestionCard } from "./Header/client";
+import { useSyncIDs } from "./Header/client";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { TiDelete } from "react-icons/ti";
 import { FaCheck } from "react-icons/fa";
@@ -149,13 +149,43 @@ function Option({
   );
 }
 
+function useQCSS(id: string) {
+  // temporary implementation
+  const storage = typeof window !== "undefined" ? sessionStorage : null;
+
+  const getQC = () => {
+    const rawData = storage?.getItem(id);
+    const placeholder = {
+      questionTitle: "",
+      options: [],
+    };
+    if (rawData) {
+      return JSON.parse(rawData);
+    } else {
+      storage?.setItem(id, JSON.stringify(placeholder));
+      return placeholder;
+    }
+  };
+
+  const setQC = (newVal: QuestionCard) => {
+    storage?.setItem(id, JSON.stringify(newVal));
+  };
+
+  const deleteQC = () => {
+    storage?.removeItem(id);
+  };
+
+  return {
+    lastData: getQC(),
+    setQC,
+    deleteQC,
+  };
+}
+
 function QuestionCard({ id, index }: { id: string; index: number }) {
-  const { questionCard, deleteQuestionCard, setQuestionCardNewValue } =
-    useSyncQuestionCard(id);
+  const { deleteQC, lastData, setQC } = useQCSS(id);
 
-  useEffect(() => () => deleteQuestionCard(), []);
-
-  console.log({ questionCard });
+  console.log({ lastData });
 
   const {
     register,
@@ -164,18 +194,22 @@ function QuestionCard({ id, index }: { id: string; index: number }) {
     formState: { isDirty },
     reset,
   } = useForm({
-    defaultValues: questionCard,
+    defaultValues: lastData,
   });
 
   console.log("render");
 
   const data = watch();
 
+  const debounce = useMemo(createDebounce, []);
+
   useEffect(() => {
     if (isDirty) {
-      console.log(data);
-      setQuestionCardNewValue(data);
-      reset();
+      // console.log(data);
+      debounce(() => {
+        setQC(data);
+        console.log("data write");
+      }, 1000);
     }
   }, [data]);
 
@@ -190,7 +224,6 @@ function QuestionCard({ id, index }: { id: string; index: number }) {
       <input
         placeholder="Введіть якусь інфу"
         {...register("questionTitle")}
-        value={questionCard.questionTitle}
         className="text-questTextColor font-semibold focus:outline-none"
       />
       <RenderOptions control={control} register={register} />
@@ -229,17 +262,26 @@ export default function page() {
   );
 }
 
-export function debounce<T extends unknown[], U>(
-  callback: (...args: T) => PromiseLike<U> | U,
-  wait: number
-) {
-  let timer: ReturnType<typeof setTimeout>;
+// export function debounce<T extends unknown[], U>(
+//   callback: (...args: T) => PromiseLike<U> | U,
+//   wait: number
+// ) {
+//   let timer: ReturnType<typeof setTimeout>;
 
-  return (...args: T): Promise<U> => {
+//   return (...args: T): Promise<U> => {
+//     clearTimeout(timer);
+//     return new Promise((resolve) => {
+//       timer = setTimeout(() => resolve(callback(...args)), wait);
+//     });
+//   };
+// }
+
+export function createDebounce() {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  return (callback: () => void, wait: number) => {
     clearTimeout(timer);
-    return new Promise((resolve) => {
-      timer = setTimeout(() => resolve(callback(...args)), wait);
-    });
+    timer = setTimeout(callback, wait);
   };
 }
 
