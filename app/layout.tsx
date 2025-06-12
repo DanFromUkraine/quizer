@@ -5,7 +5,7 @@ import "./globals.css";
 export default function layout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body className="">
         <Provider>{children}</Provider>
       </body>
     </html>

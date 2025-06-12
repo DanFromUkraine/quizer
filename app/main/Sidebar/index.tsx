@@ -9,7 +9,7 @@ export default function Sidebar() {
   return (
     <nav
       ref={containerRef}
-      className="flex flex-col items-center min-w-16 w-16 max-w-lg h-full border-r border-r-lightGray relative @container"
+      className="flex flex-col items-center min-w-16 w-16 max-w-lg h-screen border-r border-r-lightGray sticky top-0 left-0 @container"
     >
       <DragHandlerUI dragHandlerRef={dragHandlerRef} />
       <ColorStatusBarUI />

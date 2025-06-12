@@ -8,7 +8,7 @@ export default function PageUI({
   addID: () => void;
 }) {
   return (
-    <main className="w-full p-8 flex flex-col">
+    <main className="w-full p-8 flex flex-col min-h-full">
       <input
         type="text"
         placeholder="Введіть заголовок"
