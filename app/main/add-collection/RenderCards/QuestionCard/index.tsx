@@ -2,7 +2,10 @@ import { useEffect, useMemo } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { FaRegTrashAlt } from "react-icons/fa";
 import RenderOptions from "./RenderOptions";
-import { QuestionCardType } from "@/app/lib/db/addCollectionPageDB";
+import {
+  QuestionCardType,
+  useServiceOneCard,
+} from "@/app/lib/db/addCollectionPageDB";
 
 export default function QuestionCard({
   id,
@@ -12,7 +15,6 @@ export default function QuestionCard({
 }: QuestionCardType & {
   index: number;
 }) {
-  const debounce = useMemo(createDebounce, []);
   const methods = useForm({
     defaultValues: {
       questionTitle,
@@ -20,12 +22,20 @@ export default function QuestionCard({
     },
   });
 
+  const { lazyUpdateCard, deleteCard } = useServiceOneCard();
   const data = methods.watch();
-
   useEffect(() => {
     if (methods.formState.isDirty) {
+      lazyUpdateCard({
+        id,
+        ...data,
+      });
     }
   }, [data]);
+
+  const onDeleteBtnClick = () => {
+    deleteCard(id);
+  };
 
   return (
     <FormProvider {...methods}>
@@ -34,7 +44,10 @@ export default function QuestionCard({
           <p className="px-3 py-1.5 text-darker w-fit font-semibold bg-fillbg rounded-normal">
             Картка №{index}
           </p>
-          <FaRegTrashAlt className="text-xl text-questTextColor" />
+          <FaRegTrashAlt
+            className="text-xl text-questTextColor"
+            onClick={onDeleteBtnClick}
+          />
         </div>
         <QuestionTitle />
         <RenderOptions />
@@ -52,13 +65,4 @@ export function QuestionTitle() {
       className="text-questTextColor font-semibold focus:outline-none"
     />
   );
-}
-
-export function createDebounce() {
-  let timer: ReturnType<typeof setTimeout> | undefined;
-
-  return (callback: () => void, wait: number) => {
-    clearTimeout(timer);
-    timer = setTimeout(callback, wait);
-  };
 }

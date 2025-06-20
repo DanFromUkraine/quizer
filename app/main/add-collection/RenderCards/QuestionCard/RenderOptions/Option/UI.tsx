@@ -29,7 +29,7 @@ export default function OptionUI({
       </label>
 
       <div
-        className="bg-questTextColor h-full min-w-8 flex justify-center items-center hover:bg-red-500 duration-150"
+        className="bg-questTextColor h-12 min-w-8 flex justify-center items-center hover:bg-red-500 duration-150"
         onClick={onRemoveBtnClick}
       >
         <span className="w-2/3 h-1.5 bg-white " />

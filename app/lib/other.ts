@@ -16,3 +16,12 @@ export function setSS<T>(key: string, newVal: T) {
   const storage = typeof window !== "undefined" ? sessionStorage : null;
   storage?.setItem(key, JSON.stringify(newVal));
 }
+
+export function createDebounce() {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  return (callback: () => void, wait: number) => {
+    clearTimeout(timer);
+    timer = setTimeout(callback, wait);
+  };
+}

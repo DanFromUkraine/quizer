@@ -1,8 +1,15 @@
 // this file is used only by no-ssr component, so "use client" directive is not needed
 import { DBSchema, IDBPDatabase, openDB } from "idb";
 import { useAtomValue, useSetAtom } from "jotai";
-import { useEffect, useState } from "react";
-import { addCardAtom, cardsAtom, initCardsAtom } from "../jotai/addCollection";
+import { useEffect, useState, useMemo } from "react";
+import {
+  addCardAtom,
+  cardsAtom,
+  initCardsAtom,
+  removeCardAtom,
+  udpateCardAtom,
+} from "../jotai/addCollection";
+import { createDebounce } from "@/app/lib/other";
 
 type CollectionNameDoc = {
   collectionName: string;
@@ -30,7 +37,7 @@ interface AddCollectionPageSchema extends DBSchema {
     };
   };
   cards: {
-    key: number;
+    key: string;
     value: QuestionCardType;
   };
 }
@@ -110,9 +117,23 @@ export function useGetAndAddCards() {
 export function useServiceOneCard() {
   const db = useDB();
   const isDbUndefined = typeof db === "undefined";
-    
+  const debounce = useMemo(createDebounce, []);
+  const updateCardJotai = useSetAtom(udpateCardAtom);
+  const deleteCardJotai = useSetAtom(removeCardAtom);
 
   const lazyUpdateCard = (newCardData: QuestionCardType) => {
-
+    if (isDbUndefined) return;
+    debounce(() => {
+      db.put("cards", newCardData);
+      updateCardJotai(newCardData);
+    }, 1_000);
   };
+
+  const deleteCard = (cardID: string) => {
+    if (isDbUndefined) return;
+    db.delete("cards", cardID);
+    deleteCardJotai(cardID);
+  };
+
+  return { lazyUpdateCard, deleteCard };
 }
