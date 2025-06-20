@@ -1,11 +1,8 @@
 import {
-  Control,
   useFieldArray,
-  useFormContext,
-  UseFormRegister,
+  useFormContext
 } from "react-hook-form";
 import Option from "./Option";
-import { QuestionCardType } from "..";
 
 export default function RenderOptions() {
   const { control } = useFormContext();
@@ -18,7 +15,7 @@ export default function RenderOptions() {
   return (
     <div className="flex flex-col gap-3">
       {fields.map(({ id }, index) => (
-        <Option key={id} index={index} remove={remove}/>
+        <Option key={id} index={index} remove={remove} />
       ))}
       <button type="button" onClick={onAddBtnClick}>
         Add option

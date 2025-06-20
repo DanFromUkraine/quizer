@@ -2,71 +2,28 @@ import { useEffect, useMemo } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { FaRegTrashAlt } from "react-icons/fa";
 import RenderOptions from "./RenderOptions";
-
-export type OptionType = {
-  isCorrect: boolean;
-  optionText: string;
-};
-
-export type QuestionCardType = {
-  questionTitle: string;
-  options: OptionType[];
-};
-
-function useQCSS(id: string) {
-  // temporary implementation
-  const storage = typeof window !== "undefined" ? sessionStorage : null;
-
-  const getQC = () => {
-    const rawData = storage?.getItem(id);
-    const placeholder = {
-      questionTitle: "",
-      options: [],
-    };
-    if (rawData) {
-      return JSON.parse(rawData);
-    } else {
-      storage?.setItem(id, JSON.stringify(placeholder));
-      return placeholder;
-    }
-  };
-
-  const setQC = (newVal: QuestionCardType) => {
-    storage?.setItem(id, JSON.stringify(newVal));
-  };
-
-  const deleteQC = () => {
-    storage?.removeItem(id);
-  };
-
-  return {
-    lastData: getQC(),
-    setQC,
-    deleteQC,
-  };
-}
+import { QuestionCardType } from "@/app/lib/db/addCollectionPageDB";
 
 export default function QuestionCard({
   id,
+  questionTitle,
+  options,
   index,
-}: {
-  id: string;
+}: QuestionCardType & {
   index: number;
 }) {
-  const { deleteQC, lastData, setQC } = useQCSS(id);
   const debounce = useMemo(createDebounce, []);
   const methods = useForm({
-    defaultValues: lastData,
+    defaultValues: {
+      questionTitle,
+      options,
+    },
   });
 
   const data = methods.watch();
 
   useEffect(() => {
     if (methods.formState.isDirty) {
-      debounce(() => {
-        setQC(data);
-        console.log("data write");
-      }, 1000);
     }
   }, [data]);
 

@@ -1,11 +1,11 @@
 "use client";
 
-import { useFormContext, UseFormRegister } from "react-hook-form";
-import { Data } from "../page";
-import HeaderUI from "./UI";
+import CollectionTitle from "./CollectionTitle";
 
 export default function Header() {
-  const { register } = useFormContext();
-
-  return <HeaderUI register={register} />;
+  return (
+    <header className="w-full flex flex-col">
+      <CollectionTitle />
+    </header>
+  );
 }
