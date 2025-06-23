@@ -1,10 +1,10 @@
 "use client";
 
+import { userCollectionsAtom } from "@/app/lib/jotai/mainPage";
+import { useAtomValue } from "jotai";
+
 export default function RenderCollections() {
-  const collections =
-    typeof document !== "undefined"
-      ? (localStorage.getItem("collections") as string[] | null)
-      : [];
+  const collections = useAtomValue(userCollectionsAtom);
 
   return (
     <div>
@@ -16,5 +16,5 @@ export default function RenderCollections() {
 }
 
 function Collection() {
-  return <div></div>;
+  return <div>some collection</div>;
 }

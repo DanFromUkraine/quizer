@@ -33,6 +33,10 @@
   .heading {
     @apply font-semibold text-2xl ml-[54px] mt-8;
   }
+
+  .simpleButton {
+    @apply rounded-normal h-min w-min py-2 px-3 whitespace-nowrap text-white font-semibold;
+  }
 }
 
 @layer utilities {

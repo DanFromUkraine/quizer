@@ -14,7 +14,7 @@ export default function RenderCards() {
       <section className="w-full flex justify-center pt-4">
         <button
           type="button"
-          className="bg-blueAccent rounded-normal w-min py-2 px-3 whitespace-nowrap text-white font-semibold "
+          className="bg-blueAccent simpleButton"
           onClick={() => addEmptyCard()}
         >
           Додати карточку
