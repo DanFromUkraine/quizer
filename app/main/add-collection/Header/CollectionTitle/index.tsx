@@ -1,4 +1,4 @@
-import { usePageTitle } from "@/app/lib/db/addCollectionPageDB";
+import { usePageTitle } from "@/app/lib/db/AddCollectionPageDB";
 import { FormEventHandler } from "react";
 
 export default function CollectionTitle() {

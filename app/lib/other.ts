@@ -1,27 +1,41 @@
-"use client";
 
-export function getOrInitSS<T>(key: string, initVal: T): T {
-  const storage = typeof window !== "undefined" ? sessionStorage : null;
-  const rawData = storage?.getItem(key);
 
-  if (rawData) {
-    return JSON.parse(rawData);
-  }
+export type FlushDebounceType = {
+  id: string;
+  flush: () => void;
+};
 
-  setSS(key, initVal);
-  return initVal;
-}
-
-export function setSS<T>(key: string, newVal: T) {
-  const storage = typeof window !== "undefined" ? sessionStorage : null;
-  storage?.setItem(key, JSON.stringify(newVal));
-}
-
-export function createDebounce() {
+export function createDebounce({
+  onDebounceUpdated,
+  onDebounceFinished,
+}: {
+  onDebounceUpdated: (flushInstance: FlushDebounceType) => void;
+  onDebounceFinished: (id: string) => void;
+}) {
   let timer: ReturnType<typeof setTimeout> | undefined;
+  let callbackFn: () => void | undefined;
+  const id = Date.now().toString();
 
-  return (callback: () => void, wait: number) => {
-    clearTimeout(timer);
-    timer = setTimeout(callback, wait);
+  const clear = () => clearTimeout(timer);
+
+  const flush = () => {
+    clear();
+    if (typeof callbackFn === "function") callbackFn();
+    callbackFn = () => {};
+    onDebounceFinished(id);
+  };
+
+  const updateCallback = (callback: () => void, wait: number) => {
+    clear();
+    callbackFn = callback;
+    onDebounceUpdated({ id, flush });
+    timer = setTimeout(() => {
+      flush();
+    }, wait);
+  };
+
+  return {
+    updateCallback,
+    flush,
   };
 }

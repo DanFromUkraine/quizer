@@ -2,11 +2,9 @@ import { FormEventHandler, useEffect, useMemo } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { FaRegTrashAlt } from "react-icons/fa";
 import RenderOptions from "./RenderOptions";
-import {
-  QuestionCardType,
-  useServiceOneCard,
-} from "@/app/lib/db/addCollectionPageDB";
 import clsx from "clsx";
+import { QuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
+import { useServiceOneCard } from "@/app/lib/db/AddCollectionPageDB";
 
 export default function QuestionCard({
   id,
@@ -27,10 +25,13 @@ export default function QuestionCard({
   const data = methods.watch();
   useEffect(() => {
     if (methods.formState.isDirty) {
-      lazyUpdateCard({
-        id,
-        ...data,
-      });
+      lazyUpdateCard(
+        {
+          id,
+          ...data,
+        },
+        () => methods.reset(methods.getValues())
+      );
     }
   }, [data]);
 
@@ -43,7 +44,7 @@ export default function QuestionCard({
       <form className="flex flex-col gap-3 w-full border border-lightGray p-6 rounded-normal">
         <div className="flex justify-between items-center">
           <p className="px-3 py-1.5 text-darker w-fit font-semibold bg-fillbg rounded-normal">
-            Картка №{index}
+            Картка №{index + 1}
           </p>
           <FaRegTrashAlt
             className="text-xl text-questTextColor"

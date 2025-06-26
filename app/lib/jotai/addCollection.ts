@@ -1,13 +1,20 @@
 "use client";
 
 import { atom } from "jotai";
-import { MyDB, QuestionCardType } from "../db/addCollectionPageDB";
 import { getAtomAddToArrayItem } from "./utils";
+import { MyDB } from "../db/MainPageDB/types";
+import { QuestionCardType } from "../db/AddCollectionPageDB/types";
+
+// Change status bar 
+
+
+
+// Collection title 
 
 export const dbAtom = atom<MyDB | null>(null);
 export const collectionTitleAtom = atom("");
 
-// Question Cards
+// Question Cards 
 
 export const cardsAtom = atom<QuestionCardType[]>([]);
 

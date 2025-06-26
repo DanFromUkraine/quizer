@@ -7,3 +7,5 @@ export function getAtomAddToArrayItem<Item, Arr extends Item[]>(
     set(targetAtom, (prev) => [...prev, newItem] as Arr);
   });
 }
+
+

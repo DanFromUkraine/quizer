@@ -1,4 +1,4 @@
-import { useSaveCollection } from "@/app/lib/db/addCollectionPageDB";
+import { useSaveCollection } from "@/app/lib/db/AddCollectionPageDB";
 
 export default function SaveBtn() {
   const { onSaveButtonClick } = useSaveCollection();

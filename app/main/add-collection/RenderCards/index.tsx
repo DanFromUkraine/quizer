@@ -1,8 +1,11 @@
-import { useGetAndAddCards } from "@/app/lib/db/addCollectionPageDB";
+import { useAddEmtyCard } from "@/app/lib/db/AddCollectionPageDB";
 import QuestionCard from "./QuestionCard";
+import { useAtomValue } from "jotai";
+import { cardsAtom } from "@/app/lib/jotai/addCollection";
 
 export default function RenderCards() {
-  const { cards, addEmptyCard } = useGetAndAddCards();
+  const { addEmptyCard } = useAddEmtyCard();
+  const cards = useAtomValue(cardsAtom);
 
   return (
     <section>

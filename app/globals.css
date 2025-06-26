@@ -14,6 +14,13 @@
 
   --color-darker: #7a7289;
   --color-questTextColor: #444444;
+
+  --color-statusBarLinearBlue: linear-gradient(
+    270deg,
+    #396eff,
+    #6ecaff,
+    #396eff
+  );
 }
 
 @theme {
@@ -40,10 +47,26 @@
 }
 
 @layer utilities {
-  .animated-gradient {
+  .statusBarBlueGradient {
     background: linear-gradient(270deg, #396eff, #6ecaff, #396eff);
+  }
+
+  .statusBarYellowGradient {
+    background: linear-gradient(270deg, #ffd93b, #fff29c, #ffd93b);
+  }
+
+  .statusBarGreenGradient {
+    background: linear-gradient(270deg, #29c76f, #9fffc2, #29c76f);
+  }
+
+  .statusBarLayer {
     background-size: 600% 600%;
     animation: gradientShift 8s ease infinite;
+    @apply w-full h-full absolute top-0 left-0 z-0;
+  }
+
+  .statusBarYellow {
+    @apply bg-[#ffd93b];
   }
 }
 

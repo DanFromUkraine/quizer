@@ -30,15 +30,9 @@ export function DragHandlerUI({
   return (
     <div
       ref={dragHandlerRef}
-      className="absolute flex -right-[19px] top-14 p-2 rounded bg-lightBg text-xl js-clickable"
+      className="absolute flex -right-[19px] top-14 p-2 rounded bg-lightBg text-xl js-clickable z-20"
     >
       <BiExpandHorizontal />
     </div>
-  );
-}
-
-export function ColorStatusBarUI() {
-  return (
-    <div className="animated-gradient border-b w-full h-32 border-b-lightGray" />
   );
 }

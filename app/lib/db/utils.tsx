@@ -1,3 +1,5 @@
+"use client";
+
 import { IDBPDatabase, openDB, StoreKey, StoreNames, StoreValue } from "idb";
 import {
   Context,
@@ -7,24 +9,26 @@ import {
   useRef,
   useState,
 } from "react";
+import { FlushDebounceType } from "../other";
 
 export enum DB_NAMES {
   MAIN_PAGE = "MainPageDB",
   ADD_COLLECTION_PAGE = "AddCollectionPageDB",
 }
 
+type OnFlushAdd = (newFlush: FlushDebounceType) => void;
+type OnFlushRemove = (id: string) => void;
+
 export type GeneralDB<DataSchema> = IDBPDatabase<DataSchema>;
 
 export function createContextDefault<DBSchema extends {}>() {
-  return createContext<{
-    db: IDBPDatabase<DBSchema> | null;
-    close: () => void;
-    isDbNotReady: boolean;
-  }>({
+  return createContext({
     db: null,
     close: () => {},
-    isDbNotReady: true,
-  });
+    isDbClosed: true,
+    onFlushAdd: (_) => {},
+    onRemoveFlush: (_) => {},
+  }) as DBContextType<DBSchema>;
 }
 
 export async function getDB<DataSchema>({
@@ -51,10 +55,6 @@ export function createObjStoreDefault<DataType extends {}>(
   if (!db.objectStoreNames.contains(storeName)) {
     db.createObjectStore(storeName, { keyPath: "id" });
   }
-}
-
-export function getIsDbUndefined<DB>(db: DB | undefined) {
-  return typeof db === "undefined";
 }
 
 export async function getOrAndInit<
@@ -88,30 +88,56 @@ export async function getOrAndInit<
   return result;
 }
 
-type DBContext<DBSchema extends {}> = Context<{
+export type DBContextType<DBSchema extends {}> = Context<{
   db: IDBPDatabase<DBSchema> | null;
   close: () => void;
-  isDbNotReady: boolean;
+  isDbClosed: boolean;
+  onFlushAdd: OnFlushAdd;
+  onRemoveFlush: OnFlushRemove;
 }>;
 
+function useFlushManager() {
+  const flushFns = useRef<FlushDebounceType[]>([]);
+
+  const finishAll = () => {
+    flushFns.current.forEach(({ flush }) => flush());
+    flushFns.current = [];
+  };
+
+  const onAddFlush = (newFlush: FlushDebounceType) => {
+    flushFns.current.push(newFlush);
+  };
+
+  const onRemoveFlush = (deleteID: string) => {
+    flushFns.current = flushFns.current.filter(({ id }) => id !== deleteID);
+  };
+
+  return {
+    finishAll,
+    onAddFlush,
+    onRemoveFlush,
+  };
+}
 export function ProviderDB<DBSchema extends {}>({
   ContextBody,
   upgrade,
   children,
   dbName,
 }: {
-  ContextBody: DBContext<DBSchema>;
+  ContextBody: DBContextType<DBSchema>;
   upgrade: (db: IDBPDatabase<DBSchema>) => void;
   children: ReactNode;
   dbName: string;
 }) {
-  const dbIsClosed = useRef(false);
+  const isDbClosed = useRef(false);
   const [db, setDB] = useState<IDBPDatabase<DBSchema> | null>(null);
+  const { finishAll, onAddFlush, onRemoveFlush } = useFlushManager();
 
   const close = () => {
-    if (!dbIsClosed.current) {
+    if (!isDbClosed.current) {
+      finishAll();
       setDB(null);
-      dbIsClosed.current = true;
+      isDbClosed.current = true;
       db?.close();
     } else {
       console.warn("DB is already closed");
@@ -119,7 +145,7 @@ export function ProviderDB<DBSchema extends {}>({
   };
 
   const resume = () => {
-    dbIsClosed.current = false;
+    isDbClosed.current = false;
     getDB<DBSchema>({
       dbName: dbName,
       upgrade,
@@ -129,18 +155,28 @@ export function ProviderDB<DBSchema extends {}>({
   };
 
   useEffect(() => {
-    if (!dbIsClosed.current) {
+    if (!db && !isDbClosed.current) {
       resume();
+    }
+
+    if (dbName === DB_NAMES.MAIN_PAGE) {
+      console.log({ db, isDbClosed });
     }
     return () => {
       db?.close();
     };
-  }, []);
-
-  const isDbNotReady = db === null || dbIsClosed.current;
+  }, [db]);
 
   return (
-    <ContextBody.Provider value={{ db, close, isDbNotReady }}>
+    <ContextBody.Provider
+      value={{
+        db,
+        close,
+        isDbClosed: isDbClosed.current,
+        onFlushAdd: onAddFlush,
+        onRemoveFlush,
+      }}
+    >
       {children}
     </ContextBody.Provider>
   );
