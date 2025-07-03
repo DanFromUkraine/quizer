@@ -1,0 +1,13 @@
+To-Do:
+
+
+
+-- Develop functionality to gain content from add-collection page
+    --> Add save button
+    --> Add collection functionality
+    --> write saved data to DB with all collections
+-- Add title for a page
+-- Add animation to add an option
+-- Add animation to add question card
+-- remove outline
+-- develop skeleton for Page
