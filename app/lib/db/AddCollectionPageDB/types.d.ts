@@ -8,14 +8,16 @@ export type CollectionResult = MetaPureType & {
   cards: QuestionCardType[];
 };
 
+
 export type QuestionCardType = {
   id: string;
   questionTitle: string;
+  numberOfCorrectAnswers: number;
   options: {
     isCorrect: boolean;
     optionText: string;
   }[];
-};
+} 
 
 export interface AddCollectionPageSchema extends DBSchema {
   meta: {

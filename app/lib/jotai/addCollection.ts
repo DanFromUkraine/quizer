@@ -43,3 +43,6 @@ export const removeCardAtom = atom(null, (_, set, deleteCardID: string) => {
     prevCards.filter((card) => card.id !== deleteCardID)
   );
 });
+
+// improved perfomance 
+

@@ -1,13 +1,21 @@
 import { useSaveCollection } from "@/app/lib/db/AddCollectionPageDB";
+import { statusBarColorAtom } from "@/app/lib/jotai/userState";
+import { useSetAtom } from "jotai";
+import SaveCollectionBtnUI from "./UI";
 
 export default function SaveBtn() {
   const { onSaveButtonClick } = useSaveCollection();
+  const setStatusBarColor = useSetAtom(statusBarColorAtom);
+
+  const onMouseDown = () => {
+    setStatusBarColor("green");
+  };
+
+  const onMouseUp = () => {
+    setStatusBarColor(undefined);
+  };
+
   return (
-    <button
-      className="bg-gray-800 hover:bg-green-800 simpleButton"
-      onClick={onSaveButtonClick}
-    >
-      Зберегти
-    </button>
+    <SaveCollectionBtnUI {...{ onSaveButtonClick, onMouseDown, onMouseUp }} />
   );
 }

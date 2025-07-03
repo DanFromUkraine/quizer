@@ -1,36 +1,35 @@
 "use client";
 
+import { IDBPDatabase } from "idb";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useDB } from "./provider";
+import { useRouter } from "next/navigation";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import {
   addCardAtom,
   cardsAtom,
   collectionTitleAtom,
-  initCardsAtom,
   removeCardAtom,
-  udpateCardAtom,
 } from "../../jotai/addCollection";
-import { useEffect, useMemo } from "react";
-import { createDebounce } from "../../other";
-import { getOrAndInit, getUniqueID } from "../utils";
-import { CollectionResult, QuestionCardType } from "./types";
-import { useRouter } from "next/navigation";
-import { deleteThisDB } from "./utils";
+import { setStatusBarColorAtom } from "../../jotai/userState";
 import { useAddCollection } from "../MainPageDB";
-import { statusBarColorAtom } from "../../jotai/userState";
+import { getOrAndInit, getUniqueID } from "../utils";
+import { useDB } from "./provider";
+import {
+  AddCollectionPageSchema,
+  CollectionResult,
+  QuestionCardType,
+} from "./types";
+import { deleteThisDB } from "./utils";
 
-export function usePageTitle() {
-  const { db, isDbClosed, onFlushAdd, onRemoveFlush } = useDB();
-  const [title, setTitle] = useAtom(collectionTitleAtom);
-  const { updateCallback } = useMemo(
-    () =>
-      createDebounce({
-        onDebounceUpdated: onFlushAdd,
-        onDebounceFinished: onRemoveFlush,
-      }),
-    [onFlushAdd, onRemoveFlush]
-  );
-
+function useInitPageTitle({
+  db,
+  isDbClosed,
+  setTitle,
+}: {
+  db: IDBPDatabase<AddCollectionPageSchema> | null;
+  isDbClosed: boolean;
+  setTitle: Dispatch<SetStateAction<string>>;
+}) {
   useEffect(() => {
     if (db === null || isDbClosed) return;
     getOrAndInit({
@@ -44,6 +43,14 @@ export function usePageTitle() {
       }
     });
   }, [db]);
+}
+
+export function usePageTitle() {
+  const { db, isDbClosed, createDebounceMemo } = useDB();
+  const [title, setTitle] = useAtom(collectionTitleAtom);
+  const { updateCallback } = createDebounceMemo();
+
+  useInitPageTitle({ db, isDbClosed, setTitle });
 
   const lazyUpdateTitle = (newTitle: string) => {
     if (db === null || isDbClosed) return;
@@ -58,57 +65,61 @@ export function usePageTitle() {
   return { title, lazyUpdateTitle };
 }
 
-export function useInitAllCardsFromDB() {
-  const { db } = useDB();
-  const initCards = useSetAtom(cardsAtom);
+function getAllCards() {}
 
-
-  const getAllCards = () => {
-    if (db === null) return;
-    db.getAll("cards").then((resCards) => {
-      console.log({ resCards });
-      initCards(resCards);
-    });
-  };
-
+function useInitAllCards({
+  db,
+  setCards,
+}: {
+  db: IDBPDatabase<AddCollectionPageSchema> | null;
+  setCards: Dispatch<SetStateAction<QuestionCardType[]>>;
+}) {
   useEffect(() => {
     if (db === null) return;
-    getAllCards();
+
+    db.getAll("cards").then((res) => {
+      console.log(res);
+      setCards(res);
+    });
   }, [db]);
 }
 
-export function useAddEmtyCard() {
+export function useGetAndInitAllCards() {
+  const { db } = useDB();
+  const [cards, setCards] = useAtom(cardsAtom);
+
+  useInitAllCards({ db, setCards });
+
+  return cards;
+}
+
+export function useAddEmptyCard() {
   const { db, isDbClosed } = useDB();
   const addCard = useSetAtom(addCardAtom);
 
   const addEmptyCard = () => {
+    console.log({ db });
     if (db === null || isDbClosed) return;
+
     const emptyCard = {
       questionTitle: "",
       options: [],
-      id: getUniqueID(),
     };
 
-    db?.add("cards", emptyCard);
-    addCard(emptyCard);
+    db?.add("cards", emptyCard).then((res) => {
+      const fullEmptyCard = Object.assign(emptyCard, { id: res });
+      addCard(fullEmptyCard);
+    });
   };
 
   return { addEmptyCard };
 }
 
 export function useServiceOneCard() {
-  const { db, onFlushAdd, onRemoveFlush, isDbClosed } = useDB();
-  const { updateCallback } = useMemo(
-    () =>
-      createDebounce({
-        onDebounceUpdated: onFlushAdd,
-        onDebounceFinished: onRemoveFlush,
-      }),
-    [onFlushAdd, onRemoveFlush]
-  );
-  const updateCardJotai = useSetAtom(udpateCardAtom);
+  const { db, isDbClosed, createDebounceMemo } = useDB();
+  const { updateCallback } = createDebounceMemo();
   const deleteCardJotai = useSetAtom(removeCardAtom);
-  const updateStatusBarColor = useSetAtom(statusBarColorAtom);
+  const updateStatusBarColor = useSetAtom(setStatusBarColorAtom);
 
   const lazyUpdateCard = (
     newCardData: QuestionCardType,
@@ -118,7 +129,6 @@ export function useServiceOneCard() {
     updateStatusBarColor("yellow");
     updateCallback(() => {
       db.put("cards", newCardData).then(() => {
-        updateCardJotai(newCardData);
         resetForm();
         updateStatusBarColor(undefined);
       });
@@ -128,6 +138,7 @@ export function useServiceOneCard() {
   const deleteCard = (cardID: string) => {
     if (db === null) return;
     db.delete("cards", cardID).then(() => {
+      console.log("this card should have been deleted", cardID);
       deleteCardJotai(cardID);
     });
   };

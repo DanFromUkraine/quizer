@@ -17,6 +17,7 @@ export default function Option({
       index={index}
       register={register}
       onRemoveBtnClick={onRemoveBtnClick}
+      
     />
   );
 }

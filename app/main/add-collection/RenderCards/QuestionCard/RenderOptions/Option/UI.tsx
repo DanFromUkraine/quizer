@@ -18,6 +18,7 @@ export default function OptionUI({
             type="checkbox"
             {...register(`options.${index}.isCorrect`)}
             className="absolute inset-0 opacity-0 z-20 peer"
+            onInput={() => {}}
           />
           <FaCheck className="hidden peer-checked:flex text-white" />
         </div>

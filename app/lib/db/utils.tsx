@@ -6,18 +6,15 @@ import {
   createContext,
   ReactNode,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
-import { FlushDebounceType } from "../other";
 
 export enum DB_NAMES {
   MAIN_PAGE = "MainPageDB",
   ADD_COLLECTION_PAGE = "AddCollectionPageDB",
 }
-
-type OnFlushAdd = (newFlush: FlushDebounceType) => void;
-type OnFlushRemove = (id: string) => void;
 
 export type GeneralDB<DataSchema> = IDBPDatabase<DataSchema>;
 
@@ -26,8 +23,10 @@ export function createContextDefault<DBSchema extends {}>() {
     db: null,
     close: () => {},
     isDbClosed: true,
-    onFlushAdd: (_) => {},
-    onRemoveFlush: (_) => {},
+    createDebounceMemo: () => ({
+      updateCallback: (callback, wait) => {},
+      flush: () => {},
+    }),
   }) as DBContextType<DBSchema>;
 }
 
@@ -45,7 +44,9 @@ export async function getDB<DataSchema>({
 }
 
 export function getUniqueID() {
-  return crypto.randomUUID();
+  const currTime = Date.now();
+
+  return `${currTime}-${crypto.randomUUID()}`;
 }
 
 export function createObjStoreDefault<DataType extends {}>(
@@ -92,8 +93,10 @@ export type DBContextType<DBSchema extends {}> = Context<{
   db: IDBPDatabase<DBSchema> | null;
   close: () => void;
   isDbClosed: boolean;
-  onFlushAdd: OnFlushAdd;
-  onRemoveFlush: OnFlushRemove;
+  createDebounceMemo: () => {
+    updateCallback: (callback: () => void, wait: number) => void;
+    flush: () => void;
+  };
 }>;
 
 function useFlushManager() {
@@ -118,6 +121,47 @@ function useFlushManager() {
     onRemoveFlush,
   };
 }
+
+type FlushDebounceType = {
+  id: string;
+  flush: () => void;
+};
+
+function createDebounce({
+  onDebounceUpdated,
+  onDebounceFinished,
+}: {
+  onDebounceUpdated: (flushInstance: FlushDebounceType) => void;
+  onDebounceFinished: (id: string) => void;
+}) {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  let callbackFn: () => void | undefined;
+  const id = Date.now().toString();
+
+  const clear = () => clearTimeout(timer);
+
+  const flush = () => {
+    clear();
+    if (typeof callbackFn === "function") callbackFn();
+    callbackFn = () => {};
+    onDebounceFinished(id);
+  };
+
+  const updateCallback = (callback: () => void, wait: number) => {
+    clear();
+    callbackFn = callback;
+    onDebounceUpdated({ id, flush });
+    timer = setTimeout(() => {
+      flush();
+    }, wait);
+  };
+
+  return {
+    updateCallback,
+    flush,
+  };
+}
+
 export function ProviderDB<DBSchema extends {}>({
   ContextBody,
   upgrade,
@@ -132,6 +176,14 @@ export function ProviderDB<DBSchema extends {}>({
   const isDbClosed = useRef(false);
   const [db, setDB] = useState<IDBPDatabase<DBSchema> | null>(null);
   const { finishAll, onAddFlush, onRemoveFlush } = useFlushManager();
+  const createDebounceMemo = useMemo(
+    () => () =>
+      createDebounce({
+        onDebounceUpdated: onAddFlush,
+        onDebounceFinished: onRemoveFlush,
+      }),
+    []
+  );
 
   const close = () => {
     if (!isDbClosed.current) {
@@ -159,9 +211,6 @@ export function ProviderDB<DBSchema extends {}>({
       resume();
     }
 
-    if (dbName === DB_NAMES.MAIN_PAGE) {
-      console.log({ db, isDbClosed });
-    }
     return () => {
       db?.close();
     };
@@ -173,8 +222,7 @@ export function ProviderDB<DBSchema extends {}>({
         db,
         close,
         isDbClosed: isDbClosed.current,
-        onFlushAdd: onAddFlush,
-        onRemoveFlush,
+        createDebounceMemo,
       }}
     >
       {children}

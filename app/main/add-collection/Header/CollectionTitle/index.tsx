@@ -1,5 +1,6 @@
 import { usePageTitle } from "@/app/lib/db/AddCollectionPageDB";
 import { FormEventHandler } from "react";
+import CollectionTitleUI from "./UI";
 
 export default function CollectionTitle() {
   const { title, lazyUpdateTitle } = usePageTitle();
@@ -9,13 +10,5 @@ export default function CollectionTitle() {
     lazyUpdateTitle(target.value);
   };
 
-  return (
-    <input
-      type="text"
-      placeholder="Введіть заголовок"
-      className="px-6 py-1.5 w-full text-[#5C5E64] text-2xl font-semibold focus:outline-none mb-8"
-      defaultValue={title}
-      onInput={onInput}
-    />
-  );
+  return <CollectionTitleUI {...{ title, onInput }} />;
 }

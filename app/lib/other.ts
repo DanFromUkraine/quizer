@@ -1,17 +1,17 @@
-
-
 export type FlushDebounceType = {
   id: string;
   flush: () => void;
 };
 
-export function createDebounce({
-  onDebounceUpdated,
-  onDebounceFinished,
-}: {
-  onDebounceUpdated: (flushInstance: FlushDebounceType) => void;
-  onDebounceFinished: (id: string) => void;
-}) {
+export function createDebounce(
+  {
+    onDebounceUpdated,
+    onDebounceFinished,
+  }: {
+    onDebounceUpdated: (flushInstance: FlushDebounceType) => void;
+    onDebounceFinished: (id: string) => void;
+  } = { onDebounceUpdated: () => {}, onDebounceFinished: () => {} }
+) {
   let timer: ReturnType<typeof setTimeout> | undefined;
   let callbackFn: () => void | undefined;
   const id = Date.now().toString();

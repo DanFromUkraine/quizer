@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { ReactNode, useContext } from "react";
+import { ReactNode, use } from "react";
 import {
   createContextDefault,
   createObjStoreDefault,
@@ -20,7 +20,12 @@ export function AddCollectionPageDBContextProvider({
 }) {
   const upgrade = (database: MyDB) => {
     createObjStoreDefault<AddCollectionPageSchema>(database, "meta");
-    createObjStoreDefault<AddCollectionPageSchema>(database, "cards");
+    if (!database.objectStoreNames.contains("cards")) {
+      database.createObjectStore("cards", {
+        keyPath: "id",
+        autoIncrement: true,
+      });
+    }
   };
 
   return (
@@ -36,4 +41,4 @@ export function AddCollectionPageDBContextProvider({
   );
 }
 
-export const useDB = () => useContext(DBContext);
+export const useDB = () => use(DBContext);

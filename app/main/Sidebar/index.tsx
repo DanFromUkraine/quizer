@@ -2,7 +2,7 @@
 
 import { RenderNavLinks, useDragSidebar } from "./client";
 import { ColorStatusBar } from "./ColorStatusBar";
-import {  DragHandlerUI } from "./UI";
+import { DragHandlerUI } from "./UI";
 
 export default function Sidebar() {
   const { containerRef, dragHandlerRef } = useDragSidebar();

@@ -3,7 +3,7 @@
 import { useAtom } from "jotai";
 import { CollectionResult } from "../AddCollectionPageDB/types";
 import { userCollectionsAtom } from "../../jotai/mainPage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDB } from "./provider";
 
 export function useAddCollection() {
@@ -34,4 +34,19 @@ export function useInitCollections() {
       setCollections(collections);
     });
   }, [db]);
+}
+
+export function useGetCollection(collectionID: string) {
+  const { db, isDbClosed } = useDB();
+  const [collection, setCollection] = useState<CollectionResult>();
+
+  useEffect(() => {
+    if (db === null || isDbClosed) return;
+
+    db.get("userCollections", collectionID).then((res) => {
+      setCollection(res);
+    });
+  }, [db]);
+
+  return collection;
 }
