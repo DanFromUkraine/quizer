@@ -1,20 +1,14 @@
 "use client";
 
-import { createDebounce } from "@/app/lib/other";
-import clsx from "clsx";
-import {
-  ChangeEvent,
-  FormEventHandler,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { ChangeEvent, FormEventHandler, useMemo, useRef } from "react";
+import { useFormContext } from "react-hook-form";
 import QuestionTitleUI from "./UI";
+import { useChangeStatusBarColor } from "@/app/lib/jotai/userState";
+import { createDebounce } from "@/app/lib/debounce";
+import { useDebounceInputAndUpdateStatusBar } from "@/app/lib/debounceInput";
 
 export function QuestionTitle() {
   const { control } = useFormContext();
-  const { updateCallback } = useMemo(() => createDebounce(), []);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const onInput: FormEventHandler<HTMLTextAreaElement> = (e) => {
@@ -26,12 +20,7 @@ export function QuestionTitle() {
     }
   };
 
-  const onDebounceChange = (
-    e: ChangeEvent,
-    onChange: (e: ChangeEvent) => void
-  ) => {
-    updateCallback(() => onChange(e), 1000);
-  };
+  const onDebounceChange = useDebounceInputAndUpdateStatusBar();
 
   return (
     <QuestionTitleUI {...{ onDebounceChange, onInput, textareaRef, control }} />

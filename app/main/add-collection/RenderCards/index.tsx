@@ -1,15 +1,22 @@
+"use client";
+
 import {
   useAddEmptyCard,
-  useGetAndInitAllCards,
+  useClearJotaiOnExit,
+  useInitAllCards,
 } from "@/app/lib/db/AddCollectionPageDB";
 import RenderCardsUI from "./UI";
-import { useAddCardOnShortcut } from "./QuestionCard/client";
+import { useAddCardOnShortcut } from "./client";
+import { useAtomValue } from "jotai";
+import { cardsAtom } from "@/app/lib/jotai/addCollection";
 
 export default function RenderCards() {
-  const { addEmptyCard } = useAddEmptyCard();
   useAddCardOnShortcut();
+  useInitAllCards();
+  useClearJotaiOnExit();
 
-  const cards = useGetAndInitAllCards();
+  const { addEmptyCard } = useAddEmptyCard();
+  const cards = useAtomValue(cardsAtom);
 
   return <RenderCardsUI {...{ cards, addEmptyCard }} />;
 }

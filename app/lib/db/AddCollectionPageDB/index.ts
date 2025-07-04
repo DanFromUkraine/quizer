@@ -2,15 +2,15 @@
 
 import { IDBPDatabase } from "idb";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { RESET } from "jotai/utils";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   addCardAtom,
   cardsAtom,
   collectionTitleAtom,
   removeCardAtom,
 } from "../../jotai/addCollection";
-import { setStatusBarColorAtom } from "../../jotai/userState";
 import { useAddCollection } from "../MainPageDB";
 import { getOrAndInit, getUniqueID } from "../utils";
 import { useDB } from "./provider";
@@ -65,15 +65,45 @@ export function usePageTitle() {
   return { title, lazyUpdateTitle };
 }
 
-function getAllCards() {}
+export function useGetTitle() {
+  const { db } = useDB();
 
-function useInitAllCards({
-  db,
-  setCards,
-}: {
-  db: IDBPDatabase<AddCollectionPageSchema> | null;
-  setCards: Dispatch<SetStateAction<QuestionCardType[]>>;
-}) {
+  const getTitle = () => {
+    return db?.get("meta", "collectionTitle").then((res) => res?.value);
+  };
+
+  return { getTitle };
+}
+
+export function useClearJotaiOnExit() {
+  const setCards = useSetAtom(cardsAtom);
+  const setTitle = useSetAtom(collectionTitleAtom);
+
+  useEffect(
+    () => () => {
+      setCards(RESET);
+      setTitle(RESET);
+    },
+    []
+  );
+}
+
+function useGetAllCards() {
+  const { db } = useDB();
+
+  const getCards = async () => {
+    if (db === null) return;
+
+    return db.getAll("cards");
+  };
+
+  return { getCards };
+}
+
+export function useInitAllCards() {
+  const { db } = useDB();
+  const setCards = useSetAtom(cardsAtom);
+
   useEffect(() => {
     if (db === null) return;
 
@@ -84,30 +114,23 @@ function useInitAllCards({
   }, [db]);
 }
 
-export function useGetAndInitAllCards() {
-  const { db } = useDB();
-  const [cards, setCards] = useAtom(cardsAtom);
-
-  useInitAllCards({ db, setCards });
-
-  return cards;
-}
-
 export function useAddEmptyCard() {
   const { db, isDbClosed } = useDB();
   const addCard = useSetAtom(addCardAtom);
 
   const addEmptyCard = () => {
-    console.log({ db });
     if (db === null || isDbClosed) return;
 
     const emptyCard = {
       questionTitle: "",
       options: [],
-    };
+      numberOfCorrectAnswers: 0,
+    } as {};
 
-    db?.add("cards", emptyCard).then((res) => {
-      const fullEmptyCard = Object.assign(emptyCard, { id: res });
+    db?.add("cards", emptyCard as QuestionCardType).then((res) => {
+      const fullEmptyCard = Object.assign(emptyCard as QuestionCardType, {
+        id: res as number,
+      });
       addCard(fullEmptyCard);
     });
   };
@@ -115,53 +138,60 @@ export function useAddEmptyCard() {
   return { addEmptyCard };
 }
 
-export function useServiceOneCard() {
+export function useLazyUpdateCard() {
   const { db, isDbClosed, createDebounceMemo } = useDB();
   const { updateCallback } = createDebounceMemo();
-  const deleteCardJotai = useSetAtom(removeCardAtom);
-  const updateStatusBarColor = useSetAtom(setStatusBarColorAtom);
 
-  const lazyUpdateCard = (
-    newCardData: QuestionCardType,
-    resetForm: () => void
-  ) => {
+  const lazyUpdateCard = (newCardData: QuestionCardType) => {
     if (db === null || isDbClosed) return;
-    updateStatusBarColor("yellow");
     updateCallback(() => {
-      db.put("cards", newCardData).then(() => {
-        resetForm();
-        updateStatusBarColor(undefined);
-      });
+      return db.put("cards", newCardData);
     }, 1_000);
   };
 
-  const deleteCard = (cardID: string) => {
+  return { lazyUpdateCard };
+}
+
+export function useOnClickDeleteCard(id: number) {
+  const { db } = useDB();
+  const deleteCardJotai = useSetAtom(removeCardAtom);
+
+  const onClickDeleteCard = () => {
     if (db === null) return;
-    db.delete("cards", cardID).then(() => {
-      console.log("this card should have been deleted", cardID);
-      deleteCardJotai(cardID);
+    db.delete("cards", id).then(() => {
+      deleteCardJotai(id);
     });
   };
 
-  return { lazyUpdateCard, deleteCard };
+  return { onClickDeleteCard };
 }
 
 export function useSaveCollection() {
   const { addCollection } = useAddCollection();
   const { db, close } = useDB();
-  const collectionTitle = useAtomValue(collectionTitleAtom);
-  const cards = useAtomValue(cardsAtom);
   const router = useRouter();
-
-  const result: CollectionResult = {
-    id: getUniqueID(),
-    timestamp: Date.now(),
-    collectionTitle,
-    cards,
-  };
+  const { getCards } = useGetAllCards();
+  const { getTitle } = useGetTitle();
 
   const onSaveButtonClick = async () => {
     if (db === null) return;
+
+    const [collectionTitle, cards] = await Promise.all([
+      getTitle(),
+      getCards(),
+    ]);
+
+    if (typeof collectionTitle !== "string" || !Array.isArray(cards))
+      throw "collectionTitle, or cards are wrong type (just got them right from db)";
+
+    console.log({ collectionTitle, cards });
+
+    const result: CollectionResult = {
+      id: getUniqueID(),
+      timestamp: Date.now(),
+      collectionTitle,
+      cards,
+    };
 
     deleteThisDB(close)
       .then(async () => await addCollection(result))

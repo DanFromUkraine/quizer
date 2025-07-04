@@ -29,7 +29,7 @@ export function AddCollectionPageDBContextProvider({
   };
 
   return (
-    <ProviderDB
+    <ProviderDB<AddCollectionPageSchema>
       {...{
         dbName: DB_NAMES.ADD_COLLECTION_PAGE,
         upgrade,

@@ -1,6 +1,13 @@
 "use client";
 
-import { IDBPDatabase, openDB, StoreKey, StoreNames, StoreValue } from "idb";
+import {
+  DBSchema,
+  IDBPDatabase,
+  openDB,
+  StoreKey,
+  StoreNames,
+  StoreValue,
+} from "idb";
 import {
   Context,
   createContext,
@@ -18,16 +25,18 @@ export enum DB_NAMES {
 
 export type GeneralDB<DataSchema> = IDBPDatabase<DataSchema>;
 
-export function createContextDefault<DBSchema extends {}>() {
+export function createContextDefault<
+  Schema extends DBSchema
+>(): DBContextType<Schema> {
   return createContext({
-    db: null,
+    db: null as IDBPDatabase<Schema> | null,
     close: () => {},
-    isDbClosed: true,
+    isDbClosed: true as boolean,
     createDebounceMemo: () => ({
       updateCallback: (callback, wait) => {},
       flush: () => {},
     }),
-  }) as DBContextType<DBSchema>;
+  });
 }
 
 export async function getDB<DataSchema>({

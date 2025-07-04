@@ -10,7 +10,9 @@ export default function RenderCollections() {
   useInitCollections();
   const collections = useAtomValue(userCollectionsAtom);
 
-  // console.log({ collections });
+  console.log({ collections });
+
+
 
   return (
     <div

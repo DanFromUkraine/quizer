@@ -13,10 +13,10 @@ import CardIndex from "./CardIndex";
 import { QuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
 
 export default function QuestionCardUI({
-  onDeleteBtnClick,
+  onClickDeleteCard,
   methods,
 }: {
-  onDeleteBtnClick: () => void;
+  onClickDeleteCard: () => void;
   methods: UseFormReturn<QuestionCardType>;
 }) {
   return (
@@ -26,7 +26,7 @@ export default function QuestionCardUI({
           <CardIndex />
           <FaRegTrashAlt
             className="text-xl text-questTextColor"
-            onClick={onDeleteBtnClick}
+            onClick={onClickDeleteCard}
           />
         </div>
         <QuestionTitle />

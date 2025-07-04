@@ -1,22 +1,34 @@
-import { useServiceOneCard } from "@/app/lib/db/AddCollectionPageDB";
 import { QuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
 import { memo, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 import QuestionCardUI from "./UI";
-import { useAddCardOnShortcut } from "./client";
+import {
+  useLazyUpdateCard,
+  useOnClickDeleteCard,
+} from "@/app/lib/db/AddCollectionPageDB";
+
+function useStayUpdated(methods: UseFormReturn<QuestionCardType>) {
+  const data = methods.watch();
+  const { lazyUpdateCard } = useLazyUpdateCard();
+
+  useEffect(() => {
+    if (methods.formState.isDirty) {
+      lazyUpdateCard({
+        ...data,
+        numberOfCorrectAnswers: calculateNumberOfCorrectOptions(data.options),
+      });
+    }
+  }, [data]);
+}
 
 export default memo(function QuestionCard({
   id,
   questionTitle,
   options,
-}: QuestionCardType & {
-  // index: number;
-}) {
-  useAddCardOnShortcut();
-
+}: QuestionCardType) {
   const methods = useForm<QuestionCardType>({
     defaultValues: {
-      id: id,
+      id,
       questionTitle,
       options,
     },
@@ -24,25 +36,10 @@ export default memo(function QuestionCard({
 
   console.log("Question card render");
 
-  const { lazyUpdateCard, deleteCard } = useServiceOneCard();
+  useStayUpdated(methods);
+  const { onClickDeleteCard } = useOnClickDeleteCard(id);
 
-  const data = methods.watch();
-
-  useEffect(() => {
-    if (methods.formState.isDirty) {
-      lazyUpdateCard(
-        {
-          ...data,
-          numberOfCorrectAnswers: calculateNumberOfCorrectOptions(data.options),
-        },
-        () => {}
-      );
-    }
-  }, [data]);
-
-  const onDeleteBtnClick = () => deleteCard(id);
-
-  return <QuestionCardUI {...{ methods, onDeleteBtnClick }} />;
+  return <QuestionCardUI {...{ methods, onClickDeleteCard }} />;
 });
 
 function calculateNumberOfCorrectOptions(
