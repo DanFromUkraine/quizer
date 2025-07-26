@@ -12,13 +12,7 @@ type StatusBarColors = "green" | "yellow" | undefined;
 
 export const statusBarColorAtom = atom<StatusBarColors>();
 
-export const setStatusBarColorAtom = atom(
-  null,
-  (get, set, newVal: StatusBarColors) => {
-    const prev = get(statusBarColorAtom);
-    if (prev !== newVal) set(statusBarColorAtom, newVal);
-  }
-);
+
 
 export function useChangeStatusBarColor(newColor: StatusBarColors) {
   const triggered = useRef(false);

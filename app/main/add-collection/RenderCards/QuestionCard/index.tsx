@@ -34,8 +34,6 @@ export default memo(function QuestionCard({
     },
   });
 
-  console.log("Question card render");
-
   useStayUpdated(methods);
   const { onClickDeleteCard } = useOnClickDeleteCard(id);
 

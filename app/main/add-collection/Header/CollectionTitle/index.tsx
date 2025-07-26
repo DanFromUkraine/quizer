@@ -1,14 +1,10 @@
-import { usePageTitle } from "@/app/lib/db/AddCollectionPageDB";
-import { FormEventHandler } from "react";
+import { FormEventHandler, useRef } from "react";
 import CollectionTitleUI from "./UI";
+import { useFormContext } from "react-hook-form";
 
 export default function CollectionTitle() {
-  const { title, lazyUpdateTitle } = usePageTitle();
+  const titleRef = useRef<HTMLInputElement>(null);
+  const { control } = useFormContext();
 
-  const onInput: FormEventHandler<HTMLInputElement> = (event) => {
-    const target = event.target as HTMLInputElement;
-    lazyUpdateTitle(target.value);
-  };
-
-  return <CollectionTitleUI {...{ title, onInput }} />;
+  return <CollectionTitleUI {...{ ref: titleRef, control }} />;
 }

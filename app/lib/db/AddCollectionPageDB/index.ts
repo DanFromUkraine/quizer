@@ -23,15 +23,14 @@ import { deleteThisDB } from "./utils";
 
 function useInitPageTitle({
   db,
-  isDbClosed,
+
   setTitle,
 }: {
   db: IDBPDatabase<AddCollectionPageSchema> | null;
-  isDbClosed: boolean;
   setTitle: Dispatch<SetStateAction<string>>;
 }) {
   useEffect(() => {
-    if (db === null || isDbClosed) return;
+    if (db === null) return;
     getOrAndInit({
       db,
       storeName: "meta",
@@ -45,24 +44,25 @@ function useInitPageTitle({
   }, [db]);
 }
 
-export function usePageTitle() {
-  const { db, isDbClosed, createDebounceMemo } = useDB();
+export function useGetPageTitle() {
+  const { db } = useDB();
   const [title, setTitle] = useAtom(collectionTitleAtom);
-  const { updateCallback } = createDebounceMemo();
 
-  useInitPageTitle({ db, isDbClosed, setTitle });
+  useInitPageTitle({ db, setTitle });
 
-  const lazyUpdateTitle = (newTitle: string) => {
-    if (db === null || isDbClosed) return;
+  return { title };
+}
 
-    updateCallback(() => {
-      db.put("meta", { id: "collectionTitle", value: newTitle }).then(() => {
-        setTitle(newTitle);
-      });
-    }, 1_000);
+export function useUpdatePageTitle() {
+  const { db } = useDB();
+
+  const updateTitle = async (newTitle: string) => {
+    if (db === null) return;
+
+    await db.put("meta", { id: "collectionTitle", value: newTitle });
   };
 
-  return { title, lazyUpdateTitle };
+  return { updateTitle };
 }
 
 export function useGetTitle() {
@@ -115,11 +115,13 @@ export function useInitAllCards() {
 }
 
 export function useAddEmptyCard() {
-  const { db, isDbClosed } = useDB();
+  const { db } = useDB();
   const addCard = useSetAtom(addCardAtom);
 
   const addEmptyCard = () => {
-    if (db === null || isDbClosed) return;
+    console.log({ db });
+
+    if (db === null) return;
 
     const emptyCard = {
       questionTitle: "",
@@ -139,14 +141,11 @@ export function useAddEmptyCard() {
 }
 
 export function useLazyUpdateCard() {
-  const { db, isDbClosed, createDebounceMemo } = useDB();
-  const { updateCallback } = createDebounceMemo();
+  const { db } = useDB();
 
-  const lazyUpdateCard = (newCardData: QuestionCardType) => {
-    if (db === null || isDbClosed) return;
-    updateCallback(() => {
-      return db.put("cards", newCardData);
-    }, 1_000);
+  const lazyUpdateCard = async (newCardData: QuestionCardType) => {
+    if (db === null) return;
+    return await db.put("cards", newCardData);
   };
 
   return { lazyUpdateCard };
@@ -156,9 +155,9 @@ export function useOnClickDeleteCard(id: number) {
   const { db } = useDB();
   const deleteCardJotai = useSetAtom(removeCardAtom);
 
-  const onClickDeleteCard = () => {
+  const onClickDeleteCard = async () => {
     if (db === null) return;
-    db.delete("cards", id).then(() => {
+    await db.delete("cards", id).then(() => {
       deleteCardJotai(id);
     });
   };
@@ -168,7 +167,7 @@ export function useOnClickDeleteCard(id: number) {
 
 export function useSaveCollection() {
   const { addCollection } = useAddCollection();
-  const { db, close } = useDB();
+  const { db } = useDB(); /// here I need to implement my own close implementation #closeDB
   const router = useRouter();
   const { getCards } = useGetAllCards();
   const { getTitle } = useGetTitle();
@@ -186,11 +185,16 @@ export function useSaveCollection() {
 
     console.log({ collectionTitle, cards });
 
+    const filteredCards = cards.filter(
+      (card) =>
+        typeof card.questionTitle === "string" && card.questionTitle.length > 0
+    );
+
     const result: CollectionResult = {
       id: getUniqueID(),
       timestamp: Date.now(),
       collectionTitle,
-      cards,
+      cards: filteredCards,
     };
 
     deleteThisDB(close)

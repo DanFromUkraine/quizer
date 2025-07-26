@@ -5,21 +5,29 @@ import { useEffect, useRef, useState } from "react";
 
 export function useAddCardOnShortcut() {
   const { addEmptyCard } = useAddEmptyCard();
-  const triggered = useRef(false);
-  const [pressedKeys, setPressedKeys] = useState<string[]>([]);
+  const lastPressedKeys = useRef<string[]>([]);
 
   useEffect(() => {
     const keydownListener = (event: KeyboardEvent) => {
-      if (triggered.current) return;
+      if (lastPressedKeys.current.includes(event.code)) return;
+      lastPressedKeys.current.push(event.code);
 
-      triggered.current = true;
-      setPressedKeys((prev) => [...prev, event.key]);
+      if (
+        lastPressedKeys.current.includes("ControlLeft") &&
+        lastPressedKeys.current.includes("KeyM")
+      ) {
+        console.log("call");
+        addEmptyCard();
+      }
+      console.log(lastPressedKeys.current, event);
       console.log("down");
     };
 
     const keyupListener = (event: KeyboardEvent) => {
-      triggered.current = false;
-      setPressedKeys((prev) => prev.filter((key) => key !== event.key));
+      lastPressedKeys.current = lastPressedKeys.current.filter(
+        (key) => key !== event.code
+      );
+
       console.log("up");
     };
 
@@ -30,9 +38,5 @@ export function useAddCardOnShortcut() {
       document.removeEventListener("keydown", keydownListener);
       document.removeEventListener("keyup", keyupListener);
     };
-  }, []);
-
-  useEffect(() => {
-    console.log({ pressedKeys });
-  }, [pressedKeys]);
+  }, [addEmptyCard]);
 }

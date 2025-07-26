@@ -3,7 +3,10 @@ import Option from "./Option";
 
 export default function RenderOptions({
   options,
-}: Pick<QuestionCardType, "options">) {
+  isMultiOption,
+}: Pick<QuestionCardType, "options"> & {
+  isMultiOption: boolean;
+}) {
   return (
     <div className="grid grid-cols-2 gap-6 h-fit">
       {options.map((opt, i) => (
