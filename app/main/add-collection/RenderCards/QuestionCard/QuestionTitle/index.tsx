@@ -1,6 +1,5 @@
 "use client";
 
-import { useDebounceInputAndUpdateStatusBar } from "@/app/lib/debounceInput";
 import { FormEventHandler, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import QuestionTitleUI from "./UI";
@@ -18,9 +17,8 @@ export function QuestionTitle() {
     }
   };
 
-  const onDebounceChange = useDebounceInputAndUpdateStatusBar();
 
   return (
-    <QuestionTitleUI {...{ onDebounceChange, onInput, textareaRef, control }} />
+    <QuestionTitleUI {...{ onInput, textareaRef, control }} />
   );
 }

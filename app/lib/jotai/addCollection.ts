@@ -4,7 +4,7 @@ import { atom } from "jotai";
 import { getAtomAddToArrayItem } from "./utils";
 import { MyDB } from "../db/MainPageDB/types";
 import { QuestionCardType } from "../db/AddCollectionPageDB/types";
-import { atomWithReset } from "jotai/utils";
+import { atomWithReset, atomWithStorage } from "jotai/utils";
 
 // Change status bar
 
@@ -43,4 +43,9 @@ export const removeCardAtom = atom(null, (_, set, deleteCardID: number) => {
   );
 });
 
-// improved perfomance
+// Edit cards with text modal window visibility state
+
+export const cardsEditModalVisibilityAtom = atomWithStorage(
+  "cardsEditModalVisibility",
+  false
+);

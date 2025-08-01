@@ -37,11 +37,11 @@ export function useInitCollections() {
 }
 
 export function useGetCollection(collectionID: string) {
-  const { db, isDbClosed } = useDB();
+  const { db } = useDB();
   const [collection, setCollection] = useState<CollectionResult>();
 
   useEffect(() => {
-    if (db === null || isDbClosed) return;
+    if (db === null) return;
 
     db.get("userCollections", collectionID).then((res) => {
       setCollection(res);

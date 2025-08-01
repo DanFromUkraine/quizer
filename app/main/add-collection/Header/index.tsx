@@ -28,8 +28,6 @@ function useStayUpdated(methods: UseFormReturn<HeaderFormDataType>) {
 export default function Header() {
   const { title } = useGetPageTitle();
 
-  console.log("call")
-
   const methods = useForm<HeaderFormDataType>({
     defaultValues: {
       collectionTitle: title,

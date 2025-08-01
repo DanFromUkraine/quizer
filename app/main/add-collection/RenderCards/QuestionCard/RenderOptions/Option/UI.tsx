@@ -1,20 +1,14 @@
-import { OnDebounceChange } from "@/app/lib/debounceInput";
-import {
-  Control,
-  Controller
-} from "react-hook-form";
+import { Control, Controller } from "react-hook-form";
 import { FaCheck } from "react-icons/fa";
 
 export default function OptionUI({
   index,
   onRemoveBtnClick,
   control,
-  onDebounceChange,
 }: {
   index: number;
   onRemoveBtnClick: () => void;
   control: Control;
-  onDebounceChange: OnDebounceChange;
 }) {
   return (
     <div className="flex justify-between bg-fillbg rounded-normal overflow-hidden w-full text-questTextColor font-semibold">
@@ -27,7 +21,7 @@ export default function OptionUI({
               <input
                 type="checkbox"
                 {...field}
-                onChange={onDebounceChange(field.onChange)}
+                onChange={field.onChange}
                 className="absolute inset-0 opacity-0 z-20 peer"
               />
             )}
@@ -42,9 +36,8 @@ export default function OptionUI({
             <input
               type="text"
               ref={(el) => ref(el)}
-              // {...field}
               defaultValue={value}
-              onChange={onDebounceChange(onChange)}
+              onChange={onChange}
               className="w-full p-3 duration-150"
             />
           )}

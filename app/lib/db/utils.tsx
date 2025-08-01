@@ -22,8 +22,6 @@ export function createContextDefault<
 >(): DBContextType<Schema> {
   return createContext({
     db: null as IDBPDatabase<Schema> | null,
-    close: () => {},
-    isDbClosed: true as boolean,
   });
 }
 
@@ -89,34 +87,6 @@ export async function getOrAndInit<
 export type DBContextType<DBSchema extends {}> = Context<{
   db: IDBPDatabase<DBSchema> | null;
 }>;
-
-function useFlushManager() {
-  const flushFns = useRef<FlushDebounceType[]>([]);
-
-  const finishAll = () => {
-    flushFns.current.forEach(({ flush }) => flush());
-    flushFns.current = [];
-  };
-
-  const onAddFlush = (newFlush: FlushDebounceType) => {
-    flushFns.current.push(newFlush);
-  };
-
-  const onRemoveFlush = (deleteID: string) => {
-    flushFns.current = flushFns.current.filter(({ id }) => id !== deleteID);
-  };
-
-  return {
-    finishAll,
-    onAddFlush,
-    onRemoveFlush,
-  };
-}
-
-type FlushDebounceType = {
-  id: string;
-  flush: () => void;
-};
 
 export function ProviderDB<DBSchema extends {}>({
   ContextBody,
