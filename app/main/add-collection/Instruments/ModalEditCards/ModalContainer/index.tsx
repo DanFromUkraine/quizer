@@ -1,9 +1,8 @@
 "use client";
 
 import { cardsEditModalVisibilityAtom } from "@/app/lib/jotai/addCollection";
-import clsx from "clsx";
-import { useAtom, useAtomValue } from "jotai";
-import { MouseEventHandler, useRef } from "react";
+import { useAtom } from "jotai";
+import { MouseEventHandler } from "react";
 import ModalContainerUI from "./UI";
 
 export function ModalContainer() {

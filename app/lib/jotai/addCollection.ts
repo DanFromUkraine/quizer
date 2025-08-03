@@ -6,14 +6,12 @@ import { MyDB } from "../db/MainPageDB/types";
 import { QuestionCardType } from "../db/AddCollectionPageDB/types";
 import { atomWithReset, atomWithStorage } from "jotai/utils";
 
-// Change status bar
-
-// Collection title
+// Collection title:
 
 export const dbAtom = atom<MyDB | null>(null);
 export const collectionTitleAtom = atomWithReset("");
 
-// Question Cards
+// Question Cards:
 
 export const cardsAtom = atomWithReset<QuestionCardType[]>([]);
 
@@ -43,9 +41,11 @@ export const removeCardAtom = atom(null, (_, set, deleteCardID: number) => {
   );
 });
 
-// Edit cards with text modal window visibility state
+// Modal window:
 
 export const cardsEditModalVisibilityAtom = atomWithStorage(
   "cardsEditModalVisibility",
   false
 );
+
+export const saveOptionSelectedAtom = atomWithStorage("optionSelected", false);

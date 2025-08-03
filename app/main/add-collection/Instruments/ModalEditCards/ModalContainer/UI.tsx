@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { MouseEventHandler } from "react";
+import Modal from "./Modal";
 
 export default function ModalContainerUI({
   modalVisible,
@@ -22,8 +23,4 @@ export default function ModalContainerUI({
       </div>
     </div>
   );
-}
-
-function Modal() {
-  return <div className="w-8/12 bg-gray-700 h-8/12 rounded-4xl"></div>;
 }
