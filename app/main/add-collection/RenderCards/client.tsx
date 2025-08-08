@@ -16,7 +16,6 @@ export function useAddCardOnShortcut() {
         lastPressedKeys.current.includes("ControlLeft") &&
         lastPressedKeys.current.includes("KeyM")
       ) {
-        console.log("call");
         addEmptyCard();
       }
       console.log(lastPressedKeys.current, event);

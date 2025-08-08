@@ -119,7 +119,7 @@ export function useAddEmptyCard() {
   const addCard = useSetAtom(addCardAtom);
 
   const addEmptyCard = () => {
-    console.log({ db });
+    console.log({ db }, "click on btn");
 
     if (db === null) return;
 
@@ -129,7 +129,7 @@ export function useAddEmptyCard() {
       numberOfCorrectAnswers: 0,
     } as {};
 
-    db?.add("cards", emptyCard as QuestionCardType).then((res) => {
+    db.add("cards", emptyCard as QuestionCardType).then((res) => {
       const fullEmptyCard = Object.assign(emptyCard as QuestionCardType, {
         id: res as number,
       });
@@ -191,13 +191,13 @@ export function useSaveCollection() {
     );
 
     const result: CollectionResult = {
-      id: getUniqueID(),
+      id: new URLSearchParams(collectionTitle).toString(),
       timestamp: Date.now(),
       collectionTitle,
       cards: filteredCards,
     };
 
-    deleteThisDB(close)
+    deleteThisDB(() => db?.close())
       .then(async () => await addCollection(result))
       .then(() => {
         router.replace("/main");

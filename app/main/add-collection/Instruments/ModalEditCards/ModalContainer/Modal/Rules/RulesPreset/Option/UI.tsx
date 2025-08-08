@@ -15,7 +15,7 @@ export default function OptionUI({
   onChange: () => void;
 }) {
   return (
-    <div className="flex relative w-fit">
+    <div className="flex items-center gap-2 py-2 h-[38px] relative w-full group hover:border-y hover:border-y-[#8f30aa]  text-lightestGray">
       <input
         type="checkbox"
         name={name}
@@ -25,7 +25,7 @@ export default function OptionUI({
       />
       <div
         className={clsx(
-          "overflow-hidden size-5 rounded-normal border-2 border-[#8f30aa] peer-checked:bg-[#b986c7]",
+          "overflow-hidden size-5 rounded-normal border-2 border-[#8f30aa] peer-checked:bg-[#b986c7] group-hover:!bg-[#eca7ff] duration-200",
           className
         )}
       />

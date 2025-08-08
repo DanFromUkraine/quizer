@@ -1,22 +1,15 @@
 "use client";
 
 import {
-  useAddEmptyCard,
-  useClearJotaiOnExit,
-  useInitAllCards,
+  useAddEmptyCard
 } from "@/app/lib/db/AddCollectionPageDB";
-import { useVirtualizer } from "@tanstack/react-virtual";
-import RenderCardsUI from "./UI";
-import { useAddCardOnShortcut } from "./client";
-import { useAtomValue } from "jotai";
 import { cardsAtom } from "@/app/lib/jotai/addCollection";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { useAtomValue } from "jotai";
 import { useRef } from "react";
+import RenderCardsUI from "./UI";
 
 export default function RenderCards() {
-  useAddCardOnShortcut();
-  useInitAllCards();
-  useClearJotaiOnExit();
-
   const { addEmptyCard } = useAddEmptyCard();
   const cards = useAtomValue(cardsAtom);
 
@@ -26,6 +19,8 @@ export default function RenderCards() {
     getScrollElement: () => allContainerRef.current,
     estimateSize: () => 500,
   });
+
+  console.log("render cards")
 
   return (
     <RenderCardsUI

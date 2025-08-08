@@ -4,53 +4,56 @@ import {
   QuestionCardType,
 } from "../AddCollectionPageDB/types";
 
-//////// BOTH SUITABLE
+//// Both suitable
 
-type LoggedQuestionCard = {
-  answerChoosed: number | undefined;
-} & QuestionCardType;
-
-type LoggedCollection = {
-  collectionTitle: string;
-  cards: LoggedQuestionCard[];
+type CollectionStoryGen = {
+  collectionName: string;
 };
 
-//////// COMPLETED COLLECTION TYPES
+type Option = {
+  optionText: string;
+  isCorrect: boolean;
+  optionChosen: boolean;
+};
 
-type CompleteAttemp = {
+type Card = {
+  questionTitle: string;
+  options: Option[];
+};
+
+type Attemp = {
+  attempID: string;
+  cards: Card[];
+};
+
+//// Complete
+
+type CompleteAttemp = Attemp & {
   endTime: number;
   duration: number;
-  correctAnswers: number;
-  numOfQuestions: number;
-  collection: LoggedCollection;
 };
-
-type CompleteCollection = {
-  collectionID: string;
+type CollectionStoryComplete = CollectionStoryGen & {
   attemps: CompleteAttemp[];
 };
 
-//////// INCOMPLETE COLLECTION TYPES
+//// Incomplete
 
-type Attemp = {
+type IncompleteAttemp = Attemp & {
   startTime: number;
-  duration: number;
-  correctAnswers: number;
-  numOfQuestions: number;
-  collection: LoggedCollection;
+};
+type CollectionStoryIncomplete = CollectionStoryGen & {
+  attemps: IncompleteAttemp[];
 };
 
-type IncompleteCollection = {
-  collectionID: string;
-};
+////
 
-export interface HistoryDBInterface extends DBSchema {
-  completed: {
+export interface HistoryDBInterface {
+  complete: {
     key: string;
-    value: CompleteCollection;
+    value: CollectionStoryComplete;
   };
   incomplete: {
     key: string;
-    value: IncompleteCollection;
+    value: CollectionStoryIncomplete;
   };
 }

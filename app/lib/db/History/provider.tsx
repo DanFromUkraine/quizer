@@ -3,16 +3,18 @@
 import { ReactNode, use } from "react";
 import { createContextDefault, ProviderDB } from "../utils";
 import { HistoryDBInterface } from "./types";
+import { IDBPDatabase } from "idb";
 
 const DBContext = createContextDefault<HistoryDBInterface>();
 
-export default function HistoryDbContextProvider({
+export default function HistoryDBContextProvider({
   children,
 }: {
   children: ReactNode;
 }) {
-  const upgrade = () => {
-    
+  const upgrade = (db: IDBPDatabase<HistoryDBInterface>) => {
+    db.createObjectStore("completed");
+    db.createObjectStore("incomplete");
   };
 
   return (
@@ -24,4 +26,4 @@ export default function HistoryDbContextProvider({
   );
 }
 
-const useDB = use(DBContext);
+export const useDB = () => use(DBContext);

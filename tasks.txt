@@ -24,3 +24,6 @@
 1. Тепер очищує невикористані карточки
 
 
+log:
+- Changed method to create id for new created collections (now I convert collectionTitle to URLSearchParams)
+- Now you can see if selected option was correct after click

@@ -3,6 +3,7 @@ import QuestionCard from "./QuestionCard";
 import { IndexContextProvider } from "./QuestionCard/CardIndex";
 import { RefObject } from "react";
 import { Virtualizer } from "@tanstack/react-virtual";
+import BtnWithShortcut from "@/app/lib/utilComponents/ButtonWithShortcut";
 
 export default function RenderCardsUI({
   cards,
@@ -16,7 +17,10 @@ export default function RenderCardsUI({
   rowVirtualizer: Virtualizer<HTMLElement, Element>;
 }) {
   return (
-    <section ref={allContainerRef}>
+    <section
+      ref={allContainerRef}
+      style={{ height: rowVirtualizer.getTotalSize() }}
+    >
       <div className="flex flex-col gap-2.5">
         {rowVirtualizer.getVirtualItems().map((virtualItem, i) => {
           const cardData = cards[i];
@@ -28,13 +32,12 @@ export default function RenderCardsUI({
         })}
       </div>
       <section className="w-full flex justify-center pt-4">
-        <button
-          type="button"
-          className="bg-blueAccent simpleButton"
+        <BtnWithShortcut
+          textContent="Add card"
           onClick={() => addEmptyCard()}
-        >
-          Додати карточку
-        </button>
+          type="button"
+          shortcutKeys={["Ctrl", "M"]}
+        />
       </section>
     </section>
   );
