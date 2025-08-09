@@ -1,14 +1,7 @@
 "use client";
 
 import { IDBPDatabase, openDB, StoreKey, StoreNames, StoreValue } from "idb";
-import {
-  Context,
-  createContext,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { Context, createContext, ReactNode, useEffect, useState } from "react";
 
 export enum DB_NAMES {
   MAIN_PAGE = "MainPageDB",
@@ -17,11 +10,15 @@ export enum DB_NAMES {
 
 export type GeneralDB<DataSchema> = IDBPDatabase<DataSchema>;
 
-export function createContextDefault<
-  Schema extends {}
->(): DBContextType<Schema> {
-  return createContext({
+type DBContextShape<Schema extends {}, ForwardInfo> = {
+  db: IDBPDatabase<Schema> | null;
+  forwardInfo: ForwardInfo | undefined;
+};
+
+export function createContextDefault<Schema extends {}, ForwardInfo>() {
+  return createContext<DBContextShape<Schema, ForwardInfo>>({
     db: null as IDBPDatabase<Schema> | null,
+    forwardInfo: null as ForwardInfo,
   });
 }
 
@@ -84,25 +81,47 @@ export async function getOrAndInit<
   return result;
 }
 
-export type DBContextType<DBSchema extends {}> = Context<{
-  db: IDBPDatabase<DBSchema> | null;
+export type DBContextGenType<DataSchema extends {}> = Context<{
+  db: IDBPDatabase<DataSchema> | null;
 }>;
 
-export function ProviderDB<DBSchema extends {}>({
+export type DBContextExtendedType<
+  DataSchema extends {},
+  ForwardInfo = undefined
+> = Context<{
+  db: IDBPDatabase<DataSchema> | null;
+  forwardInfo: ForwardInfo;
+}>;
+
+type ProviderDbArgs<DataSchema extends {}, ForwardInfo = undefined> = {
+  ContextBody: ReturnType<typeof createContextDefault<DataSchema, ForwardInfo>>;
+  upgrade: (db: IDBPDatabase<DataSchema>) => void;
+  children: ReactNode;
+  dbName: string;
+  forwardInfo?: ForwardInfo;
+};
+
+export function ProviderDB<DataSchema extends {}>(
+  args: ProviderDbArgs<DataSchema>
+): ReactNode;
+export function ProviderDB<DataSchema extends {}, ForwardInfo>({
+  forwardInfo,
+  ...args
+}: ProviderDbArgs<DataSchema, ForwardInfo> & {
+  forwardInfo: ForwardInfo;
+}): ReactNode;
+
+export function ProviderDB<DataSchema extends {}, ForwardInfo = undefined>({
   ContextBody,
   upgrade,
   children,
   dbName,
-}: {
-  ContextBody: DBContextType<DBSchema>;
-  upgrade: (db: IDBPDatabase<DBSchema>) => void;
-  children: ReactNode;
-  dbName: string;
-}) {
-  const [db, setDB] = useState<IDBPDatabase<DBSchema> | null>(null);
+  forwardInfo,
+}: ProviderDbArgs<DataSchema, ForwardInfo>) {
+  const [db, setDB] = useState<IDBPDatabase<DataSchema> | null>(null);
 
   const startNewDB = () => {
-    getDB<DBSchema>({
+    getDB<DataSchema>({
       dbName: dbName,
       upgrade,
     }).then((res) => {
@@ -124,6 +143,7 @@ export function ProviderDB<DBSchema extends {}>({
     <ContextBody.Provider
       value={{
         db,
+        forwardInfo: forwardInfo,
       }}
     >
       {children}

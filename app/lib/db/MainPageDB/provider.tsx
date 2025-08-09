@@ -9,7 +9,7 @@ import {
 } from "../utils";
 import { MainPageSchema, MyDB } from "./types";
 
-const DBContext = createContextDefault<MainPageSchema>();
+const DBContext = createContextDefault<MainPageSchema, undefined>();
 
 export default function MainPageDBContextProvider({
   children,
@@ -21,7 +21,7 @@ export default function MainPageDBContextProvider({
   };
 
   return (
-    <ProviderDB
+    <ProviderDB<MainPageSchema>
       {...{ dbName: DB_NAMES.MAIN_PAGE, upgrade, ContextBody: DBContext }}
     >
       {children}

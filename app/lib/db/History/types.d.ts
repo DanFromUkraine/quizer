@@ -43,6 +43,7 @@ type IncompleteAttemp = Attemp & {
 };
 type CollectionStoryIncomplete = CollectionStoryGen & {
   attemps: IncompleteAttemp[];
+  attemp: IncompleteAttemp; // this is temporary property to simplify overall developing
 };
 
 ////

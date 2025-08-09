@@ -5,13 +5,11 @@ import {
   createContextDefault,
   createObjStoreDefault,
   DB_NAMES,
-  DBContextType,
   ProviderDB,
 } from "../utils";
 import { AddCollectionPageSchema, MyDB } from "./types";
 
-const DBContext: DBContextType<AddCollectionPageSchema> =
-  createContextDefault<AddCollectionPageSchema>();
+const DBContext = createContextDefault<AddCollectionPageSchema, undefined>();
 
 export function AddCollectionPageDBContextProvider({
   children,

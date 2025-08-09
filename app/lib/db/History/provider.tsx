@@ -1,16 +1,24 @@
 "use client";
 
+import { IDBPDatabase } from "idb";
 import { ReactNode, use } from "react";
 import { createContextDefault, ProviderDB } from "../utils";
 import { HistoryDBInterface } from "./types";
-import { IDBPDatabase } from "idb";
+type HistoryForwardInfo = {
+  collectionID: string;
+};
 
-const DBContext = createContextDefault<HistoryDBInterface>();
+const DBContext = createContextDefault<
+  HistoryDBInterface,
+  HistoryForwardInfo
+>();
 
 export default function HistoryDBContextProvider({
   children,
+  collectionID,
 }: {
   children: ReactNode;
+  collectionID: string;
 }) {
   const upgrade = (db: IDBPDatabase<HistoryDBInterface>) => {
     db.createObjectStore("completed");
@@ -18,8 +26,16 @@ export default function HistoryDBContextProvider({
   };
 
   return (
-    <ProviderDB<HistoryDBInterface>
-      {...{ ContextBody: DBContext, dbName: "history", upgrade }}
+    <ProviderDB<HistoryDBInterface, HistoryForwardInfo>
+      {...{
+        ContextBody: DBContext,
+        dbName: "history",
+        upgrade,
+
+        forwardInfo: {
+          collectionID,
+        },
+      }}
     >
       {children}
     </ProviderDB>
