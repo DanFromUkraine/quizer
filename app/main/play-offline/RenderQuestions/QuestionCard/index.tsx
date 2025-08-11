@@ -3,14 +3,14 @@ import Heading from "./Heading";
 import RenderOptions from "./RenderOptions";
 import NumberOfCorrectOptions from "./NumberOfCorrectOptions";
 import { useForm } from "react-hook-form";
+import { memo } from "react";
 
-export default function QuestionCard({
+export default memo(function QuestionCard({
   questionTitle,
   index,
   numberOfCorrectAnswers,
   options,
 }: QuestionCardType & { index: number }) {
-
   const methods = useForm();
 
   return (
@@ -23,4 +23,4 @@ export default function QuestionCard({
       />
     </div>
   );
-}
+});

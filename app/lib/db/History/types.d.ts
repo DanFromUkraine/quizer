@@ -1,8 +1,4 @@
 import { DBSchema } from "idb";
-import {
-  CollectionResult,
-  QuestionCardType,
-} from "../AddCollectionPageDB/types";
 
 //// Both suitable
 
@@ -10,20 +6,20 @@ type CollectionStoryGen = {
   collectionName: string;
 };
 
-type Option = {
+type TestOption = {
   optionText: string;
   isCorrect: boolean;
   optionChosen: boolean;
 };
 
-type Card = {
+export type TestCard = {
   questionTitle: string;
-  options: Option[];
+  options: TestOption[];
 };
 
 type Attemp = {
   attempID: string;
-  cards: Card[];
+  cards: TestCard[];
 };
 
 //// Complete
@@ -38,17 +34,17 @@ type CollectionStoryComplete = CollectionStoryGen & {
 
 //// Incomplete
 
-type IncompleteAttemp = Attemp & {
+export type IncompleteAttemp = Attemp & {
   startTime: number;
 };
-type CollectionStoryIncomplete = CollectionStoryGen & {
+export type CollectionStoryIncomplete = CollectionStoryGen & {
   attemps: IncompleteAttemp[];
   attemp: IncompleteAttemp; // this is temporary property to simplify overall developing
 };
 
 ////
 
-export interface HistoryDBInterface {
+export interface HistoryDBInterface extends DBSchema {
   complete: {
     key: string;
     value: CollectionStoryComplete;

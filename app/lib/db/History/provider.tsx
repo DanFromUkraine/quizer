@@ -21,8 +21,12 @@ export default function HistoryDBContextProvider({
   collectionID: string;
 }) {
   const upgrade = (db: IDBPDatabase<HistoryDBInterface>) => {
-    db.createObjectStore("completed");
-    db.createObjectStore("incomplete");
+    if (!db.objectStoreNames.contains("complete")) {
+      db.createObjectStore("complete", { keyPath: "id" });
+    }
+    if (!db.objectStoreNames.contains("incomplete")) {
+      db.createObjectStore("incomplete", { keyPath: "id" });
+    }
   };
 
   return (

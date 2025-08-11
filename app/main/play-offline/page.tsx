@@ -1,6 +1,7 @@
 import HistoryDBContextProvider from "@/app/lib/db/History/provider";
 import MainPageDBContextProvider from "@/app/lib/db/MainPageDB/provider";
 import RenderQuestions from "./RenderQuestions";
+import CollectionContextProvider from "./Provider";
 
 export default async function page({
   searchParams,
@@ -15,7 +16,9 @@ export default async function page({
     <main className="w-full p-8">
       <MainPageDBContextProvider>
         <HistoryDBContextProvider collectionID={params.id}>
-          <RenderQuestions />
+          <CollectionContextProvider>
+            <RenderQuestions />
+          </CollectionContextProvider>
         </HistoryDBContextProvider>
       </MainPageDBContextProvider>
     </main>
