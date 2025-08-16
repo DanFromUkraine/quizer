@@ -1,13 +1,19 @@
 "use client";
 
 import { QuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
+import { useTickOption } from "@/app/lib/db/History";
 import clsx from "clsx";
 import { useState } from "react";
+
+function useOptionClicked(isCorrect: boolean) {
+  const { tickOption } = useTickOption();
+}
 
 export default function Option({
   isCorrect,
   optionText,
-}: Pick<QuestionCardType, "options">["options"][number]) {
+  index
+}: Pick<QuestionCardType, "options">["options"][number] & { index: number }) {
   const [correct, setCorrect] = useState<string>();
 
   const onClick = () => {

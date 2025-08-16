@@ -1,4 +1,5 @@
 import { DBSchema } from "idb";
+import { QuestionCardType } from "../AddCollectionPageDB/types";
 
 //// Both suitable
 
@@ -12,9 +13,9 @@ type TestOption = {
   optionChosen: boolean;
 };
 
-export type TestCard = {
-  questionTitle: string;
+export type TestCard = Omit<QuestionCardType, "options"> & {
   options: TestOption[];
+  anyOptionChosen: boolean;
 };
 
 type Attemp = {

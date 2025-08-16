@@ -1,15 +1,26 @@
-import { useDB } from "./provider";
-import { useDB as useMainDB } from "../MainPageDB/provider";
-import { useCallback, useEffect, useState } from "react";
-import { CollectionStoryIncomplete, IncompleteAttemp, TestCard } from "./types";
-import { QuestionCardType } from "../AddCollectionPageDB/types";
+/*
+This is very shitty code, and I could segragate all the functionality by increasing abstraction, but now I'm trying just to finish user actions cycle
+
+
+So it will be done later. Also even if I make the code look better, it won't solve the fundamental problems in perfomance. What problems? I use global context that are used in most of the components, and their state is inevitably changed (like most basic db context). This is why UI can be changed much more often, without such necessity. Memo could imporove situation, but this is a makeshift
+*/
+
 import { useAtomValue, useSetAtom } from "jotai";
+import { useCallback, useEffect, useState } from "react";
 import { dataReadyAtom } from "../../jotai/playOffline";
+import { QuestionCardType } from "../AddCollectionPageDB/types";
+import { useDB as useMainDB } from "../MainPageDB/provider";
+import { useDB } from "./provider";
+import { CollectionStoryIncomplete, IncompleteAttemp, TestCard } from "./types";
 
 function getModifiedQuestionCards(cards: QuestionCardType[]): TestCard[] {
   return cards.map((card) => ({
     ...card,
-
+    anyOptionChosen: false,
+    numberOfCorrectAnswers: card.options.reduce(
+      (acc, { isCorrect }) => acc + Number(isCorrect),
+      0
+    ),
     options: card.options.map((opt) => ({
       optionChosen: false,
       ...opt,
@@ -34,6 +45,8 @@ export function useInitFromHistory() {
     (async function initiateDbOrNothing() {
       console.log("call before");
 
+      console.log("useEffect useGetCollection ", { mainDB, db, forwardInfo });
+
       if (!forwardInfo || !db || !mainDB) return;
 
       console.log("callMicrotask");
@@ -53,18 +66,19 @@ export function useInitFromHistory() {
       if (!baseCollectionInfo)
         throw `could not gain info from Main Page DB. collection id: ${forwardInfo.collectionID}. Initiation of collection in history db is aborted`;
 
-      const newInfo: CollectionStoryIncomplete = {
+      const newInfo: CollectionStoryIncomplete & {
+        id: string;
+      } = {
         collectionName: baseCollectionInfo.collectionTitle,
         attemps: [],
         attemp: getAttemp(baseCollectionInfo.cards),
+        id: forwardInfo.collectionID,
       };
 
-      db.put("incomplete", newInfo, forwardInfo.collectionID).then(
-        (successInfo) => {
-          console.log("success!", { successInfo });
-          setDataReady(true);
-        }
-      );
+      db.put("incomplete", newInfo).then((successInfo) => {
+        console.log("success!", { successInfo });
+        setDataReady(true);
+      });
     })();
   }, [db, mainDB]);
 }
@@ -76,9 +90,11 @@ export function useGetCollection() {
     useState<CollectionStoryIncomplete | null>(null);
 
   useEffect(() => {
+    console.log("useEffect useGetCollection ", { isDbReady, db, forwardInfo });
+
     if (!isDbReady || !db || !forwardInfo) return;
 
-    console.log("call");
+    console.log(isDbReady ? "DB is ready!!!" : "DB is not ready!!!");
 
     db.get("incomplete", forwardInfo.collectionID).then((res) => {
       if (!res)
@@ -91,4 +107,42 @@ export function useGetCollection() {
   }, [db, isDbReady, forwardInfo]);
 
   return { collection };
+}
+
+export function useTickOption() {
+  const { db, forwardInfo } = useDB();
+  const isDbReady = useAtomValue(dataReadyAtom);
+
+  const tickOption = useCallback(
+    async ({
+      questionIndex,
+      optionIndex,
+    }: {
+      questionIndex: number;
+      optionIndex: number;
+    }) => {
+      if (!db || !forwardInfo || !isDbReady) return;
+
+      const prevData = await db.get("incomplete", forwardInfo.collectionID);
+      if (!prevData)
+        throw `for some reason could not find collection, but was asked to tick option of question of this collection`;
+      const thatQuestionCard = prevData.attemp.cards.find(
+        (_, i) => i === questionIndex
+      );
+      if (!thatQuestionCard)
+        throw `could not find question in ${forwardInfo.collectionID} with index ${questionIndex}`;
+      thatQuestionCard.anyOptionChosen = true;
+      const thatOption = thatQuestionCard.options.find(
+        (_, i) => optionIndex === i
+      );
+      if (!thatOption)
+        throw `Could not find option with index ${optionIndex} within question card with index ${questionIndex} within collection ${forwardInfo.collectionID}`;
+      thatOption.optionChosen = true;
+
+      db.put("incomplete", prevData);
+    },
+    [db, isDbReady]
+  );
+
+  return { tickOption };
 }

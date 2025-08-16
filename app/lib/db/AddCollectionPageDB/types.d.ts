@@ -11,7 +11,6 @@ export type CollectionResult = MetaPureType & {
 };
 
 export type QuestionCardType = {
-  id: number;
   questionTitle: string;
   numberOfCorrectAnswers: number;
   options: {

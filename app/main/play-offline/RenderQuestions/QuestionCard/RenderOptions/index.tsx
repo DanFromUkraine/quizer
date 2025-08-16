@@ -6,11 +6,12 @@ export default function RenderOptions({
   isMultiOption,
 }: Pick<QuestionCardType, "options"> & {
   isMultiOption: boolean;
+  questionIndex: number;
 }) {
   return (
     <div className="grid grid-cols-2 gap-6 h-fit">
       {options.map((opt, i) => (
-        <Option key={i} {...opt} />
+        <Option key={i} {...opt} index={i} />
       ))}
     </div>
   );
