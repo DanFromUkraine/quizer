@@ -3,13 +3,15 @@ import { memo } from "react";
 import Heading from "./Heading";
 import NumberOfCorrectOptions from "./NumberOfCorrectOptions";
 import RenderOptions from "./RenderOptions";
+import { TestCard } from "@/app/lib/db/History/types";
 
 export default memo(function QuestionCard({
   questionTitle,
   index,
   numberOfCorrectAnswers,
   options,
-}: QuestionCardType & { index: number }) {
+  anyOptionChosen,
+}: TestCard & { index: number }) {
   return (
     <div className="max-w-3xl flex flex-col gap-3 w-full border border-lightGray p-6 rounded-normal">
       <Heading questionTitle={questionTitle} index={index} />

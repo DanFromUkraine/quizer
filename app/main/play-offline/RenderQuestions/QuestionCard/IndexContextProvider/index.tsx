@@ -1,6 +1,6 @@
 import { createContext, ReactNode } from "react";
 
-export const IndexContext = createContext<number | null>(null);
+export const IndexContext = createContext<number>(0);
 
 export default function IndexContextProvider({
   children,

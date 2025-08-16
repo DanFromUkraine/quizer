@@ -2,22 +2,54 @@
 
 import { QuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
 import { useTickOption } from "@/app/lib/db/History";
+import { TestOption } from "@/app/lib/db/History/types";
 import clsx from "clsx";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-function useOptionClicked(isCorrect: boolean) {
+function useClickOption({
+  isCorrect,
+  optionIndex,
+  questionIndex,
+}: {
+  isCorrect: boolean;
+  optionIndex: number;
+  questionIndex: number;
+}) {
   const { tickOption } = useTickOption();
+  const ticked = useRef(false);
+
+  const onTick = useCallback(() => {
+    if (ticked.current) return;
+    tickOption({ questionIndex, optionIndex });
+  }, []);
+
+  return { onTick };
 }
 
 export default function Option({
   isCorrect,
   optionText,
-  index
-}: Pick<QuestionCardType, "options">["options"][number] & { index: number }) {
-  const [correct, setCorrect] = useState<string>();
+  optionIndex,
+  questionIndex,
+  optionChosen,
+}: TestOption & {
+  optionIndex: number;
+  questionIndex: number;
+}) {
+  const [correct, setCorrect] = useState<"correct" | "incorrect">();
+  const { onTick } = useClickOption({ questionIndex, optionIndex, isCorrect });
+
+  const showIsCorrect = useCallback(() => {
+    setCorrect(isCorrect ? "correct" : "incorrect");
+  }, []);
+
+  useEffect(() => {
+    if (optionChosen) showIsCorrect()
+  }, [optionChosen])
 
   const onClick = () => {
-    setCorrect(isCorrect ? "correct" : "incorrect");
+    showIsCorrect();
+    onTick();
   };
 
   return (
