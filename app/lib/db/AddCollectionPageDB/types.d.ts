@@ -7,10 +7,11 @@ type MetaPureType = {
 export type CollectionResult = MetaPureType & {
   id: string;
   timestamp: number;
-  cards: QuestionCardType[];
+  cards: CreateModeQuestionCardType[];
 };
 
-export type QuestionCardType = {
+export type CreateModeQuestionCardType = {
+  id: number;
   questionTitle: string;
   numberOfCorrectAnswers: number;
   options: {
@@ -29,7 +30,7 @@ export interface AddCollectionPageSchema extends DBSchema {
   };
   cards: {
     key: number;
-    value: QuestionCardType;
+    value: CreateModeQuestionCardType;
   };
 }
 

@@ -13,14 +13,18 @@ type TestOption = {
   optionChosen: boolean;
 };
 
-export type TestCard = Omit<QuestionCardType, "options"> & {
+export type AssessmentModeQuestionCardType = Omit<
+  QuestionCardType,
+  "options"
+> & {
   options: TestOption[];
   anyOptionChosen: boolean;
+  numberOfCorrectAnswers: number;
 };
 
 type Attemp = {
   attempID: string;
-  cards: TestCard[];
+  cards: AssessmentModeQuestionCardType[];
 };
 
 //// Complete
@@ -28,9 +32,12 @@ type Attemp = {
 type CompleteAttemp = Attemp & {
   endTime: number;
   duration: number;
+  numberOfCorrectAnswers: number;
+  numberOfQuestions: number;
 };
 type CollectionStoryComplete = CollectionStoryGen & {
   attemps: CompleteAttemp[];
+  attemp: CompleteAttemp;
 };
 
 //// Incomplete

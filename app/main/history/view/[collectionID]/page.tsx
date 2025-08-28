@@ -1,25 +1,20 @@
 import HistoryDBContextProvider from "@/app/lib/db/History/provider";
 import MainPageDBContextProvider from "@/app/lib/db/MainPageDB/provider";
-import RenderQuestions from "./RenderQuestions";
-import CollectionContextProvider from "./Provider";
-import SubmitButton from "./SubmitButton";
+import CollectionContextProvider from "@/app/main/play-offline/Provider";
 
-export default async function page({
+export default async function ViewSearchParams({
   searchParams,
 }: {
-  searchParams: Promise<{ id: string | undefined }>;
+  searchParams: Promise<{ id: string }>;
 }) {
   const params = await searchParams;
-
-  if (typeof params.id !== "string") throw "No Collection ID in URL";
 
   return (
     <main className="w-full p-8 flex flex-col gap-2 items-center">
       <MainPageDBContextProvider>
         <HistoryDBContextProvider collectionID={params.id}>
           <CollectionContextProvider>
-            <RenderQuestions />
-            <SubmitButton />
+            <p>hello, world</p>
           </CollectionContextProvider>
         </HistoryDBContextProvider>
       </MainPageDBContextProvider>

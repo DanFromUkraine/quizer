@@ -8,12 +8,21 @@ So it will be done later. Also even if I make the code look better, it won't sol
 import { useAtomValue, useSetAtom } from "jotai";
 import { useCallback, useEffect, useState } from "react";
 import { dataReadyAtom } from "../../jotai/playOffline";
-import { QuestionCardType } from "../AddCollectionPageDB/types";
+import { CreateModeQuestionCardType } from "../AddCollectionPageDB/types";
 import { useDB as useMainDB } from "../MainPageDB/provider";
 import { useDB } from "./provider";
-import { CollectionStoryIncomplete, IncompleteAttemp, TestCard } from "./types";
+import {
+  CollectionStoryIncomplete,
+  CompleteAttemp,
+  IncompleteAttemp,
+  AssessmentModeQuestionCardType,
+} from "./types";
+import test from "node:test";
+import { redirect } from "next/navigation";
 
-function getModifiedQuestionCards(cards: QuestionCardType[]): TestCard[] {
+function getModifiedQuestionCards(
+  cards: CreateModeQuestionCardType[]
+): AssessmentModeQuestionCardType[] {
   return cards.map((card) => ({
     ...card,
     anyOptionChosen: false,
@@ -28,7 +37,7 @@ function getModifiedQuestionCards(cards: QuestionCardType[]): TestCard[] {
   }));
 }
 
-function getAttemp(cards: QuestionCardType[]): IncompleteAttemp {
+function getAttemp(cards: CreateModeQuestionCardType[]): IncompleteAttemp {
   return {
     startTime: Date.now(),
     attempID: crypto.randomUUID(),
@@ -146,3 +155,60 @@ export function useTickOption() {
 
   return { tickOption };
 }
+
+export function useSubmit() {
+  const { db, forwardInfo } = useDB();
+
+  const submit = async () => {
+    if (!db || !forwardInfo?.collectionID) return;
+    const completetionResult = await db.get(
+      "incomplete",
+      forwardInfo.collectionID
+    );
+
+    if (!completetionResult)
+      throw `While submitting and trying to retrieve collection result from incomplete object store didn't find the collection. `;
+
+    const numberOfCorrectAnswers = completetionResult.attemp.cards.reduce(
+      (acc, testCard) => {
+        const someCorrect = testCard.options.some(
+          (opt) => opt.isCorrect && opt.optionChosen
+        );
+        return acc + Number(someCorrect);
+      },
+      0
+    );
+
+    console.log({ numberOfCorrectAnswers });
+
+    const completeAttemp: CompleteAttemp & {
+      id: string;
+    } = {
+      id: forwardInfo.collectionID,
+      attempID: forwardInfo.collectionID,
+      cards: completetionResult.attemp.cards,
+      numberOfCorrectAnswers,
+      numberOfQuestions: completetionResult.attemp.cards.length,
+      endTime: Date.now(),
+      duration: Date.now() - completetionResult.attemp.startTime,
+    };
+
+    const result = {
+      id: forwardInfo.collectionID,
+      collectionName: completetionResult.collectionName,
+      attemps: [completeAttemp],
+      attemp: completeAttemp,
+    };
+
+    await db.put("complete", result);
+
+    await db.delete("incomplete", forwardInfo.collectionID);
+
+    db.close();
+    redirect(`/main/history/view/${forwardInfo.collectionID}`);
+  };
+
+  return { submit };
+}
+
+export function useGetResultInfo() {}

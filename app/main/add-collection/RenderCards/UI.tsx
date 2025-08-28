@@ -1,4 +1,4 @@
-import { QuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
+import { CreateModeQuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
 import QuestionCard from "./QuestionCard";
 import { IndexContextProvider } from "./QuestionCard/CardIndex";
 import { RefObject } from "react";
@@ -11,7 +11,7 @@ export default function RenderCardsUI({
   allContainerRef,
   rowVirtualizer,
 }: {
-  cards: QuestionCardType[];
+  cards: CreateModeQuestionCardType[];
   addEmptyCard: () => void;
   allContainerRef: RefObject<HTMLElement | null>;
   rowVirtualizer: Virtualizer<HTMLElement, Element>;
