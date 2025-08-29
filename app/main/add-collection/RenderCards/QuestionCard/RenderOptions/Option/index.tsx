@@ -9,15 +9,14 @@ export default function Option({
   index: number;
   remove: (i: number) => void;
 }) {
-  const { register } = useFormContext();
+  const { control } = useFormContext();
   const onRemoveBtnClick = () => remove(index);
 
   return (
     <OptionUI
       index={index}
-      register={register}
       onRemoveBtnClick={onRemoveBtnClick}
-      
+      control={control}
     />
   );
 }

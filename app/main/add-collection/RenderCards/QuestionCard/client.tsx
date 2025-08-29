@@ -1,33 +1,31 @@
 "use client";
 
-import { useAddEmptyCard } from "@/app/lib/db/AddCollectionPageDB";
-import {
-  useEffect,
-  useRef
-} from "react";
+import { useLazyUpdateCard } from "@/app/lib/db/AddCollectionPageDB";
+import { CreateModeQuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
+import { useEffect } from "react";
+import { UseFormReturn } from "react-hook-form";
 
-export function useAddCardOnShortcut() {
-  const { addEmptyCard } = useAddEmptyCard();
-  const triggered = useRef(false);
+export function useStayUpdated(
+  methods: UseFormReturn<CreateModeQuestionCardType>
+) {
+  const data = methods.watch();
+  const { lazyUpdateCard } = useLazyUpdateCard();
 
   useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key.toLowerCase() === "m" && !triggered.current) {
-        triggered.current = true;
-        addEmptyCard();
-      }
-    };
-    const onKeyUp = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() === "m" || e.key === "Control") {
-        triggered.current = false;
-      }
-    };
+    if (methods.formState.isDirty) {
+      lazyUpdateCard({
+        ...data,
+        numberOfCorrectAnswers: calculateNumberOfCorrectOptions(data.options),
+      });
+    }
+  }, [data]);
+}
 
-    document.addEventListener("keydown", onKeyDown);
-    document.addEventListener("keyup", onKeyUp);
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.removeEventListener("keyup", onKeyUp);
-    };
-  }, [addEmptyCard]);
+function calculateNumberOfCorrectOptions(
+  options: Pick<CreateModeQuestionCardType, "options">["options"]
+) {
+  return options.reduce(
+    (accum, { isCorrect }) => (isCorrect ? accum + 1 : accum),
+    0
+  );
 }

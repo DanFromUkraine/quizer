@@ -10,14 +10,14 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { QuestionTitle } from "./QuestionTitle";
 import RenderOptions from "./RenderOptions";
 import CardIndex from "./CardIndex";
-import { QuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
+import { CreateModeQuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
 
 export default function QuestionCardUI({
-  onDeleteBtnClick,
+  onClickDeleteCard,
   methods,
 }: {
-  onDeleteBtnClick: () => void;
-  methods: UseFormReturn<QuestionCardType>;
+  onClickDeleteCard: () => void;
+  methods: UseFormReturn<CreateModeQuestionCardType>;
 }) {
   return (
     <FormProvider {...methods}>
@@ -26,7 +26,7 @@ export default function QuestionCardUI({
           <CardIndex />
           <FaRegTrashAlt
             className="text-xl text-questTextColor"
-            onClick={onDeleteBtnClick}
+            onClick={onClickDeleteCard}
           />
         </div>
         <QuestionTitle />

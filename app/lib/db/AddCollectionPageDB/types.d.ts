@@ -1,3 +1,5 @@
+import { DBSchema } from "idb";
+
 type MetaPureType = {
   collectionTitle: string;
 };
@@ -5,31 +7,30 @@ type MetaPureType = {
 export type CollectionResult = MetaPureType & {
   id: string;
   timestamp: number;
-  cards: QuestionCardType[];
+  cards: CreateModeQuestionCardType[];
 };
 
-
-export type QuestionCardType = {
-  id: string;
+export type CreateModeQuestionCardType = {
+  id: number;
   questionTitle: string;
   numberOfCorrectAnswers: number;
   options: {
     isCorrect: boolean;
     optionText: string;
   }[];
-} 
+};
 
 export interface AddCollectionPageSchema extends DBSchema {
   meta: {
     key: string;
     value: {
-      id: string;
+      id: keyof MetaPureType;
       value: string;
     };
   };
   cards: {
-    key: string;
-    value: QuestionCardType;
+    key: number;
+    value: CreateModeQuestionCardType;
   };
 }
 

@@ -1,7 +1,6 @@
 import { statusBarColorAtom } from "@/app/lib/jotai/userState";
 import clsx from "clsx";
 import { useAtomValue } from "jotai";
-import { useEffect, useRef } from "react";
 
 export function ColorStatusBar() {
   const color = useAtomValue(statusBarColorAtom);

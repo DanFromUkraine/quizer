@@ -68,6 +68,12 @@
   .statusBarYellow {
     @apply bg-[#ffd93b];
   }
+
+  .plusesBtw p:not(:last-child)::after {
+    /* this class is used for containers and appliable, when we want to insert "+" only between elements <p> */
+    content: "+";
+    margin-left: 0.5em;
+  }
 }
 
 @keyframes gradientShift {

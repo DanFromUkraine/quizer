@@ -1,20 +1,11 @@
 "use client";
 
-import { createDebounce } from "@/app/lib/other";
-import clsx from "clsx";
-import {
-  ChangeEvent,
-  FormEventHandler,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { FormEventHandler, useRef } from "react";
+import { useFormContext } from "react-hook-form";
 import QuestionTitleUI from "./UI";
 
 export function QuestionTitle() {
   const { control } = useFormContext();
-  const { updateCallback } = useMemo(() => createDebounce(), []);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const onInput: FormEventHandler<HTMLTextAreaElement> = (e) => {
@@ -26,14 +17,8 @@ export function QuestionTitle() {
     }
   };
 
-  const onDebounceChange = (
-    e: ChangeEvent,
-    onChange: (e: ChangeEvent) => void
-  ) => {
-    updateCallback(() => onChange(e), 1000);
-  };
 
   return (
-    <QuestionTitleUI {...{ onDebounceChange, onInput, textareaRef, control }} />
+    <QuestionTitleUI {...{ onInput, textareaRef, control }} />
   );
 }

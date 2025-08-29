@@ -4,19 +4,16 @@ import { atom } from "jotai";
 import { getAtomAddToArrayItem } from "./utils";
 import { MyDB } from "../db/MainPageDB/types";
 import { QuestionCardType } from "../db/AddCollectionPageDB/types";
+import { atomWithReset, atomWithStorage } from "jotai/utils";
 
-// Change status bar 
-
-
-
-// Collection title 
+// Collection title:
 
 export const dbAtom = atom<MyDB | null>(null);
-export const collectionTitleAtom = atom("");
+export const collectionTitleAtom = atomWithReset("");
 
-// Question Cards 
+// Question Cards:
 
-export const cardsAtom = atom<QuestionCardType[]>([]);
+export const cardsAtom = atomWithReset<QuestionCardType[]>([]);
 
 export const initCardsAtom = atom(
   null,
@@ -38,11 +35,17 @@ export const udpateCardAtom = atom(
   }
 );
 
-export const removeCardAtom = atom(null, (_, set, deleteCardID: string) => {
+export const removeCardAtom = atom(null, (_, set, deleteCardID: number) => {
   set(cardsAtom, (prevCards) =>
     prevCards.filter((card) => card.id !== deleteCardID)
   );
 });
 
-// improved perfomance 
+// Modal window:
 
+export const cardsEditModalVisibilityAtom = atomWithStorage(
+  "cardsEditModalVisibility",
+  false
+);
+
+export const saveOptionSelectedAtom = atomWithStorage("optionSelected", false);

@@ -1,6 +1,8 @@
+import HistoryDBContextProvider from "@/app/lib/db/History/provider";
 import MainPageDBContextProvider from "@/app/lib/db/MainPageDB/provider";
 import RenderQuestions from "./RenderQuestions";
-import CollectionContextProvider from "./provider";
+import CollectionContextProvider from "./Provider";
+import SubmitButton from "./SubmitButton";
 
 export default async function page({
   searchParams,
@@ -12,11 +14,14 @@ export default async function page({
   if (typeof params.id !== "string") throw "No Collection ID in URL";
 
   return (
-    <main className="w-full p-8">
+    <main className="w-full p-8 flex flex-col gap-2 items-center">
       <MainPageDBContextProvider>
-        <CollectionContextProvider collectionID={params.id}>
-          <RenderQuestions />
-        </CollectionContextProvider>
+        <HistoryDBContextProvider collectionID={params.id}>
+          <CollectionContextProvider>
+            <RenderQuestions />
+            <SubmitButton />
+          </CollectionContextProvider>
+        </HistoryDBContextProvider>
       </MainPageDBContextProvider>
     </main>
   );

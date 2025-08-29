@@ -1,16 +1,20 @@
 "use client";
 
-import { useContext } from "react";
-import { collectionContext } from "../provider";
-import QuestionCard from "./QuestionCard";
+import { useInitFromHistory } from "@/app/lib/db/History";
+// import QuestionCard from "./QuestionCard";
+import { useCollectionContext } from "../Provider";
+import QuestionCard from "@/app/lib/commonComponents/QuestionCard";
 
 export default function RenderQuestions() {
-  const collection = useContext(collectionContext);
+  useInitFromHistory();
+  const collection = useCollectionContext();
+
+  console.log({ collection });
 
   return (
     <div className="flex flex-col w-full items-center gap-2.5">
-      {collection?.cards.map((card, i) => (
-        <QuestionCard key={card.id} {...card} index={i} />
+      {collection?.attemp.cards.map((card, i) => (
+        <QuestionCard key={i} mode="assessment-mode" cardIndex={i} {...card} />
       ))}
     </div>
   );

@@ -1,15 +1,7 @@
 "use client";
 
 import { IDBPDatabase, openDB, StoreKey, StoreNames, StoreValue } from "idb";
-import {
-  Context,
-  createContext,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { Context, createContext, ReactNode, useEffect, useState } from "react";
 
 export enum DB_NAMES {
   MAIN_PAGE = "MainPageDB",
@@ -18,16 +10,16 @@ export enum DB_NAMES {
 
 export type GeneralDB<DataSchema> = IDBPDatabase<DataSchema>;
 
-export function createContextDefault<DBSchema extends {}>() {
-  return createContext({
-    db: null,
-    close: () => {},
-    isDbClosed: true,
-    createDebounceMemo: () => ({
-      updateCallback: (callback, wait) => {},
-      flush: () => {},
-    }),
-  }) as DBContextType<DBSchema>;
+type DBContextShape<Schema extends {}, ForwardInfo> = {
+  db: IDBPDatabase<Schema> | null;
+  forwardInfo: ForwardInfo | undefined;
+};
+
+export function createContextDefault<Schema extends {}, ForwardInfo>() {
+  return createContext<DBContextShape<Schema, ForwardInfo>>({
+    db: null as IDBPDatabase<Schema> | null,
+    forwardInfo: null as ForwardInfo,
+  });
 }
 
 export async function getDB<DataSchema>({
@@ -89,116 +81,47 @@ export async function getOrAndInit<
   return result;
 }
 
-export type DBContextType<DBSchema extends {}> = Context<{
-  db: IDBPDatabase<DBSchema> | null;
-  close: () => void;
-  isDbClosed: boolean;
-  createDebounceMemo: () => {
-    updateCallback: (callback: () => void, wait: number) => void;
-    flush: () => void;
-  };
+export type DBContextGenType<DataSchema extends {}> = Context<{
+  db: IDBPDatabase<DataSchema> | null;
 }>;
 
-function useFlushManager() {
-  const flushFns = useRef<FlushDebounceType[]>([]);
+export type DBContextExtendedType<
+  DataSchema extends {},
+  ForwardInfo = undefined
+> = Context<{
+  db: IDBPDatabase<DataSchema> | null;
+  forwardInfo: ForwardInfo;
+}>;
 
-  const finishAll = () => {
-    flushFns.current.forEach(({ flush }) => flush());
-    flushFns.current = [];
-  };
-
-  const onAddFlush = (newFlush: FlushDebounceType) => {
-    flushFns.current.push(newFlush);
-  };
-
-  const onRemoveFlush = (deleteID: string) => {
-    flushFns.current = flushFns.current.filter(({ id }) => id !== deleteID);
-  };
-
-  return {
-    finishAll,
-    onAddFlush,
-    onRemoveFlush,
-  };
-}
-
-type FlushDebounceType = {
-  id: string;
-  flush: () => void;
+type ProviderDbArgs<DataSchema extends {}, ForwardInfo = undefined> = {
+  ContextBody: ReturnType<typeof createContextDefault<DataSchema, ForwardInfo>>;
+  upgrade: (db: IDBPDatabase<DataSchema>) => void;
+  children: ReactNode;
+  dbName: string;
+  forwardInfo?: ForwardInfo;
 };
 
-function createDebounce({
-  onDebounceUpdated,
-  onDebounceFinished,
-}: {
-  onDebounceUpdated: (flushInstance: FlushDebounceType) => void;
-  onDebounceFinished: (id: string) => void;
-}) {
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  let callbackFn: () => void | undefined;
-  const id = Date.now().toString();
+export function ProviderDB<DataSchema extends {}>(
+  args: ProviderDbArgs<DataSchema>
+): ReactNode;
+export function ProviderDB<DataSchema extends {}, ForwardInfo>({
+  forwardInfo,
+  ...args
+}: ProviderDbArgs<DataSchema, ForwardInfo> & {
+  forwardInfo: ForwardInfo;
+}): ReactNode;
 
-  const clear = () => clearTimeout(timer);
-
-  const flush = () => {
-    clear();
-    if (typeof callbackFn === "function") callbackFn();
-    callbackFn = () => {};
-    onDebounceFinished(id);
-  };
-
-  const updateCallback = (callback: () => void, wait: number) => {
-    clear();
-    callbackFn = callback;
-    onDebounceUpdated({ id, flush });
-    timer = setTimeout(() => {
-      flush();
-    }, wait);
-  };
-
-  return {
-    updateCallback,
-    flush,
-  };
-}
-
-export function ProviderDB<DBSchema extends {}>({
+export function ProviderDB<DataSchema extends {}, ForwardInfo = undefined>({
   ContextBody,
   upgrade,
   children,
   dbName,
-}: {
-  ContextBody: DBContextType<DBSchema>;
-  upgrade: (db: IDBPDatabase<DBSchema>) => void;
-  children: ReactNode;
-  dbName: string;
-}) {
-  const isDbClosed = useRef(false);
-  const [db, setDB] = useState<IDBPDatabase<DBSchema> | null>(null);
-  const { finishAll, onAddFlush, onRemoveFlush } = useFlushManager();
-  const createDebounceMemo = useMemo(
-    () => () =>
-      createDebounce({
-        onDebounceUpdated: onAddFlush,
-        onDebounceFinished: onRemoveFlush,
-      }),
-    []
-  );
+  forwardInfo,
+}: ProviderDbArgs<DataSchema, ForwardInfo>) {
+  const [db, setDB] = useState<IDBPDatabase<DataSchema> | null>(null);
 
-  const close = () => {
-    if (!isDbClosed.current) {
-      finishAll();
-      setDB(null);
-      isDbClosed.current = true;
-      db?.close();
-    } else {
-      console.warn("DB is already closed");
-    }
-  };
-
-  const resume = () => {
-    isDbClosed.current = false;
-    getDB<DBSchema>({
+  const startNewDB = () => {
+    getDB<DataSchema>({
       dbName: dbName,
       upgrade,
     }).then((res) => {
@@ -207,8 +130,8 @@ export function ProviderDB<DBSchema extends {}>({
   };
 
   useEffect(() => {
-    if (!db && !isDbClosed.current) {
-      resume();
+    if (!db) {
+      startNewDB();
     }
 
     return () => {
@@ -220,9 +143,7 @@ export function ProviderDB<DBSchema extends {}>({
     <ContextBody.Provider
       value={{
         db,
-        close,
-        isDbClosed: isDbClosed.current,
-        createDebounceMemo,
+        forwardInfo: forwardInfo,
       }}
     >
       {children}

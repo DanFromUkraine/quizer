@@ -1,15 +1,30 @@
+"use client";
+
 import {
-  useAddEmptyCard,
-  useGetAndInitAllCards,
+  useAddEmptyCard
 } from "@/app/lib/db/AddCollectionPageDB";
+import { cardsAtom } from "@/app/lib/jotai/addCollection";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { useAtomValue } from "jotai";
+import { useRef } from "react";
 import RenderCardsUI from "./UI";
-import { useAddCardOnShortcut } from "./QuestionCard/client";
 
 export default function RenderCards() {
   const { addEmptyCard } = useAddEmptyCard();
-  useAddCardOnShortcut();
+  const cards = useAtomValue(cardsAtom);
 
-  const cards = useGetAndInitAllCards();
+  const allContainerRef = useRef<HTMLElement>(null);
+  const rowVirtualizer = useVirtualizer({
+    count: cards.length,
+    getScrollElement: () => allContainerRef.current,
+    estimateSize: () => 500,
+  });
 
-  return <RenderCardsUI {...{ cards, addEmptyCard }} />;
+  console.log("render cards")
+
+  return (
+    <RenderCardsUI
+      {...{ cards, addEmptyCard, rowVirtualizer, allContainerRef }}
+    />
+  );
 }

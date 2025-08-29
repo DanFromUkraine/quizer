@@ -1,9 +1,7 @@
-import { IconType } from "react-icons";
-import { FaApple, FaFacebook, FaLock } from "react-icons/fa";
-import { FaGoogle } from "react-icons/fa";
-import { Poppins } from "next/font/google";
 import clsx from "clsx";
-import Link from "next/link";
+import { Poppins } from "next/font/google";
+import { IconType } from "react-icons";
+import { FaApple, FaFacebook, FaGoogle, FaLock } from "react-icons/fa";
 import { SkipBtn } from "./client";
 
 const poppinsFont = Poppins({

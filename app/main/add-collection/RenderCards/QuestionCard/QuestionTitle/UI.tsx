@@ -5,15 +5,11 @@ import { Control, Controller } from "react-hook-form";
 export default function QuestionTitleUI({
   control,
   textareaRef,
-  onDebounceChange,
   onInput,
 }: {
   control: Control;
   textareaRef: RefObject<HTMLTextAreaElement | null>;
-  onDebounceChange: (
-    e: ChangeEvent,
-    onChange: (e: ChangeEvent) => void
-  ) => void;
+
   onInput: FormEventHandler<HTMLTextAreaElement>;
 }) {
   return (
@@ -29,7 +25,7 @@ export default function QuestionTitleUI({
           }}
           defaultValue={value}
           placeholder="Enter text"
-          onChange={(e) => onDebounceChange(e, onChange)}
+          onChange={onChange}
           className={clsx(
             "resize-none overflow-hidden w-full rounded-lg bg-transparent  outline-1 outline-alternateBorder px-6 box-border leading-5 py-3 focus:outline-white focus:outline-2 text-sm text-defaultText h-12"
           )}

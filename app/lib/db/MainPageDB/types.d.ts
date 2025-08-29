@@ -1,6 +1,9 @@
+import type { DBSchema } from "idb";
+import type { CollectionResult } from "../AddCollectionPageDB/types";
+
 export interface MainPageSchema extends DBSchema {
   userCollections: {
-    key: "string";
+    key: string;
     value: CollectionResult;
   };
 }
