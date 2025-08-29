@@ -1,5 +1,5 @@
 import { DBSchema } from "idb";
-import { QuestionCardType } from "../AddCollectionPageDB/types";
+import { CreateModeQuestionCardType } from "../AddCollectionPageDB/types";
 
 //// Both suitable
 
@@ -14,7 +14,7 @@ type TestOption = {
 };
 
 export type AssessmentModeQuestionCardType = Omit<
-  QuestionCardType,
+  CreateModeQuestionCardType,
   "options"
 > & {
   options: TestOption[];
