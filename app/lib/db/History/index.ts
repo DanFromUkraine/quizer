@@ -6,19 +6,18 @@ So it will be done later. Also even if I make the code look better, it won't sol
 */
 
 import { useAtomValue, useSetAtom } from "jotai";
+import { redirect } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { dataReadyAtom } from "../../jotai/playOffline";
 import { CreateModeQuestionCardType } from "../AddCollectionPageDB/types";
 import { useDB as useMainDB } from "../MainPageDB/provider";
 import { useDB } from "./provider";
 import {
+  AssessmentModeQuestionCardType,
   CollectionStoryIncomplete,
   CompleteAttemp,
   IncompleteAttemp,
-  AssessmentModeQuestionCardType,
 } from "./types";
-import test from "node:test";
-import { redirect } from "next/navigation";
 
 function getModifiedQuestionCards(
   cards: CreateModeQuestionCardType[]
@@ -52,13 +51,7 @@ export function useInitFromHistory() {
 
   useEffect(() => {
     (async function initiateDbOrNothing() {
-      console.log("call before");
-
-      console.log("useEffect useGetCollection ", { mainDB, db, forwardInfo });
-
       if (!forwardInfo || !db || !mainDB) return;
-
-      console.log("callMicrotask");
 
       const historyCollectionInfo = await db.get(
         "incomplete",
@@ -71,6 +64,8 @@ export function useInitFromHistory() {
         "userCollections",
         forwardInfo.collectionID
       );
+
+      console.dir({ info: forwardInfo });
 
       if (!baseCollectionInfo)
         throw `could not gain info from Main Page DB. collection id: ${forwardInfo.collectionID}. Initiation of collection in history db is aborted`;

@@ -23,6 +23,7 @@ import {
   QuestionCardResultModeProps,
 } from "./index.d";
 import AssessmentModeImplementation from "./AssessmentMode";
+import CreateModeImplementation from "./CreateMode";
 
 export default function QuestionCard(
   props: QuestionCardCreateModeProps
@@ -42,4 +43,6 @@ export default function QuestionCard<T extends ModesAvailable>({
 }: PickProps<T>) {
   if (props.mode === "assessment-mode")
     return <AssessmentModeImplementation {...props} />;
+  else if (props.mode === "create-mode")
+    return <CreateModeImplementation {...props} />;
 }

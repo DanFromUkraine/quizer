@@ -8,7 +8,9 @@ export default function AssessmentModeImplementation({
   questionTitle,
   cardIndex,
   numberOfCorrectAnswers,
-}: AssessmentModeQuestionCardType) {
+}: AssessmentModeQuestionCardType & {
+  cardIndex: number;
+}) {
   return (
     <div className="max-w-3xl flex flex-col gap-3 w-full border border-lightGray p-6 rounded-normal">
       <Heading questionTitle={questionTitle} index={cardIndex} />
