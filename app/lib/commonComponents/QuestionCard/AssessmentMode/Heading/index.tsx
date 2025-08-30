@@ -1,4 +1,4 @@
-import CardIndex from "./CardIndex";
+import CardIndexUI from "../../CardIndexUI";
 import QuestionTitle from "./Title";
 
 export default function Heading({
@@ -9,9 +9,9 @@ export default function Heading({
   index: number;
 }) {
   return (
-    <div className="flex justify-between">
+    <div className="flex flex-col gap-2">
+      <CardIndexUI index={index} />
       <QuestionTitle title={questionTitle} />
-      <CardIndex index={index} />
     </div>
   );
 }

@@ -44,6 +44,10 @@
   .simpleButton {
     @apply rounded-normal h-min w-min py-2 px-3 whitespace-nowrap text-white font-semibold;
   }
+
+  .questionCard {
+    @apply max-w-3xl flex flex-col gap-2 w-full border border-lightGray p-6 rounded-normal;
+  }
 }
 
 @layer utilities {

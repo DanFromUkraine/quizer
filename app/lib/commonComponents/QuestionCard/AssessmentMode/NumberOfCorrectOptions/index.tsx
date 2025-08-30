@@ -1,4 +1,8 @@
-import clsx from "clsx";
+function getCorrectWordForm(numOfCorrAnswers: number) {
+  const BASE = "correct answer";
+  if (numOfCorrAnswers === 1) return BASE;
+  else return BASE + "s";
+}
 
 export default function NumberOfCorrectOptions({
   numberOfCorrectAnswers,
@@ -6,8 +10,8 @@ export default function NumberOfCorrectOptions({
   numberOfCorrectAnswers: number;
 }) {
   return (
-    <div className={clsx("", { hidden: numberOfCorrectAnswers === 1 })}>
-      {numberOfCorrectAnswers} correct answers
+    <div className="text-gray-500 text-sm">
+      {numberOfCorrectAnswers} {getCorrectWordForm(numberOfCorrectAnswers)}
     </div>
   );
 }

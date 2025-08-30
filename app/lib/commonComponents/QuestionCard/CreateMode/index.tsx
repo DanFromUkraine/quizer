@@ -1,5 +1,5 @@
 import { FormProvider, useForm } from "react-hook-form";
-import { QuestionCardCreateModeProps } from "../index.d";
+import { QuestionCardCreateModeProps } from "../types.d";
 import CardIndex from "./CardIndex";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { QuestionTitle } from "./QuestionTitle";
@@ -26,7 +26,7 @@ export default function CreateModeImplementation({
 
   return (
     <FormProvider {...methods}>
-      <form className="flex flex-col gap-3 w-full border border-lightGray p-6 rounded-normal">
+      <form className="questionCard">
         <div className="flex justify-between items-center">
           <CardIndex />
           <FaRegTrashAlt
