@@ -12,7 +12,7 @@ export default function AssessmentModeImplementation({
   cardIndex: number;
 }) {
   return (
-    <div className="max-w-3xl flex flex-col gap-3 w-full border border-lightGray p-6 rounded-normal">
+    <div className="questionCard">
       <Heading questionTitle={questionTitle} index={cardIndex} />
       <NumberOfCorrectOptions {...{ numberOfCorrectAnswers }} />
       <RenderOptions

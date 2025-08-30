@@ -1,0 +1,4 @@
+
+.someClass {
+  @apply text-6xl text-red-500;
+}

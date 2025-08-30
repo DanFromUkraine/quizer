@@ -17,7 +17,7 @@ import { useDB } from "./provider";
 import {
   AddCollectionPageSchema,
   CollectionResult,
-  QuestionCardType,
+  CreateModeQuestionCardType,
 } from "./types";
 import { deleteThisDB } from "./utils";
 
@@ -129,10 +129,13 @@ export function useAddEmptyCard() {
       numberOfCorrectAnswers: 0,
     } as {};
 
-    db.add("cards", emptyCard as QuestionCardType).then((res) => {
-      const fullEmptyCard = Object.assign(emptyCard as QuestionCardType, {
-        id: res as number,
-      });
+    db.add("cards", emptyCard as CreateModeQuestionCardType).then((res) => {
+      const fullEmptyCard = Object.assign(
+        emptyCard as CreateModeQuestionCardType,
+        {
+          id: res as number,
+        }
+      );
       addCard(fullEmptyCard);
     });
   };
@@ -143,7 +146,7 @@ export function useAddEmptyCard() {
 export function useLazyUpdateCard() {
   const { db } = useDB();
 
-  const lazyUpdateCard = async (newCardData: QuestionCardType) => {
+  const lazyUpdateCard = async (newCardData: CreateModeQuestionCardType) => {
     if (db === null) return;
     return await db.put("cards", newCardData);
   };

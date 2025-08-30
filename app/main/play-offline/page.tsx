@@ -13,14 +13,12 @@ export default async function page({
 
   if (typeof params.id !== "string") throw "No Collection ID in URL";
 
-  // console.log({
-  //   sdlkfjsdlfkjsdf: new URLSearchParams(params.id).toString(),
-  // });
-
   return (
     <main className="w-full p-8 flex flex-col gap-2 items-center">
       <MainPageDBContextProvider>
-        <HistoryDBContextProvider collectionID={new URLSearchParams(params.id).toString()}>
+        <HistoryDBContextProvider
+          collectionID={new URLSearchParams(params.id).toString()}
+        >
           <CollectionContextProvider>
             <RenderQuestions />
             <SubmitButton />
