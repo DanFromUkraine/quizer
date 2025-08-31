@@ -8,6 +8,7 @@ export default function AssessmentModeImplementation({
   questionTitle,
   cardIndex,
   numberOfCorrectAnswers,
+  anyOptionChosen,
 }: AssessmentModeQuestionCardType & {
   cardIndex: number;
 }) {
@@ -19,6 +20,7 @@ export default function AssessmentModeImplementation({
         options={options}
         isMultiOption={numberOfCorrectAnswers > 1}
         questionIndex={cardIndex}
+        anyOptionChosen={anyOptionChosen}
       />
     </div>
   );

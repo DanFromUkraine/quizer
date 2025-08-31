@@ -1,8 +1,8 @@
 import HistoryDBContextProvider from "@/app/lib/db/History/provider";
 import MainPageDBContextProvider from "@/app/lib/db/MainPageDB/provider";
 import RenderQuestions from "./RenderQuestions";
-import CollectionContextProvider from "./Provider";
 import SubmitButton from "./SubmitButton";
+import CollectionContextProvider from "@/app/main/play-offline/CollectionDataContext/provider";
 
 export default async function page({
   searchParams,

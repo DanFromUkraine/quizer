@@ -200,7 +200,7 @@ export function useSubmit() {
     await db.delete("incomplete", forwardInfo.collectionID);
 
     db.close();
-    redirect(`/main/history/view/${forwardInfo.collectionID}`);
+    redirect(`/main/history/view?id=${forwardInfo.collectionID}`);
   };
 
   return { submit };

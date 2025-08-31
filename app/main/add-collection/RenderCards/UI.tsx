@@ -3,8 +3,8 @@ import { CreateModeQuestionCardType } from "@/app/lib/db/AddCollectionPageDB/typ
 import { IndexContextProvider } from "./QuestionCard/CardIndex";
 import { RefObject } from "react";
 import { Virtualizer } from "@tanstack/react-virtual";
-import BtnWithShortcut from "@/app/lib/utilComponents/ButtonWithShortcut";
 import QuestionCard from "@/app/lib/commonComponents/QuestionCard";
+import BtnWithShortcut from "@/app/lib/componentsUI/ButtonWithShortcut";
 
 export default function RenderCardsUI({
   cards,

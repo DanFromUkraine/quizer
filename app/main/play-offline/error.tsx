@@ -1,5 +1,7 @@
 "use client";
 
-export default function errorPage(params: unknown) {
-  return <div>some error occured</div>;
+import Error, { ErrorProps } from "next/error";
+
+export default function errorPage(params: ErrorProps) {
+  return <div>{params.title} {params.statusCode}</div>;
 }
