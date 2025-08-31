@@ -1,9 +1,10 @@
 import { CreateModeQuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
-import QuestionCard from "./QuestionCard";
+// import QuestionCard from "./QuestionCard";
 import { IndexContextProvider } from "./QuestionCard/CardIndex";
 import { RefObject } from "react";
 import { Virtualizer } from "@tanstack/react-virtual";
-import BtnWithShortcut from "@/app/lib/utilComponents/ButtonWithShortcut";
+import QuestionCard from "@/app/lib/commonComponents/QuestionCard";
+import BtnWithShortcut from "@/app/lib/componentsUI/ButtonWithShortcut";
 
 export default function RenderCardsUI({
   cards,
@@ -26,7 +27,8 @@ export default function RenderCardsUI({
           const cardData = cards[i];
           return (
             <IndexContextProvider value={i} key={virtualItem.key}>
-              <QuestionCard {...cardData} />
+              {/* <QuestionCard {...cardData} /> */}
+              <QuestionCard mode="create-mode" {...cardData} />
             </IndexContextProvider>
           );
         })}

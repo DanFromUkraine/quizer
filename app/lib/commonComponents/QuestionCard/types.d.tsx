@@ -12,7 +12,6 @@ export interface QuestionCardCreateModeProps
   extends QuestionCardGeneralProps,
     CreateModeQuestionCardType {
   mode: "create-mode";
-  IndexComponent: JSX.Element;
 }
 
 export interface QuestionCardAssessmentModeProps

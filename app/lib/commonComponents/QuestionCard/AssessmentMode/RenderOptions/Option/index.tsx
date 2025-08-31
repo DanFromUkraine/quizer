@@ -1,6 +1,5 @@
 "use client";
 
-import { QuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
 import { useTickOption } from "@/app/lib/db/History";
 import { TestOption } from "@/app/lib/db/History/types";
 import clsx from "clsx";
@@ -32,11 +31,24 @@ export default function Option({
   optionIndex,
   questionIndex,
   optionChosen,
+  anyOptionChosen,
 }: TestOption & {
   optionIndex: number;
   questionIndex: number;
+  anyOptionChosen: boolean;
 }) {
-  const [correct, setCorrect] = useState<"correct" | "incorrect">();
+  console.log({
+    isCorrect,
+    optionChosen,
+    optionIndex,
+    questionIndex,
+    
+    anyOptionChosen,
+  });
+
+  const [correct, setCorrect] = useState<"correct" | "incorrect" | undefined>(
+    anyOptionChosen ? (optionChosen ? "correct" : "incorrect") : undefined
+  );
   const { onTick } = useClickOption({ questionIndex, optionIndex, isCorrect });
 
   const showIsCorrect = useCallback(() => {

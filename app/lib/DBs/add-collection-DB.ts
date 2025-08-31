@@ -9,7 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { createDebounce } from "../utils";
+import { createDebounce } from "../utils/debounce";
 
 type PageTitleDocPure = {
   pageTitle: string;

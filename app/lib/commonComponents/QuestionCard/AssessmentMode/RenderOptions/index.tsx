@@ -1,4 +1,3 @@
-import { QuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
 import Option from "./Option";
 import { TestOption } from "@/app/lib/db/History/types";
 
@@ -6,10 +5,12 @@ export default function RenderOptions({
   options,
   isMultiOption,
   questionIndex,
+  anyOptionChosen,
 }: {
   options: TestOption[];
   isMultiOption: boolean;
   questionIndex: number;
+  anyOptionChosen: boolean;
 }) {
   return (
     <div className="grid grid-cols-2 gap-6 h-fit">
@@ -19,6 +20,7 @@ export default function RenderOptions({
           {...opt}
           optionIndex={i}
           questionIndex={questionIndex}
+          anyOptionChosen={anyOptionChosen}
         />
       ))}
     </div>

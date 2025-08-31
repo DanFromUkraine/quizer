@@ -1,5 +1,5 @@
 import { CardMethodsType, QuestionCardType } from "@/app/lib/DBs/add-collection-DB";
-import { createDebounce } from "@/app/lib/utils";
+import { createDebounce } from "@/app/lib/utils/debounce";
 import clsx from "clsx";
 import { FormEventHandler, useEffect, useMemo } from "react";
 import { useForm, useFormContext } from "react-hook-form";
