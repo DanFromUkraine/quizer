@@ -14,6 +14,7 @@ import { useDB as useMainDB } from "../MainPageDB/provider";
 import { useDB } from "./provider";
 import {
   AssessmentModeQuestionCardType,
+  CollectionStoryComplete,
   CollectionStoryIncomplete,
   CompleteAttemp,
   IncompleteAttemp,
@@ -206,4 +207,19 @@ export function useSubmit() {
   return { submit };
 }
 
-export function useGetResultInfo() {}
+export function useGetResultInfo() {
+  const { db, forwardInfo } = useDB();
+  const [data, setData] = useState<CollectionStoryComplete | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      if (!db || !forwardInfo) return;
+
+      const result =
+        (await db.get("complete", forwardInfo?.collectionID)) || null;
+      setData(result);
+    })();
+  }, [db]);
+
+  return data;
+}

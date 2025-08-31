@@ -2,11 +2,11 @@
 
 import { useInitFromHistory } from "@/app/lib/db/History";
 import QuestionCard from "@/app/lib/commonComponents/QuestionCard";
-import { useCollectionContext } from "../../../main/play-offline/CollectionDataContext/context";
+import { useCollectionContextComplete } from "../CollectionDataContext/context";
 
 export default function RenderQuestions() {
   useInitFromHistory();
-  const collection = useCollectionContext();
+  const collection = useCollectionContextComplete();
 
   console.log({ collection });
 

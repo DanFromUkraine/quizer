@@ -1,7 +1,7 @@
-import CollectionContextProvider from "@/app/main/play-offline/CollectionDataContext/provider";
-import RenderQuestions from "@/app/lib/assessmentModeComponents/RenderQuestions";
 import HistoryDBContextProvider from "@/app/lib/db/History/provider";
 import MainPageDBContextProvider from "@/app/lib/db/MainPageDB/provider";
+import CollectionDataCompleteContextProvider from "./CollectionDataContext/provider";
+import RenderQuestions from "./RenderQuestions";
 
 export default async function ViewSearchParams({
   searchParams,
@@ -18,9 +18,9 @@ export default async function ViewSearchParams({
         <HistoryDBContextProvider
           collectionID={new URLSearchParams(params.id).toString()}
         >
-          <CollectionContextProvider>
+          <CollectionDataCompleteContextProvider>
             <RenderQuestions />
-          </CollectionContextProvider>
+          </CollectionDataCompleteContextProvider>
         </HistoryDBContextProvider>
       </MainPageDBContextProvider>
     </main>
