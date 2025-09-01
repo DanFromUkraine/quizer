@@ -3,7 +3,7 @@
 import { atom } from "jotai";
 import { getAtomAddToArrayItem } from "./utils";
 import { MyDB } from "../db/MainPageDB/types";
-import { QuestionCardType } from "../db/AddCollectionPageDB/types";
+import { QuestionCardType } from "../db/ObservableCreateCollectionDB/types";
 import { atomWithReset, atomWithStorage } from "jotai/utils";
 
 // Collection title:

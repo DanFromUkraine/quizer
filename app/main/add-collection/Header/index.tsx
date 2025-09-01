@@ -6,7 +6,7 @@ import SaveBtn from "./SaveCollectionBtn";
 import {
   useGetPageTitle,
   useUpdatePageTitle,
-} from "@/app/lib/db/AddCollectionPageDB";
+} from "@/app/lib/db/ObservableCreateCollectionDB";
 import { useEffect } from "react";
 
 type HeaderFormDataType = {

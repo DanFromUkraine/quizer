@@ -44,8 +44,6 @@ function TestObservable() {
     console.log("hello! this is listener 4 " + data);
   });
 
-  // console.log(observable.listeners);
-
   const onClick = () => {
     observable.requestData("Button Data request", (data) => {
       console.log("hello! this is data from click action ", data);

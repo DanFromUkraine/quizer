@@ -9,7 +9,7 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { redirect } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { dataReadyAtom } from "../../jotai/playOffline";
-import { CreateModeQuestionCardType } from "../AddCollectionPageDB/types";
+import { CreateModeQuestionCardType } from "../ObservableCreateCollectionDB/types";
 import { useDB as useMainDB } from "../MainPageDB/provider";
 import { useDB } from "./provider";
 import {

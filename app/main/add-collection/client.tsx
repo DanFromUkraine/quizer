@@ -1,5 +1,5 @@
 "use client";
-import { AddCollectionPageDBContextProvider } from "@/app/lib/db/AddCollectionPageDB/provider";
+import { AddCollectionPageDBContextProvider } from "@/app/lib/db/ObservableCreateCollectionDB/provider";
 import MainPageDBContextProvider from "@/app/lib/db/MainPageDB/provider";
 import Header from "./Header";
 import RenderCards from "./RenderCards";
@@ -8,7 +8,7 @@ import { useAddCardOnShortcut } from "./RenderCards/client";
 import {
   useClearJotaiOnExit,
   useInitAllCards,
-} from "@/app/lib/db/AddCollectionPageDB";
+} from "@/app/lib/db/ObservableCreateCollectionDB";
 
 export default function Page() {
   console.log("renderPage");

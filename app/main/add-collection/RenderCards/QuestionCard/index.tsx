@@ -1,7 +1,7 @@
 import {
   useOnClickDeleteCard
-} from "@/app/lib/db/AddCollectionPageDB";
-import { CreateModeQuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
+} from "@/app/lib/db/ObservableCreateCollectionDB";
+import { CreateModeQuestionCardType } from "@/app/lib/db/ObservableCreateCollectionDB/types";
 import { memo } from "react";
 import { useForm } from "react-hook-form";
 import { useStayUpdated } from "./client";

@@ -2,7 +2,7 @@
 
 import {
   useAddEmptyCard
-} from "@/app/lib/db/AddCollectionPageDB";
+} from "@/app/lib/db/ObservableCreateCollectionDB";
 import { cardsAtom } from "@/app/lib/jotai/addCollection";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useAtomValue } from "jotai";

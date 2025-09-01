@@ -51,7 +51,7 @@ export class Observable<DataType extends NonNullable<unknown>> {
     }
   }
 
-  deleteRequestData(listenerName: string) {
+  private deleteRequestData(listenerName: string) {
     console.warn("before", this.listeners.length);
     this.listeners = this.listeners.filter((prevCallback, i, arr) => {
       return prevCallback.listenerName !== listenerName;
