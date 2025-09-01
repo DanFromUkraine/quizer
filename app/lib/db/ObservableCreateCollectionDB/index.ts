@@ -13,66 +13,72 @@ import {
 } from "../../jotai/addCollection";
 import { useAddCollection } from "../MainPageDB";
 import { getOrAndInit, getUniqueID } from "../utils";
-import { useDB } from "./provider";
+// import { useDB } from "./provider";
 import {
   AddCollectionPageSchema,
   CollectionResult,
   CreateModeQuestionCardType,
 } from "./types";
 import { deleteThisDB } from "./utils";
-
-function useInitPageTitle({
-  db,
-
-  setTitle,
-}: {
-  db: IDBPDatabase<AddCollectionPageSchema> | null;
-  setTitle: Dispatch<SetStateAction<string>>;
-}) {
-  useEffect(() => {
-    if (db === null) return;
-    getOrAndInit({
-      db,
-      storeName: "meta",
-      key: "collectionTitle",
-      initVal: { id: "collectionTitle", value: "" },
-    }).then((res) => {
-      if ("value" in res) {
-        setTitle(res.value);
-      }
-    });
-  }, [db]);
-}
+import { useObservableContext } from "./context";
 
 export function useGetPageTitle() {
-  const { db } = useDB();
+  const { requestData } = useObservableContext()!;
   const [title, setTitle] = useAtom(collectionTitleAtom);
 
-  useInitPageTitle({ db, setTitle });
+  useEffect(() => {
+    requestData("initialize page title", (db) => {
+      getOrAndInit({
+        db,
+        storeName: "meta",
+        key: "collectionTitle",
+        initVal: { id: "collectionTitle", value: "" },
+      }).then((res) => {
+        if ("value" in res) {
+          setTitle(res.value);
+        }
+      });
+    });
+  }, []);
 
   return { title };
 }
 
 export function useUpdatePageTitle() {
-  const { db } = useDB();
+  const { requestData } = useObservableContext()!;
 
-  const updateTitle = async (newTitle: string) => {
-    if (db === null) return;
-
-    await db.put("meta", { id: "collectionTitle", value: newTitle });
+  const updateTitle = (newTitle: string) => {
+    requestData("update page title", async (db) => {
+      await db.put("meta", { id: "collectionTitle", value: newTitle });
+    });
   };
 
   return { updateTitle };
 }
 
 export function useGetTitle() {
-  const { db } = useDB();
+  const { requestData } = useObservableContext()!;
+  const [collectionTitle, setCollectionTitle] = useState("");
 
   const getTitle = () => {
-    return db?.get("meta", "collectionTitle").then((res) => res?.value);
+    requestData("get collection title", async (db) => {
+      const result = await db.get("meta", "collectionTitle");
+      if (result) {
+        setCollectionTitle(result.value);
+      }
+    });
   };
 
-  return { getTitle };
+  useEffect(() => {
+    requestData("get collection title", async (db) => {
+      const result = await db.get("meta", "collectionTitle");
+      if (result) {
+        setCollectionTitle(result.value);
+      }
+    });
+  }, []);
+
+  return { getTitle, collectionTitle };
 }
 
 export function useClearJotaiOnExit() {
@@ -89,39 +95,49 @@ export function useClearJotaiOnExit() {
 }
 
 function useGetAllCards() {
-  const { db } = useDB();
+  // const { db } = useDB();
+  const { requestData } = useObservableContext()!;
+  const [cards, setCards] = useState<CreateModeQuestionCardType[]>([]);
 
-  const getCards = async () => {
-    if (db === null) return;
+  useEffect(() => {
+    requestData("get all cards", async (db) => {
+      const resultCards = await db.getAll("cards");
+      setCards(resultCards);
+    });
+  }, []);
 
-    return db.getAll("cards");
+  const getCards = () => {
+    // return db.getAll("cards");
   };
 
   return { getCards };
 }
 
 export function useInitAllCards() {
-  const { db } = useDB();
+  // const { db } = useDB();
+  const { requestData } = useObservableContext()!;
+
   const setCards = useSetAtom(cardsAtom);
 
   useEffect(() => {
-    if (db === null) return;
+    // if (db === null) return;
 
-    db.getAll("cards").then((res) => {
-      console.log(res);
-      setCards(res);
+    requestData("init all cards", async (db) => {
+      const resultCards = await db.getAll("cards");
+      setCards(resultCards);
     });
-  }, [db]);
+  }, []);
 }
 
 export function useAddEmptyCard() {
-  const { db } = useDB();
+  // const { db } = useDB();
+  const { requestData } = useObservableContext()!;
   const addCard = useSetAtom(addCardAtom);
 
   const addEmptyCard = () => {
-    console.log({ db }, "click on btn");
+    // console.log({ db }, "click on btn");
 
-    if (db === null) return;
+    // if (db === null) return;
 
     const emptyCard = {
       questionTitle: "",
@@ -129,11 +145,16 @@ export function useAddEmptyCard() {
       numberOfCorrectAnswers: 0,
     } as {};
 
-    db.add("cards", emptyCard as CreateModeQuestionCardType).then((res) => {
+    requestData("add empty card", async (db) => {
+      const newCardID = await db.add(
+        "cards",
+        emptyCard as CreateModeQuestionCardType
+      );
+
       const fullEmptyCard = Object.assign(
         emptyCard as CreateModeQuestionCardType,
         {
-          id: res as number,
+          id: newCardID as number,
         }
       );
       addCard(fullEmptyCard);
@@ -144,23 +165,28 @@ export function useAddEmptyCard() {
 }
 
 export function useLazyUpdateCard() {
-  const { db } = useDB();
+  // const { db } = useDB();
+  const { requestData } = useObservableContext()!;
 
-  const lazyUpdateCard = async (newCardData: CreateModeQuestionCardType) => {
-    if (db === null) return;
-    return await db.put("cards", newCardData);
+  const lazyUpdateCard = (newCardData: CreateModeQuestionCardType) => {
+    // if (db === null) return;
+    requestData("lazy update card", async (db) => {
+      db.put("cards", newCardData);
+    });
   };
 
   return { lazyUpdateCard };
 }
 
 export function useOnClickDeleteCard(id: number) {
-  const { db } = useDB();
+  // const { db } = useDB();
+  const { requestData } = useObservableContext()!;
   const deleteCardJotai = useSetAtom(removeCardAtom);
 
   const onClickDeleteCard = async () => {
-    if (db === null) return;
-    await db.delete("cards", id).then(() => {
+    // if (db === null) return;
+    requestData("delete card", async (db) => {
+      await db.delete("cards", id);
       deleteCardJotai(id);
     });
   };
@@ -170,41 +196,44 @@ export function useOnClickDeleteCard(id: number) {
 
 export function useSaveCollection() {
   const { addCollection } = useAddCollection();
-  const { db } = useDB(); /// here I need to implement my own close implementation #closeDB
+  // const { db } = useDB(); /// here I need to implement my own close implementation #closeDB
   const router = useRouter();
   const { getCards } = useGetAllCards();
   const { getTitle } = useGetTitle();
+  const { requestData } = useObservableContext()!;
 
   const onSaveButtonClick = async () => {
-    if (db === null) return;
+    // if (db === null) return;
+    requestData("save collection", async (db) => {
+      const [collectionTitle, cards] = await Promise.all([
+        getTitle(),
+        getCards(),
+      ]);
 
-    const [collectionTitle, cards] = await Promise.all([
-      getTitle(),
-      getCards(),
-    ]);
+      if (typeof collectionTitle !== "string" || !Array.isArray(cards))
+        throw "collectionTitle, or cards are wrong type (just got them right from db)";
 
-    if (typeof collectionTitle !== "string" || !Array.isArray(cards))
-      throw "collectionTitle, or cards are wrong type (just got them right from db)";
+      console.log({ collectionTitle, cards });
 
-    console.log({ collectionTitle, cards });
+      const filteredCards = cards.filter(
+        (card) =>
+          typeof card.questionTitle === "string" &&
+          card.questionTitle.length > 0
+      );
 
-    const filteredCards = cards.filter(
-      (card) =>
-        typeof card.questionTitle === "string" && card.questionTitle.length > 0
-    );
+      const result: CollectionResult = {
+        id: new URLSearchParams(collectionTitle).toString(),
+        timestamp: Date.now(),
+        collectionTitle,
+        cards: filteredCards,
+      };
 
-    const result: CollectionResult = {
-      id: new URLSearchParams(collectionTitle).toString(),
-      timestamp: Date.now(),
-      collectionTitle,
-      cards: filteredCards,
-    };
-
-    deleteThisDB(() => db?.close())
-      .then(async () => await addCollection(result))
-      .then(() => {
-        router.replace("/main");
-      });
+      deleteThisDB(() => db?.close())
+        .then(async () => await addCollection(result))
+        .then(() => {
+          router.replace("/main");
+        });
+    });
   };
 
   return { onSaveButtonClick };

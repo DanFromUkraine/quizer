@@ -1,7 +1,16 @@
 "use client";
 
 import { IDBPDatabase, openDB, StoreKey, StoreNames, StoreValue } from "idb";
-import { Context, createContext, ReactNode, useEffect, useState } from "react";
+import {
+  Context,
+  createContext,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { Observable } from "../utils/observableLogic";
+import { DB, ObservableDatabaseContext } from "./types";
 
 export enum DB_NAMES {
   MAIN_PAGE = "MainPageDB",
@@ -156,4 +165,18 @@ export function createObjectStoreEnhanced<DataType extends {}>({
       autoIncrement,
     });
   }
+}
+
+export function ObservableProviderDB<DataType extends {}>({
+  Context,
+  dbPromise,
+  children,
+}: {
+  Context: ObservableDatabaseContext<DataType>;
+  dbPromise: Promise<DB<DataType>>;
+  children: ReactNode;
+}) {
+  const observable = useMemo(() => new Observable<DB<DataType>>(dbPromise), []);
+
+  return <Context.Provider value={observable}>{children}</Context.Provider>;
 }

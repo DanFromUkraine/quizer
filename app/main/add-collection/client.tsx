@@ -1,5 +1,5 @@
 "use client";
-import { AddCollectionPageDBContextProvider } from "@/app/lib/db/ObservableCreateCollectionDB/provider";
+// import { AddCollectionPageDBContextProvider } from "@/app/lib/db/ObservableCreateCollectionDB/provider";
 import MainPageDBContextProvider from "@/app/lib/db/MainPageDB/provider";
 import Header from "./Header";
 import RenderCards from "./RenderCards";
@@ -9,20 +9,24 @@ import {
   useClearJotaiOnExit,
   useInitAllCards,
 } from "@/app/lib/db/ObservableCreateCollectionDB";
+import { ObservableCreateCollectioProviderDB } from "@/app/lib/db/ObservableCreateCollectionDB/provider";
 
 export default function Page() {
   console.log("renderPage");
 
   return (
     <MainPageDBContextProvider>
-      <AddCollectionPageDBContextProvider>
+      {/* <AddCollectionPageDBContextProvider> */}
+      <ObservableCreateCollectioProviderDB>
         <main className="w-full p-8 flex flex-col gap-5 min-h-full">
           <Initializers />
           <Header />
           <Instruments />
           <RenderCards />
         </main>
-      </AddCollectionPageDBContextProvider>
+      </ObservableCreateCollectioProviderDB>
+
+      {/* </AddCollectionPageDBContextProvider> */}
     </MainPageDBContextProvider>
   );
 }

@@ -1,56 +1,61 @@
 "use client";
 
-import { Context, createContext, memo, ReactNode, use, useMemo } from "react";
 import {
-  createContextDefault,
+  // Context, createContext,
+  memo,
+  ReactNode,
+  // use, useMemo
+} from "react";
+import {
+  // createContextDefault,
   createObjectStoreEnhanced,
-  createObjStoreDefault,
+  // createObjStoreDefault,
   DB_NAMES,
   getDB,
-  ProviderDB,
+  ObservableProviderDB,
+  // ProviderDB,
 } from "../utils";
-import { AddCollectionPageSchema, MyDB } from "./types";
-import { Observable } from "../../utils/observableLogic";
-import { IDBPDatabase } from "idb";
+import {
+  AddCollectionPageSchema,
+  CreateCollectionDB,
+  // MyDB,
+  // ObservableCreateCollectionContext,
+} from "./types";
+// import { Observable } from "../../utils/observableLogic";
+// import { IDBPDatabase } from "idb";
+import { ObservableCreateCollectionDBContext } from "./context";
 
-const DBContext = createContextDefault<AddCollectionPageSchema>();
+// const DBContext = createContextDefault<AddCollectionPageSchema>();
 
-export function AddCollectionPageDBContextProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  const upgrade = (database: MyDB) => {
-    createObjStoreDefault<AddCollectionPageSchema>(database, "meta");
-    if (!database.objectStoreNames.contains("cards")) {
-      database.createObjectStore("cards", {
-        keyPath: "id",
-        autoIncrement: true,
-      });
-    }
-  };
+// export function AddCollectionPageDBContextProvider({
+//   children,
+// }: {
+//   children: ReactNode;
+// }) {
+//   const upgrade = (database: MyDB) => {
+//     createObjStoreDefault<AddCollectionPageSchema>(database, "meta");
+//     if (!database.objectStoreNames.contains("cards")) {
+//       database.createObjectStore("cards", {
+//         keyPath: "id",
+//         autoIncrement: true,
+//       });
+//     }
+//   };
 
-  return (
-    <ProviderDB<AddCollectionPageSchema>
-      {...{
-        dbName: DB_NAMES.ADD_COLLECTION_PAGE,
-        upgrade,
-        ContextBody: DBContext,
-      }}
-    >
-      {children}
-    </ProviderDB>
-  );
-}
+//   return (
+//     <ProviderDB<AddCollectionPageSchema>
+//       {...{
+//         dbName: DB_NAMES.ADD_COLLECTION_PAGE,
+//         upgrade,
+//         ContextBody: DBContext,
+//       }}
+//     >
+//       {children}
+//     </ProviderDB>
+//   );
+// }
 
-export const useDB = () => use(DBContext);
-
-type CreateCollectionDB = IDBPDatabase<AddCollectionPageSchema>;
-type ObservableCreateCollectionContext =
-  Context<Observable<CreateCollectionDB> | null>;
-
-export const ObservableCreateCollectionDBContext =
-  createContext<Observable<CreateCollectionDB> | null>(null);
+// export const useDB = () => use(DBContext);
 
 export const ObservableCreateCollectioProviderDB = memo(function ({
   children,
@@ -85,20 +90,3 @@ export const ObservableCreateCollectioProviderDB = memo(function ({
     </ObservableProviderDB>
   );
 });
-
-export function ObservableProviderDB({
-  Context,
-  dbPromise,
-  children,
-}: {
-  Context: ObservableCreateCollectionContext;
-  dbPromise: Promise<CreateCollectionDB>;
-  children: ReactNode;
-}) {
-  const observable = useMemo(
-    () => new Observable<CreateCollectionDB>(dbPromise),
-    []
-  );
-
-  return <Context.Provider value={observable}>{children}</Context.Provider>;
-}
