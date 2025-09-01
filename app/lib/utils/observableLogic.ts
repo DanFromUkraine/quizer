@@ -1,8 +1,8 @@
-type DataRequestListener<> = () => {};
+type DataRequestListener<DataType> = (arg: DataType) => void;
 
 export class Observable<DataType extends NonNullable<unknown>> {
   private listeners: {
-    listenerBody: (arg1: DataType) => void;
+    listenerBody: DataRequestListener<DataType>;
     listenerName: string;
   }[];
   private data: DataType | null;
@@ -39,7 +39,8 @@ export class Observable<DataType extends NonNullable<unknown>> {
     }
   }
 
-  requestData(name: string, callback: (arg1: DataType) => void) {
+  requestData(name: string, callback: DataRequestListener<DataType>) {
+    console.log({ this: this });
     if (this.data !== null) {
       callback(this.data);
     } else {
@@ -52,7 +53,6 @@ export class Observable<DataType extends NonNullable<unknown>> {
   }
 
   private deleteRequestData(listenerName: string) {
-    console.warn("before", this.listeners.length);
     this.listeners = this.listeners.filter((prevCallback, i, arr) => {
       return prevCallback.listenerName !== listenerName;
     });

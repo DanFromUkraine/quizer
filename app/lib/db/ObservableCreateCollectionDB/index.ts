@@ -1,33 +1,33 @@
 "use client";
 
-import { IDBPDatabase } from "idb";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { RESET } from "jotai/utils";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import {
-  addCardAtom,
-  cardsAtom,
-  collectionTitleAtom,
-  removeCardAtom,
-} from "../../jotai/addCollection";
+import { useEffect, useState } from "react";
+// import {
+//   addCardAtom,
+//   cardsAtom,
+//   collectionTitleAtom,
+//   removeCardAtom,
+// } from "../../jotai/addCollection";
 import { useAddCollection } from "../MainPageDB";
-import { getOrAndInit, getUniqueID } from "../utils";
-// import { useDB } from "./provider";
-import {
-  AddCollectionPageSchema,
-  CollectionResult,
-  CreateModeQuestionCardType,
-} from "./types";
-import { deleteThisDB } from "./utils";
+import { getOrAndInit } from "../utils";
 import { useObservableContext } from "./context";
+import { CollectionResult, CreateModeQuestionCardType } from "./types";
+import { deleteThisDB } from "./utils";
+import { useCardsContext } from "@/app/main/add-collection/CardsContext/context";
+import {
+  useAddCard,
+  useRemoveCard,
+} from "@/app/main/add-collection/CardsContext/provider";
+import { useCollectionTitle } from "@/app/main/add-collection/CollectionTitleContext";
 
 export function useGetPageTitle() {
-  const { requestData } = useObservableContext()!;
-  const [title, setTitle] = useAtom(collectionTitleAtom);
+  const obs = useObservableContext();
+  const { collectionTitle, setCollectionTitle } = useCollectionTitle()!;
 
   useEffect(() => {
-    requestData("initialize page title", (db) => {
+    obs?.requestData("initialize page title", (db) => {
       getOrAndInit({
         db,
         storeName: "meta",
@@ -35,20 +35,20 @@ export function useGetPageTitle() {
         initVal: { id: "collectionTitle", value: "" },
       }).then((res) => {
         if ("value" in res) {
-          setTitle(res.value);
+          setCollectionTitle(res.value);
         }
       });
     });
   }, []);
 
-  return { title };
+  return { collectionTitle };
 }
 
 export function useUpdatePageTitle() {
-  const { requestData } = useObservableContext()!;
+  const obs = useObservableContext();
 
   const updateTitle = (newTitle: string) => {
-    requestData("update page title", async (db) => {
+    obs?.requestData("update page title", async (db) => {
       await db.put("meta", { id: "collectionTitle", value: newTitle });
     });
   };
@@ -57,11 +57,11 @@ export function useUpdatePageTitle() {
 }
 
 export function useGetTitle() {
-  const { requestData } = useObservableContext()!;
+  const obs = useObservableContext();
   const [collectionTitle, setCollectionTitle] = useState("");
 
   const getTitle = () => {
-    requestData("get collection title", async (db) => {
+    obs?.requestData("get collection title", async (db) => {
       const result = await db.get("meta", "collectionTitle");
       if (result) {
         setCollectionTitle(result.value);
@@ -70,7 +70,7 @@ export function useGetTitle() {
   };
 
   useEffect(() => {
-    requestData("get collection title", async (db) => {
+    obs?.requestData("get collection title", async (db) => {
       const result = await db.get("meta", "collectionTitle");
       if (result) {
         setCollectionTitle(result.value);
@@ -81,26 +81,25 @@ export function useGetTitle() {
   return { getTitle, collectionTitle };
 }
 
-export function useClearJotaiOnExit() {
-  const setCards = useSetAtom(cardsAtom);
-  const setTitle = useSetAtom(collectionTitleAtom);
+// export function useClearJotaiOnExit() {
+//   const setCards = useSetAtom(cardsAtom);
+//   const setTitle = useSetAtom(collectionTitleAtom);
 
-  useEffect(
-    () => () => {
-      setCards(RESET);
-      setTitle(RESET);
-    },
-    []
-  );
-}
+//   useEffect(
+//     () => () => {
+//       setCards(RESET);
+//       setTitle(RESET);
+//     },
+//     []
+//   );
+// }
 
 function useGetAllCards() {
-  // const { db } = useDB();
-  const { requestData } = useObservableContext()!;
+  const obs = useObservableContext();
   const [cards, setCards] = useState<CreateModeQuestionCardType[]>([]);
 
   useEffect(() => {
-    requestData("get all cards", async (db) => {
+    obs?.requestData("get all cards", async (db) => {
       const resultCards = await db.getAll("cards");
       setCards(resultCards);
     });
@@ -113,39 +112,48 @@ function useGetAllCards() {
   return { getCards };
 }
 
-export function useInitAllCards() {
-  // const { db } = useDB();
-  const { requestData } = useObservableContext()!;
-
-  const setCards = useSetAtom(cardsAtom);
+export function useCards() {
+  const obs = useObservableContext();
+  const [cards, setCardsStateOnly] = useState<CreateModeQuestionCardType[]>([]);
 
   useEffect(() => {
-    // if (db === null) return;
-
-    requestData("init all cards", async (db) => {
+    obs?.requestData("get all cards", async (db) => {
       const resultCards = await db.getAll("cards");
-      setCards(resultCards);
+      setCardsStateOnly(resultCards);
     });
   }, []);
+
+  return { cards, setCardsStateOnly };
 }
 
+// export function useInitAllCards() {
+//   // const { db } = useDB();
+//   const obs = useObservableContext();
+
+//   const setCards = useSetAtom(cardsAtom);
+
+//   useEffect(() => {
+//     // if (db === null) return;
+
+//     obs?.requestData("init all cards", async (db) => {
+//       const resultCards = await db.getAll("cards");
+//       setCards(resultCards);
+//     });
+//   }, []);
+// }
+
 export function useAddEmptyCard() {
-  // const { db } = useDB();
-  const { requestData } = useObservableContext()!;
-  const addCard = useSetAtom(addCardAtom);
+  const obs = useObservableContext();
+  const { addCard } = useAddCard();
 
   const addEmptyCard = () => {
-    // console.log({ db }, "click on btn");
-
-    // if (db === null) return;
-
     const emptyCard = {
       questionTitle: "",
       options: [],
       numberOfCorrectAnswers: 0,
     } as {};
 
-    requestData("add empty card", async (db) => {
+    obs?.requestData("add empty card", async (db) => {
       const newCardID = await db.add(
         "cards",
         emptyCard as CreateModeQuestionCardType
@@ -157,6 +165,7 @@ export function useAddEmptyCard() {
           id: newCardID as number,
         }
       );
+
       addCard(fullEmptyCard);
     });
   };
@@ -166,11 +175,11 @@ export function useAddEmptyCard() {
 
 export function useLazyUpdateCard() {
   // const { db } = useDB();
-  const { requestData } = useObservableContext()!;
+  const obs = useObservableContext();
 
   const lazyUpdateCard = (newCardData: CreateModeQuestionCardType) => {
     // if (db === null) return;
-    requestData("lazy update card", async (db) => {
+    obs?.requestData("lazy update card", async (db) => {
       db.put("cards", newCardData);
     });
   };
@@ -179,15 +188,13 @@ export function useLazyUpdateCard() {
 }
 
 export function useOnClickDeleteCard(id: number) {
-  // const { db } = useDB();
-  const { requestData } = useObservableContext()!;
-  const deleteCardJotai = useSetAtom(removeCardAtom);
+  const obs = useObservableContext();
+  const { removeCard } = useRemoveCard();
 
   const onClickDeleteCard = async () => {
-    // if (db === null) return;
-    requestData("delete card", async (db) => {
+    obs?.requestData("delete card", async (db) => {
       await db.delete("cards", id);
-      deleteCardJotai(id);
+      removeCard(id);
     });
   };
 
@@ -196,15 +203,14 @@ export function useOnClickDeleteCard(id: number) {
 
 export function useSaveCollection() {
   const { addCollection } = useAddCollection();
-  // const { db } = useDB(); /// here I need to implement my own close implementation #closeDB
   const router = useRouter();
   const { getCards } = useGetAllCards();
   const { getTitle } = useGetTitle();
-  const { requestData } = useObservableContext()!;
+  const obs = useObservableContext();
 
   const onSaveButtonClick = async () => {
     // if (db === null) return;
-    requestData("save collection", async (db) => {
+    obs?.requestData("save collection", async (db) => {
       const [collectionTitle, cards] = await Promise.all([
         getTitle(),
         getCards(),
