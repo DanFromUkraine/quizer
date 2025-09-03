@@ -46,7 +46,7 @@
   }
 
   .questionCard {
-    @apply max-w-3xl flex flex-col gap-2 w-full border border-lightGray p-6 rounded-normal;
+    @apply max-w-3xl flex flex-col gap-3 w-full border border-lightGray p-6 rounded-normal;
   }
 }
 

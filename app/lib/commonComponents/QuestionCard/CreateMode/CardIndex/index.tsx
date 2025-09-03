@@ -21,7 +21,7 @@ export default function CardIndex() {
 
         return (
                 <p className='px-3 py-1.5 text-darker w-fit font-semibold bg-fillbg rounded-normal'>
-                        Картка №{index + 1}
+                        №{index + 1}
                 </p>
         );
 }
