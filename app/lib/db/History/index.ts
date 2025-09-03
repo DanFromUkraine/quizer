@@ -82,7 +82,6 @@ export function useInitFromHistory() {
                         };
 
                         db.put('incomplete', newInfo).then((successInfo) => {
-                                console.log('success!', { successInfo });
                                 setDataReady(true);
                         });
                 })();
@@ -99,10 +98,6 @@ export function useGetCollection() {
 
         useEffect(() => {
                 if (!isDbReady || !db || !collectionID) return;
-
-                console.log(
-                        isDbReady ? 'DB is ready!!!' : 'DB is not ready!!!'
-                );
 
                 db.get('incomplete', collectionID).then((res) => {
                         if (!res)
@@ -186,8 +181,6 @@ export function useSubmit() {
                                 },
                                 0
                         );
-
-                console.log({ numberOfCorrectAnswers });
 
                 const completeAttemp: CompleteAttemp & {
                         id: string;

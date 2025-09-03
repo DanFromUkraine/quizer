@@ -1,4 +1,4 @@
-import { JSX } from 'react';
+import { JSX, memo } from 'react';
 import {
         ModesAvailable,
         PickProps,

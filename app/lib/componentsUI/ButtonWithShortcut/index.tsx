@@ -18,12 +18,6 @@ export default function BtnWithShortcut({
         type: string;
         otherAttributes?: object;
 }) {
-        const containerRef = (ref: unknown) => {
-                console.log(ref);
-        };
-
-        console.log('renderBtnWithShortcut');
-
         return (
                 <button
                         className={clsx(
@@ -31,7 +25,6 @@ export default function BtnWithShortcut({
                                 className
                         )}
                         onClick={onClick}
-                        ref={containerRef}
                         {...otherAttributes}>
                         <p className=''>{textContent}</p>
                         <div className='flex w-auto opacity-0 transition-[width_1s_ease-in-out,_left_1.5s_ease-in-out] items-center gap-2 group-hover:opacity-100'>

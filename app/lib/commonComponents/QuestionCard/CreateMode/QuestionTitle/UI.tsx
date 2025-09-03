@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ChangeEvent, FormEventHandler, RefObject } from 'react';
+import { FormEventHandler, RefObject } from 'react';
 import { Control, Controller } from 'react-hook-form';
 
 export default function QuestionTitleUI({
@@ -23,6 +23,7 @@ export default function QuestionTitleUI({
 
                                                 textareaRef.current = e;
                                         }}
+                                        data-testid='questionTitle'
                                         defaultValue={value}
                                         placeholder='Enter text'
                                         onChange={onChange}

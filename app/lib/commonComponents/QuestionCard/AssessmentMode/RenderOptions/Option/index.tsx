@@ -59,15 +59,6 @@ export default function Option({
                 onTick();
         };
 
-        console.log({
-                isCorrect,
-                optionChosen,
-                optionIndex,
-                questionIndex,
-                anyOptionChosen,
-                correct
-        });
-
         return (
                 <div
                         className={clsx(

@@ -1,3 +1,5 @@
+'use client';
+
 import { FormProvider, useForm } from 'react-hook-form';
 import { QuestionCardCreateModeProps } from '../types.d';
 import CardIndex from './CardIndex';
@@ -7,8 +9,9 @@ import RenderOptions from './RenderOptions';
 import { CreateModeQuestionCardType } from '@/app/lib/db/ObservableCreateCollectionDB/types';
 import { useOnClickDeleteCard } from '@/app/lib/db/ObservableCreateCollectionDB';
 import { useStayUpdated } from './client';
+import { memo } from 'react';
 
-export default function CreateModeImplementation({
+export default memo(function CreateModeImplementation({
         id,
         questionTitle,
         options
@@ -39,4 +42,4 @@ export default function CreateModeImplementation({
                         </form>
                 </FormProvider>
         );
-}
+});

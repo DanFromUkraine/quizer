@@ -8,7 +8,7 @@ import RenderCardsUI from './UI';
 export default function RenderCards() {
         const { cards } = useCards();
 
-        console.log({ cards });
+        console.log({ theLatestCards: cards });
 
         const allContainerRef = useRef<HTMLElement>(null);
         const rowVirtualizer = useVirtualizer({
@@ -16,8 +16,6 @@ export default function RenderCards() {
                 getScrollElement: () => allContainerRef.current,
                 estimateSize: () => 500
         });
-
-        console.log('render cards');
 
         return (
                 <RenderCardsUI

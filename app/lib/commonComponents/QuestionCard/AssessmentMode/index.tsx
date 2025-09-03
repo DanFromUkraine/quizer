@@ -2,8 +2,9 @@ import { AssessmentModeQuestionCardType } from '@/app/lib/db/History/types';
 import Heading from './Heading';
 import NumberOfCorrectOptions from './NumberOfCorrectOptions';
 import RenderOptions from './RenderOptions';
+import { memo } from 'react';
 
-export default function AssessmentModeImplementation({
+export default memo(function AssessmentModeImplementation({
         options,
         questionTitle,
         cardIndex,
@@ -29,4 +30,4 @@ export default function AssessmentModeImplementation({
                         />
                 </div>
         );
-}
+});

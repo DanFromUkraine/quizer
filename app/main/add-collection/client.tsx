@@ -11,7 +11,7 @@ import // useClearJotaiOnExit,
 import { ObservableCreateCollectioProviderDB } from '@/app/lib/db/ObservableCreateCollectionDB/provider';
 import { CollectionTitleContextProvider } from './CollectionTitleContext';
 import CardsContextProvider from './CardsContext/provider';
-import AddCardButton from './AddCard';
+import AddCardButton from './AddCardButton';
 
 export default function Page() {
         console.log('renderPage');

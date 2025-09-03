@@ -96,8 +96,6 @@ export function useAddEmptyCard() {
                                 }
                         );
 
-                        console.log('I should have added card');
-
                         addCard(fullEmptyCard);
                 });
         };

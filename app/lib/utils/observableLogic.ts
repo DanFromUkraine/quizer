@@ -42,7 +42,6 @@ export class Observable<DataType extends NonNullable<unknown>> {
         }
 
         requestData(name: string, callback: DataRequestListener<DataType>) {
-                console.log({ this: this });
                 if (this.data !== null) {
                         callback(this.data);
                 } else {

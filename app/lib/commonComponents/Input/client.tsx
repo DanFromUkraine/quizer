@@ -1,9 +1,8 @@
 'use client';
 
 import { InputHTMLAttributes, useCallback, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
-import type { AvailableInputTypes, Clearable } from './types.d.ts';
 import { ClearButtonUI } from '../../componentsUI/ClearButton/index.jsx';
+import type { AvailableInputTypes } from './types.d.ts';
 
 export function useInputType(defaultInputType: AvailableInputTypes) {
         const isPasswordButtonVisible = defaultInputType === 'password';
@@ -12,10 +11,7 @@ export function useInputType(defaultInputType: AvailableInputTypes) {
         );
 
         const toggleInputType = useCallback(() => {
-                // console.log("click");
-
                 setCurrentInputType((prev) => {
-                        //   console.log({ prev });
                         return prev === defaultInputType
                                 ? 'text'
                                 : defaultInputType;

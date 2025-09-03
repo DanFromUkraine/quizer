@@ -13,11 +13,10 @@ test.describe('This tests bundle will describe collection creation process', () 
                 const titleInput = page.getByTestId('collection-title-input');
                 await titleInput.focus();
                 await titleInput.fill(EXAMPLE_TEXT_VAL);
-                expect(titleInput).toHaveValue(EXAMPLE_TEXT_VAL);
+                await expect(titleInput).toHaveValue(EXAMPLE_TEXT_VAL);
                 await page.reload();
-                await page.waitForTimeout(300);
                 await titleInput.focus();
-                expect(titleInput).toHaveValue(EXAMPLE_TEXT_VAL);
+                await expect(titleInput).toHaveValue(EXAMPLE_TEXT_VAL);
         });
 
         test("When user fills question title, it won't be earased after reload", async ({
@@ -25,14 +24,13 @@ test.describe('This tests bundle will describe collection creation process', () 
         }) => {
                 const addCardButton = page.getByTestId('add-card');
                 await addCardButton.click();
-                await page.waitForTimeout(300);
                 const questionCard = page.locator('.questionCard');
-                expect(questionCard).toBeVisible();
-                const questionCardTitle =
-                        questionCard.locator('.questionTitle');
+                await expect(questionCard).toBeVisible();
+                const questionCardTitle = page.getByTestId('questionTitle');
+                await expect(questionCardTitle).toBeVisible();
                 await questionCardTitle.focus();
                 await questionCardTitle.fill(EXAMPLE_TEXT_VAL);
                 await page.reload();
-                expect(questionCardTitle).toHaveValue(EXAMPLE_TEXT_VAL);
+                await expect(questionCardTitle).toHaveValue(EXAMPLE_TEXT_VAL);
         });
 });

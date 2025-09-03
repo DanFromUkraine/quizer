@@ -12,13 +12,7 @@ export function useAddCollection() {
         const addCollection = async (newCollection: CollectionResult) => {
                 if (db === null) return;
 
-                await db
-                        .put('userCollections', newCollection)
-                        .then((resultString) => {
-                                console.log('successfuly added collection', {
-                                        resultString
-                                });
-                        });
+                await db.put('userCollections', newCollection);
         };
 
         return { addCollection };
@@ -28,13 +22,10 @@ export function useInitCollections() {
         const { db } = useDB();
         const [_, setCollections] = useAtom(userCollectionsAtom);
 
-        console.log('useInitCollections', db);
-
         useEffect(() => {
                 if (db === null) return;
 
                 db.getAll('userCollections').then((collections) => {
-                        console.log('succedded!! ', { collections });
                         setCollections(collections);
                 });
         }, [db]);

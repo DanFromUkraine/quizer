@@ -8,7 +8,6 @@ export function createDebounce() {
                 },
                 abort: () => {
                         clearTimeout(timer);
-                        console.log('aborted');
                         timer = undefined;
                 }
         };

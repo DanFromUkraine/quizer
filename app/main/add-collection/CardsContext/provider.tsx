@@ -4,21 +4,13 @@ import { ReactNode, useCallback, useState } from 'react';
 import { CreateModeQuestionCardType } from '@/app/lib/db/ObservableCreateCollectionDB/types';
 
 export function useAddCard() {
-        const contextData = useCards()!;
+        const { setCardsStateOnly } = useCardsContext();
 
         const addCard = useCallback(
                 (newCard: CreateModeQuestionCardType) => {
-                        console.log("i'm here");
-                        if (!contextData.setCardsStateOnly) return;
-                        contextData.setCardsStateOnly((prev) =>
-                                prev.map((prevCard) =>
-                                        prevCard.id === newCard.id
-                                                ? newCard
-                                                : prevCard
-                                )
-                        );
+                        setCardsStateOnly((prev) => [...prev, newCard]);
                 },
-                [contextData.setCardsStateOnly]
+                [setCardsStateOnly]
         );
 
         return { addCard };
@@ -32,17 +24,13 @@ function getFilteredByID(
 }
 
 export function useRemoveCard() {
-        const contextData = useCards()!;
+        const { setCardsStateOnly } = useCardsContext();
 
-        const removeCard = useCallback(
-                (cardIdToDelete: number) => {
-                        if (!contextData.setCardsStateOnly) return;
-                        contextData.setCardsStateOnly((prev) =>
-                                getFilteredByID(prev, cardIdToDelete)
-                        );
-                },
-                [contextData]
-        );
+        const removeCard = useCallback((cardIdToDelete: number) => {
+                setCardsStateOnly((prev) =>
+                        getFilteredByID(prev, cardIdToDelete)
+                );
+        }, []);
 
         return { removeCard };
 }
