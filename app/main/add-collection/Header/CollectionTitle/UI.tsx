@@ -15,6 +15,7 @@ export default function CollectionTitleUI({
 }) {
   return (
     <input
+      data-testid="collection-title-input"
       type="text"
       placeholder="Enter heading"
       className="px-6 py-1.5 w-full text-[#5C5E64] text-2xl font-semibold focus:outline-none mb-8"
