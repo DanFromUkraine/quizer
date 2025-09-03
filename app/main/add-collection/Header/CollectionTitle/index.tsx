@@ -4,7 +4,7 @@ import CollectionTitleUI from "./UI";
 
 export default function CollectionTitle() {
   const titleRef = useRef<HTMLInputElement>(null);
-  const { control } = useFormContext();
+  const { control, register } = useFormContext();
 
-  return <CollectionTitleUI {...{ ref: titleRef, control }} />;
+  return <CollectionTitleUI {...{ ref: titleRef, register }} />;
 }

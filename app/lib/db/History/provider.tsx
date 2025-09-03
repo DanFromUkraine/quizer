@@ -8,17 +8,12 @@ type HistoryForwardInfo = {
   collectionID: string;
 };
 
-const DBContext = createContextDefault<
-  HistoryDBInterface,
-  HistoryForwardInfo
->();
+const DBContext = createContextDefault<HistoryDBInterface>();
 
 export default function HistoryDBContextProvider({
   children,
-  collectionID,
 }: {
   children: ReactNode;
-  collectionID: string;
 }) {
   const upgrade = (db: IDBPDatabase<HistoryDBInterface>) => {
     if (!db.objectStoreNames.contains("complete")) {
@@ -35,10 +30,6 @@ export default function HistoryDBContextProvider({
         ContextBody: DBContext,
         dbName: "history",
         upgrade,
-
-        forwardInfo: {
-          collectionID,
-        },
       }}
     >
       {children}

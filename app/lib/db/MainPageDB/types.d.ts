@@ -1,5 +1,5 @@
 import type { DBSchema } from "idb";
-import type { CollectionResult } from "../AddCollectionPageDB/types";
+import type { CollectionResult } from "../ObservableCreateCollectionDB/types";
 
 export interface MainPageSchema extends DBSchema {
   userCollections: {

@@ -1,8 +1,8 @@
 "use client";
 
-import { getSetInitLS } from "@/app/lib/db/simpleUtils/simpleLocasStorage";
 import { ReactNode, useCallback } from "react";
 import OptionUI from "./UI";
+import { getSetInitLS } from "@/app/lib/utils/localStorageUtils";
 
 export default function Option({
   className,

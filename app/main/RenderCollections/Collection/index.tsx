@@ -1,4 +1,4 @@
-import { CollectionResult } from "@/app/lib/db/AddCollectionPageDB/types";
+import { CollectionResult } from "@/app/lib/db/ObservableCreateCollectionDB/types";
 import Link from "next/link";
 
 export default function Collection({

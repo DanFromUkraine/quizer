@@ -4,44 +4,73 @@ import { FormProvider, useForm, UseFormReturn } from "react-hook-form";
 import CollectionTitle from "./CollectionTitle";
 import SaveBtn from "./SaveCollectionBtn";
 import {
-  useGetPageTitle,
+  useGetCollectionTitle,
   useUpdatePageTitle,
-} from "@/app/lib/db/AddCollectionPageDB";
-import { useEffect } from "react";
+} from "@/app/lib/db/ObservableCreateCollectionDB";
+import { use, useEffect, useMemo } from "react";
 
 type HeaderFormDataType = {
   collectionTitle: string;
 };
 
-function useStayUpdated(methods: UseFormReturn<HeaderFormDataType>) {
+function useStayUpdated(
+  methods: UseFormReturn<HeaderFormDataType>,
+  loading: boolean,
+  collectionTitle: string
+) {
   const { updateTitle } = useUpdatePageTitle();
 
   const data = methods.watch();
 
   useEffect(() => {
-    if (methods.formState.isDirty) {
+    console.log({
+      dirty: methods.formState.isDirty,
+      loading,
+      collectionTitle,
+      data: data.collectionTitle,
+    });
+    if (
+      methods.formState.isDirty &&
+      !loading &&
+      collectionTitle !== data.collectionTitle
+    ) {
       updateTitle(data.collectionTitle);
     }
-  }, [updateTitle, data]);
+  }, [updateTitle, loading, collectionTitle]);
+}
+
+function useInitFormData(
+  methods: UseFormReturn<HeaderFormDataType, any, HeaderFormDataType>,
+  collectionTitle: string
+) {
+  useEffect(() => {
+    if (typeof collectionTitle !== "string" || collectionTitle.length === 0)
+      return;
+    methods.reset({
+      collectionTitle,
+    });
+  }, [collectionTitle]);
 }
 
 export default function Header() {
-  const { title } = useGetPageTitle();
+  const { defaultCollectionTitle, loading } = useGetCollectionTitle()!;
 
   const methods = useForm<HeaderFormDataType>({
     defaultValues: {
-      collectionTitle: title,
+      collectionTitle: defaultCollectionTitle,
     },
   });
-
-  useStayUpdated(methods);
+  useStayUpdated(methods, loading, defaultCollectionTitle);
+  useInitFormData(methods, defaultCollectionTitle);
 
   return (
     <FormProvider {...methods}>
-      <header className="w-full flex justify-between">
-        <CollectionTitle />
-        <SaveBtn />
-      </header>
+      <form className="w-full">
+        <header className="w-full flex justify-bАetween">
+          <CollectionTitle />
+          <SaveBtn />
+        </header>
+      </form>
     </FormProvider>
   );
 }
