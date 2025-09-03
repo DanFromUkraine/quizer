@@ -1,19 +1,24 @@
-"use client";
+'use client';
 
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useState } from 'react';
 
 export default function createSimpleContextProviderPair<DataType>({
-  defaultData,
-  useGetData,
+        defaultData,
+        useGetData
 }: {
-  defaultData: DataType;
-  useGetData: () => DataType;
+        defaultData: DataType;
+        useGetData: () => DataType;
 }) {
-  const Context = createContext<DataType>(defaultData);
-  const Provider = ({ children }: { children: ReactNode }) => {
-    const data = useGetData();
-    return <Context.Provider value={data}> {children} </Context.Provider>;
-  };
+        const Context = createContext<DataType>(defaultData);
+        const Provider = ({ children }: { children: ReactNode }) => {
+                const data = useGetData();
+                return (
+                        <Context.Provider value={data}>
+                                {' '}
+                                {children}{' '}
+                        </Context.Provider>
+                );
+        };
 
-  return [Context, Provider] as const;
+        return [Context, Provider] as const;
 }

@@ -1,27 +1,32 @@
-import { AssessmentModeQuestionCardType } from "@/app/lib/db/History/types";
-import Heading from "./Heading";
-import NumberOfCorrectOptions from "./NumberOfCorrectOptions";
-import RenderOptions from "./RenderOptions";
+import { AssessmentModeQuestionCardType } from '@/app/lib/db/History/types';
+import Heading from './Heading';
+import NumberOfCorrectOptions from './NumberOfCorrectOptions';
+import RenderOptions from './RenderOptions';
 
 export default function AssessmentModeImplementation({
-  options,
-  questionTitle,
-  cardIndex,
-  numberOfCorrectAnswers,
-  anyOptionChosen,
+        options,
+        questionTitle,
+        cardIndex,
+        numberOfCorrectAnswers,
+        anyOptionChosen
 }: AssessmentModeQuestionCardType & {
-  cardIndex: number;
+        cardIndex: number;
 }) {
-  return (
-    <div className="questionCard">
-      <Heading questionTitle={questionTitle} index={cardIndex} />
-      <NumberOfCorrectOptions {...{ numberOfCorrectAnswers }} />
-      <RenderOptions
-        options={options}
-        isMultiOption={numberOfCorrectAnswers > 1}
-        questionIndex={cardIndex}
-        anyOptionChosen={anyOptionChosen}
-      />
-    </div>
-  );
+        return (
+                <div className='questionCard'>
+                        <Heading
+                                questionTitle={questionTitle}
+                                index={cardIndex}
+                        />
+                        <NumberOfCorrectOptions
+                                {...{ numberOfCorrectAnswers }}
+                        />
+                        <RenderOptions
+                                options={options}
+                                isMultiOption={numberOfCorrectAnswers > 1}
+                                questionIndex={cardIndex}
+                                anyOptionChosen={anyOptionChosen}
+                        />
+                </div>
+        );
 }

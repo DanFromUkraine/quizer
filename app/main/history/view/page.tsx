@@ -1,29 +1,32 @@
-import HistoryDBContextProvider from "@/app/lib/db/History/provider";
-import MainPageDBContextProvider from "@/app/lib/db/MainPageDB/provider";
-import CollectionDataCompleteContextProvider from "./CollectionDataContext/provider";
-import RenderQuestions from "./RenderQuestions";
-import IdContextProvider from "@/app/lib/assessmentModeComponents/IdContext/provider";
+import HistoryDBContextProvider from '@/app/lib/db/History/provider';
+import MainPageDBContextProvider from '@/app/lib/db/MainPageDB/provider';
+import CollectionDataCompleteContextProvider from './CollectionDataContext/provider';
+import RenderQuestions from './RenderQuestions';
+import IdContextProvider from '@/app/lib/assessmentModeComponents/IdContext/provider';
 
 export default async function ViewSearchParams({
-  searchParams,
+        searchParams
 }: {
-  searchParams: Promise<{ id: string }>;
+        searchParams: Promise<{ id: string }>;
 }) {
-  const params = await searchParams;
+        const params = await searchParams;
 
-  console.log({ params });
+        console.log({ params });
 
-  return (
-    <main className="w-full p-8 flex flex-col gap-2 items-center">
-      <MainPageDBContextProvider>
-        <IdContextProvider id={new URLSearchParams(params.id).toString()}>
-          <HistoryDBContextProvider>
-            <CollectionDataCompleteContextProvider>
-              <RenderQuestions />
-            </CollectionDataCompleteContextProvider>
-          </HistoryDBContextProvider>
-        </IdContextProvider>
-      </MainPageDBContextProvider>
-    </main>
-  );
+        return (
+                <main className='w-full p-8 flex flex-col gap-2 items-center'>
+                        <MainPageDBContextProvider>
+                                <IdContextProvider
+                                        id={new URLSearchParams(
+                                                params.id
+                                        ).toString()}>
+                                        <HistoryDBContextProvider>
+                                                <CollectionDataCompleteContextProvider>
+                                                        <RenderQuestions />
+                                                </CollectionDataCompleteContextProvider>
+                                        </HistoryDBContextProvider>
+                                </IdContextProvider>
+                        </MainPageDBContextProvider>
+                </main>
+        );
 }

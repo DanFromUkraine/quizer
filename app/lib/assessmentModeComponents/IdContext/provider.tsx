@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { ReactNode } from "react";
-import { IdContext } from "./context";
+import { ReactNode } from 'react';
+import { IdContext } from './context';
 
 export default function IdContextProvider({
-  id,
-  children,
+        id,
+        children
 }: {
-  id: string;
-  children: ReactNode;
+        id: string;
+        children: ReactNode;
 }) {
-  return <IdContext.Provider value={id}>{children} </IdContext.Provider>;
+        return <IdContext.Provider value={id}>{children} </IdContext.Provider>;
 }
