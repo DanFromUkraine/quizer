@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtom } from "jotai";
-import { CollectionResult } from "../AddCollectionPageDB/types";
+import { CollectionResult } from "../ObservableCreateCollectionDB/types";
 import { userCollectionsAtom } from "../../jotai/mainPage";
 import { useEffect, useState } from "react";
 import { useDB } from "./provider";

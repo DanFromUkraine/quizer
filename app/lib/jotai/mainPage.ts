@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 import { getAtomAddToArrayItem } from "./utils";
-import { CollectionResult } from "../db/AddCollectionPageDB/types";
+import { CollectionResult } from "../db/ObservableCreateCollectionDB/types";
 
 export const userCollectionsAtom = atom<CollectionResult[]>([]);
 

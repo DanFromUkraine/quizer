@@ -1,7 +1,7 @@
 "use client";
 
-import { useLazyUpdateCard } from "@/app/lib/db/AddCollectionPageDB";
-import { CreateModeQuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
+import { useLazyUpdateCard } from "@/app/lib/db/ObservableCreateCollectionDB";
+import { CreateModeQuestionCardType } from "@/app/lib/db/ObservableCreateCollectionDB/types";
 import { useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
 

@@ -1,4 +1,4 @@
-import { CreateModeQuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
+import { CreateModeQuestionCardType } from "@/app/lib/db/ObservableCreateCollectionDB/types";
 // import QuestionCard from "./QuestionCard";
 import { IndexContextProvider } from "./QuestionCard/CardIndex";
 import { RefObject } from "react";

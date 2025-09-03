@@ -37,17 +37,8 @@ export default function Option({
   questionIndex: number;
   anyOptionChosen: boolean;
 }) {
-  console.log({
-    isCorrect,
-    optionChosen,
-    optionIndex,
-    questionIndex,
-    
-    anyOptionChosen,
-  });
-
-  const [correct, setCorrect] = useState<"correct" | "incorrect" | undefined>(
-    anyOptionChosen ? (optionChosen ? "correct" : "incorrect") : undefined
+  const [correct, setCorrect] = useState<"correct" | "incorrect" | "">(
+    optionChosen ? (isCorrect ? "correct" : "incorrect") : ""
   );
   const { onTick } = useClickOption({ questionIndex, optionIndex, isCorrect });
 
@@ -63,6 +54,15 @@ export default function Option({
     showIsCorrect();
     onTick();
   };
+
+  console.log({
+    isCorrect,
+    optionChosen,
+    optionIndex,
+    questionIndex,
+    anyOptionChosen,
+    correct,
+  });
 
   return (
     <div

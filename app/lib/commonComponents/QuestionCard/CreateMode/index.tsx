@@ -4,8 +4,8 @@ import CardIndex from "./CardIndex";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { QuestionTitle } from "./QuestionTitle";
 import RenderOptions from "./RenderOptions";
-import { CreateModeQuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
-import { useOnClickDeleteCard } from "@/app/lib/db/AddCollectionPageDB";
+import { CreateModeQuestionCardType } from "@/app/lib/db/ObservableCreateCollectionDB/types";
+import { useOnClickDeleteCard } from "@/app/lib/db/ObservableCreateCollectionDB";
 import { useStayUpdated } from "./client";
 
 export default function CreateModeImplementation({

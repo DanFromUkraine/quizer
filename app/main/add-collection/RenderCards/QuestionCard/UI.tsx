@@ -10,7 +10,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { QuestionTitle } from "./QuestionTitle";
 import RenderOptions from "./RenderOptions";
 import CardIndex from "./CardIndex";
-import { CreateModeQuestionCardType } from "@/app/lib/db/AddCollectionPageDB/types";
+import { CreateModeQuestionCardType } from "@/app/lib/db/ObservableCreateCollectionDB/types";
 
 export default function QuestionCardUI({
   onClickDeleteCard,

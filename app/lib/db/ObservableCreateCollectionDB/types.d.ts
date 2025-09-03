@@ -1,4 +1,4 @@
-import { DBSchema } from "idb";
+import { DBSchema, IDBPDatabase } from "idb";
 
 type MetaPureType = {
   collectionTitle: string;
@@ -35,3 +35,7 @@ export interface AddCollectionPageSchema extends DBSchema {
 }
 
 export type MyDB = IDBPDatabase<AddCollectionPageSchema>;
+
+export type CreateCollectionDB = IDBPDatabase<AddCollectionPageSchema>;
+export type ObservableCreateCollectionContext =
+  Context<Observable<CreateCollectionDB> | null>;

@@ -1,4 +1,4 @@
-import { useSaveCollection } from "@/app/lib/db/AddCollectionPageDB";
+import { useSaveCollection } from "@/app/lib/db/ObservableCreateCollectionDB";
 import { statusBarColorAtom } from "@/app/lib/jotai/userState";
 import { useSetAtom } from "jotai";
 import SaveCollectionBtnUI from "./UI";

@@ -3,6 +3,7 @@ import MainPageDBContextProvider from "@/app/lib/db/MainPageDB/provider";
 import RenderQuestions from "./RenderQuestions";
 import SubmitButton from "./SubmitButton";
 import CollectionContextProvider from "@/app/main/play-offline/CollectionDataContext/provider";
+import IdContextProvider from "@/app/lib/assessmentModeComponents/IdContext/provider";
 
 export default async function page({
   searchParams,
@@ -16,14 +17,14 @@ export default async function page({
   return (
     <main className="w-full p-8 flex flex-col gap-2 items-center">
       <MainPageDBContextProvider>
-        <HistoryDBContextProvider
-          collectionID={new URLSearchParams(params.id).toString()}
-        >
-          <CollectionContextProvider>
-            <RenderQuestions />
-            <SubmitButton />
-          </CollectionContextProvider>
-        </HistoryDBContextProvider>
+        <IdContextProvider id={new URLSearchParams(params.id).toString()}>
+          <HistoryDBContextProvider>
+            <CollectionContextProvider>
+              <RenderQuestions />
+              <SubmitButton />
+            </CollectionContextProvider>
+          </HistoryDBContextProvider>
+        </IdContextProvider>
       </MainPageDBContextProvider>
     </main>
   );

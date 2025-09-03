@@ -9,15 +9,17 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { redirect } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { dataReadyAtom } from "../../jotai/playOffline";
-import { CreateModeQuestionCardType } from "../AddCollectionPageDB/types";
+import { CreateModeQuestionCardType } from "../ObservableCreateCollectionDB/types";
 import { useDB as useMainDB } from "../MainPageDB/provider";
 import { useDB } from "./provider";
 import {
   AssessmentModeQuestionCardType,
+  CollectionStoryComplete,
   CollectionStoryIncomplete,
   CompleteAttemp,
   IncompleteAttemp,
 } from "./types";
+import { useIdContext } from "../../assessmentModeComponents/IdContext/context";
 
 function getModifiedQuestionCards(
   cards: CreateModeQuestionCardType[]
@@ -45,30 +47,26 @@ function getAttemp(cards: CreateModeQuestionCardType[]): IncompleteAttemp {
 }
 
 export function useInitFromHistory() {
+  const collectionID = useIdContext();
   const { db: mainDB } = useMainDB();
-  const { db, forwardInfo } = useDB();
+  const { db } = useDB();
   const setDataReady = useSetAtom(dataReadyAtom);
 
   useEffect(() => {
     (async function initiateDbOrNothing() {
-      if (!forwardInfo || !db || !mainDB) return;
+      if (!collectionID || !db || !mainDB) return;
 
-      const historyCollectionInfo = await db.get(
-        "incomplete",
-        forwardInfo.collectionID
-      );
+      const historyCollectionInfo = await db.get("incomplete", collectionID);
 
       if (historyCollectionInfo) return setDataReady(true);
 
       const baseCollectionInfo = await mainDB.get(
         "userCollections",
-        forwardInfo.collectionID
+        collectionID
       );
 
-      console.dir({ info: forwardInfo });
-
       if (!baseCollectionInfo)
-        throw `could not gain info from Main Page DB. collection id: ${forwardInfo.collectionID}. Initiation of collection in history db is aborted`;
+        throw `could not gain info from Main Page DB. collection id: ${collectionID}. Initiation of collection in history db is aborted`;
 
       const newInfo: CollectionStoryIncomplete & {
         id: string;
@@ -76,7 +74,7 @@ export function useInitFromHistory() {
         collectionName: baseCollectionInfo.collectionTitle,
         attemps: [],
         attemp: getAttemp(baseCollectionInfo.cards),
-        id: forwardInfo.collectionID,
+        id: collectionID,
       };
 
       db.put("incomplete", newInfo).then((successInfo) => {
@@ -89,32 +87,32 @@ export function useInitFromHistory() {
 
 export function useGetCollection() {
   const isDbReady = useAtomValue(dataReadyAtom);
-  const { db, forwardInfo } = useDB();
+  const collectionID = useIdContext();
+
+  const { db } = useDB();
   const [collection, setCollection] =
     useState<CollectionStoryIncomplete | null>(null);
 
   useEffect(() => {
-    console.log("useEffect useGetCollection ", { isDbReady, db, forwardInfo });
-
-    if (!isDbReady || !db || !forwardInfo) return;
+    if (!isDbReady || !db || !collectionID) return;
 
     console.log(isDbReady ? "DB is ready!!!" : "DB is not ready!!!");
 
-    db.get("incomplete", forwardInfo.collectionID).then((res) => {
+    db.get("incomplete", collectionID).then((res) => {
       if (!res)
-        throw `did not find collection in History db by id ${forwardInfo.collectionID} even though it's said db has latest data`;
-
-      console.log({ res });
+        throw `did not find collection in History db by id ${collectionID} even though it's said db has latest data`;
 
       setCollection(res);
     });
-  }, [db, isDbReady, forwardInfo]);
+  }, [db, isDbReady, collectionID]);
 
   return { collection };
 }
 
 export function useTickOption() {
-  const { db, forwardInfo } = useDB();
+  const collectionID = useIdContext();
+
+  const { db } = useDB();
   const isDbReady = useAtomValue(dataReadyAtom);
 
   const tickOption = useCallback(
@@ -125,22 +123,22 @@ export function useTickOption() {
       questionIndex: number;
       optionIndex: number;
     }) => {
-      if (!db || !forwardInfo || !isDbReady) return;
+      if (!db || !collectionID || !isDbReady) return;
 
-      const prevData = await db.get("incomplete", forwardInfo.collectionID);
+      const prevData = await db.get("incomplete", collectionID);
       if (!prevData)
         throw `for some reason could not find collection, but was asked to tick option of question of this collection`;
       const thatQuestionCard = prevData.attemp.cards.find(
         (_, i) => i === questionIndex
       );
       if (!thatQuestionCard)
-        throw `could not find question in ${forwardInfo.collectionID} with index ${questionIndex}`;
+        throw `could not find question in ${collectionID} with index ${questionIndex}`;
       thatQuestionCard.anyOptionChosen = true;
       const thatOption = thatQuestionCard.options.find(
         (_, i) => optionIndex === i
       );
       if (!thatOption)
-        throw `Could not find option with index ${optionIndex} within question card with index ${questionIndex} within collection ${forwardInfo.collectionID}`;
+        throw `Could not find option with index ${optionIndex} within question card with index ${questionIndex} within collection ${collectionID}`;
       thatOption.optionChosen = true;
 
       db.put("incomplete", prevData);
@@ -152,14 +150,13 @@ export function useTickOption() {
 }
 
 export function useSubmit() {
-  const { db, forwardInfo } = useDB();
+  const collectionID = useIdContext();
+
+  const { db } = useDB();
 
   const submit = async () => {
-    if (!db || !forwardInfo?.collectionID) return;
-    const completetionResult = await db.get(
-      "incomplete",
-      forwardInfo.collectionID
-    );
+    if (!db || !collectionID) return;
+    const completetionResult = await db.get("incomplete", collectionID);
 
     if (!completetionResult)
       throw `While submitting and trying to retrieve collection result from incomplete object store didn't find the collection. `;
@@ -179,8 +176,8 @@ export function useSubmit() {
     const completeAttemp: CompleteAttemp & {
       id: string;
     } = {
-      id: forwardInfo.collectionID,
-      attempID: forwardInfo.collectionID,
+      id: collectionID,
+      attempID: collectionID,
       cards: completetionResult.attemp.cards,
       numberOfCorrectAnswers,
       numberOfQuestions: completetionResult.attemp.cards.length,
@@ -189,7 +186,7 @@ export function useSubmit() {
     };
 
     const result = {
-      id: forwardInfo.collectionID,
+      id: collectionID,
       collectionName: completetionResult.collectionName,
       attemps: [completeAttemp],
       attemp: completeAttemp,
@@ -197,13 +194,29 @@ export function useSubmit() {
 
     await db.put("complete", result);
 
-    await db.delete("incomplete", forwardInfo.collectionID);
+    await db.delete("incomplete", collectionID);
 
     db.close();
-    redirect(`/main/history/view?id=${forwardInfo.collectionID}`);
+    redirect(`/main/history/view?id=${collectionID}`);
   };
 
   return { submit };
 }
 
-export function useGetResultInfo() {}
+export function useGetResultInfo() {
+  const collectionID = useIdContext();
+
+  const { db } = useDB();
+  const [data, setData] = useState<CollectionStoryComplete | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      if (!db || !collectionID) return;
+
+      const result = (await db.get("complete", collectionID)) || null;
+      setData(result);
+    })();
+  }, [db]);
+
+  return data;
+}

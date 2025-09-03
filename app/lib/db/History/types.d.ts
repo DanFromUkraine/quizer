@@ -1,5 +1,5 @@
 import { DBSchema } from "idb";
-import { CreateModeQuestionCardType } from "../AddCollectionPageDB/types";
+import { CreateModeQuestionCardType } from "../ObservableCreateCollectionDB/types";
 
 //// Both suitable
 
