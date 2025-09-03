@@ -19,7 +19,7 @@ export default function RenderCardsUI({
                 <section
                         ref={allContainerRef}
                         style={{ height: rowVirtualizer.getTotalSize() }}>
-                        <div className='flex flex-col gap-2.5'>
+                        <div className='flex flex-col items-center gap-3'>
                                 {rowVirtualizer
                                         .getVirtualItems()
                                         .map((virtualItem, i) => {

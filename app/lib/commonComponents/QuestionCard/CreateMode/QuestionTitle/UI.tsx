@@ -27,7 +27,7 @@ export default function QuestionTitleUI({
                                         placeholder='Enter text'
                                         onChange={onChange}
                                         className={clsx(
-                                                'resize-none overflow-hidden w-full rounded-lg bg-transparent  outline-1 outline-alternateBorder px-6 box-border leading-5 py-3 focus:outline-white focus:outline-2 text-sm text-defaultText h-12'
+                                                'resize-none overflow-hidden w-full rounded-lg bg-transparent  outline-1 outline-alternateBorder px-6 box-border leading-5 py-3 text-sm text-defaultText h-12'
                                         )}
                                         onInput={onInput}
                                 />
