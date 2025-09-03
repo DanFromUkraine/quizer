@@ -57,7 +57,7 @@ export function useUpdatePageTitle() {
 
 export function useCards() {
         const obs = useObservableContext();
-        const { cards, setCardsStateOnly } = useCardsContext()!;
+        const { cards, setCardsStateOnly } = useCardsContext();
 
         useEffect(() => {
                 obs?.requestData('get all cards', async (db) => {
@@ -66,7 +66,10 @@ export function useCards() {
                 });
         }, []);
 
-        return { cards, setCardsStateOnly };
+        return {
+                cards,
+                setCardsStateOnly
+        };
 }
 
 export function useAddEmptyCard() {
@@ -92,6 +95,8 @@ export function useAddEmptyCard() {
                                         id: newCardID as number
                                 }
                         );
+
+                        console.log('I should have added card');
 
                         addCard(fullEmptyCard);
                 });

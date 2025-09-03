@@ -8,12 +8,10 @@ import { IndexContextProvider } from '@/app/lib/commonComponents/QuestionCard/Cr
 
 export default function RenderCardsUI({
         cards,
-        addEmptyCard,
         allContainerRef,
         rowVirtualizer
 }: {
         cards: CreateModeQuestionCardType[];
-        addEmptyCard: () => void;
         allContainerRef: RefObject<HTMLElement | null>;
         rowVirtualizer: Virtualizer<HTMLElement, Element>;
 }) {
@@ -40,17 +38,6 @@ export default function RenderCardsUI({
                                                 );
                                         })}
                         </div>
-                        <section className='w-full flex justify-center pt-4'>
-                                <BtnWithShortcut
-                                        textContent='Add card'
-                                        onClick={() => addEmptyCard()}
-                                        type='button'
-                                        shortcutKeys={['Ctrl', 'M']}
-                                        otherAttributes={{
-                                                'data-testid': 'add-card'
-                                        }}
-                                />
-                        </section>
                 </section>
         );
 }
