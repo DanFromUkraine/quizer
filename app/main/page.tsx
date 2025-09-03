@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import MainPageDBContextProvider from "../lib/db/MainPageDB/provider";
 import Header from "./Header";
 import RenderCollections from "./RenderCollections";
@@ -9,7 +9,9 @@ import { Observable } from "../lib/utils/observableLogic";
 export default function page() {
   return (
     <main className="flex flex-col w-full px-8">
-      <Header />
+      <Suspense fallback={"loading..."}>
+        <Header />
+      </Suspense>
       <TestObservable />
       <MainPageDBContextProvider>
         <RenderCollections />

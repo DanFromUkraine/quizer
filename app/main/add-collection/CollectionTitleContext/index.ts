@@ -13,15 +13,18 @@ function useInitCollectionTitle() {
 type CollectionTitle = {
   collectionTitle: string;
   setCollectionTitle: Dispatch<SetStateAction<string>>;
-} | null;
+};
 
 export const [CollectionTitleContext, CollectionTitleContextProvider] =
   createSimpleContextProviderPair<CollectionTitle>({
-    defaultData: null,
+    defaultData: {
+      collectionTitle: "",
+      setCollectionTitle: () => {},
+    },
     useGetData: useInitCollectionTitle,
   });
 
-export const useCollectionTitle = getContextEnhancedReceiver({
+export const useCollectionTitleState = getContextEnhancedReceiver({
   contextName: "Collection title",
   Context: CollectionTitleContext,
 });
