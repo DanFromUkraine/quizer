@@ -8,7 +8,7 @@ export default function Option({
         index: number;
         remove: (i: number) => void;
 }) {
-        const { control } = useFormContext();
+        const { control, register } = useFormContext();
         const onRemoveBtnClick = () => remove(index);
 
         return (
@@ -16,6 +16,7 @@ export default function Option({
                         index={index}
                         onRemoveBtnClick={onRemoveBtnClick}
                         control={control}
+                        register={register}
                 />
         );
 }

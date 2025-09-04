@@ -1,7 +1,14 @@
 import { expect, test } from '@playwright/test';
 import {
         addCard,
-        addOption
+        addOption,
+        getAllQuestionCards,
+        getCollectionTitle,
+        getOptionTextField,
+        getOptionTickBtn,
+        getQuestionCard,
+        getQuestionCardOption,
+        getQuestionCardTitle
 } from '@/tests/end-to-end/CreateCollectionPage/utils';
 
 const EXAMPLE_TEXT_VAL = 'Some example value for collection page';
@@ -14,7 +21,7 @@ test.describe('This tests bundle will describe collection creation process', () 
         test("When user sets collection title, it won't be erased after reload ", async ({
                 page
         }) => {
-                const titleInput = page.getByTestId('collection-title-input');
+                const titleInput = getCollectionTitle(page);
                 await titleInput.focus();
                 await titleInput.fill(EXAMPLE_TEXT_VAL);
                 await expect(titleInput).toHaveValue(EXAMPLE_TEXT_VAL);
@@ -28,7 +35,7 @@ test.describe('This tests bundle will describe collection creation process', () 
         }) => {
                 const NUM_OF_CARDS = 2;
                 await addCard(page, NUM_OF_CARDS);
-                const questionCards = await page.locator('.questionCard').all();
+                const questionCards = await getAllQuestionCards(page);
                 expect(questionCards.length).toBe(NUM_OF_CARDS);
         });
 
@@ -36,7 +43,8 @@ test.describe('This tests bundle will describe collection creation process', () 
                 page
         }) => {
                 await addCard(page);
-                const questionCardTitle = page.getByTestId('questionTitle');
+                const questionCard = getQuestionCard(page);
+                const questionCardTitle = getQuestionCardTitle(questionCard);
                 await expect(questionCardTitle).toBeVisible();
                 await questionCardTitle.focus();
                 await questionCardTitle.fill(EXAMPLE_TEXT_VAL);
@@ -48,12 +56,26 @@ test.describe('This tests bundle will describe collection creation process', () 
                 page
         }) => {
                 await addCard(page);
-                const questionCard = page.locator('.questionCard');
+                const questionCard = getQuestionCard(page);
                 await addOption(questionCard);
-                const optionTextField =
-                        questionCard.getByTestId('optionTextField');
+                const option = getQuestionCardOption(questionCard);
+                const optionTextField = getOptionTextField(option);
                 await optionTextField.fill(EXAMPLE_TEXT_VAL);
                 await page.reload();
                 await expect(optionTextField).toHaveValue(EXAMPLE_TEXT_VAL);
+        });
+
+        test("When users ticks option, to make it correct, it shouldn't change its status after reload", async ({
+                page
+        }) => {
+                await addCard(page);
+                const questionCard = getQuestionCard(page);
+                await addOption(questionCard);
+                const option = getQuestionCardOption(questionCard);
+                const checkbox = getOptionTickBtn(option);
+                await checkbox.click();
+                await expect(checkbox).toBeChecked();
+                await page.reload();
+                await expect(checkbox).toBeChecked();
         });
 });

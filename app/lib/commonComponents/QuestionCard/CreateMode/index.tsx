@@ -33,6 +33,7 @@ export default memo(function CreateModeImplementation({
                                 <div className='flex justify-between items-center'>
                                         <CardIndex />
                                         <FaRegTrashAlt
+                                                data-testid="remove-card-btn"
                                                 className='text-xl text-questTextColor'
                                                 onClick={onClickDeleteCard}
                                         />
