@@ -8,7 +8,6 @@ import {
 } from './types.d';
 import AssessmentModeImplementation from './AssessmentMode';
 import CreateModeImplementation from './CreateMode';
-import './styles.css';
 
 export default function QuestionCard(
         props: QuestionCardCreateModeProps

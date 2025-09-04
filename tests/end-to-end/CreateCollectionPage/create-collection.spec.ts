@@ -4,6 +4,7 @@ import {
         addOption,
         getAllQuestionCards,
         getCollectionTitle,
+        getOptionDeleteBtn,
         getOptionTextField,
         getOptionTickBtn,
         getQuestionCard,
@@ -163,6 +164,33 @@ test.describe('This tests bundle will describe collection creation process', () 
                 await test.step('expect changes to be persistent to reload', async () => {
                         await page.reload();
                         await expect(checkbox).toBeChecked();
+                });
+        });
+
+        test('When user deletes option, changes should be persistent', async ({
+                page
+        }) => {
+                await test.step('add card', async () => {
+                        await addCard(page);
+                });
+                const option = await test.step('add option', async () => {
+                        const card = getQuestionCard(page);
+                        await addOption(card);
+                        return getQuestionCardOption(card);
+                });
+                await test.step('option should be visible', async () => {
+                        await expect(option).toBeVisible();
+                });
+                await test.step('delete option', async () => {
+                        const optionDeleteBtn = getOptionDeleteBtn(option);
+                        await optionDeleteBtn.click();
+                });
+                await test.step('option should be invisible', async () => {
+                        await expect(option).not.toBeVisible();
+                });
+                await test.step('changes should be persistent to page reload', async () => {
+                        await page.reload();
+                        await expect(option).not.toBeVisible();
                 });
         });
 });
