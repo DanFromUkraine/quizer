@@ -36,10 +36,9 @@ export async function getDB<DataSchema>({
         dbName: string;
         upgrade: (database: GeneralDB<DataSchema>) => void;
 }) {
-        const db = openDB<DataSchema>(dbName, 1, {
+        return openDB<DataSchema>(dbName, 1, {
                 upgrade
         });
-        return db;
 }
 
 export function getUniqueID() {

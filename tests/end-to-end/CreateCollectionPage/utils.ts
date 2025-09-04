@@ -56,3 +56,7 @@ export function getQuestionCardDeleteBtn(questionCard: Locator) {
 export function getCollectionTitle(page: Page) {
         return page.getByTestId('collection-title-input');
 }
+
+export function getSaveCollectionButton(page: Page) {
+        return page.getByTestId('save-collection-btn');
+}

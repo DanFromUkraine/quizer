@@ -9,7 +9,7 @@ import {
 } from '../utils';
 import { MainPageSchema, MyDB } from './types';
 
-const DBContext = createContextDefault<MainPageSchema, undefined>();
+const DBContext = createContextDefault<MainPageSchema>();
 
 export default function MainPageDBContextProvider({
         children

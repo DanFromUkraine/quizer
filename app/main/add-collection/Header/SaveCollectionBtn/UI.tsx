@@ -13,6 +13,7 @@ export default function SaveCollectionBtnUI({
                         onClick={onSaveButtonClick}
                         onMouseOver={onMouseDown}
                         onMouseLeave={onMouseUp}
+                        data-testid='save-collection-btn'
                         type='button'>
                         Зберегти
                 </button>

@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import {
         addCard,
         addOption,
+        getAllQuestionCardOptions,
         getAllQuestionCards,
         getCollectionTitle,
         getOptionDeleteBtn,
@@ -10,8 +11,13 @@ import {
         getQuestionCard,
         getQuestionCardDeleteBtn,
         getQuestionCardOption,
-        getQuestionCardTitle
+        getQuestionCardTitle,
+        getSaveCollectionButton
 } from '@/tests/end-to-end/CreateCollectionPage/utils';
+import { TEST_CARDS } from '@/tests/end-to-end/CreateCollectionPage/constants';
+import { createObjStoreDefault, getDB } from '@/app/lib/db/utils';
+import { MainPageSchema } from '@/app/lib/db/MainPageDB/types';
+import { DB } from '@/app/lib/db/types';
 
 const EXAMPLE_TEXT_VAL = 'Some example value for collection page';
 
@@ -193,4 +199,93 @@ test.describe('This tests bundle will describe collection creation process', () 
                         await expect(option).not.toBeVisible();
                 });
         });
+
+        test('If data entered and save button clicked, redirect should work, and data should appear in MainDB', async ({
+                page
+        }) => {
+                await test.step('add 5 cards', async () => {
+                        await addCard(page, 5);
+                });
+
+                await test.step('insert collection title data', async () => {
+                        const collectionTitle = getCollectionTitle(page);
+                        await collectionTitle.fill(EXAMPLE_TEXT_VAL);
+                });
+
+                await test.step('fulfill cards with info', async () => {
+                        const cards = await getAllQuestionCards(page);
+                        for (let i = 0; i < cards.length; i++) {
+                                const testCard = TEST_CARDS[i];
+                                const pageCard = cards[i];
+
+                                const questionTitle =
+                                        getQuestionCardTitle(pageCard);
+                                await questionTitle.fill(
+                                        testCard.questionTitle
+                                );
+                                await addOption(
+                                        pageCard,
+                                        testCard.options.length
+                                );
+                                const options =
+                                        await getAllQuestionCardOptions(
+                                                pageCard
+                                        );
+
+                                for (let i2 = 0; i2 < options.length; i2++) {
+                                        const option = options[i2];
+                                        const testOption = testCard.options[i2];
+                                        const optionTextField =
+                                                getOptionTextField(option);
+                                        await optionTextField.fill(
+                                                testOption.optionText
+                                        );
+                                        if (testOption.isTicked) {
+                                                const optionTickButton =
+                                                        getOptionTickBtn(
+                                                                option
+                                                        );
+                                                await optionTickButton.click();
+                                        }
+                                }
+                        }
+                });
+
+                await test.step('click save collection button', async () => {
+                        const saveCollectionButton =
+                                getSaveCollectionButton(page);
+                        await saveCollectionButton.click();
+                });
+
+                await test.step('user should appear on main page', async () => {
+                        await page.waitForTimeout(3_000);
+                        await expect(page).toHaveURL('/main');
+                });
+                await test.step('expect data to be in IndexedDB', async () => {
+                        page.evaluate(async () => {
+                                const upgrade = (
+                                        database: DB<MainPageSchema>
+                                ) => {
+                                        createObjStoreDefault<MainPageSchema>(
+                                                database,
+                                                'userCollections'
+                                        );
+                                };
+                                const db = await getDB({
+                                        dbName: 'MainPageDB',
+                                        upgrade
+                                });
+                                const collectionData = await db.get(
+                                        'userCollections',
+                                        getUrlEncodedKey(EXAMPLE_TEXT_VAL)
+                                );
+                                console.log({ collectionData });
+                                expect(collectionData).toBeTruthy();
+                        });
+                });
+        });
 });
+
+function getUrlEncodedKey(key: string) {
+        return new URLSearchParams(key).toString();
+}
