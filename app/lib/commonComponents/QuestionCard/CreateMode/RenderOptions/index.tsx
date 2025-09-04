@@ -19,7 +19,7 @@ export default function RenderOptions() {
                                         remove={remove}
                                 />
                         ))}
-                        <button type='button' onClick={onAddBtnClick}>
+                        <button type='button' data-testid="add-option-btn" onClick={onAddBtnClick}>
                                 Add option
                         </button>
                 </div>

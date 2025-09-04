@@ -13,6 +13,18 @@ export class Observable<DataType extends NonNullable<unknown>> {
                 this.initiateData(dataPromise);
         }
 
+        requestData(name: string, callback: DataRequestListener<DataType>) {
+                if (this.data !== null) {
+                        callback(this.data);
+                } else {
+                        this.deleteRequestData(name);
+                        this.listeners.push({
+                                listenerName: name,
+                                listenerBody: callback
+                        });
+                }
+        }
+
         private initiateData(dataPromise: Promise<DataType>) {
                 dataPromise.then((newData) => {
                         this.updateData(newData);
@@ -38,18 +50,6 @@ export class Observable<DataType extends NonNullable<unknown>> {
                         console.warn(
                                 'Was asked to notify listeners, but data is null'
                         );
-                }
-        }
-
-        requestData(name: string, callback: DataRequestListener<DataType>) {
-                if (this.data !== null) {
-                        callback(this.data);
-                } else {
-                        this.deleteRequestData(name);
-                        this.listeners.push({
-                                listenerName: name,
-                                listenerBody: callback
-                        });
                 }
         }
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useAddEmptyCard } from '@/app/lib/db/ObservableCreateCollectionDB';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function useAddCardOnShortcut() {
         const { addEmptyCard } = useAddEmptyCard();

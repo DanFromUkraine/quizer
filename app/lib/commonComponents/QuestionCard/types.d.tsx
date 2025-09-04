@@ -1,4 +1,3 @@
-import { JSX } from 'react';
 import { CreateModeQuestionCardType } from '../../db/ObservableCreateCollectionDB/types';
 import { AssessmentModeQuestionCardType } from '../../db/History/types';
 

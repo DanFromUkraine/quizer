@@ -5,9 +5,7 @@ import Header from './Header';
 import RenderCards from './RenderCards';
 import Instruments from './Instruments';
 import { useAddCardOnShortcut } from './RenderCards/client';
-import // useClearJotaiOnExit,
-// useInitAllCards,
-'@/app/lib/db/ObservableCreateCollectionDB';
+import '@/app/lib/db/ObservableCreateCollectionDB';
 import { ObservableCreateCollectioProviderDB } from '@/app/lib/db/ObservableCreateCollectionDB/provider';
 import { CollectionTitleContextProvider } from './CollectionTitleContext';
 import CardsContextProvider from './CardsContext/provider';

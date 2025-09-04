@@ -7,7 +7,7 @@ import {
         useGetCollectionTitle,
         useUpdatePageTitle
 } from '@/app/lib/db/ObservableCreateCollectionDB';
-import { use, useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 
 type HeaderFormDataType = {
         collectionTitle: string;

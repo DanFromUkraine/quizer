@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, ReactNode, useState } from 'react';
+import { createContext, ReactNode } from 'react';
 
 export default function createSimpleContextProviderPair<DataType>({
         defaultData,

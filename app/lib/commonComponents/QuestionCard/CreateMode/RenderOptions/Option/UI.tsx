@@ -42,6 +42,7 @@ export default function OptionUI({
                                                         ref={(el) => ref(el)}
                                                         defaultValue={value}
                                                         onChange={onChange}
+                                                        data-testid="optionTextField"
                                                         className='w-full p-3 duration-150'
                                                 />
                                         )}

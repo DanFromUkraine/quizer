@@ -1,5 +1,3 @@
-import { MouseEventHandler } from 'react';
-
 export default function ButtonUI({ onClick }: { onClick: () => void }) {
         return (
                 <button

@@ -1,6 +1,6 @@
 'use client';
 
-import { atom, WritableAtom, type PrimitiveAtom } from 'jotai';
+import { atom, WritableAtom } from 'jotai';
 import { RESET } from 'jotai/utils';
 
 type SetStateActionWithReset<Value> =

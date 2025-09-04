@@ -3,7 +3,6 @@ import { CreateModeQuestionCardType } from '@/app/lib/db/ObservableCreateCollect
 import { RefObject } from 'react';
 import { Virtualizer } from '@tanstack/react-virtual';
 import QuestionCard from '@/app/lib/commonComponents/QuestionCard';
-import BtnWithShortcut from '@/app/lib/componentsUI/ButtonWithShortcut';
 import { IndexContextProvider } from '@/app/lib/commonComponents/QuestionCard/CreateMode/CardIndex';
 
 export default function RenderCardsUI({

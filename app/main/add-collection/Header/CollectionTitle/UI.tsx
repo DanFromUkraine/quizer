@@ -1,10 +1,5 @@
-import { FormEventHandler, RefObject } from 'react';
-import {
-        Control,
-        Controller,
-        FieldValues,
-        UseFormRegister
-} from 'react-hook-form';
+import { RefObject } from 'react';
+import { FieldValues, UseFormRegister } from 'react-hook-form';
 
 export default function CollectionTitleUI({
         ref,

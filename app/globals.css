@@ -1,93 +1,94 @@
 @import "tailwindcss";
 
 @theme static {
-  --color-lightGray: #d9d9d9;
-  --color-lightestGray: #fafafa;
-  --color-lightBg: #f6f6f6;
-  --color-icon: #5c5e64;
-  --color-blueAccent: #396eff;
+    --color-lightGray: #d9d9d9;
+    --color-lightestGray: #fafafa;
+    --color-lightBg: #f6f6f6;
+    --color-icon: #5c5e64;
+    --color-blueAccent: #396eff;
 
-  --color-lightBgV2: #e5e5e5;
-  --color-blueAccentV2: #3b82f6;
-  --color-secondary: #737373;
-  --color-fillbg: #e6e6e6;
+    --color-lightBgV2: #e5e5e5;
+    --color-blueAccentV2: #3b82f6;
+    --color-secondary: #737373;
+    --color-fillbg: #e6e6e6;
 
-  --color-darker: #7a7289;
-  --color-questTextColor: #444444;
+    --color-darker: #7a7289;
+    --color-questTextColor: #444444;
 
-  --color-statusBarLinearBlue: linear-gradient(
-    270deg,
-    #396eff,
-    #6ecaff,
-    #396eff
-  );
+    --color-statusBarLinearBlue: linear-gradient(
+            270deg,
+            #396eff,
+            #6ecaff,
+            #396eff
+    );
 }
 
 @theme {
-  --container-sidebarNavTextVisible: 200px;
-  --radius-normal: 8px;
+    --container-sidebarNavTextVisible: 200px;
+    --radius-normal: 8px;
 }
 @layer {
-  input:focus {
-    @apply outline-none;
-  }
+    input:focus {
+        @apply outline-none;
+    }
 }
 
 @layer components {
-  .navIcon {
-    @apply text-4xl p-2.5 rounded-xl text-icon mt-2;
-  }
-  .heading {
-    @apply font-semibold text-2xl ml-[54px] mt-8;
-  }
+    .navIcon {
+        @apply text-4xl p-2.5 rounded-xl text-icon mt-2;
+    }
 
-  .simpleButton {
-    @apply rounded-normal h-min w-min py-2 px-3 whitespace-nowrap text-white font-semibold;
-  }
+    .heading {
+        @apply font-semibold text-2xl ml-[54px] mt-8;
+    }
 
-  .questionCard {
-    @apply max-w-3xl flex flex-col gap-3 w-full border border-lightGray p-6 rounded-normal;
-  }
+    .simpleButton {
+        @apply rounded-normal h-min w-min py-2 px-3 whitespace-nowrap text-white font-semibold;
+    }
+
+    .questionCard {
+        @apply max-w-3xl flex flex-col gap-3 w-full border border-lightGray p-6 rounded-normal;
+    }
 }
 
 @layer utilities {
-  .statusBarBlueGradient {
-    background: linear-gradient(270deg, #396eff, #6ecaff, #396eff);
-  }
+    .statusBarBlueGradient {
+        background: linear-gradient(270deg, #396eff, #6ecaff, #396eff);
+    }
 
-  .statusBarYellowGradient {
-    background: linear-gradient(270deg, #ffd93b, #fff29c, #ffd93b);
-  }
+    .statusBarYellowGradient {
+        background: linear-gradient(270deg, #ffd93b, #fff29c, #ffd93b);
+    }
 
-  .statusBarGreenGradient {
-    background: linear-gradient(270deg, #29c76f, #9fffc2, #29c76f);
-  }
+    .statusBarGreenGradient {
+        background: linear-gradient(270deg, #29c76f, #9fffc2, #29c76f);
+    }
 
-  .statusBarLayer {
-    background-size: 600% 600%;
-    animation: gradientShift 8s ease infinite;
-    @apply w-full h-full absolute top-0 left-0 z-0;
-  }
+    .statusBarLayer {
+        background-size: 600% 600%;
+        animation: gradientShift 8s ease infinite;
+        @apply w-full h-full absolute top-0 left-0 z-0;
+    }
 
-  .statusBarYellow {
-    @apply bg-[#ffd93b];
-  }
+    .statusBarYellow {
+        @apply bg-[#ffd93b];
+    }
 
-  .plusesBtw p:not(:last-child)::after {
-    /* this class is used for containers and appliable, when we want to insert "+" only between elements <p> */
-    content: "+";
-    margin-left: 0.5em;
-  }
+    .plusesBtw p:not(:last-child)::after {
+        /* this class is used for containers and appliable, when we want to insert "+" only between elements <p> */
+        content: "+";
+        margin-left: 0.5em;
+    }
 }
 
 @keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { IconType } from 'react-icons';
 import { BiSolidAddToQueue } from 'react-icons/bi';
 import { BsFillCollectionFill } from 'react-icons/bs';

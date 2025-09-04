@@ -1,4 +1,3 @@
-import BtnWithShortcut from '@/app/lib/componentsUI/ButtonWithShortcut';
 import { useAddEmptyCard } from '@/app/lib/db/ObservableCreateCollectionDB';
 import AddEmptyCardUI from './UI';
 

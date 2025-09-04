@@ -2,7 +2,6 @@
 
 import clsx from 'clsx';
 import RenderShorcutKeys from './RenderShortcutKeys';
-import { ButtonHTMLAttributes, useEffect, useRef, useState } from 'react';
 
 export default function BtnWithShortcut({
         textContent,

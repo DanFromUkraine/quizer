@@ -4,6 +4,7 @@ import { IDBPDatabase } from 'idb';
 import { ReactNode, use } from 'react';
 import { createContextDefault, ProviderDB } from '../utils';
 import { HistoryDBInterface } from './types';
+
 type HistoryForwardInfo = {
         collectionID: string;
 };
