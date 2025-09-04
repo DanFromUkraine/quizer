@@ -16,6 +16,8 @@ export default memo(function CreateModeImplementation({
         questionTitle,
         options
 }: QuestionCardCreateModeProps) {
+        console.log({ questionCardId: id });
+
         const methods = useForm<CreateModeQuestionCardType>({
                 defaultValues: {
                         id,
@@ -33,7 +35,7 @@ export default memo(function CreateModeImplementation({
                                 <div className='flex justify-between items-center'>
                                         <CardIndex />
                                         <FaRegTrashAlt
-                                                data-testid="remove-card-btn"
+                                                data-testid='remove-card-btn'
                                                 className='text-xl text-questTextColor'
                                                 onClick={onClickDeleteCard}
                                         />

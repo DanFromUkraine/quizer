@@ -19,16 +19,17 @@ function getFilteredByID(
         cards: CreateModeQuestionCardType[],
         cardIdToDelete: number
 ) {
-        return cards.filter((card) => card.id === cardIdToDelete);
+        return cards.filter((card) => card.id !== cardIdToDelete);
 }
 
 export function useRemoveCard() {
         const { setCardsStateOnly } = useCardsContext();
 
         const removeCard = useCallback((cardIdToDelete: number) => {
-                setCardsStateOnly((prev) =>
-                        getFilteredByID(prev, cardIdToDelete)
-                );
+                setCardsStateOnly((prev) => {
+                        console.log({ prev, cardIdToDelete });
+                        return getFilteredByID(prev, cardIdToDelete);
+                });
         }, []);
 
         return { removeCard };

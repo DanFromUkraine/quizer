@@ -1,0 +1,45 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - img [ref=e5]
+      - generic [ref=e11]:
+        - link [ref=e12] [cursor=pointer]:
+          - /url: /main
+          - img [ref=e13] [cursor=pointer]
+        - link [ref=e15] [cursor=pointer]:
+          - /url: /main/history
+          - img [ref=e16] [cursor=pointer]
+        - link [ref=e18] [cursor=pointer]:
+          - /url: /main/add-collection
+          - img [ref=e19] [cursor=pointer]
+    - main [ref=e22]:
+      - generic [ref=e24]:
+        - textbox "Enter heading" [ref=e25]
+        - button "Зберегти" [ref=e26]
+      - button "Edit cards as a text" [ref=e29]
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - paragraph [ref=e34]: №1
+            - img [ref=e35]
+          - textbox "Enter text" [ref=e37]
+          - button "Add option" [ref=e39]
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - paragraph [ref=e42]: №2
+            - img [ref=e43]
+          - textbox "Enter text" [ref=e45]
+          - button "Add option" [ref=e47]
+      - button "Add card Ctrl + M" [active] [ref=e49]:
+        - paragraph [ref=e50]: Add card
+        - generic [ref=e51]:
+          - paragraph [ref=e52]: Ctrl
+          - text: +
+          - paragraph [ref=e53]: M
+  - alert [ref=e54]
+  - button "Open Next.js Dev Tools" [ref=e60] [cursor=pointer]:
+    - img [ref=e61] [cursor=pointer]
+```
