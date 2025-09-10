@@ -1,11 +1,12 @@
 import type { DBSchema } from 'idb';
 import type { CollectionResult } from '../ObservableCreateCollectionDB/types';
+import { DB } from '@/app/lib/db/types';
 
-export interface MainPageSchema extends DBSchema {
+export interface MainDbSchema extends DBSchema {
         userCollections: {
                 key: string;
                 value: CollectionResult;
         };
 }
 
-export type MyDB = GeneralDB<MainPageSchema>;
+export type MainDB = DB<MainDbSchema>;
