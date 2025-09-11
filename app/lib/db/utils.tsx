@@ -12,32 +12,21 @@ import {
 import { Observable } from '../utils/observableLogic';
 import { DB, ObservableDatabaseContext } from './types';
 
-export enum DB_NAMES {
-        MAIN_PAGE = 'MainPageDB',
-        ADD_COLLECTION_PAGE = 'AddCollectionPageDB'
-}
+// export function createContextDefault<Schema extends {}>() {
+//         return createContext<DBContextShape<Schema>>({
+//                 db: null as IDBPDatabase<Schema> | null
+//         });
+// }
 
-export type GeneralDB<DataSchema> = IDBPDatabase<DataSchema>;
-
-type DBContextShape<Schema extends {}> = {
-        db: IDBPDatabase<Schema> | null;
-};
-
-export function createContextDefault<Schema extends {}>() {
-        return createContext<DBContextShape<Schema>>({
-                db: null as IDBPDatabase<Schema> | null
-        });
-}
-
-export async function getDB<DataSchema>({
+export async function getDB<DataSchema extends {}>({
         dbName,
-        upgrade
+        upgradeAction
 }: {
         dbName: string;
-        upgrade: (database: GeneralDB<DataSchema>) => void;
+        upgradeAction: (database: DB<DataSchema>) => void;
 }) {
         return openDB<DataSchema>(dbName, 1, {
-                upgrade
+                upgrade: upgradeAction
         });
 }
 
@@ -60,6 +49,7 @@ export async function getOrAndInit<
         DataSchema extends {},
         Store extends StoreNames<DataSchema>
 >({
+        //# refactor - delete
         db,
         storeName,
         key,
@@ -146,24 +136,7 @@ export function ProviderDB<DataSchema extends {}>({
         );
 }
 
-export function createObjectStoreEnhanced<DataType extends {}>({
-        db,
-        storeName,
-        keyPath,
-        autoIncrement
-}: {
-        db: IDBPDatabase<DataType>;
-        storeName: StoreNames<DataType>;
-        keyPath: 'id';
-        autoIncrement?: true | undefined;
-}) {
-        if (!db.objectStoreNames.contains(storeName)) {
-                db.createObjectStore(storeName, {
-                        keyPath,
-                        autoIncrement
-                });
-        }
-}
+
 
 export function ObservableProviderDB<DataType extends {}>({
         Context,

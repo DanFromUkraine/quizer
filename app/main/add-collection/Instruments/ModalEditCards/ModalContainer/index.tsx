@@ -1,6 +1,6 @@
 'use client';
 
-import { cardsEditModalVisibilityAtom } from '@/app/lib/jotai/addCollection';
+import { cardsEditModalVisibilityAtom } from '@/app/lib/jotai/MainDbAtom/utils';
 import { useAtom } from 'jotai';
 import { MouseEventHandler } from 'react';
 import ModalContainerUI from './UI';

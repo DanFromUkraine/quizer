@@ -3,8 +3,8 @@ import { DB } from '@/app/lib/db/types';
 
 export type MainDb = DB<MainDbSchema>;
 
-interface MainDbSchema extends DBSchema {
-        allBooks: {
+export interface MainDbSchema extends DBSchema {
+        books: {
                 key: string;
                 value: Book;
         };
@@ -18,11 +18,12 @@ interface MainDbSchema extends DBSchema {
         };
 }
 
+
 export interface Book {
         id: string;
-        name: string;
-        createDate: number;
-        cardIds: string;
+        bookTitle: string;
+        lastChangeDate: number;
+        cardIds: string[];
 }
 
 export interface Card {
@@ -34,5 +35,5 @@ export interface Card {
 export interface Option {
         id: string;
         isCorrect: boolean;
-        content: string;
+        optionTitle: string;
 }

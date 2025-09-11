@@ -1,16 +1,23 @@
 'use client';
 
-import MainPageDBContextProvider from '../lib/db/MainPageDB/provider';
 import Header from './Header';
 import RenderCollections from './RenderCollections';
+import dynamic from 'next/dynamic';
 
-export default function page() {
+const Initializers_CLIENT_ONLY = dynamic(
+        () => import('../lib/components/Initializers/InitMainDbAtoms'),
+        { ssr: false }
+);
+
+export default function MainPage() {
         return (
-                <main className='flex flex-col w-full px-8'>
-                        <Header />
-                        <MainPageDBContextProvider>
+                <>
+                        <Initializers_CLIENT_ONLY />
+
+                        <main className='flex flex-col w-full px-8'>
+                                <Header />
                                 <RenderCollections />
-                        </MainPageDBContextProvider>
-                </main>
+                        </main>
+                </>
         );
 }

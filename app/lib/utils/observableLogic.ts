@@ -1,4 +1,5 @@
 type DataRequestListener<DataType> = (arg: DataType) => void;
+type AsyncDataRequestListener<DataType> = (arg: DataType) => void;
 
 export class Observable<DataType extends NonNullable<unknown>> {
         private listeners: {
@@ -13,9 +14,14 @@ export class Observable<DataType extends NonNullable<unknown>> {
                 this.initiateData(dataPromise);
         }
 
-        requestData(name: string, callback: DataRequestListener<DataType>) {
+        requestData(
+                name: string,
+                callback:
+                        | DataRequestListener<DataType>
+                        | AsyncDataRequestListener<DataType>
+        ) {
                 if (this.data !== null) {
-                        callback(this.data);
+                        return callback(this.data);
                 } else {
                         this.deleteRequestData(name);
                         this.listeners.push({

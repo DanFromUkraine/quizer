@@ -1,42 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [
-`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Такс, які задачі мені потрібно вирішити:
 
-## Getting Started
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+33. Реекспортувати всі хуки, й все за допомогою index.ts
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+34. Змінити значення DB_NAMES на CollectionCreation та Main
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+35. Видалити GeneralDB тип
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically
-optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+36. Видалити DBContextShape
 
-## Learn More
+37. Видалити createContextDefault
 
-To learn more about Next.js, take a look at the following resources:
+38. Видалити createObjectStoreDefault
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+39. Видалити DBContextGenType
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions
-are welcome!
+40. Видалити DbContextExtendedType
 
-## Deploy on Vercel
+41. Видалити ProviderDbArgs
 
-The easiest way to deploy your Next.js app is to use
-the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
-from the creators of Next.js.
+42. Видалити ProviderDB
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for
-more details.
+43. Перейменувати MainPageDBContextProvider у MainDbContextProvider
+
+44. Використати замість createObjStoreDefault - createObjectStoreEnhanced
+
+45. Винести upgrade функцію з MainDbContextProvider у константу
+
+46. Перейменувати useDB у useObservableDb
+
+47. Використати getContextReceiverEnhanced для use Observable Db
+
+48. Створити context.ts
+
+49. Винести useObservableDb у context.ts а також й сам контекст
+
+50. Перейменувати DBContext у MainDbContext
+
+51. Перейменувати MainPageSchema у MainDbSchema
+
+52. Видалити MyDB
+
+53. Винести upgrade функцію у константу з HistoryDbContextProvider
+
+54. Винести контекст й хук для нього в файл context.ts, використовуючи відповідні утиліти
+
+55. Використовувати відповідні функції-утиліти для upgrade функції history
+
+56. Використати Observable патерн для history контекст провайдера
+
+57. Створити хук для отримання всіх колекцій історії
+
+58. Використати цей хук і відображати всі історії на сторінці /main/history
+
+59. На сторінці Main відображати кнопку 

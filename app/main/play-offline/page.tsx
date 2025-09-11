@@ -1,5 +1,5 @@
 import HistoryDBContextProvider from '@/app/lib/db/History/provider';
-import MainPageDBContextProvider from '@/app/lib/db/MainPageDB/provider';
+import MainPageDBContextProvider from '@/app/lib/db/Main/provider';
 import RenderQuestions from './RenderQuestions';
 import SubmitButton from './SubmitButton';
 import CollectionContextProvider from '@/app/main/play-offline/CollectionDataContext/provider';

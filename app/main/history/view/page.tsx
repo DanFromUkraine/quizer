@@ -1,5 +1,5 @@
 import HistoryDBContextProvider from '@/app/lib/db/History/provider';
-import MainPageDBContextProvider from '@/app/lib/db/MainPageDB/provider';
+import MainPageDBContextProvider from '@/app/lib/db/Main/provider';
 import CollectionDataCompleteContextProvider from './CollectionDataContext/provider';
 import RenderQuestions from './RenderQuestions';
 import IdContextProvider from '@/app/lib/assessmentModeComponents/IdContext/provider';

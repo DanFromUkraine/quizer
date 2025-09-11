@@ -5,7 +5,8 @@ import CollectionTitle from './CollectionTitle';
 import SaveBtn from './SaveCollectionBtn';
 import {
         useGetCollectionTitle,
-        useUpdatePageTitle
+        useUpdateBookTitle,
+
 } from '@/app/lib/db/ObservableCreateCollectionDB';
 import { useEffect } from 'react';
 
@@ -18,7 +19,7 @@ function useStayUpdated(
         loading: boolean,
         collectionTitle: string
 ) {
-        const { updateTitle } = useUpdatePageTitle();
+        const { updateTitle } = useUpdateBookTitle();
 
         const data = methods.watch();
 

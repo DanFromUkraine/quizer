@@ -2,8 +2,8 @@ import { CreateModeQuestionCardType } from '@/app/lib/db/ObservableCreateCollect
 // import QuestionCard from "./QuestionCard";
 import { RefObject } from 'react';
 import { Virtualizer } from '@tanstack/react-virtual';
-import QuestionCard from '@/app/lib/commonComponents/QuestionCard';
-import { IndexContextProvider } from '@/app/lib/commonComponents/QuestionCard/CreateMode/CardIndex';
+import QuestionCard from '@/app/lib/components/QuestionCard';
+import { IndexContextProvider } from '@/app/lib/components/QuestionCard/CreateMode/CardIndex';
 
 export default function RenderCardsUI({
         cards,

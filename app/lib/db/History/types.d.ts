@@ -1,5 +1,6 @@
 import { DBSchema } from 'idb';
 import { CreateModeQuestionCardType } from '../ObservableCreateCollectionDB/types';
+import { DB } from '@/app/lib/db/types';
 
 //// Both suitable
 
@@ -22,32 +23,32 @@ export type AssessmentModeQuestionCardType = Omit<
         numberOfCorrectAnswers: number;
 };
 
-type Attemp = {
-        attempID: string;
+type Attempt = {
+        attemptID: string;
         cards: AssessmentModeQuestionCardType[];
 };
 
 //// Complete
 
-type CompleteAttemp = Attemp & {
+type CompleteAttempt = Attemp & {
         endTime: number;
         duration: number;
         numberOfCorrectAnswers: number;
         numberOfQuestions: number;
 };
 type CollectionStoryComplete = CollectionStoryGen & {
-        attemps: CompleteAttemp[];
-        attemp: CompleteAttemp;
+        attempts: CompleteAttemp[];
+        attempt: CompleteAttemp;
 };
 
 //// Incomplete
 
-export type IncompleteAttemp = Attemp & {
+export type IncompleteAttempt = Attemp & {
         startTime: number;
 };
 export type CollectionStoryIncomplete = CollectionStoryGen & {
-        attemps: IncompleteAttemp[];
-        attemp: IncompleteAttemp; // this is temporary property to simplify overall developing
+        attempts: IncompleteAttemp[];
+        attempt: IncompleteAttemp; // this is temporary property to simplify overall developing
 };
 
 ////
@@ -62,3 +63,5 @@ export interface HistoryDBInterface extends DBSchema {
                 value: CollectionStoryIncomplete;
         };
 }
+
+export type HistoryDb = DB<HistoryDBInterface>;

@@ -1,40 +1,43 @@
 'use client';
 
-import { IDBPDatabase } from 'idb';
-import { ReactNode, use } from 'react';
-import { createContextDefault, ProviderDB } from '../utils';
-import { HistoryDBInterface } from './types';
+import { memo, ReactNode } from 'react';
+import {
+        createObjectStoreEnhanced,
+        getDB,
+        ObservableProviderDB
+} from '../utils';
+import { DB_NAMES } from '@/app/lib/db/constants';
+import { HistoryDB, HistoryDbContext } from '@/app/lib/db/History/context';
+import { HistoryDBInterface } from '@/app/lib/db/History/types';
 
-type HistoryForwardInfo = {
-        collectionID: string;
-};
-
-const DBContext = createContextDefault<HistoryDBInterface>();
-
-export default function HistoryDBContextProvider({
+export const HistoryDbContextProvider = memo(function ({
         children
 }: {
         children: ReactNode;
 }) {
-        const upgrade = (db: IDBPDatabase<HistoryDBInterface>) => {
-                if (!db.objectStoreNames.contains('complete')) {
-                        db.createObjectStore('complete', { keyPath: 'id' });
-                }
-                if (!db.objectStoreNames.contains('incomplete')) {
-                        db.createObjectStore('incomplete', { keyPath: 'id' });
-                }
+        const upgradeDatabase = (database: HistoryDB) => {
+                createObjectStoreEnhanced<HistoryDBInterface>({
+                        keyPath: 'id',
+                        db: database,
+                        storeName: 'complete'
+                });
+                createObjectStoreEnhanced<HistoryDBInterface>({
+                        keyPath: 'id',
+                        db: database,
+                        storeName: 'incomplete'
+                });
         };
 
-        return (
-                <ProviderDB<HistoryDBInterface, HistoryForwardInfo>
-                        {...{
-                                ContextBody: DBContext,
-                                dbName: 'history',
-                                upgrade
-                        }}>
-                        {children}
-                </ProviderDB>
-        );
-}
+        const asyncDB = getDB({
+                dbName: DB_NAMES.ADD_COLLECTION_PAGE,
+                upgradeAction: upgradeDatabase
+        });
 
-export const useDB = () => use(DBContext);
+        return (
+                <ObservableProviderDB
+                        Context={HistoryDbContext}
+                        dbPromise={asyncDB}>
+                        {children}
+                </ObservableProviderDB>
+        );
+});

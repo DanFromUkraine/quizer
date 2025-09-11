@@ -3,59 +3,24 @@
 import { memo, ReactNode } from 'react';
 import {
         createObjectStoreEnhanced,
-        DB_NAMES,
         getDB,
         ObservableProviderDB
 } from '../utils';
-import { AddCollectionPageSchema, CreateCollectionDB } from './types';
-// import { Observable } from "../../utils/observableLogic";
-// import { IDBPDatabase } from "idb";
-import { ObservableCreateCollectionDBContext } from './context';
+import { CollectionDbSchema, CreateCollectionDB } from './types';
+import { DB_NAMES } from '@/app/lib/db/constants';
 
-// const DBContext = createContextDefault<AddCollectionPageSchema>();
-
-// export function AddCollectionPageDBContextProvider({
-//   children,
-// }: {
-//   children: ReactNode;
-// }) {
-//   const upgrade = (database: MyDB) => {
-//     createObjStoreDefault<AddCollectionPageSchema>(database, "meta");
-//     if (!database.objectStoreNames.contains("cards")) {
-//       database.createObjectStore("cards", {
-//         keyPath: "id",
-//         autoIncrement: true,
-//       });
-//     }
-//   };
-
-//   return (
-//     <ProviderDB<AddCollectionPageSchema>
-//       {...{
-//         dbName: DB_NAMES.ADD_COLLECTION_PAGE,
-//         upgrade,
-//         ContextBody: DBContext,
-//       }}
-//     >
-//       {children}
-//     </ProviderDB>
-//   );
-// }
-
-// export const useDB = () => use(DBContext);
-
-export const ObservableCreateCollectioProviderDB = memo(function ({
+export const CreateCollectionProviderDB = memo(function ({
         children
 }: {
         children: ReactNode;
 }) {
         const upgradeDatabase = (database: CreateCollectionDB) => {
-                createObjectStoreEnhanced<AddCollectionPageSchema>({
+                createObjectStoreEnhanced<CollectionDbSchema>({
                         keyPath: 'id',
                         db: database,
                         storeName: 'meta'
                 });
-                createObjectStoreEnhanced<AddCollectionPageSchema>({
+                createObjectStoreEnhanced<CollectionDbSchema>({
                         keyPath: 'id',
                         db: database,
                         storeName: 'cards',
@@ -65,12 +30,12 @@ export const ObservableCreateCollectioProviderDB = memo(function ({
 
         const asyncDB = getDB({
                 dbName: DB_NAMES.ADD_COLLECTION_PAGE,
-                upgrade: upgradeDatabase
+                upgradeAction: upgradeDatabase
         });
 
         return (
                 <ObservableProviderDB
-                        Context={ObservableCreateCollectionDBContext}
+                        Context={CreateCollectionProviderDB}
                         dbPromise={asyncDB}>
                         {children}
                 </ObservableProviderDB>

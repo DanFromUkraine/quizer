@@ -20,7 +20,7 @@ export type CreateModeQuestionCardType = {
         }[];
 };
 
-export interface AddCollectionPageSchema extends DBSchema {
+export interface CollectionDbSchema extends DBSchema {
         meta: {
                 key: string;
                 value: {
@@ -34,8 +34,8 @@ export interface AddCollectionPageSchema extends DBSchema {
         };
 }
 
-export type MyDB = IDBPDatabase<AddCollectionPageSchema>;
+export type MyDB = IDBPDatabase<CollectionDbSchema>;
 
-export type CreateCollectionDB = IDBPDatabase<AddCollectionPageSchema>;
+export type CreateCollectionDB = IDBPDatabase<CollectionDbSchema>;
 export type ObservableCreateCollectionContext =
         Context<Observable<CreateCollectionDB> | null>;

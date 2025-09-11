@@ -2,7 +2,7 @@
 
 import { useSetAtom } from 'jotai';
 import ButtonUI from './UI';
-import { cardsEditModalVisibilityAtom } from '@/app/lib/jotai/addCollection';
+import { cardsEditModalVisibilityAtom } from '@/app/lib/jotai/MainDbAtom/utils';
 
 export default function Button() {
         const setModalVisibility = useSetAtom(cardsEditModalVisibilityAtom);

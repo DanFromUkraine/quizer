@@ -4,7 +4,7 @@ import { useAddEmptyCard } from '@/app/lib/db/ObservableCreateCollectionDB';
 import { useEffect, useRef } from 'react';
 
 export function useAddCardOnShortcut() {
-        const { addEmptyCard } = useAddEmptyCard();
+        const addEmptyCard = useAddEmptyCard();
         const lastPressedKeys = useRef<string[]>([]);
 
         useEffect(() => {
