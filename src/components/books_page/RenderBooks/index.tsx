@@ -2,12 +2,11 @@
 
 import { useAtomValue, useSetAtom } from 'jotai';
 import { addEmptyBookAtom, booksIdsAtom } from '@/src/jotai/mainDbAtom';
+import BookItem from '@/src/components/books_page/RenderBooks/Book';
 
-
-export default function RenderCollections() {
-        const ids = useAtomValue(booksIdsAtom);
+export default function RenderBooks() {
+        const booksIds = useAtomValue(booksIdsAtom);
         const addBook = useSetAtom(addEmptyBookAtom);
-        console.log({ ids });
 
         return (
                 <div
@@ -15,6 +14,9 @@ export default function RenderCollections() {
     '
                         onClick={addBook}>
                         hello
+                        {booksIds.map((id) => (
+                                <BookItem id={id} key={id} />
+                        ))}
                 </div>
         );
 }

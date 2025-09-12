@@ -1,37 +1,33 @@
-import {
-        getEmptyBookTemplate,
-        getEmptyCardTemplate,
-        getEmptyOptionTemplate
-} from '@/src/idb/main/templates';
 import { atom, Getter, Setter, WritableAtom } from 'jotai';
-import { Book, Card, Option } from '@/src/types/mainDb';
+import { Book, Card, MainDb, Option, StoreMap } from '@/src/types/mainDb';
 import {
         booksFamilyAtom,
         booksIdsAtom,
         cardsFamilyAtom,
+        mainDbAtom,
         optionsFamilyAtom
 } from '@/src/jotai/mainDbAtom';
-import { getFilteredIds } from '@/src/utils/database/idUtils';
+import { getFilteredIds } from '@/src/utils/idb/idUtils';
+import { getTemplate } from '@/src/utils/idb/main/templates';
 
-export function getBookAtom(id: string): WritableAtom<Book, [Book], unknown> {
-        return atom(getEmptyBookTemplate(id));
-}
-
-export function getCardAtom(id: string): WritableAtom<Card, [Card], unknown> {
-        return atom(getEmptyCardTemplate(id));
-}
-
-export function getOptionAtom(
-        id: string
-): WritableAtom<Option, [Option], unknown> {
-        return atom(getEmptyOptionTemplate(id));
+export function getAtomFactory<K extends keyof StoreMap>(storeName: K) {
+        return (
+                id: string
+        ): WritableAtom<StoreMap[K], [StoreMap[K]], unknown> =>
+                atom(getTemplate(storeName, id) as StoreMap[K]);
 }
 
 export function addEmptyBookAtomHelper(set: Setter, id: string) {
         const newBookAtom = booksFamilyAtom(id);
-        const bookTemplate = getEmptyBookTemplate(id);
+        const bookTemplate = getTemplate('books', id);
         set(booksIdsAtom, (prev) => [...prev, id]);
         set(newBookAtom, bookTemplate);
+}
+
+export function addEmptyCardAtomHelper(set: Setter, id: string) {
+        const newCardAtom = cardsFamilyAtom(id);
+        const cardTemplate = getTemplate('cards', id);
+        set(newCardAtom, cardTemplate);
 }
 
 export function deleteBookAtomHelper(set: Setter, id: string) {
@@ -62,7 +58,7 @@ export function getNewBookWithFilteredIds(
         idToDelete: string
 ) {
         const prevBook = get(booksFamilyAtom(bookId));
-        const filteredIds = getFilteredIds(prevBook.cardIds, idToDelete);
+        const filteredIds = getFilteredIds(prevBook.cardsIds, idToDelete);
         return {
                 ...prevBook,
                 filteredIds
@@ -71,7 +67,7 @@ export function getNewBookWithFilteredIds(
 
 export function getBookWithNewId(get: Getter, bookId: string, cardId: string) {
         const prevBook = get(booksFamilyAtom(bookId));
-        const updatedIds = [...prevBook.cardIds, cardId];
+        const updatedIds = [...prevBook.cardsIds, cardId];
         return {
                 ...prevBook,
                 cardIds: updatedIds
@@ -81,12 +77,6 @@ export function getBookWithNewId(get: Getter, bookId: string, cardId: string) {
 export function updateCardAtomHelper(set: Setter, newCard: Card) {
         const cardAtom = cardsFamilyAtom(newCard.id);
         set(cardAtom, newCard);
-}
-
-export function addEmptyCardAtomHelper(set: Setter, id: string) {
-        const newCardAtom = cardsFamilyAtom(id);
-        const cardTemplate = getEmptyCardTemplate(id);
-        set(newCardAtom, cardTemplate);
 }
 
 export function getCardWithUpdatedTitleHelper(
@@ -106,16 +96,61 @@ export function updateOptionAtomHelper(set: Setter, newOption: Option) {
         set(optionAtom, newOption);
 }
 
-export function getNewOptionWithChangedCorrectness(
+export function getCardWithNewOptionId(
         get: Getter,
-        optionId: string,
-        isCorrect: boolean
+        cardId: string,
+        optionId: string
 ) {
-        const optionAtom = optionsFamilyAtom(optionId);
-        const prevOption = get(optionAtom);
+        const cardAtom = cardsFamilyAtom(cardId);
+        const prevCard = get(cardAtom);
+        const newIds = [...prevCard.optionsIds, optionId];
+
         return {
-                ...prevOption,
-                isCorrect
+                ...prevCard,
+                optionIds: newIds
         };
 }
 
+export function addEmptyOptionAtomHelper(set: Setter, optionId: string) {
+        const optionAtom = optionsFamilyAtom(optionId);
+        const newOption = getTemplate('options', optionId);
+        set(optionAtom, newOption);
+}
+
+export function getCardWithFilteredOptionsIds(
+        get: Getter,
+        cardId: string,
+        optionId: string
+) {
+        const cardAtom = cardsFamilyAtom(cardId);
+        const prevCard = get(cardAtom);
+        const newIds = getFilteredIds(prevCard.optionsIds, optionId);
+
+        return {
+                ...prevCard,
+                optionsIds: newIds
+        };
+}
+
+export function getDerivedAtom<Args extends unknown[]>(
+        callback: (
+                get: Getter,
+                set: Setter,
+                mainDb: MainDb,
+                ...args: Args
+        ) => Promise<void> | void
+): WritableAtom<null, Args, Promise<void> | void> {
+        return atom<null, Args, Promise<void> | void>(
+                null,
+                async (get, set, ...args: Args) => {
+                        const mainDb = get(mainDbAtom) as MainDb | undefined;
+                        if (typeof mainDb === 'undefined') return;
+
+                        try {
+                                await callback(get, set, mainDb, ...args);
+                        } catch (e) {
+                                console.error(e);
+                        }
+                }
+        ) as WritableAtom<null, Args, Promise<void> | void>;
+}

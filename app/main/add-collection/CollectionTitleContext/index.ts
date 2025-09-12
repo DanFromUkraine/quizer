@@ -25,6 +25,6 @@ export const [CollectionTitleContext, CollectionTitleContextProvider] =
         });
 
 export const useCollectionTitleState = getContextEnhancedReceiver({
-        contextName: 'Collection title',
+        contextName: 'Book title',
         Context: CollectionTitleContext
 });

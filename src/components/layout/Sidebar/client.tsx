@@ -28,7 +28,7 @@ const NAV_LINKS: LinkType[] = [
         {
                 href: '/main/add-collection',
                 Icon: BiSolidAddToQueue,
-                text: 'Add Collection'
+                text: 'Add Book'
         }
 ];
 

@@ -8,17 +8,18 @@ import {
         getAllCardsFromAsyncDb,
         getAllOptionsFromAsyncDb,
         getMainDb
-} from '@/src/idb/main/getters';
+} from '@/src/utils/idb/main/actions';
 
-import { booksIdsAtom, mainDbAtom } from '@/app/lib/jotai/MainDbAtom';
 import { useSetAtom } from 'jotai';
-import { pickIds } from '@/app/lib/utils/database/pickIds';
 import { useInitFamilyAtom } from '@/src/hooks/jotai/initializers';
 import {
         booksFamilyAtom,
+        booksIdsAtom,
         cardsFamilyAtom,
+        mainDbAtom,
         optionsFamilyAtom
 } from '@/src/jotai/mainDbAtom';
+import { pickIds } from '@/src/utils/idb/idUtils';
 
 export default function InitAllMainDbAtoms_CLIENT_ONLY() {
         console.log({ window: typeof window });

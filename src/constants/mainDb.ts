@@ -1,6 +1,5 @@
-import { DB } from '@/app/lib/db/types';
-import { createObjectStoreEnhanced } from '@/app/lib/utils/database/createStoreEnhanced';
-import { MainDb, MainDbSchema } from '@/app/lib/types/mainDb';
+import { MainDb, MainDbSchema } from '@/src/types/mainDb';
+import { createObjectStoreEnhanced } from '@/src/utils/idb/createStoreEnhanced';
 
 export const UPGRADE_MAIN_DB = (database: MainDb) => {
         createObjectStoreEnhanced<MainDbSchema>({

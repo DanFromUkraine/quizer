@@ -1,3 +1,1 @@
-import { PrimitiveAtom } from 'jotai';
-
-export type FamilyAtom<T> = (id: string) => PrimitiveAtom<T>;
+export type FamilyAtom<T> = (id: string) => WritableAtom<T, [T], unknown>;

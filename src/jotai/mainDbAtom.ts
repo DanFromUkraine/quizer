@@ -3,151 +3,116 @@
 import { atom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
 
-import { getEmptyBookTemplate } from '@/src/idb/main/templates';
-import { Card, MainDb, Option } from '@/src/types/mainDb';
+import { Book, Card, MainDb, Option } from '@/src/types/mainDb';
 import {
         addEmptyBookAtomHelper,
         addEmptyCardAtomHelper,
+        addEmptyOptionAtomHelper,
         deleteBookAtomHelper,
-        getBookAtom,
+        getAtomFactory,
         getBookWithNewId,
-        getBookWithUpdatedTitle,
-        getCardAtom,
-        getCardWithUpdatedTitleHelper,
+        getCardWithFilteredOptionsIds,
+        getCardWithNewOptionId,
+        getDerivedAtom,
         getNewBookWithFilteredIds,
-        getOptionAtom,
         updateBookAtomHelper,
         updateCardAtomHelper,
         updateOptionAtomHelper
 } from '@/src/jotai/utils/mainDbUtils';
 import getUniqueID from '@/src/utils/getUniqueID';
 import {
+        addEmptyBookIdb,
         addEmptyCardIdb,
+        addEmptyOptionIdb,
         deleteBookIdb,
         deleteCardIdb,
+        deleteOptionIdb,
         updateBookIdb,
         updateCardIdb,
         updateOptionIdb
-} from '@/src/idb/main/getters';
+} from '@/src/utils/idb/main/actions';
 
 export const mainDbAtom = atom<MainDb>();
-export const booksFamilyAtom = atomFamily((id: string) => getBookAtom(id));
-export const cardsFamilyAtom = atomFamily((id: string) => getCardAtom(id));
-export const optionsFamilyAtom = atomFamily((id: string) => getOptionAtom(id));
+export const booksFamilyAtom = atomFamily(getAtomFactory('books'));
+export const cardsFamilyAtom = atomFamily(getAtomFactory('cards'));
+export const optionsFamilyAtom = atomFamily(getAtomFactory('options'));
 export const booksIdsAtom = atom<string[]>([]);
 
-export const addEmptyBookAtom = atom(null, async (get, set) => {
-        const mainDb = get(mainDbAtom);
-        if (typeof mainDb === 'undefined') return;
-
+export const addEmptyBookAtom = getDerivedAtom(async (get, set, mainDb) => {
         const id = getUniqueID();
-        const bookTemplate = getEmptyBookTemplate(id);
-
-        try {
-                await mainDb.add('books', bookTemplate);
-                addEmptyBookAtomHelper(set, id);
-        } catch (e) {
-                console.error(e);
-        }
+        await addEmptyBookIdb(mainDb, id);
+        addEmptyBookAtomHelper(set, id);
 });
 
-export const deleteBookAtom = atom(null, async (get, set, id: string) => {
-        const mainDb = get(mainDbAtom);
-        if (typeof mainDb === 'undefined') return;
-
-        try {
-                await deleteBookIdb(mainDb, id);
-                deleteBookAtomHelper(set, id);
-        } catch (e) {
-                console.error(e);
-        }
-});
-
-export const updateBookTitleAtom = atom(
-        null,
-        async (get, set, bookId: string, newTitle: string) => {
-                const mainDb = get(mainDbAtom);
-                if (typeof mainDb === 'undefined') return;
-
-                try {
-                        const newBook = getBookWithUpdatedTitle(
-                                get,
-                                bookId,
-                                newTitle
-                        );
-                        await mainDb.put('books', newBook);
-                        updateBookAtomHelper(set, newBook);
-                } catch (e) {
-                        console.error(e);
-                }
+export const deleteBookAtom = getDerivedAtom(
+        async (get, set, mainDb, bookId: string) => {
+                await deleteBookIdb(mainDb, bookId);
+                deleteBookAtomHelper(set, bookId);
         }
 );
 
-export const addEmptyCardAtom = atom(null, async (get, set, bookId: string) => {
-        const mainDb = get(mainDbAtom);
-        if (typeof mainDb === 'undefined') return;
-        const cardId = getUniqueID();
+export const updateBookAtom = getDerivedAtom(
+        async (get, set, mainDb, newBook: Book) => {
+                await mainDb.put('books', newBook);
+                updateBookAtomHelper(set, newBook);
+        }
+);
 
-        try {
+export const addEmptyCardAtom = getDerivedAtom(
+        async (get, set, mainDb, bookId: string) => {
+                const cardId = getUniqueID();
                 const newBook = getBookWithNewId(get, bookId, cardId);
                 await updateBookIdb(mainDb, newBook);
                 await addEmptyCardIdb(mainDb, cardId);
                 updateBookAtomHelper(set, newBook);
                 addEmptyCardAtomHelper(set, cardId);
-        } catch (e) {
-                console.error(e);
         }
-});
+);
 
-export const updateCardAtom = atom(null, async (get, set, newCard: Card) => {
-        const mainDb = get(mainDbAtom);
-        if (typeof mainDb === 'undefined') return;
-
-        try {
+export const updateCardAtom = getDerivedAtom(
+        async (get, set, mainDb, newCard: Card) => {
                 await updateCardIdb(mainDb, newCard);
                 updateCardAtomHelper(set, newCard);
-        } catch (e) {
-                console.error(e);
-        }
-});
-
-export const deleteCardAtom = atom(
-        null,
-        async (get, set, bookId: string, cardId: string) => {
-                const mainDb = get(mainDbAtom);
-                if (typeof mainDb === 'undefined') return;
-
-                try {
-                        const newBook = getNewBookWithFilteredIds(
-                                get,
-                                bookId,
-                                cardId
-                        );
-                        await updateBookIdb(mainDb, newBook);
-                        await deleteCardIdb(mainDb, cardId);
-                        updateBookAtomHelper(set, newBook);
-                        cardsFamilyAtom.remove(cardId);
-                } catch (e) {
-                        console.error(e);
-                }
         }
 );
 
-export const updateOptionAtom = atom(
-        null,
-        async (get, set, newOption: Option) => {
-                const mainDb = get(mainDbAtom);
-                if (typeof mainDb === 'undefined') return;
-
-                try {
-                        await updateOptionIdb(mainDb, newOption);
-                        updateOptionAtomHelper(set, newOption);
-                } catch (e) {
-                        console.error(e);
-                }
+export const deleteCardAtom = getDerivedAtom(
+        async (get, set, mainDb, bookId: string, cardId: string) => {
+                const newBook = getNewBookWithFilteredIds(get, bookId, cardId);
+                await updateBookIdb(mainDb, newBook);
+                await deleteCardIdb(mainDb, cardId);
+                updateBookAtomHelper(set, newBook);
+                cardsFamilyAtom.remove(cardId);
         }
 );
 
-export const addEmptyOptionAtom = atom(null, async (get, set) => {});
+export const updateOptionAtom = getDerivedAtom(
+        async (get, set, mainDb, newOption: Option) => {
+                await updateOptionIdb(mainDb, newOption);
+                updateOptionAtomHelper(set, newOption);
+        }
+);
 
-export const deleteOptionAtom = atom(null, async (get, set) => {});
+export const addEmptyOptionAtom = getDerivedAtom(
+        async (get, set, mainDb, cardId: string) => {
+                const newId = getUniqueID();
+                const newCard = getCardWithNewOptionId(get, cardId, newId);
+                await updateCardIdb(mainDb, newCard);
+                await addEmptyOptionIdb(mainDb, newId);
+                addEmptyOptionAtomHelper(set, newId);
+                updateCardAtomHelper(set, newCard);
+        }
+);
+
+export const deleteOptionAtom = getDerivedAtom(
+        async (get, set, mainDb, cardId: string, optionId: string) => {
+                const newCard = getCardWithFilteredOptionsIds(
+                        get,
+                        cardId,
+                        optionId
+                );
+                await deleteOptionIdb(mainDb, optionId);
+                await updateCardIdb(mainDb, newCard);
+                optionsFamilyAtom.remove(optionId);
+        }
+);

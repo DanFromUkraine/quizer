@@ -18,17 +18,28 @@ export interface MainDbSchema extends DBSchema {
         };
 }
 
+export type ObjectStores = keyof Pick<
+        MainDbSchema,
+        'books' | 'cards' | 'options'
+>;
+
+export type StoreMap = {
+        books: Book;
+        cards: Card;
+        options: Option;
+};
+
 export interface Book {
         id: string;
         bookTitle: string;
         lastChangeDate: number;
-        cardIds: string[];
+        cardsIds: string[];
 }
 
 export interface Card {
         id: string;
         cardTitle: string;
-        optionIds: string[];
+        optionsIds: string[];
 }
 
 export interface Option {

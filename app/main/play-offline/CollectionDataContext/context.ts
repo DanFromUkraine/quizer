@@ -10,5 +10,5 @@ export const CollectionContextIncomplete =
 export const useCollectionContext =
         getContextEnhancedReceiver<CollectionStoryIncomplete | null>({
                 Context: CollectionContextIncomplete,
-                contextName: 'Collection Data Context'
+                contextName: 'Book Data Context'
         });

@@ -12,7 +12,7 @@ export default async function page({
 }) {
         const params = await searchParams;
 
-        if (typeof params.id !== 'string') throw 'No Collection ID in URL';
+        if (typeof params.id !== 'string') throw 'No Book ID in URL';
 
         return (
                 <main className='w-full p-8 flex flex-col gap-2 items-center'>

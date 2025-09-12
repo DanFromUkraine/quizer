@@ -9,5 +9,5 @@ export const CollectionContextComplete =
 
 export const useCollectionContextComplete = getContextEnhancedReceiver({
         Context: CollectionContextComplete,
-        contextName: 'Collection Context Complete'
+        contextName: 'Book Context Complete'
 });
