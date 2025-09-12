@@ -1,7 +1,8 @@
 'use client';
 
 import { useAtomValue, useSetAtom } from 'jotai';
-import { addEmptyBookAtom, booksIdsAtom } from '@/app/lib/jotai/MainDbAtom';
+import { addEmptyBookAtom, booksIdsAtom } from '@/src/jotai/mainDbAtom';
+
 
 export default function RenderCollections() {
         const ids = useAtomValue(booksIdsAtom);

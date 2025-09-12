@@ -1,6 +1,7 @@
 'use client';
 
 //#task: db must close connection on unmount
+//#refactor: I don't like this callback chain. Looks kinda awful
 
 import {
         getAllBooksSync,
@@ -21,8 +22,6 @@ export default function InitAllMainDbAtoms_CLIENT_ONLY() {
                         .then((books) => pickIds(books))
                         .then((ids) => setBooksIds(ids));
         });
-
-        // useInitAllAtomFamilies();
 
         return <></>;
 }

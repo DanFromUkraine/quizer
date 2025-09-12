@@ -1,4 +1,4 @@
-export enum DB_NAMES {
-        MAIN = 'Collections',
-        HISTORY = 'History'
-}
+// export enum DB_NAMES {
+//         MAIN = 'Collections',
+//         HISTORY = 'History'
+// }
