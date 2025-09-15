@@ -7,3 +7,4 @@ export type WithInitialValue<Value> = {
 };
 
 
+export type StringAtomAdapter =  AtomFamily<string, WritableAtom<string, [newValue: string], void>>;

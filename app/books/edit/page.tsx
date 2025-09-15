@@ -4,6 +4,7 @@ import { createPropsProvider } from '@/src/utils/createPropsProvider';
 import BookTitleInput from '@/src/components/edit_book_page/Header';
 import { use } from 'react';
 import Initializer_CLIENT_ONLY from '@/src/components/initializers/InitMainDbAtoms';
+import BookDescriptionInput from '@/src/components/edit_book_page/Description';
 
 type EditBookProps = {
         bookId: string;
@@ -30,6 +31,7 @@ export default function EditBookPage({
                         <Initializer_CLIENT_ONLY />
                         <main className='mainContainer'>
                                 <BookTitleInput />
+                                <BookDescriptionInput />
                         </main>
                 </EditBookPropsProvider>
         );

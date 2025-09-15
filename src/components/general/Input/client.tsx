@@ -1,7 +1,7 @@
 'use client';
 
 import { InputHTMLAttributes, useCallback, useState } from 'react';
-import { ClearButtonUI } from '../../componentsUI/ClearButton/index.jsx';
+import { ClearButtonUI } from '../../../../app/lib/componentsUI/ClearButton';
 import type { AvailableInputTypes } from './types.d.ts';
 
 export function useInputType(defaultInputType: AvailableInputTypes) {

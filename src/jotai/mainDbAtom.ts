@@ -31,6 +31,8 @@ import {
         updateCardIdb,
         updateOptionIdb
 } from '@/src/utils/idb/main/actions';
+import { AtomFamily } from 'jotai/vanilla/utils/atomFamily';
+import { WritableAtom } from 'jotai';
 
 export const mainDbAtom = atom<MainDb>();
 export const booksFamilyAtom = atomFamily(getAtomFactory('books'));
@@ -120,12 +122,24 @@ export const deleteOptionAtom = getDerivedAtom(
         }
 );
 
+
 export const bookTitleAtomAdapter = atomFamily((bookId: string) =>
         atom(
                 (get) => get(booksFamilyAtom(bookId)).bookTitle,
                 (get, set, newTitle: string) => {
                         const prevBook = get(booksFamilyAtom(bookId));
                         const newBook = { ...prevBook, bookTitle: newTitle };
+                        set(updateBookAtom, newBook);
+                }
+        )
+);
+
+export const bookDescriptionAtomAdapter = atomFamily((bookId: string) =>
+        atom(
+                (get) => get(booksFamilyAtom(bookId)).description,
+                (get, set, newDescription: string) => {
+                        const prevBook = get(booksFamilyAtom(bookId));
+                        const newBook = { ...prevBook, description: newDescription };
                         set(updateBookAtom, newBook);
                 }
         )

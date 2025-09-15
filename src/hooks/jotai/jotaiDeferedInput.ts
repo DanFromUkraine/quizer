@@ -1,11 +1,14 @@
 'use client';
 
 import { useDeferredValue, useEffect, useMemo, useState } from 'react';
-import { bookTitleAtomAdapter } from '@/src/jotai/mainDbAtom';
 import { useAtom } from 'jotai';
+import { StringAtomAdapter } from '@/src/types/jotai';
 
-export default function useJotaiDeferredInput(bookId: string) {
-        const bookAtom = useMemo(() => bookTitleAtomAdapter(bookId), []);
+export default function useJotaiDeferredInput(
+        atomAdapter: StringAtomAdapter,
+        bookId: string
+) {
+        const bookAtom = useMemo(() => atomAdapter(bookId), []);
         const [jotaiValue, setJotaiValue] = useAtom(bookAtom);
         const [value, setValue] = useState(() => jotaiValue);
         const deferredValue = useDeferredValue(value);
