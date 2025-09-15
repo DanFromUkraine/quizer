@@ -20,8 +20,9 @@ import {
         optionsFamilyAtom
 } from '@/src/jotai/mainDbAtom';
 import { pickIds } from '@/src/utils/idb/idUtils';
+import dynamic from 'next/dynamic';
 
-export default function InitAllMainDbAtoms_CLIENT_ONLY() {
+export function InitAllMainDbAtoms_DO_NOT_IMPORT() {
         console.log({ window: typeof window });
 
         const asyncMainDb = getMainDb();
@@ -50,3 +51,11 @@ export default function InitAllMainDbAtoms_CLIENT_ONLY() {
 
         return <></>;
 }
+
+export default dynamic(
+        () =>
+                import('@/src/components/initializers/InitMainDbAtoms').then(
+                        (modules) => modules.InitAllMainDbAtoms_DO_NOT_IMPORT
+                ),
+        { ssr: false }
+);

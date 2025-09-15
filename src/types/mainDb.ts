@@ -34,6 +34,7 @@ export interface Book {
         bookTitle: string;
         lastChangeDate: number;
         cardsIds: string[];
+        description: string;
 }
 
 export interface Card {

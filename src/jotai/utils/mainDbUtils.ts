@@ -146,6 +146,8 @@ export function getDerivedAtom<Args extends unknown[]>(
                         const mainDb = get(mainDbAtom) as MainDb | undefined;
                         if (typeof mainDb === 'undefined') return;
 
+
+
                         try {
                                 await callback(get, set, mainDb, ...args);
                         } catch (e) {

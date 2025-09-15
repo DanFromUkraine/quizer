@@ -23,7 +23,7 @@ const EXAMPLE_TEXT_VAL = 'Some example value for collection page';
 
 test.describe('This tests bundle will describe collection creation process', () => {
         test.beforeEach(async ({ page }) => {
-                await page.goto('/main/add-collection');
+                await page.goto('/books/edit');
         });
 
         test("When user sets collection title, it won't be erased after reload ", async ({
@@ -257,9 +257,9 @@ test.describe('This tests bundle will describe collection creation process', () 
                         await saveCollectionButton.click();
                 });
 
-                await test.step('user should appear on main page', async () => {
+                await test.step('user should appear on books page', async () => {
                         await page.waitForTimeout(3_000);
-                        await expect(page).toHaveURL('/main');
+                        await expect(page).toHaveURL('/books');
                 });
                 await test.step('expect data to be in IndexedDB', async () => {
                         console.log('ok 1');

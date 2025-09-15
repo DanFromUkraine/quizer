@@ -7,7 +7,7 @@ export default function AddBookButton() {
         const add = useSetAtom(addEmptyBookAtom);
         return (
                 <button onClick={add} className='fixed bottom-5 right-5'>
-                        <IoAddCircle />
+                        <IoAddCircle className='text-6xl hover:rotate-45 duration-200' />
                 </button>
         );
 }

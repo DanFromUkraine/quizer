@@ -53,7 +53,10 @@ export const deleteBookAtom = getDerivedAtom(
 
 export const updateBookAtom = getDerivedAtom(
         async (get, set, mainDb, newBook: Book) => {
-                await mainDb.put('books', newBook);
+
+                await mainDb.put('books', newBook).then(() => {
+                        console.log('update successful');
+                });
                 updateBookAtomHelper(set, newBook);
         }
 );
@@ -115,4 +118,15 @@ export const deleteOptionAtom = getDerivedAtom(
                 await updateCardIdb(mainDb, newCard);
                 optionsFamilyAtom.remove(optionId);
         }
+);
+
+export const bookTitleAtomAdapter = atomFamily((bookId: string) =>
+        atom(
+                (get) => get(booksFamilyAtom(bookId)).bookTitle,
+                (get, set, newTitle: string) => {
+                        const prevBook = get(booksFamilyAtom(bookId));
+                        const newBook = { ...prevBook, bookTitle: newTitle };
+                        set(updateBookAtom, newBook);
+                }
+        )
 );

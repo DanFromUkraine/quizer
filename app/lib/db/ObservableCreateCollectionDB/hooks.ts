@@ -6,7 +6,7 @@
 // import {
 //         useAddCard,
 //         useRemoveCard
-// } from '@/app/main/add-collection/CardsContext/provider';
+// } from '@/app/books/edit/CardsContext/provider';
 // import { useAddCollection } from '../Main';
 // import { useObservableContext } from './context';
 // import {
@@ -15,8 +15,8 @@
 //         CreateModeQuestionCardType
 // } from './types';
 // import { deleteThisDB, useInitCollectionTitle } from './utils';
-// import { useCardsContext } from '@/app/main/add-collection/CardsContext/context';
-// import { useCollectionTitleState } from '@/app/main/add-collection/CollectionTitleContext';
+// import { useCardsContext } from '@/app/books/edit/CardsContext/context';
+// import { useCollectionTitleState } from '@/app/books/edit/CollectionTitleContext';
 // import { Observable } from '@/app/lib/utils/observableLogic';
 // import { EMPTY_CARD_TEMPLATE } from '@/app/lib/db/constants';
 // import { SetState } from '@/app/lib/types/global';
@@ -180,7 +180,7 @@
 //
 //                         await addCollection(newBook);
 //                         await deleteThisDB(db);
-//                         router.replace('/main');
+//                         router.replace('/books');
 //                 });
 //         };
 // }

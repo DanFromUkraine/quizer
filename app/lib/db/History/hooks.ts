@@ -202,7 +202,7 @@
 //                 await db.delete('incomplete', collectionID);
 //
 //                 db.close();
-//                 redirect(`/main/history/view?id=${collectionID}`);
+//                 redirect(`/books/history/view?id=${collectionID}`);
 //         };
 //
 //         return { submit };

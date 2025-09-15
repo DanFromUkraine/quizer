@@ -5,6 +5,7 @@ function getEmptyBookTemplate(id: string): Book {
                 id,
                 bookTitle: '',
                 lastChangeDate: Date.now(),
+                description: "",
                 cardsIds: []
         };
 }

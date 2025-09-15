@@ -1,21 +1,21 @@
 'use client';
 
-import { useAtomValue, useSetAtom } from 'jotai';
-import { addEmptyBookAtom, booksIdsAtom } from '@/src/jotai/mainDbAtom';
+import { useAtomValue } from 'jotai';
+import { booksIdsAtom } from '@/src/jotai/mainDbAtom';
 import BookItem from '@/src/components/books_page/RenderBooks/Book';
+import { Suspense } from 'react';
 
 export default function RenderBooks() {
         const booksIds = useAtomValue(booksIdsAtom);
-        const addBook = useSetAtom(addEmptyBookAtom);
 
         return (
-                <div
-                        className='grid grid-cols-2 w-full h-fit gap-4 max-sm:grid-cols-1
-    '
-                        onClick={addBook}>
-                        hello
+                <div className='grid grid-cols-3 w-full h-fit gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1'>
                         {booksIds.map((id) => (
-                                <BookItem id={id} key={id} />
+                                <Suspense
+                                        key={id}
+                                        fallback={<div>loading...</div>}>
+                                        <BookItem id={id} />
+                                </Suspense>
                         ))}
                 </div>
         );
