@@ -1,10 +1,13 @@
 'use client';
 
-import { useAddEmptyCard } from '@/app/lib/db/ObservableCreateCollectionDB';
 import { useEffect, useRef } from 'react';
+import { useBookProps } from '@/src/components/books_page/RenderBooks/Book';
+import { useSetAtom } from 'jotai';
+import { addEmptyCardAtom } from '@/src/jotai/mainDbAtom';
 
 export function useAddCardOnShortcut() {
-        const addEmptyCard = useAddEmptyCard();
+        const { id: bookId } = useBookProps();
+        const addEmptyCard = useSetAtom(addEmptyCardAtom);
         const lastPressedKeys = useRef<string[]>([]);
 
         useEffect(() => {
@@ -19,7 +22,7 @@ export function useAddCardOnShortcut() {
                                 ) &&
                                 lastPressedKeys.current.includes('KeyM')
                         ) {
-                                addEmptyCard();
+                                addEmptyCard(bookId);
                         }
                         console.log(lastPressedKeys.current, event);
                         console.log('down');

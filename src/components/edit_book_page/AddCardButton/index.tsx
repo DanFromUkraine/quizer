@@ -1,9 +1,14 @@
-import { useAddEmptyCard } from '@/app/lib/db/ObservableCreateCollectionDB';
-import AddEmptyCardUI from './UI';
+'use client';
 
-export default function AddCardButton() {
-        const { addEmptyCard } = useAddEmptyCard();
-        const onButtonClick = () => addEmptyCard();
+import { useSetAtom } from 'jotai';
+import AddEmptyCardUI from './UI';
+import { addEmptyCardAtom } from '@/src/jotai/mainDbAtom';
+import { useEditBookProps } from '@/app/books/edit/page';
+
+export default function AddEmptyCardButton() {
+        const { bookId } = useEditBookProps();
+        const addEmptyCard = useSetAtom(addEmptyCardAtom);
+        const onButtonClick = () => addEmptyCard(bookId);
 
         return <AddEmptyCardUI onClick={onButtonClick} />;
 }

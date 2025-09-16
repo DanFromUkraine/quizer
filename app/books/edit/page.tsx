@@ -5,6 +5,8 @@ import BookTitleInput from '@/src/components/edit_book_page/Header';
 import { use } from 'react';
 import Initializer_CLIENT_ONLY from '@/src/components/initializers/InitMainDbAtoms';
 import BookDescriptionInput from '@/src/components/edit_book_page/Description';
+import { RenderCards } from '@/src/components/edit_book_page/RenderCards';
+import AddEmptyCardButton from '@/src/components/edit_book_page/AddCardButton';
 
 type EditBookProps = {
         bookId: string;
@@ -32,6 +34,8 @@ export default function EditBookPage({
                         <main className='mainContainer'>
                                 <BookTitleInput />
                                 <BookDescriptionInput />
+                                <RenderCards />
+                                <AddEmptyCardButton />
                         </main>
                 </EditBookPropsProvider>
         );

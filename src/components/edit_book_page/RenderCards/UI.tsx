@@ -1,16 +1,13 @@
-import { CreateModeQuestionCardType } from '@/app/lib/db/ObservableCreateCollectionDB/types';
-// import QuestionCard from "./QuestionCard";
 import { RefObject } from 'react';
 import { Virtualizer } from '@tanstack/react-virtual';
-import QuestionCard from '@/app/lib/components/QuestionCard';
-import { IndexContextProvider } from '@/app/lib/components/QuestionCard/CreateMode/CardIndex';
+import Card from '@/src/components/edit_book_page/RenderCards/Card';
 
 export default function RenderCardsUI({
-        cards,
+        cardsIds,
         allContainerRef,
         rowVirtualizer
 }: {
-        cards: CreateModeQuestionCardType[];
+        cardsIds: string[];
         allContainerRef: RefObject<HTMLElement | null>;
         rowVirtualizer: Virtualizer<HTMLElement, Element>;
 }) {
@@ -22,18 +19,15 @@ export default function RenderCardsUI({
                                 {rowVirtualizer
                                         .getVirtualItems()
                                         .map((virtualItem, i) => {
-                                                const cardData = cards[i];
+                                                const cardId = cardsIds[i];
                                                 return (
-                                                        <IndexContextProvider
-                                                                value={i}
+                                                        <Card
+
                                                                 key={
                                                                         virtualItem.key
-                                                                }>
-                                                                <QuestionCard
-                                                                        mode='create-mode'
-                                                                        {...cardData}
-                                                                />
-                                                        </IndexContextProvider>
+                                                                }
+                                                                cardId={cardId}
+                                                        />
                                                 );
                                         })}
                         </div>

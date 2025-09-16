@@ -1,29 +1,29 @@
 'use client';
 
-import { useCards } from '@/app/lib/db/ObservableCreateCollectionDB';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import RenderCardsUI from './UI';
+import { useEditBookProps } from '@/app/books/edit/page';
+import { booksFamilyAtom } from '@/src/jotai/mainDbAtom';
+import { useAtomValue } from 'jotai';
 
-export default function RenderCards() {
-        const { cards } = useCards();
-
-        console.log({ theLatestCards: cards });
-
+export function RenderCards() {
+        const { bookId } = useEditBookProps();
+        const bookAtom = useMemo(() => booksFamilyAtom(bookId), [bookId]);
+        const { cardsIds } = useAtomValue(bookAtom);
         const allContainerRef = useRef<HTMLElement>(null);
         const rowVirtualizer = useVirtualizer({
-                count: cards.length,
+                count: cardsIds.length,
                 getScrollElement: () => allContainerRef.current,
-                estimateSize: () => 500
+                estimateSize: () => 500,
+                measureElement: (el) => el?.getBoundingClientRect().height ?? 0
         });
+
+        console.log({ cardsIds });
 
         return (
                 <RenderCardsUI
-                        {...{
-                                cards,
-                                rowVirtualizer,
-                                allContainerRef
-                        }}
+                        {...{ cardsIds, allContainerRef, rowVirtualizer }}
                 />
         );
 }

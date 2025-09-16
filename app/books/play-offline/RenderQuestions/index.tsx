@@ -1,7 +1,7 @@
 'use client';
 
 import { useInitFromHistory } from '@/app/lib/db/History';
-import QuestionCard from '@/app/lib/components/QuestionCard';
+import QuestionCard from '@/src/components/general/QuestionCard';
 import { useCollectionContext } from '@/app/books/play-offline/CollectionDataContext/context';
 
 export default function RenderQuestions() {

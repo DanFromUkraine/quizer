@@ -1,12 +1,12 @@
 'use client';
 
 import { JSX } from 'react';
-import { ClearButton, InputBody, useInputType } from './client';
+import {  InputBody, useInputType } from './client';
 import type {
         InputContainerProps,
         InputContainerPropsIfClearable
 } from './types.d.ts';
-import { InputNameUI, ToggleVisibilityButtonUI } from './UI';
+import { ClearButton, InputNameUI, ToggleVisibilityButtonUI } from './UI';
 
 export default function InputContainer(props: InputContainerProps): JSX.Element;
 export default function InputContainer(
@@ -17,7 +17,8 @@ export default function InputContainer({
         clearable,
         inputName,
         inputAttributes,
-        onClearButtonClick
+        onClearButtonClick,
+        extendable
 }: InputContainerPropsIfClearable | InputContainerProps) {
         const { currentInputType, toggleInputType, isPasswordButtonVisible } =
                 useInputType(inputType);
@@ -27,8 +28,9 @@ export default function InputContainer({
                         <InputNameUI textContent={inputName} />
                         <InputBody
                                 {...{
-                                        currentInputType,
-                                        attributes: inputAttributes
+                                        inputType: currentInputType,
+                                        inputAttributes,
+                                        extendable
                                 }}
                         />
 

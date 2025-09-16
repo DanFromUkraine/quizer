@@ -70,7 +70,7 @@ export function getBookWithNewId(get: Getter, bookId: string, cardId: string) {
         const updatedIds = [...prevBook.cardsIds, cardId];
         return {
                 ...prevBook,
-                cardIds: updatedIds
+                cardsIds: updatedIds
         };
 }
 

@@ -31,8 +31,6 @@ import {
         updateCardIdb,
         updateOptionIdb
 } from '@/src/utils/idb/main/actions';
-import { AtomFamily } from 'jotai/vanilla/utils/atomFamily';
-import { WritableAtom } from 'jotai';
 
 export const mainDbAtom = atom<MainDb>();
 export const booksFamilyAtom = atomFamily(getAtomFactory('books'));
@@ -55,7 +53,6 @@ export const deleteBookAtom = getDerivedAtom(
 
 export const updateBookAtom = getDerivedAtom(
         async (get, set, mainDb, newBook: Book) => {
-
                 await mainDb.put('books', newBook).then(() => {
                         console.log('update successful');
                 });
@@ -122,7 +119,6 @@ export const deleteOptionAtom = getDerivedAtom(
         }
 );
 
-
 export const bookTitleAtomAdapter = atomFamily((bookId: string) =>
         atom(
                 (get) => get(booksFamilyAtom(bookId)).bookTitle,
@@ -139,8 +135,57 @@ export const bookDescriptionAtomAdapter = atomFamily((bookId: string) =>
                 (get) => get(booksFamilyAtom(bookId)).description,
                 (get, set, newDescription: string) => {
                         const prevBook = get(booksFamilyAtom(bookId));
-                        const newBook = { ...prevBook, description: newDescription };
+                        const newBook = {
+                                ...prevBook,
+                                description: newDescription
+                        };
                         set(updateBookAtom, newBook);
                 }
         )
+);
+
+export const cardTitleAtomAdapter = atomFamily((cardId: string) =>
+        atom(
+                (get) => {
+                        return get(cardsFamilyAtom(cardId)).cardTitle;
+                },
+                (get, set, newTitle: string) => {
+                        const prevCard = get(cardsFamilyAtom(cardId));
+                        const newCard = {
+                                ...prevCard,
+                                cardTitle: newTitle
+                        };
+                        set(updateCardAtom, newCard);
+                }
+        )
+);
+export const cardOptionTitleAtomAdapter = atomFamily((optionId: string) =>
+        atom(
+                (get) => get(optionsFamilyAtom(optionId)).optionTitle,
+                (get, set, newTitle: string) => {
+                        const prevOption = get(optionsFamilyAtom(optionId));
+                        const newOption = {
+                                ...prevOption,
+                                optionTitle: newTitle
+                        };
+                        set(updateOptionAtom, newOption);
+                }
+        )
+);
+
+export const cardOptionCorrectnessMarkerAtomAdapter = atomFamily(
+        (optionId: string) =>
+                atom(
+                        (get) => get(optionsFamilyAtom(optionId)).isCorrect,
+                        (get, set, isCorrect: boolean) => {
+                                const prevOption = get(
+                                        optionsFamilyAtom(optionId)
+                                );
+                                const newOption = {
+                                        ...prevOption,
+                                        isCorrect
+                                };
+                                set(updateOptionAtom, newOption);
+                        }
+                )
 );

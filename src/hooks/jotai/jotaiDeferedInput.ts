@@ -6,10 +6,10 @@ import { StringAtomAdapter } from '@/src/types/jotai';
 
 export default function useJotaiDeferredInput(
         atomAdapter: StringAtomAdapter,
-        bookId: string
+        itemId: string
 ) {
-        const bookAtom = useMemo(() => atomAdapter(bookId), []);
-        const [jotaiValue, setJotaiValue] = useAtom(bookAtom);
+        const itemAtom = useMemo(() => atomAdapter(itemId), []);
+        const [jotaiValue, setJotaiValue] = useAtom(itemAtom);
         const [value, setValue] = useState(() => jotaiValue);
         const deferredValue = useDeferredValue(value);
 

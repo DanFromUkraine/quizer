@@ -13,11 +13,6 @@ export function ClearButtonUI({
         classNameIcon
 }: ClearButtonUIProps) {
         return (
-                <button
-                        type='button'
-                        onClick={clear}
-                        className={clsx({ hidden: !clearable })}>
-                        <IoClose className={clsx('text-xl', classNameIcon)} />
-                </button>
+
         );
 }
