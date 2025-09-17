@@ -23,8 +23,6 @@ import { pickIds } from '@/src/utils/idb/idUtils';
 import dynamic from 'next/dynamic';
 
 export function InitAllMainDbAtoms_DO_NOT_IMPORT() {
-        console.log({ window: typeof window });
-
         const asyncMainDb = getMainDb();
         const setMainDb = useSetAtom(mainDbAtom);
         const setBooksIds = useSetAtom(booksIdsAtom);

@@ -14,8 +14,15 @@ export default function useJotaiDeferredInput(
         const deferredValue = useDeferredValue(value);
 
         useEffect(() => {
+                if (jotaiValue.length === 0 && value.length > 0) {
+                        setJotaiValue(deferredValue);
+                }
+        }, [value, jotaiValue]);
+
+        useEffect(() => {
+                if (jotaiValue.length === 0) return;
                 setJotaiValue(deferredValue);
-        }, [value]);
+        }, [deferredValue]);
 
         return [value || jotaiValue, setValue] as const;
 }

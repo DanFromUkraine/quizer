@@ -11,7 +11,6 @@ export default async function ViewSearchParams({
 }) {
         const params = await searchParams;
 
-        console.log({ params });
 
         return (
                 <main className='w-full p-8 flex flex-col gap-2 items-center'>

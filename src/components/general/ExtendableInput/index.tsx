@@ -10,7 +10,7 @@ export default function ExtendableTextArea({
                 <textarea
                         {...props}
                         className={clsx(
-                                'resize-none field-sizing-content',
+                                'resize-none field-sizing-content focus-within:outline-none',
                                 props.className
                         )}></textarea>
         );

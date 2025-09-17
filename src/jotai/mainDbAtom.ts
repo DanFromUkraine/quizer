@@ -31,12 +31,14 @@ import {
         updateCardIdb,
         updateOptionIdb
 } from '@/src/utils/idb/main/actions';
+import { ALPHABET } from '@/src/constants/indexation';
 
 export const mainDbAtom = atom<MainDb>();
 export const booksFamilyAtom = atomFamily(getAtomFactory('books'));
 export const cardsFamilyAtom = atomFamily(getAtomFactory('cards'));
 export const optionsFamilyAtom = atomFamily(getAtomFactory('options'));
 export const booksIdsAtom = atom<string[]>([]);
+export const currentBookIdAtom = atom<string>('');
 
 export const addEmptyBookAtom = getDerivedAtom(async (get, set, mainDb) => {
         const id = getUniqueID();
@@ -53,23 +55,20 @@ export const deleteBookAtom = getDerivedAtom(
 
 export const updateBookAtom = getDerivedAtom(
         async (get, set, mainDb, newBook: Book) => {
-                await mainDb.put('books', newBook).then(() => {
-                        console.log('update successful');
-                });
+                await mainDb.put('books', newBook);
                 updateBookAtomHelper(set, newBook);
         }
 );
 
-export const addEmptyCardAtom = getDerivedAtom(
-        async (get, set, mainDb, bookId: string) => {
-                const cardId = getUniqueID();
-                const newBook = getBookWithNewId(get, bookId, cardId);
-                await updateBookIdb(mainDb, newBook);
-                await addEmptyCardIdb(mainDb, cardId);
-                updateBookAtomHelper(set, newBook);
-                addEmptyCardAtomHelper(set, cardId);
-        }
-);
+export const addEmptyCardAtom = getDerivedAtom(async (get, set, mainDb) => {
+        const cardId = getUniqueID();
+        const bookId = get(currentBookIdAtom);
+        const newBook = getBookWithNewId(get, bookId, cardId);
+        await updateBookIdb(mainDb, newBook);
+        await addEmptyCardIdb(mainDb, cardId);
+        updateBookAtomHelper(set, newBook);
+        addEmptyCardAtomHelper(set, cardId);
+});
 
 export const updateCardAtom = getDerivedAtom(
         async (get, set, mainDb, newCard: Card) => {
@@ -79,8 +78,8 @@ export const updateCardAtom = getDerivedAtom(
 );
 
 export const deleteCardAtom = getDerivedAtom(
-        async (get, set, mainDb, bookId: string, cardId: string) => {
-                const newBook = getNewBookWithFilteredIds(get, bookId, cardId);
+        async (get, set, mainDb, cardId: string) => {
+                const newBook = getNewBookWithFilteredIds(get, cardId);
                 await updateBookIdb(mainDb, newBook);
                 await deleteCardIdb(mainDb, cardId);
                 updateBookAtomHelper(set, newBook);
@@ -99,7 +98,6 @@ export const addEmptyOptionAtom = getDerivedAtom(
         async (get, set, mainDb, cardId: string) => {
                 const newId = getUniqueID();
                 const newCard = getCardWithNewOptionId(get, cardId, newId);
-                console.log({newCard})
                 await updateCardIdb(mainDb, newCard);
                 await addEmptyOptionIdb(mainDb, newId);
                 updateCardAtomHelper(set, newCard);
@@ -190,3 +188,24 @@ export const cardOptionCorrectnessMarkerAtomAdapter = atomFamily(
                         }
                 )
 );
+
+export const getBookCardsAsText = atom((get) => {
+        const bookId = get(currentBookIdAtom);
+        const { cardsIds } = get(booksFamilyAtom(bookId));
+
+        return cardsIds
+                .map((cardId, cardIndex) => {
+                        const { cardTitle, optionsIds,  } = get(
+                                cardsFamilyAtom(cardId)
+                        );
+                        return `\n ${cardIndex + 1}) ${cardTitle}: ${optionsIds
+                                .map((optionId, i) => {
+                                        const { optionTitle } = get(
+                                                optionsFamilyAtom(optionId)
+                                        );
+                                        return `\n \t${ALPHABET[i]}: ${optionTitle}`;
+                                })
+                                .join('')}`;
+                })
+                .join('');
+});

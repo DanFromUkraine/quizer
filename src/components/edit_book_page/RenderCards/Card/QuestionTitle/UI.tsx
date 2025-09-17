@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { ChangeEventHandler } from 'react';
 import ExtendableTextArea from '@/src/components/general/ExtendableInput';
+import Quoted from '@/src/components/general/Quoted';
 
 export default function QuestionTitleUI({
         defaultValue,
@@ -12,8 +13,7 @@ export default function QuestionTitleUI({
         cardId: string;
 }) {
         return (
-                <div className='flex w-full gap-2 bg-gray-300 heading-3 font-medium rounded-md p-3'>
-                        <span>"</span>
+                <Quoted>
                         <ExtendableTextArea
                                 data-testid='questionTitle'
                                 defaultValue={defaultValue}
@@ -21,11 +21,9 @@ export default function QuestionTitleUI({
                                 placeholder='Enter text'
                                 onChange={onChange}
                                 className={clsx(
-                                        'focus-within:outline-none w-full'
+                                        'w-full'
                                 )}
                         />
-
-                        <span>"</span>
-                </div>
+                </Quoted>
         );
 }

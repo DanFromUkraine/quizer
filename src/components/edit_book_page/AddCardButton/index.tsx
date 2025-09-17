@@ -6,9 +6,8 @@ import { addEmptyCardAtom } from '@/src/jotai/mainDbAtom';
 import { useEditBookProps } from '@/app/edit/page';
 
 export default function AddEmptyCardButton() {
-        const { bookId } = useEditBookProps();
         const addEmptyCard = useSetAtom(addEmptyCardAtom);
-        const onButtonClick = () => addEmptyCard(bookId);
+        const onButtonClick = () => addEmptyCard();
 
         return <AddEmptyCardUI onClick={onButtonClick} />;
 }

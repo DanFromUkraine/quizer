@@ -262,8 +262,6 @@ test.describe('This tests bundle will describe collection creation process', () 
                         await expect(page).toHaveURL('/(books)');
                 });
                 await test.step('expect data to be in IndexedDB', async () => {
-                        console.log('ok 1');
-
                         const upgrade = (database: DB<MainDbSchema>) => {
                                 createObjStoreDefault<MainDbSchema>(
                                         database,

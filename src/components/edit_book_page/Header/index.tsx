@@ -2,20 +2,21 @@
 
 import useJotaiDeferredInput from '@/src/hooks/jotai/jotaiDeferedInput';
 import { useEditBookProps } from '@/app/edit/page';
-import { ChangeEventHandler } from 'react';
 import { bookTitleAtomAdapter } from '@/src/jotai/mainDbAtom';
 import HeaderUI from '@/src/components/edit_book_page/Header/UI';
+import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 
 export default function BookTitleInput() {
         const { bookId } = useEditBookProps();
-        const [value, setValue] = useJotaiDeferredInput(bookTitleAtomAdapter, bookId);
-        const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-                const val = e.target.value;
-                if (!val) return;
-                setValue(val);
-        };
+        const [value, setValue] = useJotaiDeferredInput(
+                bookTitleAtomAdapter,
+                bookId
+        );
 
         return (
-                <HeaderUI defaultValue={value} onChange={onChange}/>
+                <HeaderUI
+                        defaultValue={value}
+                        onChange={getInputChangeCallback(setValue)}
+                />
         );
 }

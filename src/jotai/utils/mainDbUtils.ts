@@ -4,6 +4,7 @@ import {
         booksFamilyAtom,
         booksIdsAtom,
         cardsFamilyAtom,
+        currentBookIdAtom,
         mainDbAtom,
         optionsFamilyAtom
 } from '@/src/jotai/mainDbAtom';
@@ -52,16 +53,13 @@ export function getBookWithUpdatedTitle(
         };
 }
 
-export function getNewBookWithFilteredIds(
-        get: Getter,
-        bookId: string,
-        idToDelete: string
-) {
+export function getNewBookWithFilteredIds(get: Getter, idToDelete: string) {
+        const bookId = get(currentBookIdAtom);
         const prevBook = get(booksFamilyAtom(bookId));
         const filteredIds = getFilteredIds(prevBook.cardsIds, idToDelete);
         return {
                 ...prevBook,
-                filteredIds
+                cardsIds: filteredIds
         };
 }
 
@@ -145,8 +143,6 @@ export function getDerivedAtom<Args extends unknown[]>(
                 async (get, set, ...args: Args) => {
                         const mainDb = get(mainDbAtom) as MainDb | undefined;
                         if (typeof mainDb === 'undefined') return;
-
-
 
                         try {
                                 await callback(get, set, mainDb, ...args);

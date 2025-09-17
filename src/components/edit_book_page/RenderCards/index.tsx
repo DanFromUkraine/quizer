@@ -19,7 +19,6 @@ export function RenderCards() {
                 measureElement: (el) => el?.getBoundingClientRect().height ?? 0
         });
 
-        console.log({ cardsIds });
 
         return (
                 <RenderCardsUI

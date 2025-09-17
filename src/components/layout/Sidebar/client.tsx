@@ -3,7 +3,6 @@
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { IconType } from 'react-icons';
-import { BiSolidAddToQueue } from 'react-icons/bi';
 import { BsFillCollectionFill } from 'react-icons/bs';
 import { FaHistory } from 'react-icons/fa';
 import { NavLinkUI } from './UI';
@@ -16,19 +15,14 @@ export type LinkType = {
 
 const NAV_LINKS: LinkType[] = [
         {
-                href: '/(books)',
+                href: '/',
                 Icon: BsFillCollectionFill,
                 text: 'Home Page'
         },
         {
-                href: '/(books)/history',
+                href: '/history',
                 Icon: FaHistory,
                 text: 'History'
-        },
-        {
-                href: '/(books)/edit',
-                Icon: BiSolidAddToQueue,
-                text: 'Add Book'
         }
 ];
 

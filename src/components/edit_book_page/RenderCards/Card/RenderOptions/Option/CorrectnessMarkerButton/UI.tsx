@@ -22,7 +22,7 @@ export default function CorrectnessMarketButtonUI({
                                 name={`option-checkbox-${optionId}`}
                                 className='absolute inset-0 opacity-0 z-20 w-full'
                                 onChange={onCheckboxClick}
-                                defaultChecked={defaultChecked}
+                                checked={defaultChecked}
                         />
                         <div>
                                 {defaultChecked ? (

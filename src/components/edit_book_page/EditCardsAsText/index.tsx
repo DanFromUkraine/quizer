@@ -5,7 +5,7 @@ import { editCardsAsTextModalVisibilityAtom } from '@/src/jotai/statusAtoms';
 import EditCardsAsTextModal from '@/src/components/edit_book_page/EditCardsAsText/Modal';
 import { useRef } from 'react';
 import clsx from 'clsx';
-import useCloseModalWhenClickOnContainer from '@/src/hooks/useCloseModalWhenClickOnContainer';
+import useCloseModalWhenClickOnContainer from '@/src/hooks/edit_book_page/useCloseModalWhenClickOnContainer';
 
 export default function EditCardsAsTextModalContainer() {
         const containerRef = useRef<HTMLDivElement>(null);

@@ -8,7 +8,6 @@ export default function RenderQuestions() {
         useInitFromHistory();
         const collection = useCollectionContextComplete();
 
-        console.log({ collection });
 
         return (
                 <div className='flex flex-col w-full items-center gap-2.5'>

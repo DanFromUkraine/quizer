@@ -10,7 +10,6 @@ export default function AddEmptyOptionButton() {
 
         const onAddOptionClick = () => {
                 addEmptyOption(cardId);
-                console.debug("click")
         };
 
         return (
