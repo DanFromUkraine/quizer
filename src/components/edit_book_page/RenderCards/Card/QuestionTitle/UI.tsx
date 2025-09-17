@@ -12,22 +12,20 @@ export default function QuestionTitleUI({
         cardId: string;
 }) {
         return (
-                <div className='container items-center'>
-                        <div className='flex gap-2 bg-gray-300 heading-3 font-medium rounded-md p-3 w-10/12'>
-                                <span>"</span>
-                                <ExtendableTextArea
-                                        data-testid='questionTitle'
-                                        defaultValue={defaultValue}
-                                        name={`card-title-${cardId}`}
-                                        placeholder='Enter text'
-                                        onChange={onChange}
-                                        className={clsx(
-                                                'focus-within:outline-none w-full'
-                                        )}
-                                />
+                <div className='flex w-full gap-2 bg-gray-300 heading-3 font-medium rounded-md p-3'>
+                        <span>"</span>
+                        <ExtendableTextArea
+                                data-testid='questionTitle'
+                                defaultValue={defaultValue}
+                                name={`card-title-${cardId}`}
+                                placeholder='Enter text'
+                                onChange={onChange}
+                                className={clsx(
+                                        'focus-within:outline-none w-full'
+                                )}
+                        />
 
-                                <span>"</span>
-                        </div>
+                        <span>"</span>
                 </div>
         );
 }

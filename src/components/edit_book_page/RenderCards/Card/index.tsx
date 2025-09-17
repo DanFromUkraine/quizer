@@ -14,13 +14,17 @@ export const { Provider: CardPropsProvider, usePropsContext: useCardProps } =
 export default function Card({ cardId }: CardProps) {
         return (
                 <CardPropsProvider cardId={cardId}>
-                        <section className='questionCard' >
+                        <section className='questionCard'>
                                 <div className='flex justify-between items-center'>
                                         <CardIndex />
                                         <DeleteCardButton />
                                 </div>
-                                <QuestionTitle />
-                                <RenderOptions />
+                                <div className='container items-center'>
+                                        <div className='w-11/12 flex flex-col gap-4'>
+                                                <QuestionTitle />
+                                                <RenderOptions />
+                                        </div>
+                                </div>
                         </section>
                 </CardPropsProvider>
         );

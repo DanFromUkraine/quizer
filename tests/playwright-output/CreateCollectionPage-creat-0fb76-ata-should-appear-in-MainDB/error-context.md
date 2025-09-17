@@ -7,18 +7,18 @@
       - img [ref=e5]
       - generic [ref=e11]:
         - link [ref=e12] [cursor=pointer]:
-          - /url: /books
+          - /url: /(books)
           - img [ref=e13] [cursor=pointer]
         - link [ref=e15] [cursor=pointer]:
-          - /url: /books/history
+          - /url: /(books)/history
           - img [ref=e16] [cursor=pointer]
         - link [ref=e18] [cursor=pointer]:
-          - /url: /books/edit
+          - /url: /(books)/edit
           - img [ref=e19] [cursor=pointer]
     - main [ref=e22]:
       - heading "Мої колекції" [level=1] [ref=e24]
       - link [ref=e27] [cursor=pointer]:
-        - /url: books/play-offline?id=
+        - /url: (books)/play-offline?id=
         - generic [ref=e29] [cursor=pointer]:
           - heading [level=3]
   - alert [ref=e30]: Мої колекції

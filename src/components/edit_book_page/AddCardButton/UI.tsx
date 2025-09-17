@@ -1,4 +1,4 @@
-import BtnWithShortcut from '@/app/lib/componentsUI/ButtonWithShortcut';
+import BtnWithShortcut from '@/src/components/general/ButtonWithShortcut';
 
 export default function AddEmptyCardUI({ onClick }: { onClick: () => void }) {
         return (

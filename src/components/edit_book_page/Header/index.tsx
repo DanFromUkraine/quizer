@@ -1,7 +1,7 @@
 'use client';
 
 import useJotaiDeferredInput from '@/src/hooks/jotai/jotaiDeferedInput';
-import { useEditBookProps } from '@/app/books/edit/page';
+import { useEditBookProps } from '@/app/edit/page';
 import { ChangeEventHandler } from 'react';
 import { bookTitleAtomAdapter } from '@/src/jotai/mainDbAtom';
 import HeaderUI from '@/src/components/edit_book_page/Header/UI';

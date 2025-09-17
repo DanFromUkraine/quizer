@@ -1,4 +1,5 @@
-import { FaCheck } from 'react-icons/fa6';
+import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
+import { IoCloseCircleOutline } from 'react-icons/io5';
 
 export default function CorrectnessMarketButtonUI({
         optionId,
@@ -12,18 +13,23 @@ export default function CorrectnessMarketButtonUI({
         defaultChecked: boolean;
 }) {
         return (
-                <label className='group/option w-full flex has-checked:bg-green-300'>
-                        <div className='relative w-8 h-full flex justify-center items-center bg-red-500 has-checked:bg-green-500 duration-150'>
+                <label className='flex has-checked:bg-green-400 relative p-2 gap-2 justify-center items-center bg-red-400  duration-150'>
+                        <div className='size-7 flex justify-center items-center p-2 rounded-full bg-white'>
                                 <span>{indexMarker}</span>
-                                <input
-                                        type='checkbox'
-                                        name={`option-checkbox-${optionId}`}
-                                        className='absolute inset-0 opacity-0 z-20 peer'
-                                        onChange={onCheckboxClick}
-                                        defaultChecked={defaultChecked}
-                                />
-
-                                <FaCheck className='hidden peer-checked:flex text-white' />
+                        </div>
+                        <input
+                                type='checkbox'
+                                name={`option-checkbox-${optionId}`}
+                                className='absolute inset-0 opacity-0 z-20 w-full'
+                                onChange={onCheckboxClick}
+                                defaultChecked={defaultChecked}
+                        />
+                        <div>
+                                {defaultChecked ? (
+                                        <IoMdCheckmarkCircleOutline className='text-4xl text-white' />
+                                ) : (
+                                        <IoCloseCircleOutline className='text-4xl text-white' />
+                                )}
                         </div>
                 </label>
         );

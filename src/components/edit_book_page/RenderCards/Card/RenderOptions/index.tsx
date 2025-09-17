@@ -1,17 +1,16 @@
-import { useAtomValue, useSetAtom } from 'jotai';
+'use client';
+
+import { useAtomValue } from 'jotai';
 import Option from './Option';
-import { addEmptyOptionAtom, cardsFamilyAtom } from '@/src/jotai/mainDbAtom';
+import { cardsFamilyAtom } from '@/src/jotai/mainDbAtom';
 import { useMemo } from 'react';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
+import AddEmptyOptionButton from '@/src/components/edit_book_page/RenderCards/Card/RenderOptions/AddEmtpyOptionButton';
 
 export default function RenderOptions() {
         const { cardId } = useCardProps();
         const cardAtom = useMemo(() => cardsFamilyAtom(cardId), []);
-        const addEmptyOption = useSetAtom(addEmptyOptionAtom);
         const { optionsIds } = useAtomValue(cardAtom);
-        const onAddOptionClick = () => {
-                addEmptyOption(cardId);
-        };
 
         return (
                 <div className='flex flex-col gap-3'>
@@ -24,12 +23,7 @@ export default function RenderOptions() {
                                         }}
                                 />
                         ))}
-                        <button
-                                type='button'
-                                data-testid='add-option-btn'
-                                onClick={onAddOptionClick}>
-                                Add option
-                        </button>
+                        <AddEmptyOptionButton />
                 </div>
         );
 }

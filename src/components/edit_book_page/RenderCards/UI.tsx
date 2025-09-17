@@ -1,6 +1,7 @@
 import { RefObject } from 'react';
 import { Virtualizer } from '@tanstack/react-virtual';
 import Card from '@/src/components/edit_book_page/RenderCards/Card';
+import AddEmptyCardButton from '@/src/components/edit_book_page/AddCardButton';
 
 export default function RenderCardsUI({
         cardsIds,
@@ -22,7 +23,6 @@ export default function RenderCardsUI({
                                                 const cardId = cardsIds[i];
                                                 return (
                                                         <Card
-
                                                                 key={
                                                                         virtualItem.key
                                                                 }
@@ -30,6 +30,7 @@ export default function RenderCardsUI({
                                                         />
                                                 );
                                         })}
+                                <AddEmptyCardButton />
                         </div>
                 </section>
         );

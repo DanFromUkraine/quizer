@@ -107,7 +107,7 @@ export function getCardWithNewOptionId(
 
         return {
                 ...prevCard,
-                optionIds: newIds
+                optionsIds: newIds
         };
 }
 

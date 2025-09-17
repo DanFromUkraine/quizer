@@ -99,10 +99,11 @@ export const addEmptyOptionAtom = getDerivedAtom(
         async (get, set, mainDb, cardId: string) => {
                 const newId = getUniqueID();
                 const newCard = getCardWithNewOptionId(get, cardId, newId);
+                console.log({newCard})
                 await updateCardIdb(mainDb, newCard);
                 await addEmptyOptionIdb(mainDb, newId);
-                addEmptyOptionAtomHelper(set, newId);
                 updateCardAtomHelper(set, newCard);
+                addEmptyOptionAtomHelper(set, newId);
         }
 );
 

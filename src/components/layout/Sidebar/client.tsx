@@ -16,17 +16,17 @@ export type LinkType = {
 
 const NAV_LINKS: LinkType[] = [
         {
-                href: '/books',
+                href: '/(books)',
                 Icon: BsFillCollectionFill,
                 text: 'Home Page'
         },
         {
-                href: '/books/history',
+                href: '/(books)/history',
                 Icon: FaHistory,
                 text: 'History'
         },
         {
-                href: '/books/edit',
+                href: '/(books)/edit',
                 Icon: BiSolidAddToQueue,
                 text: 'Add Book'
         }

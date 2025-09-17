@@ -1,11 +1,7 @@
 import clsx from 'clsx';
-import { useAtomValue } from 'jotai';
-import { statusBarColorAtom } from '@/src/jotai/statusBarColorAtom';
 
 export function ColorStatusBar() {
-        const color = useAtomValue(statusBarColorAtom);
-
-        console.log({ color });
+        const color = undefined;
 
         return (
                 <section className='border-b border-b-lightGray w-full h-32  relative'>

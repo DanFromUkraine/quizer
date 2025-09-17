@@ -9,8 +9,6 @@ export default function OptionTitleUI({
         onChange: ChangeEventHandler;
         optionId: string;
 }) {
-        console.log({ defaultValue });
-
         return (
                 <input
                         name={`option-${optionId}`}
@@ -18,7 +16,7 @@ export default function OptionTitleUI({
                         defaultValue={defaultValue}
                         onChange={onChange}
                         data-testid='optionTextField'
-                        className='w-full p-3 duration-150'
+                        className='w-full p-3 bg-gray-200 group-hover:bg-gray-300 duration-100'
                 />
         );
 }
