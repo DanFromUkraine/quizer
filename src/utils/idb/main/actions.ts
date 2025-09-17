@@ -1,0 +1,50 @@
+import { getDB } from '@/src/utils/idb/getDb';
+import { Book, Card, MainDb, MainDbSchema, Option } from '@/src/types/mainDb';
+import { DB_NAMES } from '@/src/constants/dbNames';
+import { UPGRADE_MAIN_DB } from '@/src/constants/mainDb';
+import { getCatchCallback } from '@/src/utils/errorHandling/catchCallbackEnhanced';
+import {
+        addEmptyRecord,
+        deleteRecord,
+        getAllRecordsAsync,
+        updateRecord
+} from '@/src/utils/idb/main/factories';
+
+export function getMainDb() {
+        return getDB<MainDbSchema>({
+                dbName: DB_NAMES.MAIN,
+                upgradeAction: UPGRADE_MAIN_DB
+        }).catch(
+                getCatchCallback(
+                        'Get Main db instance from IndexedDB wrapped with idb'
+                )
+        );
+}
+
+export const getAllBooksFromAsyncDb = async (asyncMainDb: Promise<MainDb>) =>
+        await getAllRecordsAsync(asyncMainDb, 'books');
+export const getAllCardsFromAsyncDb = async (asyncMainDb: Promise<MainDb>) =>
+        await getAllRecordsAsync(asyncMainDb, 'cards');
+export const getAllOptionsFromAsyncDb = async (asyncMainDb: Promise<MainDb>) =>
+        await getAllRecordsAsync(asyncMainDb, 'options');
+
+export const addEmptyBookIdb = (mainDb: MainDb, id: string) =>
+        addEmptyRecord(mainDb, 'books', id);
+export const addEmptyCardIdb = (mainDb: MainDb, id: string) =>
+        addEmptyRecord(mainDb, 'cards', id);
+export const addEmptyOptionIdb = (mainDb: MainDb, id: string) =>
+        addEmptyRecord(mainDb, 'options', id);
+
+export const updateBookIdb = (mainDb: MainDb, newRecord: Book) =>
+        updateRecord(mainDb, 'books', newRecord);
+export const updateCardIdb = (mainDb: MainDb, newRecord: Card) =>
+        updateRecord(mainDb, 'cards', newRecord);
+export const updateOptionIdb = (mainDb: MainDb, newRecord: Option) =>
+        updateRecord(mainDb, 'options', newRecord);
+
+export const deleteBookIdb = (mainDb: MainDb, id: string) =>
+        deleteRecord(mainDb, 'books', id);
+export const deleteCardIdb = (mainDb: MainDb, id: string) =>
+        deleteRecord(mainDb, 'cards', id);
+export const deleteOptionIdb = (mainDb: MainDb, id: string) =>
+        deleteRecord(mainDb, 'options', id);

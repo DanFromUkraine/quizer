@@ -15,15 +15,15 @@ import {
         getSaveCollectionButton
 } from '@/tests/end-to-end/CreateCollectionPage/utils';
 import { TEST_CARDS } from '@/tests/end-to-end/CreateCollectionPage/constants';
-import { createObjStoreDefault, getDB } from '@/app/lib/db/utils';
-import { MainPageSchema } from '@/app/lib/db/MainPageDB/types';
+import { createObjStoreDefault } from '@/app/lib/db/utils';
+import { MainDbSchema } from '@/app/lib/db/Main/types';
 import { DB } from '@/app/lib/db/types';
 
 const EXAMPLE_TEXT_VAL = 'Some example value for collection page';
 
 test.describe('This tests bundle will describe collection creation process', () => {
         test.beforeEach(async ({ page }) => {
-                await page.goto('/main/add-collection');
+                await page.goto('/(books)/edit');
         });
 
         test("When user sets collection title, it won't be erased after reload ", async ({
@@ -257,31 +257,51 @@ test.describe('This tests bundle will describe collection creation process', () 
                         await saveCollectionButton.click();
                 });
 
-                await test.step('user should appear on main page', async () => {
+                await test.step('user should appear on (books) page', async () => {
                         await page.waitForTimeout(3_000);
-                        await expect(page).toHaveURL('/main');
+                        await expect(page).toHaveURL('/(books)');
                 });
                 await test.step('expect data to be in IndexedDB', async () => {
-                        page.evaluate(async () => {
-                                const upgrade = (
-                                        database: DB<MainPageSchema>
-                                ) => {
-                                        createObjStoreDefault<MainPageSchema>(
-                                                database,
-                                                'userCollections'
-                                        );
-                                };
-                                const db = await getDB({
-                                        dbName: 'MainPageDB',
-                                        upgrade
-                                });
-                                const collectionData = await db.get(
-                                        'userCollections',
-                                        getUrlEncodedKey(EXAMPLE_TEXT_VAL)
+                        const upgrade = (database: DB<MainDbSchema>) => {
+                                createObjStoreDefault<MainDbSchema>(
+                                        database,
+                                        'userCollections'
                                 );
-                                console.log({ collectionData });
-                                expect(collectionData).toBeTruthy();
+                        };
+
+                        const collectionData = await page.evaluate(async () => {
+                                return new Promise((resolve, reject) => {
+                                        const openReq =
+                                                indexedDB.open('MainPageDB');
+                                        openReq.onerror = () =>
+                                                reject(openReq.error);
+                                        openReq.onsuccess = () => {
+                                                const db = openReq.result;
+                                                const tx = db.transaction(
+                                                        'userCollections',
+                                                        'readonly'
+                                                );
+                                                const store =
+                                                        tx.objectStore(
+                                                                'userCollections'
+                                                        );
+                                                const request = store.get(
+                                                        new URLSearchParams(
+                                                                EXAMPLE_TEXT_VAL
+                                                        ).toString()
+                                                );
+                                                request.onsuccess = () => {
+                                                        resolve(request.result);
+                                                };
+                                                request.onerror = () => {
+                                                        reject(request.error);
+                                                };
+                                        };
+                                });
                         });
+
+                        expect(collectionData).toBeTruthy();
+                        console.log('ok 5');
                 });
         });
 });

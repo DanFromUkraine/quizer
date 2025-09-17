@@ -14,6 +14,9 @@
 
     --color-darker: #7a7289;
     --color-questTextColor: #444444;
+    --color-darkBlueOne: #001D75;
+    --color-darkerBlueOne: #00185E;
+    --color-lightBlueOne: #0040FF;
 
     --color-statusBarLinearBlue: linear-gradient(
             270deg,
@@ -47,9 +50,12 @@
     }
 
     .questionCard {
-        @apply max-w-3xl flex flex-col gap-3 w-full border border-lightGray p-6 rounded-normal;
+        @apply w-10/12 flex flex-col gap-3 border border-lightGray p-6 rounded-normal;
     }
+
+
 }
+
 
 @layer utilities {
     .statusBarBlueGradient {
@@ -75,9 +81,40 @@
     }
 
     .plusesBtw p:not(:last-child)::after {
-        /* this class is used for containers and appliable, when we want to insert "+" only between elements <p> */
         content: "+";
         margin-left: 0.5em;
+    }
+
+    .mainContainer {
+        @apply w-full p-8 flex flex-col gap-5;
+    }
+
+    .container {
+        @apply w-full p-2 flex flex-col gap-3;
+    }
+
+    .h1 {
+        @apply text-5xl text-gray-950 font-bold mb-5;
+    }
+
+    .heading-2 {
+        @apply text-3xl text-gray-800 font-semibold mb-3;
+    }
+
+    .heading-3 {
+        @apply text-lg text-gray-900;
+    }
+
+    .p {
+        @apply text-sm text-gray-600 mb-3;
+    }
+
+    .span {
+        @apply text-gray-500 text-sm;
+    }
+
+    .buttonV1 {
+        @apply flex gap-1 py-4 px-12 text-white font-semibold bg-darkBlueOne w-fit rounded-sm items-center hover:bg-darkerBlueOne border-2 hover:border-lightBlueOne duration-100;
     }
 }
 
@@ -92,3 +129,4 @@
         background-position: 0% 50%;
     }
 }
+
