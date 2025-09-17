@@ -1,32 +1,38 @@
-"use client";
+'use client';
 
-import { ReactNode, useContext } from "react";
+import { ReactNode, useContext } from 'react';
 import {
-  createContextDefault,
-  createObjStoreDefault,
-  DB_NAMES,
-  ProviderDB,
-} from "../utils";
-import { MainPageSchema, MyDB } from "./types";
+        createContextDefault,
+        createObjStoreDefault,
+        DB_NAMES,
+        ProviderDB
+} from '../utils';
+import { MainPageSchema, MyDB } from './types';
 
-const DBContext = createContextDefault<MainPageSchema, undefined>();
+const DBContext = createContextDefault<MainPageSchema>();
 
 export default function MainPageDBContextProvider({
-  children,
+        children
 }: {
-  children: ReactNode;
+        children: ReactNode;
 }) {
-  const upgrade = (database: MyDB) => {
-    createObjStoreDefault<MainPageSchema>(database, "userCollections");
-  };
+        const upgrade = (database: MyDB) => {
+                createObjStoreDefault<MainPageSchema>(
+                        database,
+                        'userCollections'
+                );
+        };
 
-  return (
-    <ProviderDB<MainPageSchema>
-      {...{ dbName: DB_NAMES.MAIN_PAGE, upgrade, ContextBody: DBContext }}
-    >
-      {children}
-    </ProviderDB>
-  );
+        return (
+                <ProviderDB<MainPageSchema>
+                        {...{
+                                dbName: DB_NAMES.MAIN_PAGE,
+                                upgrade,
+                                ContextBody: DBContext
+                        }}>
+                        {children}
+                </ProviderDB>
+        );
 }
 
 export const useDB = () => useContext(DBContext);

@@ -1,21 +1,21 @@
 export default function SaveCollectionBtnUI({
-  onSaveButtonClick,
-  onMouseDown,
-  onMouseUp,
+        onSaveButtonClick,
+        onMouseDown,
+        onMouseUp
 }: {
-  onSaveButtonClick: () => void;
-  onMouseDown: () => void;
-  onMouseUp: () => void;
+        onSaveButtonClick: () => void;
+        onMouseDown: () => void;
+        onMouseUp: () => void;
 }) {
-  return (
-    <button
-      className="bg-gray-800 hover:bg-green-800 simpleButton"
-      onClick={onSaveButtonClick}
-      onMouseOver={onMouseDown}
-      onMouseLeave={onMouseUp}
-      type="button"
-    >
-      Зберегти
-    </button>
-  );
+        return (
+                <button
+                        className='bg-gray-800 hover:bg-green-800 simpleButton'
+                        onClick={onSaveButtonClick}
+                        onMouseOver={onMouseDown}
+                        onMouseLeave={onMouseUp}
+                        data-testid='save-collection-btn'
+                        type='button'>
+                        Зберегти
+                </button>
+        );
 }

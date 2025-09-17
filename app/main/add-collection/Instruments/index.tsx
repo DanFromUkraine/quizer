@@ -1,9 +1,9 @@
-import ModalAndBtnEditCards from "./ModalEditCards";
+import ModalAndBtnEditCards from './ModalEditCards';
 
 export default function Instruments() {
-  return (
-    <section className="flex w-full">
-      <ModalAndBtnEditCards />
-    </section>
-  );
+        return (
+                <section className='flex w-full'>
+                        <ModalAndBtnEditCards />
+                </section>
+        );
 }

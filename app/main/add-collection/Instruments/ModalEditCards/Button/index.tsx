@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useSetAtom } from "jotai";
-import ButtonUI from "./UI";
-import { cardsEditModalVisibilityAtom } from "@/app/lib/jotai/addCollection";
+import { useSetAtom } from 'jotai';
+import ButtonUI from './UI';
+import { cardsEditModalVisibilityAtom } from '@/app/lib/jotai/addCollection';
 
 export default function Button() {
-  const setModalVisibility = useSetAtom(cardsEditModalVisibilityAtom);
+        const setModalVisibility = useSetAtom(cardsEditModalVisibilityAtom);
 
-  const onClick = () => {
-    setModalVisibility(true);
-    console.log("click")
-  };
+        const onClick = () => {
+                setModalVisibility(true);
+                console.log('click');
+        };
 
-  return <ButtonUI onClick={onClick} />;
+        return <ButtonUI onClick={onClick} />;
 }

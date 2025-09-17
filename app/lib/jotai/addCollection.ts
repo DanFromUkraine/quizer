@@ -1,15 +1,14 @@
-"use client";
+'use client';
 
-import { atom } from "jotai";
-import { getAtomAddToArrayItem } from "./utils";
-import { MyDB } from "../db/MainPageDB/types";
+import { atom } from 'jotai';
+import { MyDB } from '../db/MainPageDB/types';
 // import { QuestionCardType } from "../db/ObservableCreateCollectionDB/types";
-import { atomWithReset, atomWithStorage } from "jotai/utils";
+import { atomWithReset, atomWithStorage } from 'jotai/utils';
 
 // Collection title:
 
 export const dbAtom = atom<MyDB | null>(null);
-export const collectionTitleAtom = atomWithReset("");
+export const collectionTitleAtom = atomWithReset('');
 
 // Question Cards:
 
@@ -44,8 +43,8 @@ export const collectionTitleAtom = atomWithReset("");
 // Modal window:
 
 export const cardsEditModalVisibilityAtom = atomWithStorage(
-  "cardsEditModalVisibility",
-  false
+        'cardsEditModalVisibility',
+        false
 );
 
-export const saveOptionSelectedAtom = atomWithStorage("optionSelected", false);
+export const saveOptionSelectedAtom = atomWithStorage('optionSelected', false);

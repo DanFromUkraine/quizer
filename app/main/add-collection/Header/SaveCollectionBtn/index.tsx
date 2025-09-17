@@ -1,21 +1,23 @@
-import { useSaveCollection } from "@/app/lib/db/ObservableCreateCollectionDB";
-import { statusBarColorAtom } from "@/app/lib/jotai/userState";
-import { useSetAtom } from "jotai";
-import SaveCollectionBtnUI from "./UI";
+import { useSaveCollection } from '@/app/lib/db/ObservableCreateCollectionDB';
+import { statusBarColorAtom } from '@/app/lib/jotai/userState';
+import { useSetAtom } from 'jotai';
+import SaveCollectionBtnUI from './UI';
 
 export default function SaveBtn() {
-  const { onSaveButtonClick } = useSaveCollection();
-  const setStatusBarColor = useSetAtom(statusBarColorAtom);
+        const { onSaveButtonClick } = useSaveCollection();
+        const setStatusBarColor = useSetAtom(statusBarColorAtom);
 
-  const onMouseDown = () => {
-    setStatusBarColor("green");
-  };
+        const onMouseDown = () => {
+                setStatusBarColor('green');
+        };
 
-  const onMouseUp = () => {
-    setStatusBarColor(undefined);
-  };
+        const onMouseUp = () => {
+                setStatusBarColor(undefined);
+        };
 
-  return (
-    <SaveCollectionBtnUI {...{ onSaveButtonClick, onMouseDown, onMouseUp }} />
-  );
+        return (
+                <SaveCollectionBtnUI
+                        {...{ onSaveButtonClick, onMouseDown, onMouseUp }}
+                />
+        );
 }

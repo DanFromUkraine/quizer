@@ -1,76 +1,79 @@
-"use client";
+'use client';
 
-import { FormProvider, useForm, UseFormReturn } from "react-hook-form";
-import CollectionTitle from "./CollectionTitle";
-import SaveBtn from "./SaveCollectionBtn";
+import { FormProvider, useForm, UseFormReturn } from 'react-hook-form';
+import CollectionTitle from './CollectionTitle';
+import SaveBtn from './SaveCollectionBtn';
 import {
-  useGetCollectionTitle,
-  useUpdatePageTitle,
-} from "@/app/lib/db/ObservableCreateCollectionDB";
-import { use, useEffect, useMemo } from "react";
+        useGetCollectionTitle,
+        useUpdatePageTitle
+} from '@/app/lib/db/ObservableCreateCollectionDB';
+import { useEffect } from 'react';
 
 type HeaderFormDataType = {
-  collectionTitle: string;
+        collectionTitle: string;
 };
 
 function useStayUpdated(
-  methods: UseFormReturn<HeaderFormDataType>,
-  loading: boolean,
-  collectionTitle: string
+        methods: UseFormReturn<HeaderFormDataType>,
+        loading: boolean,
+        collectionTitle: string
 ) {
-  const { updateTitle } = useUpdatePageTitle();
+        const { updateTitle } = useUpdatePageTitle();
 
-  const data = methods.watch();
+        const data = methods.watch();
 
-  useEffect(() => {
-    console.log({
-      dirty: methods.formState.isDirty,
-      loading,
-      collectionTitle,
-      data: data.collectionTitle,
-    });
-    if (
-      methods.formState.isDirty &&
-      !loading &&
-      collectionTitle !== data.collectionTitle
-    ) {
-      updateTitle(data.collectionTitle);
-    }
-  }, [updateTitle, loading, collectionTitle]);
+        useEffect(() => {
+                console.log({
+                        dirty: methods.formState.isDirty,
+                        loading,
+                        collectionTitle,
+                        data: data.collectionTitle
+                });
+                if (
+                        methods.formState.isDirty &&
+                        !loading &&
+                        collectionTitle !== data.collectionTitle
+                ) {
+                        updateTitle(data.collectionTitle);
+                }
+        }, [updateTitle, loading, collectionTitle]);
 }
 
 function useInitFormData(
-  methods: UseFormReturn<HeaderFormDataType, any, HeaderFormDataType>,
-  collectionTitle: string
+        methods: UseFormReturn<HeaderFormDataType, any, HeaderFormDataType>,
+        collectionTitle: string
 ) {
-  useEffect(() => {
-    if (typeof collectionTitle !== "string" || collectionTitle.length === 0)
-      return;
-    methods.reset({
-      collectionTitle,
-    });
-  }, [collectionTitle]);
+        useEffect(() => {
+                if (
+                        typeof collectionTitle !== 'string' ||
+                        collectionTitle.length === 0
+                )
+                        return;
+                methods.reset({
+                        collectionTitle
+                });
+        }, [collectionTitle]);
 }
 
 export default function Header() {
-  const { defaultCollectionTitle, loading } = useGetCollectionTitle()!;
+        const { defaultCollectionTitle, loading } = useGetCollectionTitle()!;
 
-  const methods = useForm<HeaderFormDataType>({
-    defaultValues: {
-      collectionTitle: defaultCollectionTitle,
-    },
-  });
-  useStayUpdated(methods, loading, defaultCollectionTitle);
-  useInitFormData(methods, defaultCollectionTitle);
+        const methods = useForm<HeaderFormDataType>({
+                defaultValues: {
+                        collectionTitle: defaultCollectionTitle
+                }
+        });
+        useStayUpdated(methods, loading, defaultCollectionTitle);
+        useInitFormData(methods, defaultCollectionTitle);
 
-  return (
-    <FormProvider {...methods}>
-      <form className="w-full">
-        <header className="w-full flex justify-bАetween">
-          <CollectionTitle />
-          <SaveBtn />
-        </header>
-      </form>
-    </FormProvider>
-  );
+        return (
+                <FormProvider {...methods}>
+                        <form className='w-full'>
+                                <header className='w-full flex justify-bАetween'>
+                                        <CollectionTitle />
+                                        <SaveBtn />
+                                </header>
+                        </form>
+                </FormProvider>
+        );
 }

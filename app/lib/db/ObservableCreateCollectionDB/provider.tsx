@@ -1,29 +1,16 @@
-"use client";
+'use client';
 
+import { memo, ReactNode } from 'react';
 import {
-  // Context, createContext,
-  memo,
-  ReactNode,
-  // use, useMemo
-} from "react";
-import {
-  // createContextDefault,
-  createObjectStoreEnhanced,
-  // createObjStoreDefault,
-  DB_NAMES,
-  getDB,
-  ObservableProviderDB,
-  // ProviderDB,
-} from "../utils";
-import {
-  AddCollectionPageSchema,
-  CreateCollectionDB,
-  // MyDB,
-  // ObservableCreateCollectionContext,
-} from "./types";
+        createObjectStoreEnhanced,
+        DB_NAMES,
+        getDB,
+        ObservableProviderDB
+} from '../utils';
+import { AddCollectionPageSchema, CreateCollectionDB } from './types';
 // import { Observable } from "../../utils/observableLogic";
 // import { IDBPDatabase } from "idb";
-import { ObservableCreateCollectionDBContext } from "./context";
+import { ObservableCreateCollectionDBContext } from './context';
 
 // const DBContext = createContextDefault<AddCollectionPageSchema>();
 
@@ -58,35 +45,34 @@ import { ObservableCreateCollectionDBContext } from "./context";
 // export const useDB = () => use(DBContext);
 
 export const ObservableCreateCollectioProviderDB = memo(function ({
-  children,
+        children
 }: {
-  children: ReactNode;
+        children: ReactNode;
 }) {
-  const upgradeDatabase = (database: CreateCollectionDB) => {
-    createObjectStoreEnhanced<AddCollectionPageSchema>({
-      keyPath: "id",
-      db: database,
-      storeName: "meta",
-    });
-    createObjectStoreEnhanced<AddCollectionPageSchema>({
-      keyPath: "id",
-      db: database,
-      storeName: "cards",
-      autoIncrement: true,
-    });
-  };
+        const upgradeDatabase = (database: CreateCollectionDB) => {
+                createObjectStoreEnhanced<AddCollectionPageSchema>({
+                        keyPath: 'id',
+                        db: database,
+                        storeName: 'meta'
+                });
+                createObjectStoreEnhanced<AddCollectionPageSchema>({
+                        keyPath: 'id',
+                        db: database,
+                        storeName: 'cards',
+                        autoIncrement: true
+                });
+        };
 
-  const asyncDB = getDB({
-    dbName: DB_NAMES.ADD_COLLECTION_PAGE,
-    upgrade: upgradeDatabase,
-  });
+        const asyncDB = getDB({
+                dbName: DB_NAMES.ADD_COLLECTION_PAGE,
+                upgrade: upgradeDatabase
+        });
 
-  return (
-    <ObservableProviderDB
-      Context={ObservableCreateCollectionDBContext}
-      dbPromise={asyncDB}
-    >
-      {children}
-    </ObservableProviderDB>
-  );
+        return (
+                <ObservableProviderDB
+                        Context={ObservableCreateCollectionDBContext}
+                        dbPromise={asyncDB}>
+                        {children}
+                </ObservableProviderDB>
+        );
 });

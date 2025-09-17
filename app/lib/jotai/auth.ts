@@ -1,5 +1,5 @@
-import { atomWithStorage } from "jotai/utils";
+import { atomWithStorage } from 'jotai/utils';
 
-export type Modes = "guest" | "authorized";
+export type Modes = 'guest' | 'authorized';
 
-export const authModeAtom = atomWithStorage<Modes>("mode", "guest");
+export const authModeAtom = atomWithStorage<Modes>('mode', 'guest');
