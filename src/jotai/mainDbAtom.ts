@@ -31,7 +31,6 @@ import {
         updateCardIdb,
         updateOptionIdb
 } from '@/src/utils/idb/main/actions';
-import { ALPHABET } from '@/src/constants/indexation';
 
 export const mainDbAtom = atom<MainDb>();
 export const booksFamilyAtom = atomFamily(getAtomFactory('books'));
@@ -195,15 +194,15 @@ export const getBookCardsAsText = atom((get) => {
 
         return cardsIds
                 .map((cardId, cardIndex) => {
-                        const { cardTitle, optionsIds,  } = get(
+                        const { cardTitle, optionsIds } = get(
                                 cardsFamilyAtom(cardId)
                         );
-                        return `\n ${cardIndex + 1}) ${cardTitle}: ${optionsIds
+                        return `\n&& ${cardTitle} ${optionsIds
                                 .map((optionId, i) => {
-                                        const { optionTitle } = get(
+                                        const { optionTitle, isCorrect } = get(
                                                 optionsFamilyAtom(optionId)
                                         );
-                                        return `\n \t${ALPHABET[i]}: ${optionTitle}`;
+                                        return `\n \t %% ${isCorrect ? '%correct%' : ''} ${optionTitle}`;
                                 })
                                 .join('')}`;
                 })
