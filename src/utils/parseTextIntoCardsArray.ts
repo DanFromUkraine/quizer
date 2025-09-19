@@ -1,12 +1,6 @@
-/*
-&1. Текст питання. Якийсь дуже цікавий й довгий текст для запитання карточки
-** Якийсь цікавий опис
-%A %correct% текст опції
-%B інший текст опції
-%% Опція з маркером, що буде відповідати індексу
-
-&& Питання з маркером, що буде відповідати індексу запитання
-*/
+// 'to-do' - need to add support for other formats.
+// 'to-do' - rewrite in AssemblyScript, to optimize it
+// 'to-do' - add change flag, to show renderer, if a component actually needs render.
 
 const RULES = {
         DEFAULT_QUESTION_MARKER: /&&/,
@@ -27,7 +21,7 @@ interface ExplicitOptionDataStore {
         isCorrect: boolean;
 }
 
-interface ExplicitCardDataStore {
+export interface ExplicitCardDataStore {
         cardTitle: string;
         subtitle: string | undefined;
         options: ExplicitOptionDataStore[];

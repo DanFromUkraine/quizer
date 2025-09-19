@@ -18,7 +18,7 @@
     - main [ref=e22]:
       - heading "Мої колекції" [level=1] [ref=e24]
       - link [ref=e27] [cursor=pointer]:
-        - /url: (books)/play-offline?id=
+        - /url: (books)/play?id=
         - generic [ref=e29] [cursor=pointer]:
           - heading [level=3]
   - alert [ref=e30]: Мої колекції

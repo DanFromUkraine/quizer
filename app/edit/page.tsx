@@ -8,7 +8,7 @@ import BookDescriptionInput from '@/src/components/edit_book_page/Description';
 import { RenderCards } from '@/src/components/edit_book_page/RenderCards';
 import OpenEditCardsModalButton from '@/src/components/edit_book_page/OpenEditCardsModalButton';
 import EditCardsAsTextModalContainer from '@/src/components/edit_book_page/EditCardsAsText';
-import useHydrateEditBookAtoms from '@/src/hooks/edit_book_page/useHydrateEditBookAtoms';
+import useHydrateBookIdAtom from '@/src/hooks/jotai/useHydrateBookIdAtom';
 
 type EditBookProps = {
         bookId: string;
@@ -30,7 +30,7 @@ export default function EditBookPage({
         if (typeof bookId === 'undefined')
                 throw 'bookId in searchParams is undefined';
 
-        useHydrateEditBookAtoms({ bookId });
+        useHydrateBookIdAtom({ bookId });
 
         return (
                 <EditBookPropsProvider bookId={bookId}>

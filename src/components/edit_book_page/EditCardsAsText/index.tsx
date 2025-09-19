@@ -6,6 +6,7 @@ import EditCardsAsTextModal from '@/src/components/edit_book_page/EditCardsAsTex
 import { useRef } from 'react';
 import clsx from 'clsx';
 import useCloseModalWhenClickOnContainer from '@/src/hooks/edit_book_page/useCloseModalWhenClickOnContainer';
+import useUpdateCardsFromText from '@/src/hooks/edit_book_page/useUpdateCardsFromText';
 
 export default function EditCardsAsTextModalContainer() {
         const containerRef = useRef<HTMLDivElement>(null);
@@ -13,9 +14,12 @@ export default function EditCardsAsTextModalContainer() {
                 editCardsAsTextModalVisibilityAtom
         );
 
+
         useCloseModalWhenClickOnContainer(containerRef, () =>
                 setModalVisible(false)
         );
+
+        useUpdateCardsFromText();
 
         return (
                 <section
@@ -24,7 +28,7 @@ export default function EditCardsAsTextModalContainer() {
                                 'fixed top-0 left-0 mainContainer h-screen items-center justify-center z-10 backdrop-blur-md duration-100 ':
                                         modalVisible
                         })}>
-                        <EditCardsAsTextModal />
+                        {modalVisible ? <EditCardsAsTextModal /> : <></>}
                 </section>
         );
 }

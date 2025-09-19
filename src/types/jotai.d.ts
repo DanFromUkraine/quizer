@@ -1,10 +1,11 @@
-import { Getter, WritableAtom } from 'jotai';
+import { atom, WritableAtom } from 'jotai';
 
-export type FamilyAtom<T> = (id: string) => WritableAtom<T, [T], unknown>;
+export type AtomFamily<T> = (id: string) => T;
 
 export type WithInitialValue<Value> = {
         init: Value;
 };
 
-
-export type StringAtomAdapter =  AtomFamily<string, WritableAtom<string, [newValue: string], void>>;
+export type StringAtomAdapter = AtomFamily<
+        WritableAtom<string, [newTitle: string], void>
+>;

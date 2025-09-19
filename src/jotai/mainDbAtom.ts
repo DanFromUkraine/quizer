@@ -9,10 +9,13 @@ import {
         addEmptyCardAtomHelper,
         addEmptyOptionAtomHelper,
         deleteBookAtomHelper,
+        deleteCardsOnBookDeleteAtomHelper,
+        deleteOptionsOnCardDeleteAtomHelper,
         getAtomFactory,
         getBookWithNewId,
-        getCardWithFilteredOptionsIds,
+        getCardsAsText,
         getCardWithNewOptionId,
+        getCardWithoutDeletedOptionId,
         getDerivedAtom,
         getNewBookWithFilteredIds,
         updateBookAtomHelper,
@@ -31,6 +34,7 @@ import {
         updateCardIdb,
         updateOptionIdb
 } from '@/src/utils/idb/main/actions';
+import { ExplicitCardDataStore } from '@/src/utils/parseTextIntoCardsArray';
 
 export const mainDbAtom = atom<MainDb>();
 export const booksFamilyAtom = atomFamily(getAtomFactory('books'));
@@ -48,6 +52,7 @@ export const addEmptyBookAtom = getDerivedAtom(async (get, set, mainDb) => {
 export const deleteBookAtom = getDerivedAtom(
         async (get, set, mainDb, bookId: string) => {
                 await deleteBookIdb(mainDb, bookId);
+                await deleteCardsOnBookDeleteAtomHelper(get, set, bookId);
                 deleteBookAtomHelper(set, bookId);
         }
 );
@@ -71,6 +76,8 @@ export const addEmptyCardAtom = getDerivedAtom(async (get, set, mainDb) => {
 
 export const updateCardAtom = getDerivedAtom(
         async (get, set, mainDb, newCard: Card) => {
+                console.log({ newCard });
+
                 await updateCardIdb(mainDb, newCard);
                 updateCardAtomHelper(set, newCard);
         }
@@ -82,13 +89,16 @@ export const deleteCardAtom = getDerivedAtom(
                 await updateBookIdb(mainDb, newBook);
                 await deleteCardIdb(mainDb, cardId);
                 updateBookAtomHelper(set, newBook);
+                await deleteOptionsOnCardDeleteAtomHelper(get, set, cardId);
                 cardsFamilyAtom.remove(cardId);
         }
 );
 
 export const updateOptionAtom = getDerivedAtom(
         async (get, set, mainDb, newOption: Option) => {
-                await updateOptionIdb(mainDb, newOption);
+                await updateOptionIdb(mainDb, newOption).then(() =>
+                        console.debug('success option')
+                );
                 updateOptionAtomHelper(set, newOption);
         }
 );
@@ -106,13 +116,13 @@ export const addEmptyOptionAtom = getDerivedAtom(
 
 export const deleteOptionAtom = getDerivedAtom(
         async (get, set, mainDb, cardId: string, optionId: string) => {
-                const newCard = getCardWithFilteredOptionsIds(
+                const newCard = getCardWithoutDeletedOptionId(
                         get,
                         cardId,
                         optionId
                 );
                 await deleteOptionIdb(mainDb, optionId);
-                await updateCardIdb(mainDb, newCard);
+                set(updateCardAtom, newCard);
                 optionsFamilyAtom.remove(optionId);
         }
 );
@@ -166,6 +176,11 @@ export const cardOptionTitleAtomAdapter = atomFamily((optionId: string) =>
                                 ...prevOption,
                                 optionTitle: newTitle
                         };
+
+                        console.log(
+                                'slkdjflkjsdf;lkjsdfl;kjsdflkjsd;flkjsdfl;kjsdf'
+                        );
+
                         set(updateOptionAtom, newOption);
                 }
         )
@@ -188,23 +203,39 @@ export const cardOptionCorrectnessMarkerAtomAdapter = atomFamily(
                 )
 );
 
-export const getBookCardsAsText = atom((get) => {
+export const getBookCardsAsTextAtom = atom((get) => {
         const bookId = get(currentBookIdAtom);
         const { cardsIds } = get(booksFamilyAtom(bookId));
 
-        return cardsIds
-                .map((cardId, cardIndex) => {
-                        const { cardTitle, optionsIds } = get(
-                                cardsFamilyAtom(cardId)
-                        );
-                        return `\n&& ${cardTitle} ${optionsIds
-                                .map((optionId, i) => {
-                                        const { optionTitle, isCorrect } = get(
-                                                optionsFamilyAtom(optionId)
-                                        );
-                                        return `\n \t %% ${isCorrect ? '%correct%' : ''} ${optionTitle}`;
-                                })
-                                .join('')}`;
-                })
-                .join('');
+        return getCardsAsText(cardsIds, get).join('');
 });
+
+export const cardsTextAtom = atom('');
+
+export const addNewCardWithData = atom(
+        null,
+        (get, set, newCard: ExplicitCardDataStore) => {
+                const bookId = get(currentBookIdAtom);
+                const newCardId = getUniqueID();
+                const optionsIds = newCard.options.map(() => getUniqueID());
+                const newCardData: Card = {
+                        cardTitle: newCard.cardTitle,
+                        id: newCardId,
+                        optionsIds
+                };
+                const newCardAtom = cardsFamilyAtom(newCardId);
+                set(newCardAtom, newCardData);
+                const newBook = getBookWithNewId(get, bookId, newCardId);
+                set(updateBookAtom, newBook);
+                optionsIds.forEach((newOptionId, i) => {
+                        const newOptionAtom = optionsFamilyAtom(newOptionId);
+                        const newOptionData: Option = {
+                                id: getUniqueID(),
+                                ...newCard.options[i]
+                        };
+                        set(newOptionAtom, newOptionData);
+                });
+        }
+);
+
+

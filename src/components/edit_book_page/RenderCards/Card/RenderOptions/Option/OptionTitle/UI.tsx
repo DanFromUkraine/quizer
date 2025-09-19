@@ -13,7 +13,7 @@ export default function OptionTitleUI({
                 <input
                         name={`option-${optionId}`}
                         type='text'
-                        defaultValue={defaultValue}
+                        value={defaultValue}
                         onChange={onChange}
                         data-testid='optionTextField'
                         className='w-full p-3 bg-gray-200 group-hover:bg-gray-300 duration-100'

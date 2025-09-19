@@ -16,7 +16,7 @@ export default function QuestionTitle() {
         return (
                 <QuestionTitleUI
                         cardId={cardId}
-                        defaultValue={value}
+                        value={value}
                         onChange={getInputChangeCallback(setValue)}
                 />
         );

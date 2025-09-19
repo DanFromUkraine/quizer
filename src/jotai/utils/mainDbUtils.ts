@@ -5,6 +5,8 @@ import {
         booksIdsAtom,
         cardsFamilyAtom,
         currentBookIdAtom,
+        deleteCardAtom,
+        deleteOptionAtom,
         mainDbAtom,
         optionsFamilyAtom
 } from '@/src/jotai/mainDbAtom';
@@ -41,16 +43,8 @@ export function updateBookAtomHelper(set: Setter, newBook: Book) {
         set(bookAtom, newBook);
 }
 
-export function getBookWithUpdatedTitle(
-        get: Getter,
-        id: string,
-        newTitle: string
-): Book {
-        const prevBook = get(booksFamilyAtom(id));
-        return {
-                ...prevBook,
-                bookTitle: newTitle
-        };
+export function deleteOptionAtomHelper() {
+
 }
 
 export function getNewBookWithFilteredIds(get: Getter, idToDelete: string) {
@@ -77,17 +71,6 @@ export function updateCardAtomHelper(set: Setter, newCard: Card) {
         set(cardAtom, newCard);
 }
 
-export function getCardWithUpdatedTitleHelper(
-        get: Getter,
-        id: string,
-        newTitle: string
-) {
-        const prevCard = get(cardsFamilyAtom(id));
-        return {
-                ...prevCard,
-                cardTitle: newTitle
-        };
-}
 
 export function updateOptionAtomHelper(set: Setter, newOption: Option) {
         const optionAtom = optionsFamilyAtom(newOption.id);
@@ -115,7 +98,7 @@ export function addEmptyOptionAtomHelper(set: Setter, optionId: string) {
         set(optionAtom, newOption);
 }
 
-export function getCardWithFilteredOptionsIds(
+export function getCardWithoutDeletedOptionId(
         get: Getter,
         cardId: string,
         optionId: string
@@ -151,4 +134,42 @@ export function getDerivedAtom<Args extends unknown[]>(
                         }
                 }
         ) as WritableAtom<null, Args, Promise<void> | void>;
+}
+
+export function getCardsAsText(cardsIds: string[], get: Getter) {
+        return cardsIds.map((cardId) => {
+                const { cardTitle, optionsIds } = get(cardsFamilyAtom(cardId));
+                return `\n&& ${cardTitle} ${getOptionsAsText(optionsIds, get).join('')}`;
+        });
+}
+
+export function getOptionsAsText(optionsIds: string[], get: Getter) {
+        return optionsIds.map((optionId) => {
+                const { optionTitle, isCorrect } = get(
+                        optionsFamilyAtom(optionId)
+                );
+                return `\n \t %% ${isCorrect ? '%correct%' : ''} ${optionTitle}`;
+        });
+}
+
+export async function deleteCardsOnBookDeleteAtomHelper(
+        get: Getter,
+        set: Setter,
+        bookId: string
+) {
+        const { cardsIds } = get(booksFamilyAtom(bookId));
+        for await (const cardId of cardsIds) {
+                await set(deleteCardAtom, cardId);
+        }
+}
+
+export async function deleteOptionsOnCardDeleteAtomHelper(
+        get: Getter,
+        set: Setter,
+        cardId: string
+) {
+        const { optionsIds } = get(cardsFamilyAtom(cardId));
+        for await (const optionId of optionsIds) {
+                await set(deleteOptionAtom, cardId, optionId);
+        }
 }
