@@ -212,7 +212,9 @@ export const getBookCardsAsTextAtom = atom((get) => {
 
 export const cardsTextAtom = atom('');
 
-export const addNewCardWithData = atom(
+export const newCardsIdsBorrowAtom = atom<string[]>([]);
+
+export const addNewCardViaTextAtom = atom(
         null,
         (get, set, newCard: ExplicitCardDataStore) => {
                 const bookId = get(currentBookIdAtom);
@@ -223,10 +225,18 @@ export const addNewCardWithData = atom(
                         id: newCardId,
                         optionsIds
                 };
+
+                console.debug({ newCard });
+
                 const newCardAtom = cardsFamilyAtom(newCardId);
                 set(newCardAtom, newCardData);
-                const newBook = getBookWithNewId(get, bookId, newCardId);
-                set(updateBookAtom, newBook);
+
+                const prevCardsIdsBorrow = get(newCardsIdsBorrowAtom);
+                set(newCardsIdsBorrowAtom, [...prevCardsIdsBorrow, newCardId]);
+
+                // const newBook = getBookWithNewId(get, bookId, newCardId);
+                // console.log({ newBook });
+                // set(updateBookAtom, newBook);
                 optionsIds.forEach((newOptionId, i) => {
                         const newOptionAtom = optionsFamilyAtom(newOptionId);
                         const newOptionData: Option = {
@@ -238,4 +248,103 @@ export const addNewCardWithData = atom(
         }
 );
 
+export const updateOptionViaTextAtom = atom(
+        null,
+        (
+                get,
+                set,
+                {
+                        optionId,
+                        optionTitle,
+                        isCorrect
+                }: { optionTitle: string; isCorrect: boolean; optionId: string }
+        ) => {
+                const optionAtom = optionsFamilyAtom(optionId);
+                const prevOption = get(optionAtom);
 
+                set(updateOptionAtom, {
+                        ...prevOption,
+                        optionTitle,
+                        isCorrect
+                });
+        }
+);
+
+export const updateCardViaTextAtom = atom(
+        null,
+        (get, set, newCard: ExplicitCardDataStore, cardIndex: number) => {
+                const bookId = get(currentBookIdAtom);
+                const { cardsIds } = get(booksFamilyAtom(bookId));
+                const cardAtom = cardsFamilyAtom(cardsIds[cardIndex]);
+                const prevCard = get(cardAtom);
+                const newOptionIds: string[] = [];
+
+                newCard.options.forEach(({ optionTitle, isCorrect }, i) => {
+                        const newOptionId = getUniqueID();
+                        newOptionIds.push(newOptionId);
+                        set(updateOptionViaTextAtom, {
+                                optionId: newOptionId,
+                                optionTitle,
+                                isCorrect
+                        });
+                });
+
+                set(updateCardAtom, {
+                        ...prevCard,
+                        cardTitle: newCard.cardTitle,
+                        optionsIds: [...prevCard.optionsIds, ...newOptionIds]
+                });
+        }
+);
+
+export const updateManyCardsViaTextAtom = atom(
+        null,
+        (get, set, cards: ExplicitCardDataStore[]) => {
+                const bookId = get(currentBookIdAtom);
+                const { cardsIds } = get(booksFamilyAtom(bookId));
+                const cardsToUpdate = cards.slice(0, cardsIds.length);
+
+                console.debug({ cardsToUpdate });
+
+                cardsToUpdate.forEach((card, i) => {
+                        set(updateCardViaTextAtom, card, i);
+                });
+        }
+);
+
+export const deleteManyCardsViaTextAtom = atom(
+        null,
+        (get, set, cards: ExplicitCardDataStore[]) => {
+                const bookId = get(currentBookIdAtom);
+                const { cardsIds } = get(booksFamilyAtom(bookId));
+                const cardIdsToDelete =
+                        cards.length < cardsIds.length
+                                ? cardsIds.slice(cards.length - 1)
+                                : [];
+                console.debug({ cardIdsToDelete });
+
+                cardIdsToDelete.forEach((cardId) => {
+                        set(deleteCardAtom, cardId);
+                });
+        }
+);
+
+export const addManyCardsViaTextAtom = atom(
+        null,
+        (get, set, cards: ExplicitCardDataStore[]) => {
+                const bookId = get(currentBookIdAtom);
+                const { cardsIds } = get(booksFamilyAtom(bookId));
+                const cardsToAdd = cards.slice(cardsIds.length);
+
+                cardsToAdd.forEach((card) => {
+                        set(addNewCardViaTextAtom, card);
+                });
+                const borrowedCardIds = get(newCardsIdsBorrowAtom);
+                const bookAtom = booksFamilyAtom(bookId);
+                const prevBook = get(bookAtom);
+                set(bookAtom, {
+                        ...prevBook,
+                        cardsIds: [...prevBook.cardsIds, ...borrowedCardIds]
+                });
+        }
+);
