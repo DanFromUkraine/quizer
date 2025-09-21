@@ -1,5 +1,5 @@
 import { DBSchema } from 'idb';
-import { DB } from '@/app/lib/db/types';
+import { DB } from '@/src/types/globals';
 
 export type MainDb = DB<MainDbSchema>;
 
@@ -33,14 +33,14 @@ export interface Book {
         id: string;
         bookTitle: string;
         lastChangeDate: number;
-        cardsIds: string[];
+        childrenIds: string[];
         description: string;
 }
 
 export interface Card {
         id: string;
         cardTitle: string;
-        optionsIds: string[];
+        childrenIds: string[];
 }
 
 export interface Option {

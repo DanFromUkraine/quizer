@@ -2,9 +2,9 @@
 
 import useJotaiDeferredInput from '@/src/hooks/jotai/jotaiDeferedInput';
 import { useEditBookProps } from '@/app/edit/page';
-import { bookTitleAtomAdapter } from '@/src/jotai/mainDbAtom';
 import HeaderUI from '@/src/components/edit_book_page/Header/UI';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
+import { bookTitleAtomAdapter } from '@/src/jotai/utils/mainDbAtomAdapters';
 
 export default function BookTitleInput() {
         const { bookId } = useEditBookProps();

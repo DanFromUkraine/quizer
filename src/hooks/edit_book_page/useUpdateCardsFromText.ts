@@ -7,9 +7,12 @@
 import { useAtom, useAtomValue } from 'jotai';
 import {
         addManyCardsViaTextAtom,
+        booksFamilyAtom,
         cardsTextAtom,
+        currentBookIdAtom,
         deleteManyCardsViaTextAtom,
-        updateManyCardsViaTextAtom
+        getSetterAtomManyItemsForUpdateViaText,
+        updateCardViaTextAtom
 } from '@/src/jotai/mainDbAtom';
 import { useCallback, useEffect } from 'react';
 import parseTextIntoCardsArray from '@/src/utils/parseTextIntoCardsArray';
@@ -24,8 +27,14 @@ export default function useUpdateCardsFromText() {
                 useCallback((get, set, cardsTextUpToDate: string) => {
                         const cardsArray =
                                 parseTextIntoCardsArray(cardsTextUpToDate);
+                        const bookId = get(currentBookIdAtom);
 
-                        set(updateManyCardsViaTextAtom, cardsArray);
+                        set(getSetterAtomManyItemsForUpdateViaText(), {
+                                fatherId: bookId,
+                                fatherFamily: booksFamilyAtom,
+                                items: cardsArray,
+                                updateAtom: updateCardViaTextAtom
+                        });
                         set(deleteManyCardsViaTextAtom, cardsArray);
                         set(addManyCardsViaTextAtom, cardsArray);
                 }, [])

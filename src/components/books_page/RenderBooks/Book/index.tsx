@@ -21,7 +21,7 @@ export const { Provider: BookPropsProvider, usePropsContext: useBookProps } =
         createPropsProvider<BookProps>('BookItemProps');
 
 export default function BookItem({ id }: { id: string }) {
-        const { bookTitle, lastChangeDate, cardsIds, description } =
+        const { bookTitle, lastChangeDate, childrenIds, description } =
                 useAtomValue(booksFamilyAtom(id));
 
         return (
@@ -29,7 +29,7 @@ export default function BookItem({ id }: { id: string }) {
                         {...{
                                 bookTitle,
                                 lastChangeDate,
-                                cardsLength: cardsIds.length,
+                                cardsLength: childrenIds.length,
                                 description,
                                 id
                         }}>

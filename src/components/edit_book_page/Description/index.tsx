@@ -1,8 +1,8 @@
 import useJotaiDeferredInput from '@/src/hooks/jotai/jotaiDeferedInput';
 import { useEditBookProps } from '@/app/edit/page';
-import { bookDescriptionAtomAdapter } from '@/src/jotai/mainDbAtom';
 import { ChangeEventHandler } from 'react';
 import DescriptionInputUI from '@/src/components/edit_book_page/Description/UI';
+import { bookDescriptionAtomAdapter } from '@/src/jotai/utils/mainDbAtomAdapters';
 
 export default function BookDescriptionInput() {
         const { bookId } = useEditBookProps();

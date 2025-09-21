@@ -1,6 +1,6 @@
-// 'to-do' - need to add support for other formats.
-// 'to-do' - rewrite in AssemblyScript, to optimize it
-// 'to-do' - add change flag, to show renderer, if a component actually needs render.
+// 'todo' - need to add support for other formats.
+// 'todo' - rewrite in AssemblyScript, to optimize it
+// 'todo' - add change flag, to show renderer, if a component actually needs render.
 
 const RULES = {
         DEFAULT_QUESTION_MARKER: /&&/,
@@ -16,7 +16,7 @@ const OPTION_CORRECT_MARKER = '%correct%';
 const DUMB_SEGREGATOR =
         /* used in split method. First element is empty string. Second - applied string with no changes*/ /^/;
 
-interface ExplicitOptionDataStore {
+export interface ExplicitOptionDataStore {
         optionTitle: string;
         isCorrect: boolean;
 }

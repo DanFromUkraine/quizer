@@ -6,7 +6,7 @@ function getEmptyBookTemplate(id: string): Book {
                 bookTitle: '',
                 lastChangeDate: Date.now(),
                 description: "",
-                cardsIds: []
+                childrenIds: []
         };
 }
 
@@ -14,7 +14,7 @@ function getEmptyCardTemplate(id: string): Card {
         return {
                 id,
                 cardTitle: '',
-                optionsIds: []
+                childrenIds: []
         };
 }
 
