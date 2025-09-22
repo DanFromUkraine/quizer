@@ -1,20 +1,21 @@
-import { MainDb, MainDbSchema } from '@/src/types/mainDb';
+import { MainDbGlobal, MainDbSchema } from '@/src/types/mainDbGlobal';
 import { createObjectStoreEnhanced } from '@/src/utils/idb/createStoreEnhanced';
 
-export const UPGRADE_MAIN_DB = (database: MainDb) => {
+export const UPGRADE_MAIN_DB = (database: MainDbGlobal) => {
         createObjectStoreEnhanced<MainDbSchema>({
                 db: database,
-                storeName: 'books',
-                keyPath: 'id'
+                storeName: 'books'
         });
         createObjectStoreEnhanced<MainDbSchema>({
                 db: database,
-                storeName: 'cards',
-                keyPath: 'id'
+                storeName: 'cards'
         });
         createObjectStoreEnhanced<MainDbSchema>({
                 db: database,
-                storeName: 'options',
-                keyPath: 'id'
+                storeName: 'options'
+        });
+        createObjectStoreEnhanced<MainDbSchema>({
+                db: database,
+                storeName: 'history'
         });
 };

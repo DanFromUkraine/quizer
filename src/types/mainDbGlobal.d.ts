@@ -1,7 +1,7 @@
 import { DBSchema } from 'idb';
-import { DB } from '@/app/lib/db/types';
+import { DB } from '@/src/types/globals';
 
-export type MainDb = DB<MainDbSchema>;
+export type MainDbGlobal = DB<MainDbSchema>;
 
 export interface MainDbSchema extends DBSchema {
         books: {
@@ -16,6 +16,7 @@ export interface MainDbSchema extends DBSchema {
                 key: string;
                 value: Option;
         };
+        history: {};
 }
 
 export type ObjectStores = keyof Pick<
@@ -33,18 +34,51 @@ export interface Book {
         id: string;
         bookTitle: string;
         lastChangeDate: number;
-        cardsIds: string[];
+        childrenIds: string[];
         description: string;
 }
 
 export interface Card {
         id: string;
         cardTitle: string;
-        optionsIds: string[];
+        childrenIds: string[];
 }
 
 export interface Option {
         id: string;
         isCorrect: boolean;
         optionTitle: string;
+}
+
+interface OptionTermD {
+        term: string;
+        determination: string;
+}
+
+interface OptionTypeIn {
+        term: string;
+        expectedResult: string;
+}
+
+interface FullOption {
+        title: string;
+        isCorrect: boolean;
+}
+
+interface FullCard {
+        title: string;
+        options: FullOption[];
+}
+
+interface FullBook {
+        title: string;
+        creationDate: number;
+        description: string;
+        cards: FullCard[];
+}
+
+export interface History {
+        id: string;
+        completionTimeSec: number;
+        bookData: FullBook;
 }

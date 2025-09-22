@@ -1,3 +1,9 @@
+/* 'to-do' - додати можлживість видалити карточку
+ * 'to-do' - змінити іконку для видалення
+
+*
+*  */
+
 import { createPropsProvider } from '@/src/utils/createPropsProvider';
 import CardIndex from './CardIndex';
 import DeleteCardButton from './DeleteCardButton';

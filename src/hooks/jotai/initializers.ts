@@ -1,7 +1,7 @@
 import { useAtomCallback } from 'jotai/utils';
 import { useCallback } from 'react';
 import { ObjWithId } from '@/src/types/globals';
-import { FamilyAtom } from '@/src/types/jotai';
+import { FamilyAtom } from '@/src/types/jotaiGlobal';
 
 export function useInitFamilyAtom<Item extends ObjWithId>(
         familyAtom: FamilyAtom<Item>

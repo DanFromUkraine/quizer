@@ -1,5 +1,7 @@
+"use client"
+
 import DeleteOptionButtonUI from '@/src/components/edit_book_page/RenderCards/Card/RenderOptions/Option/DeleteOptionBtn/UI';
-import { deleteOptionAtom } from '@/src/jotai/mainDbAtom';
+import { deleteOptionAtom } from '@/src/jotai/mainAtoms';
 import { useSetAtom } from 'jotai';
 import { useOptionProps } from '@/src/components/edit_book_page/RenderCards/Card/RenderOptions/Option';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';

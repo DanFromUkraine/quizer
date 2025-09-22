@@ -1,12 +1,12 @@
 import {
         Book,
         Card,
-        MainDb,
+        MainDbGlobal,
         MainDbSchema,
         ObjectStores,
         Option,
         StoreMap
-} from '@/src/types/mainDb';
+} from '@/src/types/mainDbGlobal';
 import { getCatchCallback } from '@/src/utils/errorHandling/catchCallbackEnhanced';
 import { getTemplate } from '@/src/utils/idb/main/templates';
 
@@ -19,7 +19,7 @@ function getItemTypeForLog(objectStore: keyof MainDbSchema) {
 }
 
 export async function getAllRecordsAsync<Key extends keyof StoreMap>(
-        mainDb: Promise<MainDb>,
+        mainDb: Promise<MainDbGlobal>,
         objectStore: Key
 ) {
         return (await mainDb)
@@ -32,7 +32,7 @@ export async function getAllRecordsAsync<Key extends keyof StoreMap>(
 }
 
 export function addEmptyRecord(
-        mainDb: MainDb,
+        mainDb: MainDbGlobal,
         objectStore: ObjectStores,
         id: string
 ) {
@@ -49,7 +49,7 @@ export function addEmptyRecord(
 }
 
 export function updateRecord(
-        mainDb: MainDb,
+        mainDb: MainDbGlobal,
         objectStore: ObjectStores,
         newRecord: Book | Card | Option
 ) {
@@ -64,7 +64,7 @@ export function updateRecord(
 }
 
 export function deleteRecord(
-        mainDb: MainDb,
+        mainDb: MainDbGlobal,
         objectStore: ObjectStores,
         deleteId: string
 ) {

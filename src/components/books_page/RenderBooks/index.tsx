@@ -1,7 +1,7 @@
 'use client';
 
 import { useAtomValue } from 'jotai';
-import { booksIdsAtom } from '@/src/jotai/mainDbAtom';
+import { booksIdsAtom } from '@/src/jotai/mainAtoms';
 import BookItem from '@/src/components/books_page/RenderBooks/Book';
 import { Suspense } from 'react';
 

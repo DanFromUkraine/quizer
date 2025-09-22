@@ -16,15 +16,15 @@ import {
         booksFamilyAtom,
         booksIdsAtom,
         cardsFamilyAtom,
-        mainDbAtom,
+        mainAtoms,
         optionsFamilyAtom
-} from '@/src/jotai/mainDbAtom';
+} from '@/src/jotai/mainAtoms';
 import { pickIds } from '@/src/utils/idb/idUtils';
 import dynamic from 'next/dynamic';
 
 export function InitAllMainDbAtoms_DO_NOT_IMPORT() {
         const asyncMainDb = getMainDb();
-        const setMainDb = useSetAtom(mainDbAtom);
+        const setMainDb = useSetAtom(mainAtoms);
         const setBooksIds = useSetAtom(booksIdsAtom);
         const initBooksFamilyAtom = useInitFamilyAtom(booksFamilyAtom);
         const initCardsFamilyAtom = useInitFamilyAtom(cardsFamilyAtom);

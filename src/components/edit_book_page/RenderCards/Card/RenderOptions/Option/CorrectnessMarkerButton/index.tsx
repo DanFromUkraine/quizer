@@ -3,8 +3,8 @@
 import CorrectnessMarketButtonUI from '@/src/components/edit_book_page/RenderCards/Card/RenderOptions/Option/CorrectnessMarkerButton/UI';
 import { useOptionProps } from '@/src/components/edit_book_page/RenderCards/Card/RenderOptions/Option';
 import { ALPHABET } from '@/src/constants/indexation';
-import { cardOptionCorrectnessMarkerAtomAdapter } from '@/src/jotai/mainDbAtom';
 import { useAtom } from 'jotai';
+import { cardOptionCorrectnessMarkerAtomAdapter } from '@/src/utils/jotai/mainDbAtomAdapters';
 
 export default function CorrectnessMarketButton() {
         const { optionId, optionIndex } = useOptionProps();

@@ -4,11 +4,11 @@ import ExtendableTextArea from '@/src/components/general/ExtendableInput';
 import Quoted from '@/src/components/general/Quoted';
 
 export default function QuestionTitleUI({
-        defaultValue,
+                                                value,
         onChange,
         cardId
 }: {
-        defaultValue: string;
+        value: string;
         onChange: ChangeEventHandler;
         cardId: string;
 }) {
@@ -16,7 +16,7 @@ export default function QuestionTitleUI({
                 <Quoted>
                         <ExtendableTextArea
                                 data-testid='questionTitle'
-                                defaultValue={defaultValue}
+                                value={value}
                                 name={`card-title-${cardId}`}
                                 placeholder='Enter text'
                                 onChange={onChange}
