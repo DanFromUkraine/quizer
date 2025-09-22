@@ -10,7 +10,10 @@ import {
         getListWithIdsForDelete
 } from '@/src/utils/getLists';
 import waitForAsyncList from '@/src/utils/waitForAsyncList';
-import { addIdToBankFamilyAtom } from '@/src/utils/jotai/idsBank';
+import {
+        addIdToAddToBankAtom,
+        addIdToRemoveToBankAtom
+} from '@/src/utils/jotai/idsBank';
 import getUniqueID from '@/src/utils/getUniqueID';
 
 export const getSetterAtomManyItemsForUpdateViaText = <Item>() =>
@@ -39,6 +42,8 @@ export const getSetterAtomManyItemsForUpdateViaText = <Item>() =>
                                 childrenIds
                         );
 
+                        console.debug({itemsToUpdate})
+
                         itemsToUpdate.forEach((item, i) => {
                                 set(updateActionAtom, item, childrenIds[i]);
                         });
@@ -64,10 +69,15 @@ export const getSetterAtomManyItemsForDeletionViaText = <Item>() =>
                                 childrenIds
                         );
 
+                        console.debug(`Delete data:
+                        
+                        `, { itemIdsToDelete, items, childrenIds });
+
                         await waitForAsyncList(
                                 itemIdsToDelete.map((itemId) => {
                                         set(
-                                                addIdToBankFamilyAtom(fatherId),
+                                                addIdToRemoveToBankAtom,
+                                                fatherId,
                                                 itemId
                                         );
                                         return Promise.resolve(
@@ -93,18 +103,19 @@ export const getSetterAtomManyItemsForInsertionViaText = <Item>() =>
                 ) => {
                         const { childrenIds } = get(fatherFamily(fatherId));
 
-                        const itemsToAssert = getListForAssert(
+                        const itemsToInsert = getListForAssert(
                                 items,
                                 childrenIds
                         );
 
-                        console.debug({items, itemsToAssert})
+                        console.debug({ items, itemsToAssert: itemsToInsert });
 
                         await waitForAsyncList(
-                                itemsToAssert.map((item) => {
+                                itemsToInsert.map((item) => {
                                         const newItemId = getUniqueID();
                                         set(
-                                                addIdToBankFamilyAtom(fatherId),
+                                                addIdToAddToBankAtom,
+                                                fatherId,
                                                 newItemId
                                         );
 

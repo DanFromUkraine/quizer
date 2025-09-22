@@ -16,6 +16,7 @@ export interface MainDbSchema extends DBSchema {
                 key: string;
                 value: Option;
         };
+        history: {};
 }
 
 export type ObjectStores = keyof Pick<
@@ -47,4 +48,37 @@ export interface Option {
         id: string;
         isCorrect: boolean;
         optionTitle: string;
+}
+
+interface OptionTermD {
+        term: string;
+        determination: string;
+}
+
+interface OptionTypeIn {
+        term: string;
+        expectedResult: string;
+}
+
+interface FullOption {
+        title: string;
+        isCorrect: boolean;
+}
+
+interface FullCard {
+        title: string;
+        options: FullOption[];
+}
+
+interface FullBook {
+        title: string;
+        creationDate: number;
+        description: string;
+        cards: FullCard[];
+}
+
+export interface History {
+        id: string;
+        completionTimeSec: number;
+        bookData: FullBook;
 }

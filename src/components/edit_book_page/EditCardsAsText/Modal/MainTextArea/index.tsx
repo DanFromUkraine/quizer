@@ -3,7 +3,7 @@
 import ExtendableTextArea from '@/src/components/general/ExtendableInput';
 import Quoted from '@/src/components/general/Quoted';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { cardsTextAtom, getBookCardsAsTextAtom } from '@/src/jotai/mainDbAtom';
+import { cardsTextAtom, getBookCardsAsTextAtom } from '@/src/jotai/mainAtoms';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import { ChangeEventHandler } from 'react';
 
@@ -15,10 +15,10 @@ export default function MainTextArea() {
         }) as unknown as ChangeEventHandler<HTMLTextAreaElement>;
 
         return (
-                <Quoted>
+                <Quoted className='h-full'>
                         <ExtendableTextArea
                                 name='cards text input'
-                                className='w-full'
+                                className='w-full h-full overflow-hidden'
                                 defaultValue={defaultText}
                                 onChange={onChange}
                         />

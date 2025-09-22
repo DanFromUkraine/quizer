@@ -7,9 +7,9 @@ import {
         currentBookIdAtom,
         deleteCardAtom,
         deleteOptionAtom,
-        mainDbAtom,
+        mainAtoms,
         optionsFamilyAtom
-} from '@/src/jotai/mainDbAtom';
+} from '@/src/jotai/mainAtoms';
 import { getFilteredIds } from '@/src/utils/idb/idUtils';
 import { getTemplate } from '@/src/utils/idb/main/templates';
 
@@ -128,7 +128,7 @@ export function getDerivedAtom<Args extends unknown[]>(
         return atom<null, Args, Promise<void>>(
                 null,
                 async (get, set, ...args: Args) => {
-                        const mainDb = get(mainDbAtom) as MainDbGlobal | undefined;
+                        const mainDb = get(mainAtoms) as MainDbGlobal | undefined;
                         if (typeof mainDb === 'undefined') return;
 
                         try {

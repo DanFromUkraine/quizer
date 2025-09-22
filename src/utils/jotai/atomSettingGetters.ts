@@ -7,11 +7,11 @@ import {
         addNewOptionViaTextAtom,
         booksFamilyAtom,
         cardsFamilyAtom,
-        deleteCardAtom,
+        deleteCardViaTextAtom,
         deleteOptionViaTextAtom,
         updateCardViaTextAtom,
         updateOptionViaTextAtom
-} from '@/src/jotai/mainDbAtom';
+} from '@/src/jotai/mainAtoms';
 import {
         FatherFamilyAtom,
         SetterAtomForDeleteViaTextProps,
@@ -54,7 +54,7 @@ export const getSettingsForDeleteCard = ({
 }): SetterAtomForDeleteViaTextProps<ExplicitCardDataStore> => ({
         fatherId: bookId,
         fatherFamily: booksFamilyAtom as FatherFamilyAtom,
-        deleteActionAtom: deleteCardAtom,
+        deleteActionAtom: deleteCardViaTextAtom,
         items: cardsArray
 });
 
@@ -64,7 +64,7 @@ export const getSettingsForInsertOptions = ({
 }: {
         cardId: string;
         options: ExplicitOptionDataStore[];
-}) => ({
+}): SetterAtomForInsertionViaTextProps<ExplicitOptionDataStore> => ({
         fatherId: cardId,
         fatherFamily: cardsFamilyAtom as FatherFamilyAtom,
         insertActionAtom: addNewOptionViaTextAtom,
@@ -90,7 +90,7 @@ export const getSettingsForUpdateOptions = ({
 }: {
         cardId: string;
         options: ExplicitOptionDataStore[];
-}) => ({
+}): SetterAtomForUpdateViaTextProps<ExplicitOptionDataStore> => ({
         fatherId: cardId,
         fatherFamily: cardsFamilyAtom as FatherFamilyAtom,
         updateActionAtom: updateOptionViaTextAtom,

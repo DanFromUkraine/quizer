@@ -1,7 +1,7 @@
 'use client';
 
 import { useHydrateAtoms } from 'jotai/utils';
-import { currentBookIdAtom } from '@/src/jotai/mainDbAtom';
+import { currentBookIdAtom } from '@/src/jotai/mainAtoms';
 
 export default function useHydrateBookIdAtom({
         bookId

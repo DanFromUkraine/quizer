@@ -1,7 +1,7 @@
 'use client';
 
 import { useAtomValue } from 'jotai';
-import { booksFamilyAtom } from '@/src/jotai/mainDbAtom';
+import { booksFamilyAtom } from '@/src/jotai/mainAtoms';
 import BookTitle from '@/src/components/books_page/RenderBooks/Book/BookTitle';
 import BookDescription from '@/src/components/books_page/RenderBooks/Book/Description';
 import OtherInfo from '@/src/components/books_page/RenderBooks/Book/OtherInfo';

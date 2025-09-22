@@ -10,7 +10,7 @@ import {
         cardsTextAtom,
         currentBookIdAtom,
         updateBookAtom
-} from '@/src/jotai/mainDbAtom';
+} from '@/src/jotai/mainAtoms';
 import { useCallback, useEffect } from 'react';
 import parseTextIntoCardsArray, {
         ExplicitCardDataStore
@@ -27,8 +27,11 @@ import {
         getSettingsForInsertCard,
         getSettingsForUpdateCard
 } from '@/src/utils/jotai/atomSettingGetters';
-import { withdrawAllIdsFromBankFamilyAtom } from '@/src/utils/jotai/idsBank';
-import { getListWithSuchIds } from '@/src/utils/getLists';
+import { fatherUpdateLogicAtom } from '@/src/utils/jotai/fatherUpdateLogic';
+import {
+        FatherFamilyAtom,
+        FatherUpdateActionAtom
+} from '@/src/types/jotai/cardsTextParserFactories';
 
 export default function useUpdateCardsFromText() {
         const [cardsText, setCardsText] = useAtom(cardsTextAtom);
@@ -39,6 +42,13 @@ export default function useUpdateCardsFromText() {
                         const cardsArray =
                                 parseTextIntoCardsArray(cardsTextUpToDate);
                         const bookId = get(currentBookIdAtom);
+
+                        console.debug(
+                                `cards array:
+                        
+                        `,
+                                { cardsArray }
+                        );
 
                         set(
                                 getSetterAtomManyItemsForUpdateViaText<ExplicitCardDataStore>(),
@@ -54,19 +64,13 @@ export default function useUpdateCardsFromText() {
                                 getSettingsForDeleteCard({ bookId, cardsArray })
                         );
 
-                        const prevBook = get(booksFamilyAtom(bookId));
-                        const borrowedIds = get(
-                                withdrawAllIdsFromBankFamilyAtom(bookId)
-                        );
-                        const newBookIds = getListWithSuchIds(
-                                prevBook.childrenIds,
-                                borrowedIds
-                        );
-                        const newBook = {
-                                ...prevBook,
-                                childrenIds: newBookIds
-                        };
-                        set(updateBookAtom, newBook);
+                        set(fatherUpdateLogicAtom, {
+                                fatherId: bookId,
+                                fatherFamily:
+                                        booksFamilyAtom as FatherFamilyAtom,
+                                updateFatherAtom:
+                                        updateBookAtom as FatherUpdateActionAtom,
+                        });
                 }, [])
         );
 

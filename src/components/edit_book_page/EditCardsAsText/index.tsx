@@ -25,7 +25,7 @@ export default function EditCardsAsTextModalContainer() {
                 <section
                         ref={containerRef}
                         className={clsx(' hidden', {
-                                'fixed top-0 left-0 mainContainer h-screen items-center justify-center z-10 backdrop-blur-md duration-100 ':
+                                'fixed top-0 left-0 mainContainer h-screen justify-center z-10 backdrop-blur-md duration-100 ':
                                         modalVisible
                         })}>
                         {modalVisible ? <EditCardsAsTextModal /> : <></>}

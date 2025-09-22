@@ -5,7 +5,7 @@ import {
         updateBookAtom,
         updateCardAtom,
         updateOptionAtom
-} from '@/src/jotai/mainDbAtom';
+} from '@/src/jotai/mainAtoms';
 import { atom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
 

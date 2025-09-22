@@ -4,7 +4,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { useMemo, useRef } from 'react';
 import RenderCardsUI from './UI';
 import { useEditBookProps } from '@/app/edit/page';
-import { booksFamilyAtom } from '@/src/jotai/mainDbAtom';
+import { booksFamilyAtom } from '@/src/jotai/mainAtoms';
 import { useAtomValue } from 'jotai';
 
 export function RenderCards() {

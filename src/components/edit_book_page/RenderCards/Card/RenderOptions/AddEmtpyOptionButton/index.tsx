@@ -1,6 +1,6 @@
 'use client';
 
-import { addEmptyOptionAtom } from '@/src/jotai/mainDbAtom';
+import { addEmptyOptionAtom } from '@/src/jotai/mainAtoms';
 import { useSetAtom } from 'jotai';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
 

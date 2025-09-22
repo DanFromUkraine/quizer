@@ -2,7 +2,7 @@
 
 import { useAtomValue } from 'jotai';
 import Option from './Option';
-import { cardsFamilyAtom } from '@/src/jotai/mainDbAtom';
+import { cardsFamilyAtom } from '@/src/jotai/mainAtoms';
 import { useMemo } from 'react';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
 import AddEmptyOptionButton from '@/src/components/edit_book_page/RenderCards/Card/RenderOptions/AddEmtpyOptionButton';

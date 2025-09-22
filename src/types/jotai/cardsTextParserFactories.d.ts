@@ -1,8 +1,12 @@
 import { AtomFamily } from '@/src/types/jotaiGlobal';
-import {StoreMap } from '@/src/types/mainDbGlobal';
+import { StoreMap } from '@/src/types/mainDbGlobal';
 import { type WritableAtom } from 'jotai';
 
+// AtomFamily<string, WritableAtom<Book, [Book], unknown>>
+//
+
 export type FatherFamilyAtom = AtomFamily<
+        string,
         WritableAtom<
                 StoreMap['cards' | 'books'],
                 [StoreMap['cards' | 'books']],
@@ -18,7 +22,7 @@ export type WithIdAndChildrenId = {
 export type FatherUpdateActionAtom = WritableAtom<
         null,
         [WithIdAndChildrenId],
-        void
+        Promise<void>
 >;
 
 export interface SetterAtomForViaTextProps<Item> {
@@ -26,8 +30,6 @@ export interface SetterAtomForViaTextProps<Item> {
         items: Item[];
         fatherFamily: FatherFamilyAtom;
 }
-
-
 
 export interface SetterAtomForUpdateViaTextProps<Item>
         extends SetterAtomForViaTextProps<Item> {
@@ -57,5 +59,3 @@ export interface SetterAtomForInsertionViaTextProps<Item>
         extends SetterAtomForViaTextProps<Item> {
         insertActionAtom: InsertActionAtom<Item>;
 }
-
-

@@ -2,7 +2,7 @@
 
 import { useSetAtom } from 'jotai';
 import AddEmptyCardUI from './UI';
-import { addEmptyCardAtom } from '@/src/jotai/mainDbAtom';
+import { addEmptyCardAtom } from '@/src/jotai/mainAtoms';
 import { useEditBookProps } from '@/app/edit/page';
 
 export default function AddEmptyCardButton() {

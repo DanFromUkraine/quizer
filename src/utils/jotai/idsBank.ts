@@ -1,20 +1,34 @@
-import { atom } from 'jotai';
+import { atom, PrimitiveAtom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
+import { AtomFamily, WithInitialValue } from '@/src/types/jotaiGlobal';
 
+const newIdsBankFamilyAtom = atomFamily(() => atom<string[]>([]));
+const deleteIdsBankFamilyAtom = atomFamily(() => atom<string[]>([]));
 
-const idsBankFamilyAtom = atomFamily((id: string) => atom<string[]>([]));
-export const addIdToBankFamilyAtom = atomFamily((id: string) =>
-        atom(null, (get, set, newId: string) => {
-                const bankCellAtom = idsBankFamilyAtom(id);
+type Bank = AtomFamily<
+        unknown,
+        PrimitiveAtom<string[]> & WithInitialValue<string[]>
+>;
+
+const getAddSetter = (bankFamilyAtom: Bank) =>
+        atom(null, (get, set, bankCellId: string, newId: string) => {
+                const bankCellAtom = bankFamilyAtom(bankCellId);
                 const prevIds = get(bankCellAtom);
                 set(bankCellAtom, [...prevIds, newId]);
-        })
-);
-export const withdrawAllIdsFromBankFamilyAtom = atomFamily((id: string) =>
+        });
+
+const getWithdrawSetter = (bankFamilyAtom: Bank, bankCellId: string) =>
         atom((get) => {
-                const bankCell = idsBankFamilyAtom(id);
+                const bankCell = bankFamilyAtom(bankCellId);
                 const allIds = get(bankCell);
-                idsBankFamilyAtom.remove(id);
+                bankFamilyAtom.remove(bankCellId);
                 return allIds;
-        })
-);
+        });
+
+export const addIdToAddToBankAtom = getAddSetter(newIdsBankFamilyAtom);
+export const withdrawAllIdsToAddFromBankAtom = (bankCellId: string) =>
+        getWithdrawSetter(newIdsBankFamilyAtom, bankCellId);
+
+export const addIdToRemoveToBankAtom = getAddSetter(deleteIdsBankFamilyAtom);
+export const withdrawAllIdsToRemoveFromBankAtom = (bankCellId: string) =>
+        getWithdrawSetter(deleteIdsBankFamilyAtom, bankCellId);

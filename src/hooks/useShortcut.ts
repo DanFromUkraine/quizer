@@ -3,7 +3,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useSetAtom } from 'jotai';
-import { addEmptyCardAtom } from '@/src/jotai/mainDbAtom';
+import { addEmptyCardAtom } from '@/src/jotai/mainAtoms';
 
 export function useAddCardOnShortcut() {
         const addEmptyCard = useSetAtom(addEmptyCardAtom);

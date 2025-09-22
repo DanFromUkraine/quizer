@@ -1,6 +1,14 @@
 // 'todo' - when everything will be ready, I need to create more factories, to shorten amount of code
 // 'todo' - need to create adequate way to manage delete/add id lists. Because 30 async overwrites of db in a row with difference in 1 item ain't so good rn
 
+/*
+
+        now only few problems:
+        1. For some reason if erase all the text, all the elements except the last one stay, until page is not reloaded.
+        2.
+
+ */
+
 'use client';
 
 import { atom } from 'jotai';
@@ -41,8 +49,7 @@ import {
         ExplicitCardDataStore,
         ExplicitOptionDataStore
 } from '@/src/utils/parseTextIntoCardsArray';
-import { withdrawAllIdsFromBankFamilyAtom } from '@/src/utils/jotai/idsBank';
-import { getListWithSuchIds } from '@/src/utils/getLists';
+import { withdrawAllIdsToAddFromBankAtom } from '@/src/utils/jotai/idsBank';
 import {
         getSetterAtomManyItemsForDeletionViaText,
         getSetterAtomManyItemsForInsertionViaText,
@@ -53,8 +60,13 @@ import {
         getSettingsForInsertOptions,
         getSettingsForUpdateOptions
 } from '@/src/utils/jotai/atomSettingGetters';
+import { fatherUpdateLogicAtom } from '@/src/utils/jotai/fatherUpdateLogic';
+import {
+        FatherFamilyAtom,
+        FatherUpdateActionAtom
+} from '@/src/types/jotai/cardsTextParserFactories';
 
-export const mainDbAtom = atom<MainDbGlobal>();
+export const mainAtoms = atom<MainDbGlobal>();
 export const booksFamilyAtom = atomFamily(getAtomFactory('books'));
 export const cardsFamilyAtom = atomFamily(getAtomFactory('cards'));
 export const optionsFamilyAtom = atomFamily(getAtomFactory('options'));
@@ -205,7 +217,7 @@ export const addNewCardViaTextAtom = atom(
                         getSettingsForInsertOptions({ cardId, options })
                 );
 
-                const newIds = get(withdrawAllIdsFromBankFamilyAtom(cardId));
+                const newIds = get(withdrawAllIdsToAddFromBankAtom(cardId));
                 const newCard: Card = {
                         cardTitle,
                         id: cardId,
@@ -225,7 +237,6 @@ export const updateCardViaTextAtom = atom(
                 cardId: string
         ) => {
                 const cardAtom = cardsFamilyAtom(cardId);
-                const prevCard = get(cardAtom);
 
                 set(
                         getSetterAtomManyItemsForInsertionViaText<ExplicitOptionDataStore>(),
@@ -240,15 +251,21 @@ export const updateCardViaTextAtom = atom(
                         getSettingsForDeleteOptions({ cardId, options })
                 );
 
-                const newIds = get(withdrawAllIdsFromBankFamilyAtom(cardId));
-                const newCard = {
-                        ...prevCard,
-                        cardTitle,
-                        childrenIds: getListWithSuchIds(
-                                prevCard.childrenIds,
-                                newIds
-                        )
-                };
-                return set(updateCardAtom, newCard) as Promise<void>;
+                set(fatherUpdateLogicAtom, {
+                        fatherId: cardId,
+                        fatherFamily: cardsFamilyAtom as FatherFamilyAtom,
+                        updateFatherAtom:
+                                updateCardAtom as FatherUpdateActionAtom,
+                        otherData: {
+                                cardTitle
+                        }
+                });
+        }
+);
+
+export const deleteCardViaTextAtom = getDerivedAtom(
+        async (_get, _set, mainDb, cardId: string) => {
+                await deleteCardIdb(mainDb, cardId);
+                cardsFamilyAtom.remove(cardId);
         }
 );
