@@ -15,7 +15,7 @@ import {
         getSaveCollectionButton
 } from '@/tests/end-to-end/CreateCollectionPage/utils';
 import { TEST_CARDS } from '@/tests/end-to-end/CreateCollectionPage/constants';
-import { createObjStoreDefault } from '@/app/lib/db/utils';
+import { createObjStoreDefault } from '@/app/lib/db/jotai';
 import { MainDbSchema } from '@/app/lib/db/Main/types';
 import { DB } from '@/app/lib/db/types';
 

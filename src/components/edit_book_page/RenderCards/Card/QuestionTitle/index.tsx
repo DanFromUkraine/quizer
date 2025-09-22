@@ -4,7 +4,7 @@ import QuestionTitleUI from './UI';
 import useJotaiDeferredInput from '@/src/hooks/jotai/jotaiDeferedInput';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
-import { cardTitleAtomAdapter } from '@/src/jotai/utils/mainDbAtomAdapters';
+import { cardTitleAtomAdapter } from '@/src/utils/jotai/mainDbAtomAdapters';
 
 export default function QuestionTitle() {
         const { cardId } = useCardProps();

@@ -1,4 +1,4 @@
-import { Book, Card, ObjectStores, Option } from '@/src/types/mainDb';
+import { Book, Card, ObjectStores, Option } from '@/src/types/mainDbGlobal';
 
 function getEmptyBookTemplate(id: string): Book {
         return {

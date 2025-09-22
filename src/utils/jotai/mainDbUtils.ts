@@ -1,5 +1,5 @@
 import { atom, Getter, Setter, WritableAtom } from 'jotai';
-import { Book, Card, MainDb, Option, StoreMap } from '@/src/types/mainDb';
+import { Book, Card, MainDbGlobal, Option, StoreMap } from '@/src/types/mainDbGlobal';
 import {
         booksFamilyAtom,
         booksIdsAtom,
@@ -121,23 +121,23 @@ export function getDerivedAtom<Args extends unknown[]>(
         callback: (
                 get: Getter,
                 set: Setter,
-                mainDb: MainDb,
+                mainDb: MainDbGlobal,
                 ...args: Args
-        ) => Promise<void> | void
-): WritableAtom<null, Args, Promise<void> | void> {
-        return atom<null, Args, Promise<void> | void>(
+        ) => Promise<void>
+): WritableAtom<null, Args, Promise<void>> {
+        return atom<null, Args, Promise<void>>(
                 null,
                 async (get, set, ...args: Args) => {
-                        const mainDb = get(mainDbAtom) as MainDb | undefined;
+                        const mainDb = get(mainDbAtom) as MainDbGlobal | undefined;
                         if (typeof mainDb === 'undefined') return;
 
                         try {
                                 await callback(get, set, mainDb, ...args);
                         } catch (e) {
-                                console.error(e);
+                                return await Promise.reject(e);
                         }
                 }
-        ) as WritableAtom<null, Args, Promise<void> | void>;
+        ) as WritableAtom<null, Args, Promise<void>>;
 }
 
 export function getCardsAsText(cardsIds: string[], get: Getter) {

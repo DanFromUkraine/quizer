@@ -3,10 +3,10 @@
 
 'use client';
 
-import { atom, WritableAtom } from 'jotai';
+import { atom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
 
-import { Book, Card, MainDb, Option, StoreMap } from '@/src/types/mainDb';
+import { Book, Card, MainDbGlobal, Option } from '@/src/types/mainDbGlobal';
 import {
         addEmptyBookAtomHelper,
         addEmptyCardAtomHelper,
@@ -24,7 +24,7 @@ import {
         updateBookAtomHelper,
         updateCardAtomHelper,
         updateOptionAtomHelper
-} from '@/src/jotai/utils/mainDbUtils';
+} from '@/src/utils/jotai/mainDbUtils';
 import getUniqueID from '@/src/utils/getUniqueID';
 import {
         addEmptyBookIdb,
@@ -41,28 +41,27 @@ import {
         ExplicitCardDataStore,
         ExplicitOptionDataStore
 } from '@/src/utils/parseTextIntoCardsArray';
+import { withdrawAllIdsFromBankFamilyAtom } from '@/src/utils/jotai/idsBank';
+import { getListWithSuchIds } from '@/src/utils/getLists';
 import {
-        addIdToBankFamilyAtom,
-        withdrawAllIdsFromBankFamilyAtom
-} from '@/src/jotai/utils/idsBank';
-import { AtomFamily } from '@/src/types/jotai';
+        getSetterAtomManyItemsForDeletionViaText,
+        getSetterAtomManyItemsForInsertionViaText,
+        getSetterAtomManyItemsForUpdateViaText
+} from '@/src/utils/jotai/cardsTextParserFactories';
 import {
-        getListForAssert,
-        getListForUpdate,
-        getListWhereNoSuchIds,
-        getListWithIdsForDelete,
-        getListWithSuchIds
-} from '@/src/utils/getLists';
-import waitForAsyncList from '@/src/utils/waitForAsyncList';
+        getSettingsForDeleteOptions,
+        getSettingsForInsertOptions,
+        getSettingsForUpdateOptions
+} from '@/src/utils/jotai/atomSettingGetters';
 
-export const mainDbAtom = atom<MainDb>();
+export const mainDbAtom = atom<MainDbGlobal>();
 export const booksFamilyAtom = atomFamily(getAtomFactory('books'));
 export const cardsFamilyAtom = atomFamily(getAtomFactory('cards'));
 export const optionsFamilyAtom = atomFamily(getAtomFactory('options'));
 export const booksIdsAtom = atom<string[]>([]);
 export const currentBookIdAtom = atom<string>('');
 
-export const addEmptyBookAtom = getDerivedAtom(async (get, set, mainDb) => {
+export const addEmptyBookAtom = getDerivedAtom(async (_get, set, mainDb) => {
         const id = getUniqueID();
         await addEmptyBookIdb(mainDb, id);
         addEmptyBookAtomHelper(set, id);
@@ -77,7 +76,7 @@ export const deleteBookAtom = getDerivedAtom(
 );
 
 export const updateBookAtom = getDerivedAtom(
-        async (get, set, mainDb, newBook: Book) => {
+        async (_get, set, mainDb, newBook: Book) => {
                 console.debug({ bookUpdate: newBook });
                 await mainDb.put('books', newBook);
                 updateBookAtomHelper(set, newBook);
@@ -95,7 +94,7 @@ export const addEmptyCardAtom = getDerivedAtom(async (get, set, mainDb) => {
 });
 
 export const updateCardAtom = getDerivedAtom(
-        async (get, set, mainDb, newCard: Card) => {
+        async (_get, set, mainDb, newCard: Card) => {
                 console.log({ newCard });
 
                 await updateCardIdb(mainDb, newCard);
@@ -115,7 +114,7 @@ export const deleteCardAtom = getDerivedAtom(
 );
 
 export const updateOptionAtom = getDerivedAtom(
-        async (get, set, mainDb, newOption: Option) => {
+        async (_get, set, mainDb, newOption: Option) => {
                 await updateOptionIdb(mainDb, newOption).then(() =>
                         console.debug('success option')
                 );
@@ -156,381 +155,100 @@ export const getBookCardsAsTextAtom = atom((get) => {
 
 export const cardsTextAtom = atom('');
 
-/*
-
-
-
-
-
-
-
-
-
-
-
-
-
- */
-
-export const addNewCardViaTextAtom = atom(
-        null,
-        (get, set, newCard: ExplicitCardDataStore) => {
-                const newCardId = getUniqueID();
-                const optionsIds = newCard.options.map(() => getUniqueID());
-                const newCardData: Card = {
-                        cardTitle: newCard.cardTitle,
-                        id: newCardId,
-                        childrenIds: optionsIds
-                };
-
-                console.debug({ newCard });
-
-                const newCardAtom = cardsFamilyAtom(newCardId);
-                set(newCardAtom, newCardData);
+export const addNewOptionViaTextAtom = getDerivedAtom(
+        async (_get, set, mainDb, newOption: Option) => {
+                await updateOptionIdb(mainDb, newOption);
+                return (await set(
+                        optionsFamilyAtom(newOption.id),
+                        newOption
+                )) as void;
         }
 );
-
-export const updateOptionViaTextAtom = atom(
-        null,
-        (
-                get,
-                set,
-                {
-                        optionId,
-                        optionTitle,
-                        isCorrect
-                }: { optionTitle: string; isCorrect: boolean; optionId: string }
-        ) => {
-                const optionAtom = optionsFamilyAtom(optionId);
-                const prevOption = get(optionAtom);
-
-                set(updateOptionAtom, {
-                        ...prevOption,
-                        optionTitle,
-                        isCorrect
-                });
-        }
-);
-
-export const updateManyOptionsViaTextAtom = atom(
-        null,
-        (get, set, cardId: string, options: ExplicitOptionDataStore[]) => {
-                const { childrenIds } = get(cardsFamilyAtom(cardId));
-                const optionsToUpdate = options.slice(0, childrenIds.length);
-                console.debug({ optionsToUpdate });
-                optionsToUpdate.forEach((option, i) => {
-                        set(updateOptionViaTextAtom, {
-                                ...option,
-                                optionId: childrenIds[i]
-                        });
-                });
-        }
-);
-
-export const deleteManyOptionsViaTextAtom = atom(
-        null,
-        (get, set, cardId: string, options: ExplicitOptionDataStore[]) => {
-                const { childrenIds } = get(cardsFamilyAtom(cardId));
-                const optionIdsToDelete = childrenIds.slice(options.length - 1);
-                optionIdsToDelete.forEach((optionIdToDelete) => {
-                        set(deleteOptionAtom, cardId, optionIdToDelete);
-                });
-        }
-);
-
-export const addManyOptionsViaTextAtom = atom(
-        null,
-        (get, set, cardId: string, options: ExplicitOptionDataStore[]) => {
-                const { childrenIds } = get(cardsFamilyAtom(cardId));
-                const optionsToAdd = options.slice(childrenIds.length);
-
-                optionsToAdd.forEach((option) => {
-                        const newOptionId = getUniqueID();
-                        set(addIdToBankFamilyAtom(cardId), newOptionId);
-                        set(updateOptionAtom, {
-                                ...option,
-                                id: newOptionId
-                        });
-                });
-        }
-);
-
-export const updateCardViaTextAtom = atom(
-        null,
-        (get, set, newCard: ExplicitCardDataStore, cardIndex: number) => {
-                const bookId = get(currentBookIdAtom);
-                const { childrenIds } = get(booksFamilyAtom(bookId));
-                const cardAtom = cardsFamilyAtom(childrenIds[cardIndex]);
-                const prevCard = get(cardAtom);
-
-                set(updateManyOptionsViaTextAtom, prevCard.id, newCard.options);
-                set(deleteManyOptionsViaTextAtom, prevCard.id, newCard.options);
-                set(addManyOptionsViaTextAtom, prevCard.id, newCard.options);
-
-                const optionIds = get(
-                        withdrawAllIdsFromBankFamilyAtom(prevCard.id)
-                );
-
-                set(updateCardAtom, {
-                        ...prevCard,
-                        cardTitle: newCard.cardTitle,
-                        optionsIds: [...prevCard.childrenIds, ...optionIds]
-                });
-        }
-);
-
-export const updateManyCardsViaTextAtom = atom(
-        null,
-        (get, set, cards: ExplicitCardDataStore[]) => {
-                const bookId = get(currentBookIdAtom);
-                const { childrenIds } = get(booksFamilyAtom(bookId));
-                const cardsToUpdate = cards.slice(0, childrenIds.length);
-
-                console.debug({ cardsToUpdate });
-
-                cardsToUpdate.forEach((card, i) => {
-                        set(updateCardViaTextAtom, card, i);
-                });
-        }
-);
-
-export const deleteManyCardsViaTextAtom = atom(
-        null,
-        (get, set, cards: ExplicitCardDataStore[]) => {
-                const bookId = get(currentBookIdAtom);
-                const { childrenIds } = get(booksFamilyAtom(bookId));
-                const cardIdsToDelete =
-                        cards.length < childrenIds.length
-                                ? childrenIds.slice(cards.length - 1)
-                                : [];
-                console.debug({ cardIdsToDelete });
-
-                cardIdsToDelete.forEach((cardId) => {
-                        set(deleteCardAtom, cardId);
-                });
-        }
-);
-
-export const addManyCardsViaTextAtom = atom(
-        null,
-        (get, set, cards: ExplicitCardDataStore[]) => {
-                const bookId = get(currentBookIdAtom);
-                const { childrenIds } = get(booksFamilyAtom(bookId));
-                const cardsToAdd = cards.slice(childrenIds.length);
-
-                cardsToAdd.forEach((card) => {
-                        set(addNewCardViaTextAtom, card);
-                });
-
-                const borrowedCardIds = get(
-                        withdrawAllIdsFromBankFamilyAtom(bookId)
-                );
-
-                console.debug({ borrowedCardIds });
-
-                const bookAtom = booksFamilyAtom(bookId);
-                const prevBook = get(bookAtom);
-                set(updateBookAtom, {
-                        ...prevBook,
-                        cardsIds: [...prevBook.childrenIds, ...borrowedCardIds]
-                });
-        }
-);
-
-export interface SetterAtomForViaTextProps<Item> {
-        fatherId: string;
-        items: Item[];
-        fatherFamily: AtomFamily<
-                WritableAtom<
-                        StoreMap['cards' | 'books'],
-                        [StoreMap['cards' | 'books']],
-                        unknown
-                >
-        >;
-}
-
-export interface InsertOrDeleteActionAdditionalProps<> {
-        fatherUpdateActionAtom: WritableAtom<
-                null,
-                [updatedRecord: Card | Book],
-                void
-        >;
-}
-
-export interface SetterAtomForUpdateViaTextProps<Item>
-        extends SetterAtomForViaTextProps<Item>,
-                InsertOrDeleteActionAdditionalProps {
-        updateActionAtom: WritableAtom<
-                null,
-                [item: Item, iterIndex: number],
-                void
-        >;
-}
-
-export interface SetterAtomForDeleteViaTextProps<Item>
-        extends SetterAtomForViaTextProps<Item>,
-                InsertOrDeleteActionAdditionalProps {
-        deleteActionAtom: WritableAtom<null, [itemIdToDelete: string], void>;
-}
-
-export interface SetterAtomForAssertionViaTextProps<Item>
-        extends SetterAtomForViaTextProps<Item>,
-                InsertOrDeleteActionAdditionalProps {
-        insertActionAtom: WritableAtom<
-                null,
-                [newItemData: Card | Option],
-                void
-        >;
-}
-
-export const getSetterAtomManyItemsForUpdateViaText = <Item>() =>
-        atom(
-                null,
-                (
-                        get,
-                        set,
-                        {
-                                fatherId,
-                                items,
-                                fatherFamily,
-                                updateActionAtom
-                        }: SetterAtomForUpdateViaTextProps<Item>
-                ) => {
-                        console.debug({
-                                fatherId,
-                                fatherFamily,
-                                items,
-                                updateAtom: updateActionAtom
-                        });
-
-                        const { childrenIds } = get(fatherFamily(fatherId));
-                        const itemsToUpdate = getListForUpdate(
-                                items,
-                                childrenIds
-                        );
-
-                        itemsToUpdate.forEach((item, i) => {
-                                set(updateActionAtom, item, i);
-                        });
-                }
-        );
 
 export const deleteOptionViaTextAtom = getDerivedAtom(
-        async (get, set, mainDb, optionIdToDelete: string) => {
+        async (_get, _set, mainDb, optionIdToDelete: string) => {
                 await deleteOptionIdb(mainDb, optionIdToDelete);
                 optionsFamilyAtom.remove(optionIdToDelete);
         }
 );
 
-export const deleteCardViaTextAtom = getDerivedAtom(
-        async (get, set, mainDb, cardIdToDelete: string) => {
-                await deleteCardIdb(mainDb, cardIdToDelete);
-                cardsFamilyAtom.remove(cardIdToDelete);
+export const updateOptionViaTextAtom = getDerivedAtom(
+        async (
+                _get,
+                set,
+                mainDb,
+                newOptionData: ExplicitOptionDataStore,
+                optionId: string
+        ) => {
+                const newOption = {
+                        ...newOptionData,
+                        id: optionId
+                };
+                await updateOptionIdb(mainDb, newOption);
+                return set(optionsFamilyAtom(optionId), newOption) as void;
         }
 );
 
-export const getSetterAtomManyItemsForDeletionViaText = <Item>() =>
-        atom(
-                null,
-                async (
-                        get,
-                        set,
-                        {
-                                fatherId,
-                                items,
-                                fatherFamily,
-                                deleteActionAtom,
-                                fatherUpdateActionAtom
-                        }: SetterAtomForDeleteViaTextProps<Item>
-                ) => {
-                        const { childrenIds, ...prevFatherValues } = get(
-                                fatherFamily(fatherId)
-                        );
-                        const itemIdsToDelete = getListWithIdsForDelete(
-                                items,
-                                childrenIds
-                        );
+export const addNewCardViaTextAtom = atom(
+        null,
+        async (
+                get,
+                set,
+                {
+                        id: cardId,
+                        options,
+                        cardTitle
+                }: ExplicitCardDataStore & { id: string }
+        ) => {
+                await set(
+                        getSetterAtomManyItemsForInsertionViaText<ExplicitOptionDataStore>(),
+                        getSettingsForInsertOptions({ cardId, options })
+                );
 
-                        await waitForAsyncList(
-                                itemIdsToDelete.map((itemId) => {
-                                        set(
-                                                addIdToBankFamilyAtom(fatherId),
-                                                itemId
-                                        );
-                                        return Promise.resolve(
-                                                set(deleteActionAtom, itemId)
-                                        );
-                                })
-                        );
+                const newIds = get(withdrawAllIdsFromBankFamilyAtom(cardId));
+                const newCard: Card = {
+                        cardTitle,
+                        id: cardId,
+                        childrenIds: newIds
+                };
 
-                        const idsToDelete = get(
-                                withdrawAllIdsFromBankFamilyAtom(fatherId)
-                        );
-                        const newChildrenIdsListForFather =
-                                getListWhereNoSuchIds(childrenIds, idsToDelete);
-                        set(fatherUpdateActionAtom, {
-                                childrenIds: newChildrenIdsListForFather,
-                                ...prevFatherValues
-                        });
-                }
-        );
+                set(updateCardAtom, newCard);
+        }
+);
 
-export const getSetterAtomManyItemsForAssertionViaText = <Item>() =>
-        atom(
-                null,
-                async (
-                        get,
-                        set,
-                        {
-                                fatherId,
-                                fatherFamily,
-                                items,
-                                fatherUpdateActionAtom,
-                                insertActionAtom
-                        }: SetterAtomForAssertionViaTextProps<Item>
-                ) => {
-                        const { childrenIds, ...prevFatherValues } = get(
-                                fatherFamily(fatherId)
-                        );
+export const updateCardViaTextAtom = atom(
+        null,
+        async (
+                get,
+                set,
+                { options, cardTitle }: ExplicitCardDataStore,
+                cardId: string
+        ) => {
+                const cardAtom = cardsFamilyAtom(cardId);
+                const prevCard = get(cardAtom);
 
-                        const itemsToAssert = getListForAssert(
-                                items,
-                                childrenIds
-                        );
+                set(
+                        getSetterAtomManyItemsForInsertionViaText<ExplicitOptionDataStore>(),
+                        getSettingsForInsertOptions({ cardId, options })
+                );
+                set(
+                        getSetterAtomManyItemsForUpdateViaText<ExplicitOptionDataStore>(),
+                        getSettingsForUpdateOptions({ cardId, options })
+                );
+                set(
+                        getSetterAtomManyItemsForDeletionViaText(),
+                        getSettingsForDeleteOptions({ cardId, options })
+                );
 
-                        await waitForAsyncList(
-                                itemsToAssert.map((item) => {
-                                        const newItemId = getUniqueID();
-                                        set(
-                                                addIdToBankFamilyAtom(fatherId),
-                                                newItemId
-                                        );
-
-
-
-                                        return Promise.resolve(
-                                                set(insertActionAtom, {
-                                                        ...(item as
-                                                                | ExplicitCardDataStore
-                                                                | ExplicitOptionDataStore),
-                                                        id: newItemId
-                                                })
-                                        );
-                                })
-                        );
-
-                        const newIds = get(
-                                withdrawAllIdsFromBankFamilyAtom(fatherId)
-                        );
-
-                        const newChildrenIdsListForFather = getListWithSuchIds(
-                                childrenIds,
+                const newIds = get(withdrawAllIdsFromBankFamilyAtom(cardId));
+                const newCard = {
+                        ...prevCard,
+                        cardTitle,
+                        childrenIds: getListWithSuchIds(
+                                prevCard.childrenIds,
                                 newIds
-                        );
-
-                        set(fatherUpdateActionAtom, {
-                                childrenIds: newChildrenIdsListForFather,
-                                ...prevFatherValues
-                        });
-                }
-        );
+                        )
+                };
+                return set(updateCardAtom, newCard) as Promise<void>;
+        }
+);

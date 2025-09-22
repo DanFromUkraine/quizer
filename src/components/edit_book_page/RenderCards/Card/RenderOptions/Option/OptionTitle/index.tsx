@@ -4,7 +4,7 @@ import { useOptionProps } from '@/src/components/edit_book_page/RenderCards/Card
 import OptionTitleUI from '@/src/components/edit_book_page/RenderCards/Card/RenderOptions/Option/OptionTitle/UI';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import { useAtom } from 'jotai';
-import { cardOptionTitleAtomAdapter } from '@/src/jotai/utils/mainDbAtomAdapters';
+import { cardOptionTitleAtomAdapter } from '@/src/utils/jotai/mainDbAtomAdapters';
 
 export default function OptionTitle() {
         const { optionId } = useOptionProps();

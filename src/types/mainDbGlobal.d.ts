@@ -1,7 +1,7 @@
 import { DBSchema } from 'idb';
 import { DB } from '@/src/types/globals';
 
-export type MainDb = DB<MainDbSchema>;
+export type MainDbGlobal = DB<MainDbSchema>;
 
 export interface MainDbSchema extends DBSchema {
         books: {

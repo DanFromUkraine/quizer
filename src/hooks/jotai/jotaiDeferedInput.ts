@@ -11,7 +11,7 @@
 import { useDeferredValue, useEffect, useMemo, useState } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { loadable } from 'jotai/utils';
-import { StringAtomAdapter } from '@/src/types/jotai';
+import { StringAtomAdapter } from '@/src/types/jotaiGlobal';
 
 export default function useJotaiDeferredInput(
         atomAdapter: StringAtomAdapter,
