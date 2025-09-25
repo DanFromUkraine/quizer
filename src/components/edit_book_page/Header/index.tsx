@@ -1,6 +1,6 @@
 'use client';
 
-import useJotaiDeferredInput from '@/src/hooks/jotai/jotaiDeferedInput';
+import useJotaiDeferredInput from '@/src/hooks/jotaiRelated/jotaiDeferedInput';
 import { useEditBookProps } from '@/app/edit/page';
 import HeaderUI from '@/src/components/edit_book_page/Header/UI';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';

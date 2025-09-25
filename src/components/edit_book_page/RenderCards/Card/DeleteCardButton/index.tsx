@@ -2,8 +2,8 @@
 
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { useSetAtom } from 'jotai';
-import { deleteCardAtom } from '@/src/jotai/mainAtoms';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
+import { deleteCardAtom } from '@/src/jotai/cardAtoms';
 
 export default function DeleteCardButton() {
         const { cardId } = useCardProps();

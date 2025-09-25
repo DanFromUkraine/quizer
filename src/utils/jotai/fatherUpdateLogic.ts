@@ -7,10 +7,7 @@ import {
         FatherFamilyAtom,
         FatherUpdateActionAtom
 } from '@/src/types/jotai/cardsTextParserFactories';
-import {
-        getListWhereNoSuchIds,
-        getListWithSuchIds
-} from '@/src/utils/getLists';
+import { getListWhereNoSuchIds } from '@/src/utils/getLists';
 import { Book, Card } from '@/src/types/mainDbGlobal';
 
 export const fatherUpdateLogicAtom = atom(
@@ -37,36 +34,25 @@ export const fatherUpdateLogicAtom = atom(
                 const idsToExclude = get(
                         withdrawAllIdsToRemoveFromBankAtom(fatherId)
                 );
-
-                console.debug({ idsToInclude, idsToExclude, prevFatherData });
+                let changedFatherIds = [...prevFatherData.childrenIds];
 
                 if (idsToInclude.length > 0) {
-                        const fatherIdsWithIncludedNewOnes = getListWithSuchIds(
-                                prevFatherData.childrenIds,
-                                idsToInclude
-                        );
-                        const newFatherData = {
-                                ...prevFatherData,
-                                ...otherData,
-                                childrenIds: fatherIdsWithIncludedNewOnes
-                        };
-                        console.debug({ newFatherData });
-                        set(updateFatherAtom, newFatherData);
+                        changedFatherIds.push(...idsToInclude);
                 }
 
                 if (idsToExclude.length > 0) {
-                        const fatherIdsWithNoSuchId = getListWhereNoSuchIds(
+                        changedFatherIds = getListWhereNoSuchIds(
                                 prevFatherData.childrenIds,
                                 idsToExclude
                         );
-                        const newFatherData = {
-                                ...prevFatherData,
-                                otherData,
-                                childrenIds: fatherIdsWithNoSuchId
-                        };
-                        console.debug({ newFatherData, idsToExclude });
-
-                        set(updateFatherAtom, newFatherData);
                 }
+
+                const newFatherData = {
+                        ...prevFatherData,
+                        ...otherData,
+                        childrenIds: changedFatherIds
+                };
+
+                set(updateFatherAtom, newFatherData);
         }
 );

@@ -1,9 +1,9 @@
 'use client';
 
 import { MdDelete } from 'react-icons/md';
-import { deleteBookAtom } from '@/src/jotai/mainAtoms';
 import { useSetAtom } from 'jotai/react';
 import { useBookProps } from '@/src/components/books_page/RenderBooks/Book';
+import { deleteBookAtom } from '@/src/jotai/bookAtoms';
 
 export default function DeleteButton() {
         const { id } = useBookProps();

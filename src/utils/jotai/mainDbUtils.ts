@@ -1,49 +1,37 @@
 import { atom, Getter, Setter, WritableAtom } from 'jotai';
-import { Book, Card, MainDbGlobal, Option, StoreMap } from '@/src/types/mainDbGlobal';
+import {
+        Book,
+        Card,
+        MainDbGlobal,
+        ObjectStoreKeysNoHistory,
+        StoreMap,
+        Story
+} from '@/src/types/mainDbGlobal';
 import {
         booksFamilyAtom,
-        booksIdsAtom,
         cardsFamilyAtom,
-        currentBookIdAtom,
-        deleteCardAtom,
-        deleteOptionAtom,
         mainAtoms,
         optionsFamilyAtom
 } from '@/src/jotai/mainAtoms';
 import { getFilteredIds } from '@/src/utils/idb/idUtils';
-import { getTemplate } from '@/src/utils/idb/main/templates';
+import {
+        getEmptyStoryTemplate,
+        getTemplate
+} from '@/src/utils/idb/main/templates';
+import { currentBookIdAtom } from '@/src/jotai/idManagers';
 
-export function getAtomFactory<K extends keyof StoreMap>(storeName: K) {
+export function getAtomFactory<
+        K extends keyof Pick<StoreMap, ObjectStoreKeysNoHistory>
+>(storeName: K) {
         return (
                 id: string
         ): WritableAtom<StoreMap[K], [StoreMap[K]], unknown> =>
                 atom(getTemplate(storeName, id) as StoreMap[K]);
 }
 
-export function addEmptyBookAtomHelper(set: Setter, id: string) {
-        const newBookAtom = booksFamilyAtom(id);
-        const bookTemplate = getTemplate('books', id);
-        set(booksIdsAtom, (prev) => [...prev, id]);
-        set(newBookAtom, bookTemplate);
+export function getHistoryAtom(id: string) {
+        return atom<Story>(getEmptyStoryTemplate(id));
 }
-
-export function addEmptyCardAtomHelper(set: Setter, id: string) {
-        const newCardAtom = cardsFamilyAtom(id);
-        const cardTemplate = getTemplate('cards', id);
-        set(newCardAtom, cardTemplate);
-}
-
-export function deleteBookAtomHelper(set: Setter, id: string) {
-        set(booksIdsAtom, (prev) => prev.filter((lastId) => lastId !== id));
-        booksFamilyAtom.remove(id);
-}
-
-export function updateBookAtomHelper(set: Setter, newBook: Book) {
-        const bookAtom = booksFamilyAtom(newBook.id);
-        set(bookAtom, newBook);
-}
-
-export function deleteOptionAtomHelper() {}
 
 export function getNewBookWithFilteredIds(
         get: Getter,
@@ -71,16 +59,6 @@ export function getBookWithNewId(
         };
 }
 
-export function updateCardAtomHelper(set: Setter, newCard: Card) {
-        const cardAtom = cardsFamilyAtom(newCard.id);
-        set(cardAtom, newCard);
-}
-
-export function updateOptionAtomHelper(set: Setter, newOption: Option) {
-        const optionAtom = optionsFamilyAtom(newOption.id);
-        set(optionAtom, newOption);
-}
-
 export function getCardWithNewOptionId(
         get: Getter,
         cardId: string,
@@ -94,12 +72,6 @@ export function getCardWithNewOptionId(
                 ...prevCard,
                 childrenIds: newIds
         };
-}
-
-export function addEmptyOptionAtomHelper(set: Setter, optionId: string) {
-        const optionAtom = optionsFamilyAtom(optionId);
-        const newOption = getTemplate('options', optionId);
-        set(optionAtom, newOption);
 }
 
 export function getCardWithoutDeletedOptionId(
@@ -128,7 +100,9 @@ export function getDerivedAtom<Args extends unknown[]>(
         return atom<null, Args, Promise<void>>(
                 null,
                 async (get, set, ...args: Args) => {
-                        const mainDb = get(mainAtoms) as MainDbGlobal | undefined;
+                        const mainDb = get(mainAtoms) as
+                                | MainDbGlobal
+                                | undefined;
                         if (typeof mainDb === 'undefined') return;
 
                         try {
@@ -154,26 +128,4 @@ export function getOptionsAsText(optionsIds: string[], get: Getter) {
                 );
                 return `\n \t %% ${isCorrect ? '%correct%' : ''} ${optionTitle}`;
         });
-}
-
-export async function deleteCardsOnBookDeleteAtomHelper(
-        get: Getter,
-        set: Setter,
-        bookId: string
-) {
-        const { childrenIds } = get(booksFamilyAtom(bookId));
-        for await (const cardId of childrenIds) {
-                await set(deleteCardAtom, cardId);
-        }
-}
-
-export async function deleteOptionsOnCardDeleteAtomHelper(
-        get: Getter,
-        set: Setter,
-        cardId: string
-) {
-        const { childrenIds } = get(cardsFamilyAtom(cardId));
-        for await (const optionId of childrenIds) {
-                await set(deleteOptionAtom, cardId, optionId);
-        }
 }

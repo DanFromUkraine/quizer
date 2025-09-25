@@ -1,8 +1,8 @@
 'use client';
 
-import { addEmptyOptionAtom } from '@/src/jotai/mainAtoms';
 import { useSetAtom } from 'jotai';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
+import { addEmptyOptionAtom } from '@/src/jotai/optionAtoms';
 
 export default function AddEmptyOptionButton() {
         const { cardId } = useCardProps();

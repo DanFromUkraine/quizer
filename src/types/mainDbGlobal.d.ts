@@ -16,18 +16,24 @@ export interface MainDbSchema extends DBSchema {
                 key: string;
                 value: Option;
         };
-        history: {};
+        history: {
+                key: string;
+                value: Story;
+        };
 }
 
-export type ObjectStores = keyof Pick<
+export type ObjectStoreKeysNoHistory = keyof Pick<
         MainDbSchema,
         'books' | 'cards' | 'options'
 >;
+
+export type ObjectStoreKeysAll = keyof StoreMap;
 
 export type StoreMap = {
         books: Book;
         cards: Card;
         options: Option;
+        history: Story;
 };
 
 export interface Book {
@@ -77,8 +83,14 @@ interface FullBook {
         cards: FullCard[];
 }
 
-export interface History {
+export interface Story {
         id: string;
-        completionTimeSec: number;
+        isCompleted: boolean;
+        bookId: string;
+        timeSpentSec: number;
         bookData: FullBook;
 }
+
+export type BooksAndStoriesAssociations = {
+        [key: string]: string[];
+};

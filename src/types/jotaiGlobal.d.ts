@@ -1,7 +1,7 @@
 import { WritableAtom } from 'jotai';
 
-
 export type StringAtomAdapter = AtomFamily<
+        string,
         WritableAtom<string, [newTitle: string], void>
 >;
 

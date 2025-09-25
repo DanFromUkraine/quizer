@@ -11,16 +11,16 @@ import {
 } from '@/src/utils/idb/main/actions';
 
 import { useSetAtom } from 'jotai';
-import { useInitFamilyAtom } from '@/src/hooks/jotai/initializers';
+import { useInitFamilyAtom } from '@/src/hooks/jotaiRelated/initializers';
 import {
         booksFamilyAtom,
-        booksIdsAtom,
         cardsFamilyAtom,
         mainAtoms,
         optionsFamilyAtom
 } from '@/src/jotai/mainAtoms';
 import { pickIds } from '@/src/utils/idb/idUtils';
 import dynamic from 'next/dynamic';
+import { booksIdsAtom } from '@/src/jotai/idManagers';
 
 export function InitAllMainDbAtoms_DO_NOT_IMPORT() {
         const asyncMainDb = getMainDb();

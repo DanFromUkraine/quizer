@@ -5,18 +5,12 @@
 'use client';
 
 import { useAtom, useAtomValue } from 'jotai';
-import {
-        booksFamilyAtom,
-        cardsTextAtom,
-        currentBookIdAtom,
-        updateBookAtom
-} from '@/src/jotai/mainAtoms';
+import { booksFamilyAtom, cardsTextAtom } from '@/src/jotai/mainAtoms';
 import { useCallback, useEffect } from 'react';
 import parseTextIntoCardsArray, {
         ExplicitCardDataStore
 } from '@/src/utils/parseTextIntoCardsArray';
 import { useAtomCallback } from 'jotai/utils';
-import { editCardsAsTextModalVisibilityAtom } from '@/src/jotai/statusAtoms';
 import {
         getSetterAtomManyItemsForDeletionViaText,
         getSetterAtomManyItemsForInsertionViaText,
@@ -32,10 +26,15 @@ import {
         FatherFamilyAtom,
         FatherUpdateActionAtom
 } from '@/src/types/jotai/cardsTextParserFactories';
+import { updateBookAtom } from '@/src/jotai/bookAtoms';
+import { dialogVisibilityFamilyAtom } from '@/src/jotai/dialogVisibilityFamily';
+import { currentBookIdAtom } from '@/src/jotai/idManagers';
 
-export default function useUpdateCardsFromText() {
+export default function useUpdateCardsFromTextOnDialogClose() {
         const [cardsText, setCardsText] = useAtom(cardsTextAtom);
-        const modalVisible = useAtomValue(editCardsAsTextModalVisibilityAtom);
+        const modalVisible = useAtomValue(
+                dialogVisibilityFamilyAtom('editCardsAsText')
+        );
 
         const updateCards = useAtomCallback(
                 useCallback((get, set, cardsTextUpToDate: string) => {
@@ -43,12 +42,7 @@ export default function useUpdateCardsFromText() {
                                 parseTextIntoCardsArray(cardsTextUpToDate);
                         const bookId = get(currentBookIdAtom);
 
-                        console.debug(
-                                `cards array:
-                        
-                        `,
-                                { cardsArray }
-                        );
+                        console.debug({cardsArray})
 
                         set(
                                 getSetterAtomManyItemsForUpdateViaText<ExplicitCardDataStore>(),
@@ -69,7 +63,7 @@ export default function useUpdateCardsFromText() {
                                 fatherFamily:
                                         booksFamilyAtom as FatherFamilyAtom,
                                 updateFatherAtom:
-                                        updateBookAtom as FatherUpdateActionAtom,
+                                        updateBookAtom as FatherUpdateActionAtom
                         });
                 }, [])
         );

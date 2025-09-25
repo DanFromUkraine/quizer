@@ -7,8 +7,8 @@ import Initializer_CLIENT_ONLY from '@/src/components/initializers/InitMainDbAto
 import BookDescriptionInput from '@/src/components/edit_book_page/Description';
 import { RenderCards } from '@/src/components/edit_book_page/RenderCards';
 import OpenEditCardsModalButton from '@/src/components/edit_book_page/OpenEditCardsModalButton';
-import EditCardsAsTextModalContainer from '@/src/components/edit_book_page/EditCardsAsText';
-import useHydrateBookIdAtom from '@/src/hooks/jotai/useHydrateBookIdAtom';
+import EditCardsAsTextDialog from '@/src/components/edit_book_page/EditCardsAsText';
+import useHydrateBookIdAtom from '@/src/hooks/jotaiRelated/useHydrateBookIdAtom';
 
 type EditBookProps = {
         bookId: string;
@@ -35,7 +35,7 @@ export default function EditBookPage({
         return (
                 <EditBookPropsProvider bookId={bookId}>
                         <Initializer_CLIENT_ONLY />
-                        <EditCardsAsTextModalContainer />
+                        <EditCardsAsTextDialog />
                         <main className='mainContainer'>
                                 <BookTitleInput />
                                 <BookDescriptionInput />

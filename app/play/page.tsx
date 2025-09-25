@@ -1,5 +1,5 @@
 import { use } from 'react';
-import useHydrateBookIdAtom from '@/src/hooks/jotai/useHydrateBookIdAtom';
+import useHydrateBookIdAtom from '@/src/hooks/jotaiRelated/useHydrateBookIdAtom';
 
 export default async function PlayPage({
         searchParams

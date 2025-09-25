@@ -1,13 +1,15 @@
+// 'todo' - in future should rewrite all atomFamilies here into derived atoms. Because under the hood all of them use maps. And at some point they will consume a lot of memory.
+
 import {
         booksFamilyAtom,
         cardsFamilyAtom,
-        optionsFamilyAtom,
-        updateBookAtom,
-        updateCardAtom,
-        updateOptionAtom
+        optionsFamilyAtom
 } from '@/src/jotai/mainAtoms';
 import { atom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
+import { updateBookAtom } from '@/src/jotai/bookAtoms';
+import { updateCardAtom } from '@/src/jotai/cardAtoms';
+import { updateOptionAtom } from '@/src/jotai/optionAtoms';
 
 export const bookTitleAtomAdapter = atomFamily((bookId: string) =>
         atom(
@@ -58,10 +60,6 @@ export const cardOptionTitleAtomAdapter = atomFamily((optionId: string) =>
                                 ...prevOption,
                                 optionTitle: newTitle
                         };
-
-                        console.log(
-                                'slkdjflkjsdf;lkjsdfl;kjsdflkjsd;flkjsdfl;kjsdf'
-                        );
 
                         set(updateOptionAtom, newOption);
                 }

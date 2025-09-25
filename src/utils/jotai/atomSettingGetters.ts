@@ -3,14 +3,8 @@ import {
         ExplicitOptionDataStore
 } from '@/src/utils/parseTextIntoCardsArray';
 import {
-        addNewCardViaTextAtom,
-        addNewOptionViaTextAtom,
         booksFamilyAtom,
         cardsFamilyAtom,
-        deleteCardViaTextAtom,
-        deleteOptionViaTextAtom,
-        updateCardViaTextAtom,
-        updateOptionViaTextAtom
 } from '@/src/jotai/mainAtoms';
 import {
         FatherFamilyAtom,
@@ -18,6 +12,16 @@ import {
         SetterAtomForInsertionViaTextProps,
         SetterAtomForUpdateViaTextProps
 } from '@/src/types/jotai/cardsTextParserFactories';
+import {
+        addNewCardViaTextAtom,
+        deleteCardViaTextAtom,
+        updateCardViaTextAtom
+} from '@/src/jotai/cardAtoms';
+import {
+        addNewOptionViaTextAtom,
+        deleteOptionViaTextAtom,
+        updateOptionViaTextAtom
+} from '@/src/jotai/optionAtoms';
 
 export const getSettingsForUpdateCard = ({
         bookId,
