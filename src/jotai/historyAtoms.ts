@@ -2,17 +2,20 @@ import { atom, Getter } from 'jotai';
 import {
         booksFamilyAtom,
         cardsFamilyAtom,
+        historyFamilyAtom,
         optionsFamilyAtom
 } from '@/src/jotai/mainAtoms';
-import {
-        FullBook,
-        FullCard,
-        FullOption,
-        Story
-} from '@/src/types/mainDbGlobal';
+import { FullBook, FullCard, FullOption } from '@/src/types/mainDbGlobal';
 import getUniqueID from '@/src/utils/getUniqueID';
 import { getDerivedAtom } from '@/src/utils/jotai/mainDbUtils';
-import { updateStoryIdb } from '@/src/utils/idb/main/actions';
+import { deleteStoryIdb, updateStoryIdb } from '@/src/utils/idb/main/actions';
+import { AddNewStorySuccessHandler } from '@/src/types/jotaiGlobal';
+import {
+        deleteIdAtom,
+        pushNewIdAtom,
+        storyIdsAtom
+} from '@/src/jotai/idManagers';
+import getNewStory from '@/src/utils/getNewStory';
 
 function getFullOption({
         get,
@@ -59,23 +62,31 @@ function getFullBook(bookId: string) {
         });
 }
 
-export const addNewStory = getDerivedAtom(
-        async (get, set, mainDb, bookId: string) => {
+export const addNewStoryAtom = getDerivedAtom(
+        async (
+                get,
+                set,
+                mainDb,
+                bookId: string,
+                successCallback: AddNewStorySuccessHandler
+        ) => {
                 const fullBook = get(getFullBook(bookId));
                 const newStoryId = getUniqueID();
-                const newStory: Story = {
-                        id: newStoryId,
-                        bookId,
-                        bookData: fullBook,
-                        isCompleted: false,
-                        timeSpentSec: 0
-                };
+                const newStory = getNewStory({ fullBook, bookId, newStoryId });
                 await updateStoryIdb(mainDb, newStory);
-
+                set(historyFamilyAtom(newStoryId), newStory);
+                set(pushNewIdAtom, storyIdsAtom, newStoryId);
+                successCallback(newStoryId);
         }
 );
 
-
-export const deleteStory = getDerivedAtom(async(get, set, mainDb, storyId: string) => {
-
-})
+export const deleteStoryAtom = getDerivedAtom(
+        async (get, set, mainDb, storyId: string) => {
+                await deleteStoryIdb(mainDb, storyId);
+                historyFamilyAtom.remove(storyId);
+                set(deleteIdAtom, {
+                        idManager: storyIdsAtom,
+                        deleteId: storyId
+                });
+        }
+);

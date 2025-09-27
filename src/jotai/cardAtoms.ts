@@ -103,7 +103,7 @@ export const addNewCardViaTextAtom = atom(
 export const updateCardViaTextAtom = atom(
         null,
         async (
-                get,
+                _get,
                 set,
                 { options, cardTitle }: ExplicitCardDataStore,
                 cardId: string
@@ -120,14 +120,6 @@ export const updateCardViaTextAtom = atom(
                         getSetterAtomManyItemsForDeletionViaText(),
                         getSettingsForDeleteOptions({ cardId, options })
                 );
-
-                console.log(`
-                
-                card title:
-                ${cardTitle}
-                
-                
-                `)
 
                 set(fatherUpdateLogicAtom, {
                         fatherId: cardId,

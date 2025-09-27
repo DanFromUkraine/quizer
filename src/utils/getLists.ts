@@ -6,7 +6,7 @@ export function getListWithIdsForDelete<Item>(
         original: Item[],
         idsList: string[]
 ) {
-        return idsList.slice(original.length );
+        return idsList.slice(original.length);
 }
 export function getListForAssert<Item>(original: Item[], idsList: string[]) {
         return original.slice(idsList.length);

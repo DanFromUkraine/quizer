@@ -36,6 +36,9 @@ export const booksAndStoriesAssociationsAtom = atom<BooksAndStoriesAssociations>
                 const allStories = storyIds.map((storyId) =>
                         get(historyFamilyAtom(storyId))
                 );
+
+                console.debug({allStories})
+
                 return computeBooksAndStoriesAssociations(allStories);
         },
 );

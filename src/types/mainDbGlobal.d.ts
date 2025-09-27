@@ -89,6 +89,8 @@ export interface Story {
         bookId: string;
         timeSpentSec: number;
         bookData: FullBook;
+        playStartDate: number;
+        choicePointers: number[];
 }
 
 export type BooksAndStoriesAssociations = {

@@ -54,6 +54,8 @@ export function getEmptyStoryTemplate(storyId: string): Story {
                 bookId: '',
                 timeSpentSec: 0,
                 isCompleted: false,
+                choicePointers: [],
+                playStartDate: Date.now(),
                 bookData: {
                         title: '',
                         description: '',

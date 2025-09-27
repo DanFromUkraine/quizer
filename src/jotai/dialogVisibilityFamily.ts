@@ -1,7 +1,8 @@
 import { atom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
+import { SnackbarNames } from '@/src/jotai/snackbarAtoms';
 
-export type DialogNames = 'storiesForBook' | 'editCardsAsText';
+export type DialogNames = 'storiesForBook' | 'editCardsAsText' | SnackbarNames;
 
 export const dialogVisibilityFamilyAtom = atomFamily((_id: DialogNames) =>
         atom(false)

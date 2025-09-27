@@ -8,8 +8,8 @@ export default function EditCardsAsTextDialog() {
         useUpdateCardsFromTextOnDialogClose();
 
         return (
-                <Dialog dialogName='editCardsAsText'>
-                        <div className='z-50 container p-5 w-8/12 rounded-md shadow-md relative bg-white overflow-auto'>
+                <Dialog dialogName='editCardsAsText' dialogClassName="!top-5 !translate-y-0">
+                        <div className='container !p-5 rounded-md shadow-md relative bg-white '>
                                 <h2 className='heading-2'>
                                         Here you can edit your cards as a text
                                 </h2>
