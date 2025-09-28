@@ -5,7 +5,11 @@
 'use client';
 
 import { useAtom, useAtomValue } from 'jotai';
-import { booksFamilyAtom, cardsTextAtom } from '@/src/jotai/mainAtoms';
+import {
+        booksFamilyAtom,
+        cardsTextAtom,
+        textInModalHasBeenChanged
+} from '@/src/jotai/mainAtoms';
 import { useCallback, useEffect } from 'react';
 import parseTextIntoCardsArray, {
         ExplicitCardDataStore
@@ -35,6 +39,7 @@ export default function useUpdateCardsFromTextOnDialogClose() {
         const modalVisible = useAtomValue(
                 dialogVisibilityFamilyAtom('editCardsAsText')
         );
+        const [areAnyChanges, setChangesFlagState] = useAtom(textInModalHasBeenChanged);
 
         const updateCards = useAtomCallback(
                 useCallback((get, set, cardsTextUpToDate: string) => {
@@ -42,7 +47,7 @@ export default function useUpdateCardsFromTextOnDialogClose() {
                                 parseTextIntoCardsArray(cardsTextUpToDate);
                         const bookId = get(currentBookIdAtom);
 
-                        console.debug({cardsArray})
+                        console.debug({ cardsArray });
 
                         set(
                                 getSetterAtomManyItemsForUpdateViaText<ExplicitCardDataStore>(),
@@ -69,8 +74,10 @@ export default function useUpdateCardsFromTextOnDialogClose() {
         );
 
         useEffect(() => {
-                if (cardsText.length === 0 || modalVisible) return;
+                if (cardsText.length === 0 || modalVisible || !areAnyChanges)
+                        return;
+
                 updateCards(cardsText);
-                setCardsText('');
+                setChangesFlagState(false);
         }, [cardsText, modalVisible]);
 }

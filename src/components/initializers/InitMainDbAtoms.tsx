@@ -12,7 +12,10 @@ import {
 } from '@/src/utils/idb/main/actions';
 
 import { useSetAtom } from 'jotai';
-import { useInitFamilyAtom } from '@/src/hooks/jotaiRelated/initializers';
+import {
+        FamilyAtomForInit,
+        useInitFamilyAtom
+} from '@/src/hooks/jotaiRelated/initializers';
 import {
         booksFamilyAtom,
         cardsFamilyAtom,
@@ -23,6 +26,7 @@ import {
 import { pickIds } from '@/src/utils/idb/idUtils';
 import dynamic from 'next/dynamic';
 import { booksIdsAtom, storyIdsAtom } from '@/src/jotai/idManagers';
+import { Story } from '@/src/types/mainDbGlobal';
 
 export function InitAllMainDbAtoms_DO_NOT_IMPORT() {
         const asyncMainDb = getMainDb();
@@ -32,7 +36,9 @@ export function InitAllMainDbAtoms_DO_NOT_IMPORT() {
         const initBooksFamilyAtom = useInitFamilyAtom(booksFamilyAtom);
         const initCardsFamilyAtom = useInitFamilyAtom(cardsFamilyAtom);
         const initOptionsFamilyAtom = useInitFamilyAtom(optionsFamilyAtom);
-        const initStoriesFamilyAtom = useInitFamilyAtom(historyFamilyAtom);
+        const initStoriesFamilyAtom = useInitFamilyAtom(
+                historyFamilyAtom as FamilyAtomForInit<Story>
+        );
 
         getAllBooksFromAsyncDb(asyncMainDb).then((books) => {
                 setBooksIds(pickIds(books));

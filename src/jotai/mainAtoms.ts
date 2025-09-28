@@ -30,24 +30,33 @@ export const booksFamilyAtom = atomFamily(getAtomFactory('books'));
 export const cardsFamilyAtom = atomFamily(getAtomFactory('cards'));
 export const optionsFamilyAtom = atomFamily(getAtomFactory('options'));
 export const historyFamilyAtom = atomFamily(getHistoryAtom);
-export const booksAndStoriesAssociationsAtom = atom<BooksAndStoriesAssociations>(
-        (get) => {
+export const booksAndStoriesAssociationsAtom =
+        atom<BooksAndStoriesAssociations>((get) => {
                 const storyIds = get(storyIdsAtom);
                 const allStories = storyIds.map((storyId) =>
                         get(historyFamilyAtom(storyId))
                 );
 
-                console.debug({allStories})
+                console.debug({ allStories });
 
                 return computeBooksAndStoriesAssociations(allStories);
+        });
+
+const cardsTextLocalAtom = atom('');
+export const textInModalHasBeenChanged = atom(false);
+
+export const cardsTextAtom = atom(
+        (get) => {
+                const bookId = get(currentBookIdAtom);
+                const { childrenIds } = get(booksFamilyAtom(bookId));
+                const hasSomethingChanged = get(textInModalHasBeenChanged);
+
+                return hasSomethingChanged
+                        ? get(cardsTextLocalAtom)
+                        : getCardsAsText(childrenIds, get).join('');
         },
+        (_get, set, newVal: string) => {
+                set(textInModalHasBeenChanged, true);
+                set(cardsTextLocalAtom, newVal);
+        }
 );
-
-export const getBookCardsAsTextAtom = atom((get) => {
-        const bookId = get(currentBookIdAtom);
-        const { childrenIds } = get(booksFamilyAtom(bookId));
-
-        return getCardsAsText(childrenIds, get).join('');
-});
-
-export const cardsTextAtom = atom('');

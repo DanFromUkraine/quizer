@@ -2,14 +2,13 @@
 
 import ExtendableTextArea from '@/src/components/general/ExtendableInput';
 import Quoted from '@/src/components/general/Quoted';
-import { useAtomValue, useSetAtom } from 'jotai';
-import { cardsTextAtom, getBookCardsAsTextAtom } from '@/src/jotai/mainAtoms';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { cardsTextAtom } from '@/src/jotai/mainAtoms';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import { ChangeEventHandler } from 'react';
 
 export default function MainTextArea() {
-        const defaultText = useAtomValue(getBookCardsAsTextAtom);
-        const setCardsText = useSetAtom(cardsTextAtom);
+        const [cardsTextValue, setCardsText] = useAtom(cardsTextAtom);
         const onChange = getInputChangeCallback((newVal) => {
                 setCardsText(newVal);
         }) as unknown as ChangeEventHandler<HTMLTextAreaElement>;
@@ -19,7 +18,7 @@ export default function MainTextArea() {
                         <ExtendableTextArea
                                 name='cards text input'
                                 className='w-full h-full '
-                                defaultValue={defaultText}
+                                value={cardsTextValue}
                                 onChange={onChange}
                         />
                 </Quoted>

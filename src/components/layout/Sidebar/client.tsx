@@ -30,7 +30,7 @@ export function RenderNavLinks() {
         const pathname = usePathname();
 
         return (
-                <section className=' flex flex-col items-start'>
+                <section className='flex flex-col items-start static'>
                         {NAV_LINKS.map((link) => (
                                 <NavLinkUI
                                         key={link.href}
@@ -42,44 +42,3 @@ export function RenderNavLinks() {
         );
 }
 
-export function useDragSidebar() {
-        const containerRef = useRef<HTMLElement>(null);
-        const dragHandlerRef = useRef<HTMLDivElement>(null);
-        const sidebarIsBeingResized = useRef(false);
-
-        useEffect(() => {
-                const onMouseMove = (event: MouseEvent) => {
-                        requestAnimationFrame(() => {
-                                if (containerRef.current) {
-                                        containerRef.current.style.width = `${event.clientX}px`;
-                                }
-                        });
-                };
-
-                const onMouseUp = () => {
-                        document.removeEventListener('mousemove', onMouseMove);
-                        document.removeEventListener('mouseup', onMouseUp);
-                        sidebarIsBeingResized.current = false;
-                };
-
-                const onMouseDown = () => {
-                        document.addEventListener('mousemove', onMouseMove);
-                        document.addEventListener('mouseup', onMouseUp);
-                        sidebarIsBeingResized.current = true;
-                };
-
-                const dragElement = dragHandlerRef.current;
-                dragElement?.addEventListener('mousedown', onMouseDown);
-
-                return () => {
-                        dragElement?.removeEventListener(
-                                'mousedown',
-                                onMouseDown
-                        );
-                        document.removeEventListener('mousemove', onMouseMove);
-                        document.removeEventListener('mouseup', onMouseUp);
-                };
-        }, []);
-
-        return { containerRef, dragHandlerRef };
-}

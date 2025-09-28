@@ -4,8 +4,9 @@ import { getListWhereNoSuchIds } from '@/src/utils/getLists';
 
 export const storyIdsAtom = atom<string[]>([]);
 export const booksIdsAtom = atom<string[]>([]);
-export const currentBookIdAtom = atom<string>('');
-export const currentBookIdForStoriesDialogAtom = atom<string>('');
+export const currentBookIdAtom = atom('');
+export const currentBookIdForStoriesDialogAtom = atom('');
+export const currentStoryIdAtom = atom('');
 
 export const pushNewIdAtom = atom(
         null,

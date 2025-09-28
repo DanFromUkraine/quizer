@@ -1,7 +1,11 @@
-"use client"
+'use client';
 
 import { use } from 'react';
-import useHydrateBookIdAtom from '@/src/hooks/jotaiRelated/useHydrateBookIdAtom';
+import { useHydrateAtoms } from 'jotai/utils';
+import { currentStoryIdAtom } from '@/src/jotai/idManagers';
+import PageTitle from '@/src/components/play_page/Title';
+import CardsList from '@/src/components/play_page/CardsList';
+import Initializer_CLIENT_ONLY from '@/src/components/initializers/InitMainDbAtoms';
 
 export default function PlayPage({
         searchParams
@@ -10,9 +14,15 @@ export default function PlayPage({
 }) {
         const storyId = use(searchParams).storyId;
         if (typeof storyId !== 'string') throw 'No Book ID in URL';
-        // useHydrateBookIdAtom({ storyId });
+        useHydrateAtoms([[currentStoryIdAtom, storyId]]);
 
-        return <main className='mainContainer'>
-
-        </main>;
+        return (
+                <>
+                        <Initializer_CLIENT_ONLY />
+                        <main className='mainContainer'>
+                                <PageTitle />
+                                <CardsList />
+                        </main>
+                </>
+        );
 }
