@@ -5,7 +5,12 @@ import {
         historyFamilyAtom,
         optionsFamilyAtom
 } from '@/src/jotai/mainAtoms';
-import { FullBook, FullCard, FullOption } from '@/src/types/mainDbGlobal';
+import {
+        FullBook,
+        FullCard,
+        FullOption,
+        Story
+} from '@/src/types/mainDbGlobal';
 import getUniqueID from '@/src/utils/getUniqueID';
 import { getDerivedAtom } from '@/src/utils/jotai/mainDbUtils';
 import { deleteStoryIdb, updateStoryIdb } from '@/src/utils/idb/main/actions';
@@ -90,3 +95,14 @@ export const deleteStoryAtom = getDerivedAtom(
                 });
         }
 );
+
+
+export const finishStoryAtom = getDerivedAtom(async(get, set, mainDb, storyId: string) => {
+        const prevStory = get(historyFamilyAtom(storyId));
+        const newStory: Story = {
+                ...prevStory,
+                isCompleted: true
+        }
+        await updateStoryIdb(mainDb, newStory);
+        set(historyFamilyAtom(storyId), newStory);
+})

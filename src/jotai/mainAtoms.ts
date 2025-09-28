@@ -41,6 +41,15 @@ export const booksAndStoriesAssociationsAtom =
 
                 return computeBooksAndStoriesAssociations(allStories);
         });
+export const getAssociationsForBookAtomOnlyIncomplete = (bookId: string) =>
+        atom((get) => {
+                const allAssociations = get(booksAndStoriesAssociationsAtom);
+                const associationsForBook = allAssociations[bookId];
+                return associationsForBook.filter((storyId) => {
+                        const fullStory = get(historyFamilyAtom(storyId));
+                        return !fullStory.isCompleted;
+                });
+        });
 
 const cardsTextLocalAtom = atom('');
 export const textInModalHasBeenChanged = atom(false);

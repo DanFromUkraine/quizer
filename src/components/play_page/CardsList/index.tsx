@@ -3,9 +3,9 @@
 import { useAtomValue } from 'jotai';
 import { currentStoryIdAtom } from '@/src/jotai/idManagers';
 import { historyFamilyAtom } from '@/src/jotai/mainAtoms';
-import Card from '@/src/components/play_page/CardsList/Card';
+import PlayCard from '@/src/components/play_page/CardsList/Card';
 
-export default function CardsList() {
+export default function PlayCardsList() {
         const storyId = useAtomValue(currentStoryIdAtom);
         const {
                 bookData: { cards }
@@ -14,7 +14,7 @@ export default function CardsList() {
         return (
                 <ul>
                         {cards.map((card, i) => (
-                                <Card key={i} card={card} />
+                                <PlayCard key={i} card={card} />
                         ))}
                 </ul>
         );

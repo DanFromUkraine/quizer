@@ -15,7 +15,6 @@ export default function CorrectnessMarketButton() {
                 setIsCorrect(!isCorrect);
         };
 
-        const displayedIndexMarker = ALPHABET[optionIndex];
 
         return (
                 <CorrectnessMarketButtonUI
@@ -23,7 +22,7 @@ export default function CorrectnessMarketButton() {
                                 defaultChecked: isCorrect,
                                 onCheckboxClick: onChangeMarkerStateClick,
                                 optionId,
-                                indexMarker: displayedIndexMarker
+                                index: optionIndex
                         }}
                 />
         );

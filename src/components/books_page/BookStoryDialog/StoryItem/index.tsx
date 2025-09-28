@@ -1,14 +1,20 @@
+'use client';
+
 import CompletionRate from '@/src/components/books_page/BookStoryDialog/StoryItem/CompletionRate';
 import CompletionRateLikeBread from '@/src/components/books_page/BookStoryDialog/StoryItem/CompletionRateLikeBread';
 import StoryCreationDate from '@/src/components/books_page/BookStoryDialog/StoryItem/CreationDate';
 import DeleteStoryButton from '@/src/components/books_page/BookStoryDialog/StoryItem/DeleteStoryButton';
-import { redirect } from 'next/navigation';
 import getDefaultPathToPlayPage from '@/src/utils/getDefPathToPlayPage';
+import { useAtomCallback } from 'jotai/utils';
+import { hideDialogAtom } from '@/src/jotai/dialogVisibilityFamily';
+import { useRouter } from 'next/navigation';
 
 export default function StoryItem({ storyId }: { storyId: string }) {
-        const onClick = () => {
-                redirect(getDefaultPathToPlayPage(storyId));
-        };
+        const router = useRouter();
+        const onClick = useAtomCallback((_get, set) => {
+                set(hideDialogAtom, 'storiesForBook');
+                router.replace(getDefaultPathToPlayPage(storyId));
+        });
         return (
                 <div
                         onClick={onClick}

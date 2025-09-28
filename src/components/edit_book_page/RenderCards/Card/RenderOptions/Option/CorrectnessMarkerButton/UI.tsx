@@ -1,22 +1,21 @@
 import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
 import { IoCloseCircleOutline } from 'react-icons/io5';
+import IndexMarker from '@/src/components/general/IndexMarker';
 
 export default function CorrectnessMarketButtonUI({
         optionId,
         onCheckboxClick,
-        indexMarker,
+        index,
         defaultChecked
 }: {
         optionId: string;
+        index: number;
         onCheckboxClick: () => void;
-        indexMarker: string;
         defaultChecked: boolean;
 }) {
         return (
                 <label className='flex has-checked:bg-green-400 relative p-2 gap-2 justify-center items-center bg-red-400  duration-150'>
-                        <div className='size-7 flex justify-center items-center p-2 rounded-full bg-white'>
-                                <span>{indexMarker}</span>
-                        </div>
+                        <IndexMarker index={index}/>
                         <input
                                 type='checkbox'
                                 name={`option-checkbox-${optionId}`}
