@@ -1,7 +1,7 @@
 import { getDB } from '@/src/utils/idb/getDb';
 import {
         Book,
-        Card,
+        ExplicitCard,
         MainDbGlobal,
         MainDbSchema,
         Option,
@@ -31,9 +31,12 @@ export function getMainDb() {
 export const getAllBooksFromAsyncDb = async (
         asyncMainDb: Promise<MainDbGlobal>
 ) => await getAllRecordsAsync(asyncMainDb, 'books');
-export const getAllCardsFromAsyncDb = async (
+export const getAllExplicitCardsFromAsyncDb = async (
         asyncMainDb: Promise<MainDbGlobal>
-) => await getAllRecordsAsync(asyncMainDb, 'cards');
+) => await getAllRecordsAsync(asyncMainDb, 'explicitCards');
+export const getAllShortCardsFromAsyncDb = async (
+        asyncMainDb: Promise<MainDbGlobal>
+) => await getAllRecordsAsync(asyncMainDb, 'shortCards');
 export const getAllOptionsFromAsyncDb = async (
         asyncMainDb: Promise<MainDbGlobal>
 ) => await getAllRecordsAsync(asyncMainDb, 'options');
@@ -44,14 +47,16 @@ export const getAllStoriesFromAsyncDb = async (
 export const addEmptyBookIdb = (mainDb: MainDbGlobal, id: string) =>
         addEmptyRecord(mainDb, 'books', id);
 export const addEmptyCardIdb = (mainDb: MainDbGlobal, id: string) =>
-        addEmptyRecord(mainDb, 'cards', id);
+        addEmptyRecord(mainDb, 'explicitCards', id);
+export const addEmptyShortCard = (mainDb: MainDbGlobal, id: string) =>
+        addEmptyRecord(mainDb, 'shortCards', id);
 export const addEmptyOptionIdb = (mainDb: MainDbGlobal, id: string) =>
         addEmptyRecord(mainDb, 'options', id);
 
 export const updateBookIdb = (mainDb: MainDbGlobal, newRecord: Book) =>
         updateRecord(mainDb, 'books', newRecord);
-export const updateCardIdb = (mainDb: MainDbGlobal, newRecord: Card) =>
-        updateRecord(mainDb, 'cards', newRecord);
+export const updateCardIdb = (mainDb: MainDbGlobal, newRecord: ExplicitCard) =>
+        updateRecord(mainDb, 'explicitCards', newRecord);
 export const updateOptionIdb = (mainDb: MainDbGlobal, newRecord: Option) =>
         updateRecord(mainDb, 'options', newRecord);
 export const updateStoryIdb = (mainDb: MainDbGlobal, newRecord: Story) =>
@@ -59,8 +64,10 @@ export const updateStoryIdb = (mainDb: MainDbGlobal, newRecord: Story) =>
 
 export const deleteBookIdb = (mainDb: MainDbGlobal, id: string) =>
         deleteRecord(mainDb, 'books', id);
-export const deleteCardIdb = (mainDb: MainDbGlobal, id: string) =>
-        deleteRecord(mainDb, 'cards', id);
+export const deleteExplicitCardIdb = (mainDb: MainDbGlobal, id: string) =>
+        deleteRecord(mainDb, 'explicitCards', id);
+export const deleteShortCardIdb = (mainDb: MainDbGlobal, id: string) =>
+        deleteRecord(mainDb, 'shortCards', id);
 export const deleteOptionIdb = (mainDb: MainDbGlobal, id: string) =>
         deleteRecord(mainDb, 'options', id);
 export const deleteStoryIdb = (mainDb: MainDbGlobal, id: string) =>

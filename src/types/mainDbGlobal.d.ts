@@ -8,9 +8,13 @@ export interface MainDbSchema extends DBSchema {
                 key: string;
                 value: Book;
         };
-        cards: {
+        explicitCards: {
                 key: string;
-                value: Card;
+                value: ExplicitCard;
+        };
+        shortCards: {
+                key: string;
+                value: TermDefinitionCard;
         };
         options: {
                 key: string;
@@ -31,7 +35,8 @@ export type ObjectStoreKeysAll = keyof StoreMap;
 
 export type StoreMap = {
         books: Book;
-        cards: Card;
+        explicitCards: ExplicitCard;
+        shortCards: TermDefinitionCard;
         options: Option;
         history: Story;
 };
@@ -40,14 +45,24 @@ export interface Book {
         id: string;
         bookTitle: string;
         lastChangeDate: number;
-        childrenIds: string[];
         description: string;
+        explicitCardIds: string[];
+        shortCardIds: string[];
+        cardIdsOrder: string[];
 }
 
-export interface Card {
+export interface ExplicitCard {
+        type: 'explicit';
         id: string;
         cardTitle: string;
         childrenIds: string[];
+}
+
+export interface TermDefinitionCard {
+        type: 'short';
+        id: string;
+        term: string;
+        definition: string;
 }
 
 export interface Option {
@@ -71,9 +86,14 @@ interface FullOption {
         isCorrect: boolean;
 }
 
-interface FullCard {
+export interface FullCard {
         title: string;
         options: FullOption[];
+}
+
+export interface FullTermDefinition {
+        term: string;
+        definition: string;
 }
 
 interface FullBook {
@@ -90,7 +110,7 @@ export interface Story {
         timeSpentSec: number;
         bookData: FullBook;
         playStartDate: number;
-        choicePointers: number[];
+        choicePointers: (number | string)[];
 }
 
 export type BooksAndStoriesAssociations = {

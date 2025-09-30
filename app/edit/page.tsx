@@ -9,6 +9,7 @@ import { RenderCards } from '@/src/components/edit_book_page/RenderCards';
 import OpenEditCardsModalButton from '@/src/components/edit_book_page/OpenEditCardsModalButton';
 import EditCardsAsTextDialog from '@/src/components/edit_book_page/EditCardsAsText';
 import useHydrateBookIdAtom from '@/src/hooks/jotaiRelated/useHydrateBookIdAtom';
+import AddCardButtons from '@/src/components/edit_book_page/AddCardButton';
 
 type EditBookProps = {
         bookId: string;
@@ -41,6 +42,7 @@ export default function EditBookPage({
                                 <BookDescriptionInput />
                                 <OpenEditCardsModalButton />
                                 <RenderCards />
+                                <AddCardButtons />
                         </main>
                 </EditBookPropsProvider>
         );

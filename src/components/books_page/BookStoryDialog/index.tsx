@@ -2,7 +2,7 @@
 
 import Dialog from '@/src/components/general/Dialog';
 import { useAtomValue } from 'jotai';
-import StoryItem from '@/src/components/books_page/BookStoryDialog/StoryItem';
+import StoryItem from '@/src/components/general/StoryItem';
 import { storiesForBookDialogInfoAtom } from '@/src/jotai/storiesForBookDialogInfoAtoms';
 import CreateNewStoryButton from '@/src/components/books_page/BookStoryDialog/CreateNewStoryButton';
 

@@ -5,7 +5,7 @@ import {
         SetterAtomForUpdateViaTextProps
 } from '@/src/types/jotai/cardsTextParserFactories';
 import {
-        getListForAssert,
+        getListForInsert,
         getListForUpdate,
         getListWithIdsForDelete
 } from '@/src/utils/getLists';
@@ -103,7 +103,7 @@ export const getSetterAtomManyItemsForInsertionViaText = <Item>() =>
                 ) => {
                         const { childrenIds } = get(fatherFamily(fatherId));
 
-                        const itemsToInsert = getListForAssert(
+                        const itemsToInsert = getListForInsert(
                                 items,
                                 childrenIds
                         );

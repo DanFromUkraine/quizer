@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import {
         booksAndStoriesAssociationsAtom,
-        booksFamilyAtom,
+        booksAtomFamily,
         getAssociationsForBookAtomOnlyIncomplete
 } from '@/src/jotai/mainAtoms';
 import {
@@ -50,7 +50,7 @@ export const updateBookStoriesDataAtom = atom(
 );
 
 export const openBookStoryDialog = atom(null, (get, set, bookId: string) => {
-        const { bookTitle } = get(booksFamilyAtom(bookId));
+        const { bookTitle } = get(booksAtomFamily(bookId));
         const storyIds = get(getAssociationsForBookAtomOnlyIncomplete(bookId));
         const createOnAddNewStoryClick =
                 (onSuccess: AddNewStorySuccessHandler) => () => {

@@ -9,7 +9,7 @@ export type FamilyAtomForInit<Item extends ObjWithId> = AtomFamily<
         WritableAtom<Item, [Item], unknown>
 >;
 
-export function useInitFamilyAtom<Item extends ObjWithId>(
+export function useInitAtomFamily<Item extends ObjWithId>(
         familyAtom: FamilyAtomForInit<Item>
 ) {
         return useAtomCallback(

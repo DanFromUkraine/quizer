@@ -5,10 +5,10 @@
 *  */
 
 import { createPropsProvider } from '@/src/utils/createPropsProvider';
-import CardIndex from './CardIndex';
-import DeleteCardButton from './DeleteCardButton';
-import QuestionTitle from './QuestionTitle';
-import RenderOptions from './RenderOptions';
+import CardIndex from './CardHeader/CardIndex';
+import DeleteCardButton from './CardHeader/DeleteCardButton';
+import ShortOrExplicitCardSegregator
+        from '@/src/components/edit_book_page/RenderCards/Card/ShortOrExplicitCardSegregator';
 
 interface CardProps {
         cardId: string;
@@ -21,16 +21,8 @@ export default function Card({ cardId }: CardProps) {
         return (
                 <CardPropsProvider cardId={cardId}>
                         <section className='questionCard'>
-                                <div className='flex justify-between items-center'>
-                                        <CardIndex />
-                                        <DeleteCardButton />
-                                </div>
-                                <div className='container items-center'>
-                                        <div className='w-11/12 flex flex-col gap-4'>
-                                                <QuestionTitle />
-                                                <RenderOptions />
-                                        </div>
-                                </div>
+
+                                <ShortOrExplicitCardSegregator />
                         </section>
                 </CardPropsProvider>
         );

@@ -1,13 +1,30 @@
 'use client';
 
 import { useSetAtom } from 'jotai';
-import AddEmptyCardUI from './UI';
-import { useEditBookProps } from '@/app/edit/page';
-import { addEmptyCardAtom } from '@/src/jotai/cardAtoms';
+import {
+        addEmptyCardAtom,
+        addEmptyTermDefinitionCard
+} from '@/src/jotai/cardAtoms';
+import BtnWithShortcut from '@/src/components/general/ButtonWithShortcut';
 
-export default function AddEmptyCardButton() {
+export default function AddCardButtons() {
         const addEmptyCard = useSetAtom(addEmptyCardAtom);
-        const onButtonClick = () => addEmptyCard();
+        const addEmptyShortCard = useSetAtom(addEmptyTermDefinitionCard);
 
-        return <AddEmptyCardUI onClick={onButtonClick} />;
+        return (
+                <section>
+                        <BtnWithShortcut
+                                textContent='New Explicit Card'
+                                shortcutKeys={['Alt', 'j']}
+                                buttonType='button'
+                                onClick={addEmptyCard}
+                        />
+                        <BtnWithShortcut
+                                textContent='New Term-Definition Card'
+                                shortcutKeys={['Alt', 'l ']}
+                                buttonType={'button'}
+                                onClick={addEmptyShortCard}
+                        />
+                </section>
+        );
 }

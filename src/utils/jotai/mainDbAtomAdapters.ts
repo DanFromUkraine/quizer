@@ -1,21 +1,21 @@
 // 'todo' - in future should rewrite all atomFamilies here into derived atoms. Because under the hood all of them use maps. And at some point they will consume a lot of memory.
 
 import {
-        booksFamilyAtom,
-        cardsFamilyAtom,
-        optionsFamilyAtom
+        booksAtomFamily,
+        explicitCardsAtomFamily,
+        optionsAtomFamily
 } from '@/src/jotai/mainAtoms';
 import { atom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
 import { updateBookAtom } from '@/src/jotai/bookAtoms';
-import { updateCardAtom } from '@/src/jotai/cardAtoms';
+import { updateExplicitCardAtom } from '@/src/jotai/cardAtoms';
 import { updateOptionAtom } from '@/src/jotai/optionAtoms';
 
 export const bookTitleAtomAdapter = atomFamily((bookId: string) =>
         atom(
-                (get) => get(booksFamilyAtom(bookId)).bookTitle,
+                (get) => get(booksAtomFamily(bookId)).bookTitle,
                 (get, set, newTitle: string) => {
-                        const prevBook = get(booksFamilyAtom(bookId));
+                        const prevBook = get(booksAtomFamily(bookId));
                         const newBook = { ...prevBook, bookTitle: newTitle };
                         set(updateBookAtom, newBook);
                 }
@@ -24,9 +24,9 @@ export const bookTitleAtomAdapter = atomFamily((bookId: string) =>
 
 export const bookDescriptionAtomAdapter = atomFamily((bookId: string) =>
         atom(
-                (get) => get(booksFamilyAtom(bookId)).description,
+                (get) => get(booksAtomFamily(bookId)).description,
                 (get, set, newDescription: string) => {
-                        const prevBook = get(booksFamilyAtom(bookId));
+                        const prevBook = get(booksAtomFamily(bookId));
                         const newBook = {
                                 ...prevBook,
                                 description: newDescription
@@ -39,23 +39,23 @@ export const bookDescriptionAtomAdapter = atomFamily((bookId: string) =>
 export const cardTitleAtomAdapter = atomFamily((cardId: string) =>
         atom(
                 (get) => {
-                        return get(cardsFamilyAtom(cardId)).cardTitle;
+                        return get(explicitCardsAtomFamily(cardId)).cardTitle;
                 },
                 (get, set, newTitle: string) => {
-                        const prevCard = get(cardsFamilyAtom(cardId));
+                        const prevCard = get(explicitCardsAtomFamily(cardId));
                         const newCard = {
                                 ...prevCard,
                                 cardTitle: newTitle
                         };
-                        set(updateCardAtom, newCard);
+                        set(updateExplicitCardAtom, newCard);
                 }
         )
 );
 export const cardOptionTitleAtomAdapter = atomFamily((optionId: string) =>
         atom(
-                (get) => get(optionsFamilyAtom(optionId)).optionTitle,
+                (get) => get(optionsAtomFamily(optionId)).optionTitle,
                 (get, set, newTitle: string) => {
-                        const prevOption = get(optionsFamilyAtom(optionId));
+                        const prevOption = get(optionsAtomFamily(optionId));
                         const newOption = {
                                 ...prevOption,
                                 optionTitle: newTitle
@@ -69,10 +69,10 @@ export const cardOptionTitleAtomAdapter = atomFamily((optionId: string) =>
 export const cardOptionCorrectnessMarkerAtomAdapter = atomFamily(
         (optionId: string) =>
                 atom(
-                        (get) => get(optionsFamilyAtom(optionId)).isCorrect,
+                        (get) => get(optionsAtomFamily(optionId)).isCorrect,
                         (get, set, isCorrect: boolean) => {
                                 const prevOption = get(
-                                        optionsFamilyAtom(optionId)
+                                        optionsAtomFamily(optionId)
                                 );
                                 const newOption = {
                                         ...prevOption,

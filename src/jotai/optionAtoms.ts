@@ -1,7 +1,7 @@
 import {
         getCardWithNewOptionId,
         getCardWithoutDeletedOptionId,
-        getDerivedAtom
+        getDerivedAtomWithIdb
 } from '@/src/utils/jotai/mainDbUtils';
 import {
         addEmptyOptionIdb,
@@ -11,32 +11,32 @@ import {
 } from '@/src/utils/idb/main/actions';
 import { Option } from '@/src/types/mainDbGlobal';
 import getUniqueID from '@/src/utils/getUniqueID';
-import { updateCardAtom } from '@/src/jotai/cardAtoms';
-import { cardsFamilyAtom, optionsFamilyAtom } from '@/src/jotai/mainAtoms';
-import { ExplicitOptionDataStore } from '@/src/utils/parseTextIntoCardsArray';
+import { updateExplicitCardAtom } from '@/src/jotai/cardAtoms';
+import { explicitCardsAtomFamily, optionsAtomFamily } from '@/src/jotai/mainAtoms';
+import { FullOptionFromText } from '@/src/utils/parseTextIntoCardsArray';
 import { addEmptyOptionAtomHelper } from '@/src/utils/jotai/helpers';
 
-export const updateOptionAtom = getDerivedAtom(
+export const updateOptionAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, newOption: Option) => {
                 await updateOptionIdb(mainDb, newOption).then(() =>
                         console.debug('success option')
                 );
-                set(optionsFamilyAtom(newOption.id), newOption);
+                set(optionsAtomFamily(newOption.id), newOption);
         }
 );
 
-export const addEmptyOptionAtom = getDerivedAtom(
+export const addEmptyOptionAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb, cardId: string) => {
                 const newId = getUniqueID();
                 const newCard = getCardWithNewOptionId(get, cardId, newId);
                 await updateCardIdb(mainDb, newCard);
                 await addEmptyOptionIdb(mainDb, newId);
-                set(cardsFamilyAtom(cardId), newCard);
+                set(explicitCardsAtomFamily(cardId), newCard);
                 addEmptyOptionAtomHelper(set, newId);
         }
 );
 
-export const deleteOptionAtom = getDerivedAtom(
+export const deleteOptionAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb, cardId: string, optionId: string) => {
                 const newCard = getCardWithoutDeletedOptionId(
                         get,
@@ -44,34 +44,34 @@ export const deleteOptionAtom = getDerivedAtom(
                         optionId
                 );
                 await deleteOptionIdb(mainDb, optionId);
-                set(updateCardAtom, newCard);
-                optionsFamilyAtom.remove(optionId);
+                set(updateExplicitCardAtom, newCard);
+                optionsAtomFamily.remove(optionId);
         }
 );
 
-export const addNewOptionViaTextAtom = getDerivedAtom(
+export const addNewOptionViaTextAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, newOption: Option) => {
                 await updateOptionIdb(mainDb, newOption);
                 return (await set(
-                        optionsFamilyAtom(newOption.id),
+                        optionsAtomFamily(newOption.id),
                         newOption
                 )) as void;
         }
 );
 
-export const deleteOptionViaTextAtom = getDerivedAtom(
+export const deleteOptionViaTextAtom = getDerivedAtomWithIdb(
         async (_get, _set, mainDb, optionIdToDelete: string) => {
                 await deleteOptionIdb(mainDb, optionIdToDelete);
-                optionsFamilyAtom.remove(optionIdToDelete);
+                optionsAtomFamily.remove(optionIdToDelete);
         }
 );
 
-export const updateOptionViaTextAtom = getDerivedAtom(
+export const updateOptionViaTextAtom = getDerivedAtomWithIdb(
         async (
                 _get,
                 set,
                 mainDb,
-                newOptionData: ExplicitOptionDataStore,
+                newOptionData: FullOptionFromText,
                 optionId: string
         ) => {
                 const newOption = {
@@ -79,6 +79,6 @@ export const updateOptionViaTextAtom = getDerivedAtom(
                         id: optionId
                 };
                 await updateOptionIdb(mainDb, newOption);
-                return set(optionsFamilyAtom(optionId), newOption) as void;
+                return set(optionsAtomFamily(optionId), newOption) as void;
         }
 );

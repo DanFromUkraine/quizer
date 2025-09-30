@@ -5,7 +5,7 @@
 
 import {
         getAllBooksFromAsyncDb,
-        getAllCardsFromAsyncDb,
+        getAllExplicitCardsFromAsyncDb,
         getAllOptionsFromAsyncDb,
         getAllStoriesFromAsyncDb,
         getMainDb
@@ -14,14 +14,14 @@ import {
 import { useSetAtom } from 'jotai';
 import {
         FamilyAtomForInit,
-        useInitFamilyAtom
+        useInitAtomFamily
 } from '@/src/hooks/jotaiRelated/initializers';
 import {
-        booksFamilyAtom,
-        cardsFamilyAtom,
-        historyFamilyAtom,
-        mainAtoms,
-        optionsFamilyAtom
+        booksAtomFamily,
+        explicitCardsAtomFamily,
+        storiesAtomFamily,
+        mainDbAtom,
+        optionsAtomFamily
 } from '@/src/jotai/mainAtoms';
 import { pickIds } from '@/src/utils/idb/idUtils';
 import dynamic from 'next/dynamic';
@@ -30,32 +30,33 @@ import { Story } from '@/src/types/mainDbGlobal';
 
 export function InitAllMainDbAtoms_DO_NOT_IMPORT() {
         const asyncMainDb = getMainDb();
-        const setMainDb = useSetAtom(mainAtoms);
+        const setMainDb = useSetAtom(mainDbAtom);
         const setBooksIds = useSetAtom(booksIdsAtom);
         const setHistoryIds = useSetAtom(storyIdsAtom);
-        const initBooksFamilyAtom = useInitFamilyAtom(booksFamilyAtom);
-        const initCardsFamilyAtom = useInitFamilyAtom(cardsFamilyAtom);
-        const initOptionsFamilyAtom = useInitFamilyAtom(optionsFamilyAtom);
-        const initStoriesFamilyAtom = useInitFamilyAtom(
-                historyFamilyAtom as FamilyAtomForInit<Story>
+
+        const initBooksAtomFamily = useInitAtomFamily(booksAtomFamily);
+        const initExplicitCardsAtomFamily = useInitAtomFamily(explicitCardsAtomFamily);
+        const initOptionsAtomFamily = useInitAtomFamily(optionsAtomFamily);
+        const initStoriesAtomFamily = useInitAtomFamily(
+                storiesAtomFamily as FamilyAtomForInit<Story>
         );
 
         getAllBooksFromAsyncDb(asyncMainDb).then((books) => {
                 setBooksIds(pickIds(books));
-                initBooksFamilyAtom(books);
+                initBooksAtomFamily(books);
         });
 
         getAllStoriesFromAsyncDb(asyncMainDb).then((stories) => {
                 setHistoryIds(pickIds(stories));
-                initStoriesFamilyAtom(stories);
+                initStoriesAtomFamily(stories);
         });
 
-        getAllCardsFromAsyncDb(asyncMainDb).then((cards) => {
-                initCardsFamilyAtom(cards);
+        getAllExplicitCardsFromAsyncDb(asyncMainDb).then((cards) => {
+                initExplicitCardsAtomFamily(cards);
         });
 
         getAllOptionsFromAsyncDb(asyncMainDb).then((options) => {
-                initOptionsFamilyAtom(options);
+                initOptionsAtomFamily(options);
         });
 
         asyncMainDb.then((db) => {

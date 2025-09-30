@@ -1,33 +1,37 @@
 'use client';
 
 import clsx from 'clsx';
-import RenderShorcutKeys from './RenderShortcutKeys';
+import RenderShortcutKeys from './RenderShortcutKeys';
 
 export default function BtnWithShortcut({
         textContent,
         shortcutKeys,
         className,
         onClick,
-        otherAttributes
+        otherAttributes,
+        buttonType
 }: {
         textContent: string;
         shortcutKeys: string[];
         className?: string;
         onClick?: () => void;
-        type: string;
+        buttonType: 'submit' | 'reset' | 'button' | undefined;
         otherAttributes?: object;
 }) {
         return (
                 <button
                         className={clsx(
-                                'simpleButton flex justify-between group px-6 bg-blueAccent gap-2 items-center overflow-hidden w-fit',
+                                'simpleButton tr flex justify-between group px-6 bg-blueAccent gap-2 items-center overflow-hidden w-fit',
                                 className
                         )}
+                        type={buttonType}
                         onClick={onClick}
                         {...otherAttributes}>
-                        <p className=''>{textContent}</p>
-                        <div className='flex w-auto opacity-0 transition-[width_1s_ease-in-out,_left_1.5s_ease-in-out] items-center gap-2 group-hover:opacity-100'>
-                                <RenderShorcutKeys
+                        <p className='group-hover:opacity:0 group-hover:translate-x-0 duration-100'>
+                                {textContent}
+                        </p>
+                        <div className='flex w-0 group-hover:!w-auto opacity-0  scale-x-0 group-hover:scale-x-100 duration-200 items-center gap-2 group-hover:opacity-100 '>
+                                <RenderShortcutKeys
                                         shortcutKeys={shortcutKeys}
                                 />
                         </div>

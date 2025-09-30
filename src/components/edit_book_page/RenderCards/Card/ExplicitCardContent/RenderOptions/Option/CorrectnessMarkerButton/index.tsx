@@ -1,0 +1,29 @@
+'use client';
+
+import CorrectnessMarketButtonUI from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/CorrectnessMarkerButton/UI';
+import { useOptionProps } from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option';
+import { ALPHABET } from '@/src/constants/indexation';
+import { useAtom } from 'jotai';
+import { cardOptionCorrectnessMarkerAtomAdapter } from '@/src/utils/jotai/mainDbAtomAdapters';
+
+export default function CorrectnessMarketButton() {
+        const { optionId, optionIndex } = useOptionProps();
+        const correctnessMarkerAdapterAtom =
+                cardOptionCorrectnessMarkerAtomAdapter(optionId);
+        const [isCorrect, setIsCorrect] = useAtom(correctnessMarkerAdapterAtom);
+        const onChangeMarkerStateClick = () => {
+                setIsCorrect(!isCorrect);
+        };
+
+
+        return (
+                <CorrectnessMarketButtonUI
+                        {...{
+                                defaultChecked: isCorrect,
+                                onCheckboxClick: onChangeMarkerStateClick,
+                                optionId,
+                                index: optionIndex
+                        }}
+                />
+        );
+}

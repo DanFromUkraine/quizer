@@ -6,7 +6,7 @@ export default function AddEmptyCardUI({ onClick }: { onClick: () => void }) {
                         <BtnWithShortcut
                                 textContent='Add card'
                                 onClick={onClick}
-                                type='button'
+                                buttonType='button'
                                 shortcutKeys={['Ctrl', 'M']}
                                 otherAttributes={{
                                         'data-testid': 'add-card'

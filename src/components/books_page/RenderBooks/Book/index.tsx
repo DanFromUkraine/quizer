@@ -1,7 +1,7 @@
 'use client';
 
 import { useAtomValue } from 'jotai';
-import { booksFamilyAtom } from '@/src/jotai/mainAtoms';
+import { booksAtomFamily } from '@/src/jotai/mainAtoms';
 import BookTitle from '@/src/components/books_page/RenderBooks/Book/BookTitle';
 import BookDescription from '@/src/components/books_page/RenderBooks/Book/Description';
 import OtherInfo from '@/src/components/books_page/RenderBooks/Book/OtherInfo';
@@ -23,7 +23,7 @@ export const { Provider: BookPropsProvider, usePropsContext: useBookProps } =
 
 export default function BookItem({ id }: { id: string }) {
         const { bookTitle, lastChangeDate, childrenIds, description } =
-                useAtomValue(booksFamilyAtom(id));
+                useAtomValue(booksAtomFamily(id));
 
         return (
                 <BookPropsProvider

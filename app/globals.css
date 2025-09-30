@@ -122,7 +122,11 @@
     }
 
     .glass {
-       @apply backdrop-blur-lg bg-gray-700/30 border border-gray-400/40;
+       @apply backdrop-blur-lg bg-gray-400/30 border border-gray-400/40;
+    }
+
+    .tr {
+        transition: all .5s linear;
     }
 }
 

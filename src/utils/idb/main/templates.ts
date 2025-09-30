@@ -1,9 +1,10 @@
 import {
         Book,
-        Card,
-        ObjectStoreKeysNoHistory,
+        ExplicitCard,
         Option,
-        Story
+        StoreMap,
+        Story,
+        TermDefinitionCard
 } from '@/src/types/mainDbGlobal';
 
 function getEmptyBookTemplate(id: string): Book {
@@ -12,13 +13,16 @@ function getEmptyBookTemplate(id: string): Book {
                 bookTitle: '',
                 lastChangeDate: Date.now(),
                 description: '',
-                childrenIds: []
+                cardIdsOrder: [],
+                explicitCardIds: [],
+                shortCardIds: []
         };
 }
 
-function getEmptyCardTemplate(id: string): Card {
+function getEmptyCardTemplate(id: string): ExplicitCard {
         return {
                 id,
+                type: 'explicit',
                 cardTitle: '',
                 childrenIds: []
         };
@@ -32,16 +36,28 @@ function getEmptyOptionTemplate(id: string): Option {
         };
 }
 
-export function getTemplate(templateType: 'books', id: string): Book;
-export function getTemplate(templateType: 'cards', id: string): Card;
-export function getTemplate(templateType: 'options', id: string): Option;
+function getEmptyTermDefinitionCard(id: string): TermDefinitionCard {
+        return {
+                id,
+                type: 'short',
+                term: '',
+                definition: ''
+        };
+}
+
+export type AvailableTemplateTypes =
+        | 'books'
+        | 'explicitCards'
+        | 'shortCards'
+        | 'options';
+
 export function getTemplate(
-        templateType: ObjectStoreKeysNoHistory,
+        templateType: keyof Omit<StoreMap, 'history'>,
         id: string
-): Book | Card | Option;
-export function getTemplate(templateType: ObjectStoreKeysNoHistory, id: string) {
+) {
         const templates = {
-                cards: getEmptyCardTemplate,
+                explicitCards: getEmptyCardTemplate,
+                shortCards: getEmptyTermDefinitionCard,
                 books: getEmptyBookTemplate,
                 options: getEmptyOptionTemplate
         };

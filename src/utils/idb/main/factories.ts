@@ -1,13 +1,8 @@
 import {
-        Book,
-        Card,
         MainDbGlobal,
         MainDbSchema,
         ObjectStoreKeysAll,
-        ObjectStoreKeysNoHistory,
-        Option,
-        StoreMap,
-        Story
+        StoreMap
 } from '@/src/types/mainDbGlobal';
 import { getCatchCallback } from '@/src/utils/errorHandling/catchCallbackEnhanced';
 import { getTemplate } from '@/src/utils/idb/main/templates';
@@ -35,7 +30,7 @@ export async function getAllRecordsAsync<Key extends keyof StoreMap>(
 
 export function addEmptyRecord(
         mainDb: MainDbGlobal,
-        objectStore: ObjectStoreKeysNoHistory,
+        objectStore: Exclude<keyof StoreMap, 'history'>,
         id: string
 ) {
         const itemTypeForLog = getItemTypeForLog(objectStore);
@@ -53,7 +48,7 @@ export function addEmptyRecord(
 export function updateRecord(
         mainDb: MainDbGlobal,
         objectStore: ObjectStoreKeysAll,
-        newRecord:  StoreMap[keyof StoreMap]
+        newRecord: StoreMap[keyof StoreMap]
 ) {
         const itemTypeForLog = getItemTypeForLog(objectStore);
         return mainDb

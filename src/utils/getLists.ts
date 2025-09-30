@@ -8,7 +8,7 @@ export function getListWithIdsForDelete<Item>(
 ) {
         return idsList.slice(original.length);
 }
-export function getListForAssert<Item>(original: Item[], idsList: string[]) {
+export function getListForInsert<Item>(original: Item[], idsList: string[]) {
         return original.slice(idsList.length);
 }
 

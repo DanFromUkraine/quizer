@@ -2,7 +2,7 @@
 
 import { useAtomCallback } from 'jotai/utils';
 import parseTextIntoCardsArray, {
-        ExplicitCardDataStore
+        FullCardFromText
 } from '@/src/utils/parseTextIntoCardsArray';
 import { currentBookIdAtom } from '@/src/jotai/idManagers';
 import { useCallback } from 'react';
@@ -17,12 +17,18 @@ import {
         getSettingsForUpdateCard
 } from '@/src/utils/jotai/atomSettingGetters';
 import { fatherUpdateLogicAtom } from '@/src/utils/jotai/fatherUpdateLogic';
-import { booksFamilyAtom } from '@/src/jotai/mainAtoms';
+import { booksAtomFamily } from '@/src/jotai/mainAtoms';
 import {
         FatherFamilyAtom,
         FatherUpdateActionAtom
 } from '@/src/types/jotai/cardsTextParserFactories';
 import { updateBookAtom } from '@/src/jotai/bookAtoms';
+import {
+        getListForInsert,
+        getListForUpdate,
+        getListWithIdsForDelete
+} from '@/src/utils/getLists';
+import getUniqueID from '@/src/utils/getUniqueID';
 
 export default function useGetUpdateCardsFromText() {
         return useAtomCallback(
@@ -32,26 +38,60 @@ export default function useGetUpdateCardsFromText() {
                         const bookId = get(currentBookIdAtom);
 
                         set(
-                                getSetterAtomManyItemsForUpdateViaText<ExplicitCardDataStore>(),
+                                getSetterAtomManyItemsForUpdateViaText<FullCardFromText>(),
                                 getSettingsForUpdateCard({ bookId, cardsArray })
                         );
                         set(
-                                getSetterAtomManyItemsForInsertionViaText<ExplicitCardDataStore>(),
+                                getSetterAtomManyItemsForInsertionViaText<FullCardFromText>(),
                                 getSettingsForInsertCard({ bookId, cardsArray })
                         );
 
                         set(
-                                getSetterAtomManyItemsForDeletionViaText<ExplicitCardDataStore>(),
+                                getSetterAtomManyItemsForDeletionViaText<FullCardFromText>(),
                                 getSettingsForDeleteCard({ bookId, cardsArray })
                         );
 
                         set(fatherUpdateLogicAtom, {
                                 fatherId: bookId,
                                 fatherFamily:
-                                        booksFamilyAtom as FatherFamilyAtom,
+                                        booksAtomFamily as FatherFamilyAtom,
                                 updateFatherAtom:
                                         updateBookAtom as FatherUpdateActionAtom
                         });
+                }, [])
+        );
+}
+
+export function useGetUpdateCardsFromTextV2() {
+        return useAtomCallback(
+                useCallback((get, set, cardsTextUpToDate: string) => {
+                        const cardsArray =
+                                parseTextIntoCardsArray(cardsTextUpToDate);
+                        const bookId = get(currentBookIdAtom);
+                        const { childrenIds } = get(booksAtomFamily(bookId));
+                        const idsToInsert = [];
+                        const idsToDelete = [];
+
+                        getListForInsert(
+                                cardsArray,
+                                childrenIds
+                        ).forEach(card => {
+                                const newCardId = getUniqueID();
+                                idsToInsert.push(newcardId)
+                                if (card.type === "explicit") {
+
+                                }
+                        })
+                        const cardsListForDelete = getListWithIdsForDelete(
+                                cardsArray,
+                                childrenIds
+                        );
+                        const cardsListForUpdate = getListForUpdate(
+                                cardsArray,
+                                childrenIds
+                        );
+
+
                 }, [])
         );
 }

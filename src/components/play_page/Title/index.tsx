@@ -1,14 +1,14 @@
 'use client';
 
 import { useAtomValue } from 'jotai';
-import { historyFamilyAtom } from '@/src/jotai/mainAtoms';
+import { storiesAtomFamily } from '@/src/jotai/mainAtoms';
 import { currentStoryIdAtom } from '@/src/jotai/idManagers';
 
 export default function PageTitle() {
         const storyId = useAtomValue(currentStoryIdAtom);
 
 
-        const { bookData } = useAtomValue(historyFamilyAtom(storyId));
+        const { bookData } = useAtomValue(storiesAtomFamily(storyId));
 
         console.debug({storyIdInPageTitle: bookData})
 

@@ -8,7 +8,7 @@ import {
         FatherUpdateActionAtom
 } from '@/src/types/jotai/cardsTextParserFactories';
 import { getListWhereNoSuchIds } from '@/src/utils/getLists';
-import { Book, Card } from '@/src/types/mainDbGlobal';
+import { Book, ExplicitCard } from '@/src/types/mainDbGlobal';
 
 export const fatherUpdateLogicAtom = atom(
         null,
@@ -24,7 +24,7 @@ export const fatherUpdateLogicAtom = atom(
                         fatherId: string;
                         fatherFamily: FatherFamilyAtom;
                         updateFatherAtom: FatherUpdateActionAtom;
-                        otherData?: Partial<Book | Card>;
+                        otherData?: Partial<Book | ExplicitCard>;
                 }
         ) => {
                 const prevFatherData = get(fatherFamily(fatherId));

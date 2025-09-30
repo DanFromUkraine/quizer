@@ -8,7 +8,11 @@ export const UPGRADE_MAIN_DB = (database: MainDbGlobal) => {
         });
         createObjectStoreEnhanced<MainDbSchema>({
                 db: database,
-                storeName: 'cards'
+                storeName: 'explicitCards'
+        });
+        createObjectStoreEnhanced<MainDbSchema>({
+                db: database,
+                storeName: 'shortCards'
         });
         createObjectStoreEnhanced<MainDbSchema>({
                 db: database,

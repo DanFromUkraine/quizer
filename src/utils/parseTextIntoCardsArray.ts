@@ -2,41 +2,34 @@
 // 'todo' - rewrite in AssemblyScript, to optimize it
 // 'todo' - add change flag, to show renderer, if a component actually needs render.
 
+import {
+        FullCardFromText,
+        FullOptionFromText,
+        FullTermDefinitionCardFromText
+} from '@/src/types/cardsTextParser';
+
 const RULES = {
-        DEFAULT_QUESTION_MARKER: /&&/,
-        // CUSTOM_QUESTION_MARKER: /&/,
-        SUBTITLE_MARKER: /\*d/,
-        DEFAULT_OPTION_MARKER: /%%/,
-        // CUSTOM_OPTION_MARKER: /%/,
-        EXPLANATION_MARKER: /\*e/
+        FULL_CARD_MARKER: '&&',
+        SUBTITLE_MARKER: '*s',
+        DEFAULT_OPTION_MARKER: '%%',
+        EXPLANATION_MARKER: '*e',
+        SHORT_CARD_MARKER: '@@',
+        OPTION_CORRECT_MARKER: '%correct%'
 };
 
-const OPTION_CORRECT_MARKER = '%correct%';
-
-const DUMB_SEGREGATOR =
-        /* used in split method. First element is empty string. Second - applied string with no changes*/ /^/;
-
-export interface ExplicitOptionDataStore {
-        optionTitle: string;
-        isCorrect: boolean;
-}
-
-export interface ExplicitCardDataStore {
-        cardTitle: string;
-        subtitle: string | undefined;
-        options: ExplicitOptionDataStore[];
-        explanation: string | undefined;
+function getCardSeparator() {
+        return /(&&)|(@@)/g;
 }
 
 function getAllRulesAsRegExp(): RegExp {
-        return /(&&)|(%%)|(\*e)/g;
+        return /(&&)|(%%)|(\*e)|(@@)/g;
 }
 
 function splitByIndex(str: string, index: number) {
         return [str.slice(0, index), str.slice(index)];
 }
 
-function extractTarget(stringWithTarget: string, regex: RegExp | void) {
+function extractTarget(stringWithTarget: string, regex: string | void) {
         const [_partialWithoutTarget, partialWithTarget_UNSAFE] =
                 typeof regex !== 'undefined'
                         ? stringWithTarget.split(regex)
@@ -53,10 +46,10 @@ function removeSpecialSymbols(string: string) {
         return string.replaceAll(ALL_SPECIAL_SYMBOLS, '');
 }
 
-function getProcessedOptions(optionText: string): ExplicitOptionDataStore {
-        const isCorrect = optionText.includes(OPTION_CORRECT_MARKER);
+function getProcessedOptions(optionText: string): FullOptionFromText {
+        const isCorrect = optionText.includes(RULES.OPTION_CORRECT_MARKER);
         const optionTitleDirty = isCorrect
-                ? optionText.replace(OPTION_CORRECT_MARKER, '')
+                ? optionText.replace(RULES.OPTION_CORRECT_MARKER, '')
                 : optionText;
 
         const optionTitleClear = removeSpecialSymbols(optionTitleDirty).trim();
@@ -67,7 +60,7 @@ function getProcessedOptions(optionText: string): ExplicitOptionDataStore {
         };
 }
 
-function getProcessedCards(cardText: string): ExplicitCardDataStore {
+function getProcessedCards(cardText: string): FullCardFromText {
         const cardTitle = extractTarget(cardText);
         const subtitle = extractTarget(cardText, RULES.SUBTITLE_MARKER);
         const explanation = extractTarget(cardText, RULES.EXPLANATION_MARKER);
@@ -84,18 +77,18 @@ function getProcessedCards(cardText: string): ExplicitCardDataStore {
         };
 }
 
-function filterCardsWithEmptyTitle(cardTitle: string) {
+function deleteCardsWithEmptyTitle(cardTitle: string) {
         return cardTitle.length > 0;
 }
 
-export default function parseTextIntoCardsArray(targetText: string) {
-        const cardsUnprocessed = targetText.split(
-                RULES.DEFAULT_QUESTION_MARKER
-        );
+export default function parseTextIntoCardsArray(
+        targetText: string
+): (FullCardFromText | FullTermDefinitionCardFromText)[] {
+        const cardsUnprocessed = targetText.split(getCardSeparator());
 
         return cardsUnprocessed
                 .map((cardText) => getProcessedCards(cardText))
                 .filter(({ cardTitle }) =>
-                        filterCardsWithEmptyTitle(cardTitle)
+                        deleteCardsWithEmptyTitle(cardTitle)
                 );
 }

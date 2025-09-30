@@ -25,16 +25,18 @@ import {
 import computeBooksAndStoriesAssociations from '@/src/utils/jotai/computeBooksAndStoriesAssociations';
 import { currentBookIdAtom, storyIdsAtom } from '@/src/jotai/idManagers';
 
-export const mainAtoms = atom<MainDbGlobal>();
-export const booksFamilyAtom = atomFamily(getAtomFactory('books'));
-export const cardsFamilyAtom = atomFamily(getAtomFactory('cards'));
-export const optionsFamilyAtom = atomFamily(getAtomFactory('options'));
-export const historyFamilyAtom = atomFamily(getHistoryAtom);
+export const mainDbAtom = atom<MainDbGlobal>();
+export const booksAtomFamily = atomFamily(getAtomFactory('books'));
+export const explicitCardsAtomFamily = atomFamily(getAtomFactory('cards'));
+export const optionsAtomFamily = atomFamily(getAtomFactory('options'));
+export const storiesAtomFamily = atomFamily(getHistoryAtom);
+export const shortCardsAtomFamily = atomFamily(getAtomFactory);
+
 export const booksAndStoriesAssociationsAtom =
         atom<BooksAndStoriesAssociations>((get) => {
                 const storyIds = get(storyIdsAtom);
                 const allStories = storyIds.map((storyId) =>
-                        get(historyFamilyAtom(storyId))
+                        get(storiesAtomFamily(storyId))
                 );
 
                 console.debug({ allStories });
@@ -46,7 +48,7 @@ export const getAssociationsForBookAtomOnlyIncomplete = (bookId: string) =>
                 const allAssociations = get(booksAndStoriesAssociationsAtom);
                 const associationsForBook = allAssociations[bookId];
                 return associationsForBook.filter((storyId) => {
-                        const fullStory = get(historyFamilyAtom(storyId));
+                        const fullStory = get(storiesAtomFamily(storyId));
                         return !fullStory.isCompleted;
                 });
         });
@@ -57,12 +59,19 @@ export const textInModalHasBeenChanged = atom(false);
 export const cardsTextAtom = atom(
         (get) => {
                 const bookId = get(currentBookIdAtom);
-                const { childrenIds } = get(booksFamilyAtom(bookId));
+                const { cardIdsOrder, explicitCardIds, shortCardIds } = get(
+                        booksAtomFamily(bookId)
+                );
                 const hasSomethingChanged = get(textInModalHasBeenChanged);
 
                 return hasSomethingChanged
                         ? get(cardsTextLocalAtom)
-                        : getCardsAsText(childrenIds, get).join('');
+                        : getCardsAsText({
+                                  cardIdsOrder,
+                                  explicitCardIds,
+                                  shortCardIds,
+                                  get
+                          });
         },
         (_get, set, newVal: string) => {
                 set(textInModalHasBeenChanged, true);
