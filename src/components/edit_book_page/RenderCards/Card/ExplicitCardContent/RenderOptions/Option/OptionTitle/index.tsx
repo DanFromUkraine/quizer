@@ -4,11 +4,15 @@ import { useOptionProps } from '@/src/components/edit_book_page/RenderCards/Card
 import OptionTitleUI from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/OptionTitle/UI';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import { useAtom } from 'jotai';
-import { cardOptionTitleAtomAdapter } from '@/src/utils/jotai/mainDbAtomAdapters';
+import {
+        getCardOptionTitleAtomAdapter
+} from '@/src/utils/jotai/mainDbAtomAdapters';
+import { useMemo } from 'react';
 
 export default function OptionTitle() {
         const { optionId } = useOptionProps();
-        const [value, setValue] = useAtom(cardOptionTitleAtomAdapter(optionId));
+        const stableAdapterAtom = useMemo(() => getCardOptionTitleAtomAdapter(optionId), [])
+        const [value, setValue] = useAtom(stableAdapterAtom);
 
         return (
                 <OptionTitleUI

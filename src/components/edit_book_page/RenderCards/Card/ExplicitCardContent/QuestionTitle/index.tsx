@@ -1,20 +1,19 @@
 'use client';
 
-import QuestionTitleUI from './UI';
-import useJotaiDeferredInput from '@/src/hooks/jotaiRelated/jotaiDeferedInput';
+import MainQuestionTitleUI from './UI';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
-import { cardTitleAtomAdapter } from '@/src/utils/jotai/mainDbAtomAdapters';
+import { getExplicitCardTitleAtomAdapter } from '@/src/utils/jotai/mainDbAtomAdapters';
+import { useAtom } from 'jotai';
+import { useMemo } from 'react';
 
 export default function QuestionTitle() {
         const { cardId } = useCardProps();
-        const [value, setValue] = useJotaiDeferredInput(
-                cardTitleAtomAdapter,
-                cardId
-        );
+        const stableAtom = useMemo(() => getExplicitCardTitleAtomAdapter(cardId), []);
+        const [value, setValue] = useAtom(stableAtom);
 
         return (
-                <QuestionTitleUI
+                <MainQuestionTitleUI
                         cardId={cardId}
                         value={value}
                         onChange={getInputChangeCallback(setValue)}

@@ -3,8 +3,8 @@ import { ChangeEventHandler } from 'react';
 import ExtendableTextArea from '@/src/components/general/ExtendableInput';
 import Quoted from '@/src/components/general/Quoted';
 
-export default function QuestionTitleUI({
-                                                value,
+export default function MainQuestionTitleUI({
+        value,
         onChange,
         cardId
 }: {
@@ -16,13 +16,11 @@ export default function QuestionTitleUI({
                 <Quoted>
                         <ExtendableTextArea
                                 data-testid='questionTitle'
-                                value={value}
+                                defaultValue={value}
                                 name={`card-title-${cardId}`}
                                 placeholder='Enter text'
                                 onChange={onChange}
-                                className={clsx(
-                                        'w-full'
-                                )}
+                                className={clsx('w-full')}
                         />
                 </Quoted>
         );

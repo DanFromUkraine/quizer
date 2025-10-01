@@ -24,7 +24,9 @@ function getEmptyCardTemplate(id: string): ExplicitCard {
                 id,
                 type: 'explicit',
                 cardTitle: '',
-                childrenIds: []
+                childrenIds: [],
+                explanation: '',
+                subtitle: ''
         };
 }
 

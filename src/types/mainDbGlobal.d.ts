@@ -56,6 +56,8 @@ export interface ExplicitCard {
         id: string;
         cardTitle: string;
         childrenIds: string[];
+        explanation: string;
+        subtitle: string;
 }
 
 export interface TermDefinitionCard {
