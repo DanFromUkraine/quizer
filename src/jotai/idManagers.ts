@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 import { IdManagerAtom } from '@/src/types/jotaiGlobal';
-import { getListWhereNoSuchIds } from '@/src/utils/getLists';
+import { getListWhereNoSuchIds } from '@/src/utils/lists';
 
 export const storyIdsAtom = atom<string[]>([]);
 export const booksIdsAtom = atom<string[]>([]);

@@ -7,7 +7,7 @@ import {
         FatherFamilyAtom,
         FatherUpdateActionAtom
 } from '@/src/types/jotai/cardsTextParserFactories';
-import { getListWhereNoSuchIds } from '@/src/utils/getLists';
+import { getListWhereNoSuchIds } from '@/src/utils/lists';
 import { Book, ExplicitCard } from '@/src/types/mainDbGlobal';
 
 export const fatherUpdateLogicAtom = atom(

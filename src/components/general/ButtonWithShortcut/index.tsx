@@ -21,16 +21,14 @@ export default function BtnWithShortcut({
         return (
                 <button
                         className={clsx(
-                                'simpleButton tr flex justify-between group px-6 bg-blueAccent gap-2 items-center overflow-hidden w-fit',
+                                'simpleButton flex justify-between group px-6 hover:bg-blue-400 duration-100 bg-blueAccent gap-2 items-center overflow-hidden w-fit',
                                 className
                         )}
                         type={buttonType}
                         onClick={onClick}
                         {...otherAttributes}>
-                        <p className='group-hover:opacity:0 group-hover:translate-x-0 duration-100'>
-                                {textContent}
-                        </p>
-                        <div className='flex w-0 group-hover:!w-auto opacity-0  scale-x-0 group-hover:scale-x-100 duration-200 items-center gap-2 group-hover:opacity-100 '>
+                        <p className='heading-3 !text-white'>{textContent}</p>
+                        <div className='flex items-center gap-2'>
                                 <RenderShortcutKeys
                                         shortcutKeys={shortcutKeys}
                                 />

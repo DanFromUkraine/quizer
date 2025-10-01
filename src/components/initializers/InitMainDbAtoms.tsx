@@ -7,6 +7,7 @@ import {
         getAllBooksFromAsyncDb,
         getAllExplicitCardsFromAsyncDb,
         getAllOptionsFromAsyncDb,
+        getAllShortCardsFromAsyncDb,
         getAllStoriesFromAsyncDb,
         getMainDb
 } from '@/src/utils/idb/main/actions';
@@ -19,9 +20,10 @@ import {
 import {
         booksAtomFamily,
         explicitCardsAtomFamily,
-        storiesAtomFamily,
         mainDbAtom,
-        optionsAtomFamily
+        optionsAtomFamily,
+        shortCardsAtomFamily,
+        storiesAtomFamily
 } from '@/src/jotai/mainAtoms';
 import { pickIds } from '@/src/utils/idb/idUtils';
 import dynamic from 'next/dynamic';
@@ -35,7 +37,11 @@ export function InitAllMainDbAtoms_DO_NOT_IMPORT() {
         const setHistoryIds = useSetAtom(storyIdsAtom);
 
         const initBooksAtomFamily = useInitAtomFamily(booksAtomFamily);
-        const initExplicitCardsAtomFamily = useInitAtomFamily(explicitCardsAtomFamily);
+        const initExplicitCardsAtomFamily = useInitAtomFamily(
+                explicitCardsAtomFamily
+        );
+        const initShortCardsAtomFamily =
+                useInitAtomFamily(shortCardsAtomFamily);
         const initOptionsAtomFamily = useInitAtomFamily(optionsAtomFamily);
         const initStoriesAtomFamily = useInitAtomFamily(
                 storiesAtomFamily as FamilyAtomForInit<Story>
@@ -53,6 +59,10 @@ export function InitAllMainDbAtoms_DO_NOT_IMPORT() {
 
         getAllExplicitCardsFromAsyncDb(asyncMainDb).then((cards) => {
                 initExplicitCardsAtomFamily(cards);
+        });
+
+        getAllShortCardsFromAsyncDb(asyncMainDb).then((shortCards) => {
+                initShortCardsAtomFamily(shortCards);
         });
 
         getAllOptionsFromAsyncDb(asyncMainDb).then((options) => {

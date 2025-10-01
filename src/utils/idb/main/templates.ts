@@ -45,23 +45,22 @@ function getEmptyTermDefinitionCard(id: string): TermDefinitionCard {
         };
 }
 
-export type AvailableTemplateTypes =
-        | 'books'
-        | 'explicitCards'
-        | 'shortCards'
-        | 'options';
+const templates = {
+        books: getEmptyBookTemplate,
+        explicitCards: getEmptyCardTemplate,
+        shortCards: getEmptyTermDefinitionCard,
+        options: getEmptyOptionTemplate
+};
 
-export function getTemplate(
-        templateType: keyof Omit<StoreMap, 'history'>,
+type Templates = typeof templates & {
+        [key in keyof typeof templates]: (id: string) => Templates[key];
+};
+
+export function getTemplate<Key extends keyof Omit<StoreMap, 'history'>>(
+        tp: Key,
         id: string
-) {
-        const templates = {
-                explicitCards: getEmptyCardTemplate,
-                shortCards: getEmptyTermDefinitionCard,
-                books: getEmptyBookTemplate,
-                options: getEmptyOptionTemplate
-        };
-        return templates[templateType](id);
+): StoreMap[Key] {
+        return templates[tp](id) as StoreMap[Key];
 }
 
 export function getEmptyStoryTemplate(storyId: string): Story {

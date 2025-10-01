@@ -2,17 +2,17 @@
 
 import { useSetAtom } from 'jotai';
 import {
-        addEmptyCardAtom,
-        addEmptyTermDefinitionCard
+        addEmptyExplicitCardAtom,
+        addEmptyTermShortCard
 } from '@/src/jotai/cardAtoms';
 import BtnWithShortcut from '@/src/components/general/ButtonWithShortcut';
 
 export default function AddCardButtons() {
-        const addEmptyCard = useSetAtom(addEmptyCardAtom);
-        const addEmptyShortCard = useSetAtom(addEmptyTermDefinitionCard);
+        const addEmptyCard = useSetAtom(addEmptyExplicitCardAtom);
+        const addEmptyShortCard = useSetAtom(addEmptyTermShortCard);
 
         return (
-                <section>
+                <section className='mx-auto flex gap-2'>
                         <BtnWithShortcut
                                 textContent='New Explicit Card'
                                 shortcutKeys={['Alt', 'j']}
@@ -21,6 +21,7 @@ export default function AddCardButtons() {
                         />
                         <BtnWithShortcut
                                 textContent='New Term-Definition Card'
+                                className='bg-green-500 hover:bg-green-400'
                                 shortcutKeys={['Alt', 'l ']}
                                 buttonType={'button'}
                                 onClick={addEmptyShortCard}

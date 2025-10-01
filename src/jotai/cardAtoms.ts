@@ -4,27 +4,27 @@ import {
         getDerivedAtomWithIdb,
         getNewBookWithDeletedCardId
 } from '@/src/utils/jotai/mainDbUtils';
-import { explicitCardsAtomFamily } from '@/src/jotai/mainAtoms';
 import {
-        addEmptyCardIdb,
-        addEmptyTermDefinitionCardIdb,
+        explicitCardsAtomFamily,
+        shortCardsAtomFamily
+} from '@/src/jotai/mainAtoms';
+import {
+        addEmptyExplicitCardIdb,
+        addEmptyShortCardIdb,
         deleteExplicitCardIdb,
+        deleteShortCardIdb,
         updateBookIdb,
-        updateCardIdb
+        updateExplicitCardIdb,
+        updateShortCardIdb
 } from '@/src/utils/idb/main/actions';
-import { ExplicitCard } from '@/src/types/mainDbGlobal';
-import { atom } from 'jotai';
-import { getSetterAtomManyItemsForInsertionViaText } from '@/src/utils/jotai/cardsTextParserFactories';
-import { getSettingsForInsertOptions } from '@/src/utils/jotai/atomSettingGetters';
-import { withdrawAllIdsToAddFromBankAtom } from '@/src/utils/jotai/idsBank';
+import { ExplicitCard, TermDefinitionCard } from '@/src/types/mainDbGlobal';
 import {
-        addEmptyCardAtomHelper,
         deleteOptionsOnCardDeleteAtomHelper,
         updateBookAtomHelper
 } from '@/src/utils/jotai/helpers';
 import { currentBookIdAtom } from '@/src/jotai/idManagers';
 
-export const addEmptyCardAtom = getDerivedAtomWithIdb(
+export const addEmptyExplicitCardAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb) => {
                 const cardId = getUniqueID();
                 const bookId = get(currentBookIdAtom);
@@ -35,13 +35,12 @@ export const addEmptyCardAtom = getDerivedAtomWithIdb(
                         cardType: 'explicit'
                 });
                 await updateBookIdb(mainDb, newBook);
-                await addEmptyCardIdb(mainDb, cardId);
+                await addEmptyExplicitCardIdb(mainDb, cardId);
                 updateBookAtomHelper(set, newBook);
-                addEmptyCardAtomHelper(set, cardId);
         }
 );
 
-export const addEmptyTermDefinitionCard = getDerivedAtomWithIdb(
+export const addEmptyTermShortCard = getDerivedAtomWithIdb(
         async (get, set, mainDb) => {
                 const cardId = getUniqueID();
                 const bookId = get(currentBookIdAtom);
@@ -52,23 +51,22 @@ export const addEmptyTermDefinitionCard = getDerivedAtomWithIdb(
                         cardType: 'short'
                 });
                 await updateBookIdb(mainDb, newBook);
-                addEmptyTermDefinitionCardIdb(mainDb, cardId);
+                await addEmptyShortCardIdb(mainDb, cardId);
                 updateBookAtomHelper(set, newBook);
-                /*'todo' - need to add helper to actually add new card*/
         }
 );
 
 export const updateExplicitCardAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, newCard: ExplicitCard) => {
-                console.log(`
-                card update !!!
-                ${newCard.cardTitle}
-                
-                `);
-                await updateCardIdb(mainDb, newCard);
+                await updateExplicitCardIdb(mainDb, newCard);
                 set(explicitCardsAtomFamily(newCard.id), newCard);
         }
 );
+
+export const updateShortCardAtom = getDerivedAtomWithIdb(async(_get, set, mainDb, newCard: TermDefinitionCard) => {
+        await updateShortCardIdb(mainDb, newCard);
+        set(shortCardsAtomFamily(newCard.id), newCard);
+})
 
 export const deleteExplicitCardAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb, cardId: string) => {
@@ -85,42 +83,39 @@ export const deleteShortCardAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb, cardId: string) => {
                 const newBook = getNewBookWithDeletedCardId(get, cardId);
                 await updateBookIdb(mainDb, newBook);
-                await deleteExplicitCardIdb(mainDb, cardId);
+                await deleteShortCardIdb(mainDb, cardId);
                 updateBookAtomHelper(set, newBook);
-                explicitCardsAtomFamily.remove({
-                        type: 'shortCard',
-                        id: cardId
-                });
+                explicitCardsAtomFamily.remove(cardId);
         }
 );
 
-export const addNewCardViaTextAtom = atom(
-        null,
-        async (
-                get,
-                set,
-                {
-                        id: cardId,
-                        options,
-                        cardTitle
-                }: FullCardFromText & { id: string }
-        ) => {
-                await set(
-                        getSetterAtomManyItemsForInsertionViaText<FullOptionFromText>(),
-                        getSettingsForInsertOptions({ cardId, options })
-                );
-
-                const newIds = get(withdrawAllIdsToAddFromBankAtom(cardId));
-                const newCard: ExplicitCard = {
-                        type: 'explicit',
-                        cardTitle,
-                        id: cardId,
-                        childrenIds: newIds
-                };
-
-                set(updateExplicitCardAtom, newCard);
-        }
-);
+// export const addNewCardViaTextAtom = atom(
+//         null,
+//         async (
+//                 get,
+//                 set,
+//                 {
+//                         id: cardId,
+//                         options,
+//                         cardTitle
+//                 }: FullCardFromText & { id: string }
+//         ) => {
+//                 await set(
+//                         getSetterAtomManyItemsForInsertionViaText<FullOptionFromText>(),
+//                         getSettingsForInsertOptions({ cardId, options })
+//                 );
+//
+//                 const newIds = get(withdrawAllIdsToAddFromBankAtom(cardId));
+//                 const newCard: ExplicitCard = {
+//                         type: 'explicit',
+//                         cardTitle,
+//                         id: cardId,
+//                         childrenIds: newIds
+//                 };
+//
+//                 set(updateExplicitCardAtom, newCard);
+//         }
+// );
 
 // export const updateCardViaTextAtom = atom(
 //         null,
@@ -155,15 +150,15 @@ export const addNewCardViaTextAtom = atom(
 //         }
 // );
 
-export const deleteCardViaTextAtom = getDerivedAtomWithIdb(
-        async (_get, _set, mainDb, cardId: string) => {
-                await deleteExplicitCardIdb(mainDb, cardId);
-                explicitCardsAtomFamily.remove({
-                        id: cardId,
-                        type: 'explicitCard'
-                });
-        }
-);
+// export const deleteCardViaTextAtom = getDerivedAtomWithIdb(
+//         async (_get, _set, mainDb, cardId: string) => {
+//                 await deleteExplicitCardIdb(mainDb, cardId);
+//                 explicitCardsAtomFamily.remove({
+//                         id: cardId,
+//                         type: 'explicitCard'
+//                 });
+//         }
+// );
 
 /*
 

@@ -1,10 +1,13 @@
 'use client';
 
-import { createContext, ReactNode, useContext } from 'react';
+import { createContext, ReactNode, useCallback, useContext } from 'react';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
-import { useSetAtom } from 'jotai';
-import { deleteExplicitCardAtom } from '@/src/jotai/cardAtoms';
+import {
+        deleteExplicitCardAtom,
+        deleteShortCardAtom
+} from '@/src/jotai/cardAtoms';
 import { FaRegTrashAlt } from 'react-icons/fa';
+import { useAtomCallback } from 'jotai/utils';
 
 export const IndexContext = createContext<number>(0);
 
@@ -33,11 +36,16 @@ export function CardIndex() {
 }
 
 export function DeleteCardButton() {
-        const { cardId } = useCardProps();
-        const deleteCard = useSetAtom(deleteExplicitCardAtom);
-        const onClick = () => {
-                deleteCard(cardId);
-        };
+        const { cardId, cardType } = useCardProps();
+
+        const onClick = useAtomCallback(useCallback(async (_get, set) => {
+                console.debug({cardId, cardType})
+                if (cardType === 'explicit') {
+                        await set(deleteExplicitCardAtom, cardId);
+                } else {
+                        await set(deleteShortCardAtom, cardId);
+                }
+        }, []));
 
         return (
                 <FaRegTrashAlt

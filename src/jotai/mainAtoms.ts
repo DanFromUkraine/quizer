@@ -27,10 +27,10 @@ import { currentBookIdAtom, storyIdsAtom } from '@/src/jotai/idManagers';
 
 export const mainDbAtom = atom<MainDbGlobal>();
 export const booksAtomFamily = atomFamily(getAtomFactory('books'));
-export const explicitCardsAtomFamily = atomFamily(getAtomFactory('cards'));
+export const explicitCardsAtomFamily = atomFamily(getAtomFactory('explicitCards'));
 export const optionsAtomFamily = atomFamily(getAtomFactory('options'));
 export const storiesAtomFamily = atomFamily(getHistoryAtom);
-export const shortCardsAtomFamily = atomFamily(getAtomFactory);
+export const shortCardsAtomFamily = atomFamily(getAtomFactory('shortCards'));
 
 export const booksAndStoriesAssociationsAtom =
         atom<BooksAndStoriesAssociations>((get) => {

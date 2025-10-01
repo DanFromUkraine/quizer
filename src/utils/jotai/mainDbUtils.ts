@@ -18,20 +18,13 @@ import {
         getTemplate
 } from '@/src/utils/idb/main/templates';
 import { currentBookIdAtom } from '@/src/jotai/idManagers';
-import {
-        getListWhereNoSuchIds,
-        getListWithIdsForDelete,
-        getListWithSuchIds
-} from '@/src/utils/getLists';
+import { getListWhereNoSuchIds, getListWithSuchIds } from '@/src/utils/lists';
 import { AvailableCardTypes } from '@/src/types/globals';
 
 export function getAtomFactory<K extends keyof Omit<StoreMap, 'history'>>(
         storeName: K
 ) {
-        return (
-                id: string
-        ): WritableAtom<StoreMap[K], [StoreMap[K]], unknown> =>
-                atom(getTemplate(storeName, id) as StoreMap[K]);
+        return (id: string) => atom(getTemplate(storeName, id));
 }
 
 export function getHistoryAtom(id: string) {
@@ -50,10 +43,9 @@ export function getNewBookWithDeletedCardId(
         const newCardIdsOrder = getListWhereNoSuchIds(cardIdsOrder, [
                 idToDelete
         ]);
-        const newExplicitCardIdsList = getListWithIdsForDelete(
-                explicitCardIds,
-                [idToDelete]
-        );
+        const newExplicitCardIdsList = getListWhereNoSuchIds(explicitCardIds, [
+                idToDelete
+        ]);
         const newShortCardIdsList = getListWhereNoSuchIds(shortCardIds, [
                 idToDelete
         ]);

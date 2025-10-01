@@ -3,10 +3,10 @@
 
 import { useEffect, useRef } from 'react';
 import { useSetAtom } from 'jotai';
-import { addEmptyCardAtom } from '@/src/jotai/cardAtoms';
+import { addEmptyExplicitCardAtom } from '@/src/jotai/cardAtoms';
 
 export function useAddCardOnShortcut() {
-        const addEmptyCard = useSetAtom(addEmptyCardAtom);
+        const addEmptyCard = useSetAtom(addEmptyExplicitCardAtom);
         const lastPressedKeys = useRef<string[]>([]);
 
         useEffect(() => {

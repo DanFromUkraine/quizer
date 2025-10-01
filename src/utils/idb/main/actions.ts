@@ -5,7 +5,8 @@ import {
         MainDbGlobal,
         MainDbSchema,
         Option,
-        Story
+        Story,
+        TermDefinitionCard
 } from '@/src/types/mainDbGlobal';
 import { DB_NAMES } from '@/src/constants/dbNames';
 import { UPGRADE_MAIN_DB } from '@/src/constants/mainDb';
@@ -46,17 +47,23 @@ export const getAllStoriesFromAsyncDb = async (
 
 export const addEmptyBookIdb = (mainDb: MainDbGlobal, id: string) =>
         addEmptyRecord(mainDb, 'books', id);
-export const addEmptyCardIdb = (mainDb: MainDbGlobal, id: string) =>
+export const addEmptyExplicitCardIdb = (mainDb: MainDbGlobal, id: string) =>
         addEmptyRecord(mainDb, 'explicitCards', id);
-export const addEmptyShortCard = (mainDb: MainDbGlobal, id: string) =>
+export const addEmptyShortCardIdb = (mainDb: MainDbGlobal, id: string) =>
         addEmptyRecord(mainDb, 'shortCards', id);
 export const addEmptyOptionIdb = (mainDb: MainDbGlobal, id: string) =>
         addEmptyRecord(mainDb, 'options', id);
 
 export const updateBookIdb = (mainDb: MainDbGlobal, newRecord: Book) =>
         updateRecord(mainDb, 'books', newRecord);
-export const updateCardIdb = (mainDb: MainDbGlobal, newRecord: ExplicitCard) =>
-        updateRecord(mainDb, 'explicitCards', newRecord);
+export const updateExplicitCardIdb = (
+        mainDb: MainDbGlobal,
+        newRecord: ExplicitCard
+) => updateRecord(mainDb, 'explicitCards', newRecord);
+export const updateShortCardIdb = (
+        mainDb: MainDbGlobal,
+        newRecord: TermDefinitionCard
+) => updateRecord(mainDb, 'shortCards', newRecord);
 export const updateOptionIdb = (mainDb: MainDbGlobal, newRecord: Option) =>
         updateRecord(mainDb, 'options', newRecord);
 export const updateStoryIdb = (mainDb: MainDbGlobal, newRecord: Story) =>

@@ -1,14 +1,19 @@
 // 'todo' - in future should rewrite all atomFamilies here into derived atoms. Because under the hood all of them use maps. And at some point they will consume a lot of memory.
+// 'todo' - It seems like all of the atom adapters have similar structure. So I can rewrite them into 1 multi adapter
 
 import {
         booksAtomFamily,
         explicitCardsAtomFamily,
-        optionsAtomFamily
+        optionsAtomFamily,
+        shortCardsAtomFamily
 } from '@/src/jotai/mainAtoms';
 import { atom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
 import { updateBookAtom } from '@/src/jotai/bookAtoms';
-import { updateExplicitCardAtom } from '@/src/jotai/cardAtoms';
+import {
+        updateExplicitCardAtom,
+        updateShortCardAtom
+} from '@/src/jotai/cardAtoms';
 import { updateOptionAtom } from '@/src/jotai/optionAtoms';
 
 export const bookTitleAtomAdapter = atomFamily((bookId: string) =>
@@ -82,3 +87,31 @@ export const cardOptionCorrectnessMarkerAtomAdapter = atomFamily(
                         }
                 )
 );
+
+export function getShortCardTermAdapterAtom(cardId: string) {
+        return atom(
+                (get) => get(shortCardsAtomFamily(cardId)).term,
+                (get, set, newVal: string) => {
+                        const prevShortCard = get(shortCardsAtomFamily(cardId));
+
+                        set(updateShortCardAtom, {
+                                ...prevShortCard,
+                                term: newVal
+                        });
+                }
+        );
+}
+
+export function getShortCardDefinitionAdapterAtom(cardId: string) {
+        return atom(
+                (get) => get(shortCardsAtomFamily(cardId)).definition,
+                (get, set, newVal: string) => {
+                        const prevShortCard = get(shortCardsAtomFamily(cardId));
+
+                        set(updateShortCardAtom, {
+                                ...prevShortCard,
+                                definition: newVal
+                        });
+                }
+        );
+}

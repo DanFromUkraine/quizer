@@ -8,7 +8,7 @@ import {
         getListForInsert,
         getListForUpdate,
         getListWithIdsForDelete
-} from '@/src/utils/getLists';
+} from '@/src/utils/lists';
 import waitForAsyncList from '@/src/utils/waitForAsyncList';
 import {
         addIdToAddToBankAtom,

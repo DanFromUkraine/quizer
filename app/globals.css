@@ -46,7 +46,7 @@
     }
 
     .simpleButton {
-        @apply rounded-normal h-min w-min py-2 px-3 whitespace-nowrap text-white font-semibold;
+        @apply rounded-normal py-2 px-3 whitespace-nowrap text-white font-semibold;
     }
 
     .questionCard {

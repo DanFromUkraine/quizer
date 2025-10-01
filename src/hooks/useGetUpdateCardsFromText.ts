@@ -27,7 +27,7 @@ import {
         getListForInsert,
         getListForUpdate,
         getListWithIdsForDelete
-} from '@/src/utils/getLists';
+} from '@/src/utils/lists';
 import getUniqueID from '@/src/utils/getUniqueID';
 
 export default function useGetUpdateCardsFromText() {

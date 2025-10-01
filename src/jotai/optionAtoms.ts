@@ -6,15 +6,17 @@ import {
 import {
         addEmptyOptionIdb,
         deleteOptionIdb,
-        updateCardIdb,
+        updateExplicitCardIdb,
         updateOptionIdb
 } from '@/src/utils/idb/main/actions';
 import { Option } from '@/src/types/mainDbGlobal';
 import getUniqueID from '@/src/utils/getUniqueID';
 import { updateExplicitCardAtom } from '@/src/jotai/cardAtoms';
-import { explicitCardsAtomFamily, optionsAtomFamily } from '@/src/jotai/mainAtoms';
-import { FullOptionFromText } from '@/src/utils/parseTextIntoCardsArray';
-import { addEmptyOptionAtomHelper } from '@/src/utils/jotai/helpers';
+import {
+        explicitCardsAtomFamily,
+        optionsAtomFamily
+} from '@/src/jotai/mainAtoms';
+import { FullOptionFromText } from '@/src/types/cardsTextParser';
 
 export const updateOptionAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, newOption: Option) => {
@@ -29,10 +31,9 @@ export const addEmptyOptionAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb, cardId: string) => {
                 const newId = getUniqueID();
                 const newCard = getCardWithNewOptionId(get, cardId, newId);
-                await updateCardIdb(mainDb, newCard);
+                await updateExplicitCardIdb(mainDb, newCard);
                 await addEmptyOptionIdb(mainDb, newId);
                 set(explicitCardsAtomFamily(cardId), newCard);
-                addEmptyOptionAtomHelper(set, newId);
         }
 );
 
