@@ -10,7 +10,8 @@ import {
         booksAtomFamily,
         explicitCardsAtomFamily,
         mainDbAtom,
-        optionsAtomFamily
+        optionsAtomFamily,
+        shortCardsAtomFamily
 } from '@/src/jotai/mainAtoms';
 import { getFilteredIds } from '@/src/utils/idb/idUtils';
 import {
@@ -18,8 +19,13 @@ import {
         getTemplate
 } from '@/src/utils/idb/main/templates';
 import { currentBookIdAtom } from '@/src/jotai/idManagers';
-import { getListWhereNoSuchIds, getListWithSuchIds } from '@/src/utils/lists';
+import {
+        getCardType,
+        getListWhereNoSuchIds,
+        getListWithSuchIds
+} from '@/src/utils/lists';
 import { AvailableCardTypes } from '@/src/types/globals';
+import { CARD_TYPE_UNKNOWN } from '@/src/constants/errors';
 
 export function getAtomFactory<K extends keyof Omit<StoreMap, 'history'>>(
         storeName: K
@@ -156,15 +162,27 @@ export function getCardsAsText({
         shortCardIds: string[];
         get: Getter;
 }) {
-        return [].join('');
-        /*cardsIds.map((cardId) => {
-                const card = get(cardsFamilyAtom(cardId));
-                if (card.type === 'explicit') {
-                        return `\n&& ${card.cardTitle} ${getOptionsAsText(card.childrenIds, get).join('')}`;
+        return cardIdsOrder.map((cardId) => {
+                const cardType = getCardType({
+                        targetId: cardId,
+                        explicitCardIds,
+                        shortCardIds
+                });
+                if (cardType === 'short') {
+                        const { term, definition } = get(
+                                shortCardsAtomFamily(cardId)
+                        );
+                        return `\n @@ ${term} - ${definition}`;
+                } else if (cardType === 'explicit') {
+                        const { cardTitle, childrenIds } = get(
+                                explicitCardsAtomFamily(cardId)
+                        );
+
+                        return `\n && ${cardTitle} ${getOptionsAsText(childrenIds, get)}`;
                 } else {
-                        return `\n@@ ${card.term} - ${card.definition}`;
+                        throw CARD_TYPE_UNKNOWN;
                 }
-        }); */
+        }).join('')
 }
 
 export function getOptionsAsText(optionsIds: string[], get: Getter) {

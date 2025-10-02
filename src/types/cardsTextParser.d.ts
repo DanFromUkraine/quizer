@@ -5,6 +5,7 @@ export interface FullOptionFromText {
 }
 
 export interface FullCardFromText {
+        type: 'explicit';
         cardTitle: string;
         subtitle: string | undefined;
         options: FullOptionFromText[];
@@ -12,6 +13,7 @@ export interface FullCardFromText {
 }
 
 export interface FullTermDefinitionCardFromText {
+        type: 'short';
         term: string;
         definition: string;
 }

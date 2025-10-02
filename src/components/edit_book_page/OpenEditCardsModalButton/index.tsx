@@ -1,7 +1,6 @@
 'use client';
 
 import { useSetAtom } from 'jotai';
-import { editCardsAsTextModalVisibilityAtom } from '@/src/jotai/statusAtoms';
 import { FaRegEdit } from 'react-icons/fa';
 import { openDialogAtom } from '@/src/jotai/dialogVisibilityFamily';
 

@@ -5,7 +5,7 @@ import Dialog from '@/src/components/general/Dialog';
 import MainTextArea from '@/src/components/edit_book_page/EditCardsAsText/MainTextArea';
 
 export default function EditCardsAsTextDialog() {
-        // useUpdateCardsFromTextOnDialogClose();
+        useUpdateCardsFromTextOnDialogClose();
 
         return (
                 <Dialog dialogName='editCardsAsText' dialogClassName="!top-5 !translate-y-0">

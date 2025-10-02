@@ -15,9 +15,3 @@ export default function ExtendableTextArea({
                         )}></textarea>
         );
 }
-
-/* sdfsdf
- * s
- * df
- * sdf
- * */
