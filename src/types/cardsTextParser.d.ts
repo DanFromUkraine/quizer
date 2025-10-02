@@ -7,9 +7,9 @@ export interface FullOptionFromText {
 export interface FullCardFromText {
         type: 'explicit';
         cardTitle: string;
-        subtitle: string | undefined;
+        subtitle: string ;
         options: FullOptionFromText[];
-        explanation: string | undefined;
+        explanation: string;
 }
 
 export interface FullTermDefinitionCardFromText {

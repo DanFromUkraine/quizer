@@ -1,5 +1,9 @@
 'use client';
 
+/* todo Currently I have few problems:
+ *  1. You can't actually change type of cards on the fly.
+ */
+
 import { useAtomCallback } from 'jotai/utils';
 import parseTextIntoCardsArray from '@/src/utils/parseTextIntoCardsArray';
 import { currentBookIdAtom } from '@/src/jotai/idManagers';
@@ -14,11 +18,16 @@ import {
         getListWithSuchIds
 } from '@/src/utils/lists';
 import getUniqueID from '@/src/utils/getUniqueID';
-import {
-        FullCardFromText,
-        FullTermDefinitionCardFromText
-} from '@/src/types/cardsTextParser';
+import { FullCardFromText, FullTermDefinitionCardFromText } from '@/src/types/cardsTextParser';
 import { Getter, Setter } from 'jotai';
+import {
+        deleteExplicitCardAtom,
+        deleteExplicitCardViaTextAtom,
+        deleteShortCardAtom,
+        deleteShortCardViaTextAtom,
+        updateExplicitCardViaText,
+        updateShortCardAtom
+} from '@/src/jotai/cardAtoms';
 import { updateBookAtom } from '@/src/jotai/bookAtoms';
 
 interface InsertCardsReducerOutput {
@@ -31,6 +40,13 @@ interface DeleteCardsReducerOutput {
         explicitCardIdsToDelete: string[];
         shortCardIdsToDelete: string[];
         cardIdsOrderToDelete: string[];
+}
+
+interface UpdateCardsReducerOutput {
+        explicitCardIdsToInsertAfterTypeChange: string[];
+        explicitCardIdsToDeleteAfterTypeChange: string[];
+        shortCardIdsToInsertAfterTypeChange: string[];
+        shortCardIdsToDeleteAfterTypeChange: string[];
 }
 
 type ReducerInsertCallback = (
@@ -48,10 +64,15 @@ type CardUpdateCallback = (
         index: number
 ) => void;
 
-function getInsertReducerCallbackAndStartValue(): [
-        callback: ReducerInsertCallback,
-        InsertCardsReducerOutput
-] {
+type CardUpdateReducer = (
+        _acc: UpdateCardsReducerOutput,
+        card: FullCardFromText | FullTermDefinitionCardFromText,
+        index: number
+) => UpdateCardsReducerOutput;
+
+function getInsertReducerCallbackAndStartValue(
+        set: Setter
+): [callback: ReducerInsertCallback, InsertCardsReducerOutput] {
         const cardIdsOrderToInsert: string[] = [];
         const explicitCardIdsToInsert: string[] = [];
         const shortCardIdsToInsert: string[] = [];
@@ -60,12 +81,19 @@ function getInsertReducerCallbackAndStartValue(): [
                 (_acc, card) => {
                         const newCardId = getUniqueID();
 
+                        cardIdsOrderToInsert.push(newCardId);
                         if (card.type === 'explicit') {
                                 explicitCardIdsToInsert.push(newCardId);
-                                /* EXPLICIT CARD UPDATE LOGIC*/
+                                set(updateExplicitCardViaText, {
+                                        ...card,
+                                        id: newCardId
+                                });
                         } else if (card.type === 'short') {
                                 shortCardIdsToInsert.push(newCardId);
-                                /* SHORT CARD UPDATE LOGIC*/
+                                set(updateShortCardAtom, {
+                                        ...card,
+                                        id: newCardId
+                                });
                         }
 
                         return {
@@ -84,10 +112,12 @@ function getInsertReducerCallbackAndStartValue(): [
 
 function getDeleteReducerCallbackAndStartValue({
         shortCardIds,
-        explicitCardIds
+        explicitCardIds,
+        set
 }: {
         shortCardIds: string[];
         explicitCardIds: string[];
+        set: Setter;
 }): [callback: ReducerDeleteCallback, startValue: DeleteCardsReducerOutput] {
         const explicitCardIdsToDelete: string[] = [];
         const shortCardIdsToDelete: string[] = [];
@@ -105,10 +135,10 @@ function getDeleteReducerCallbackAndStartValue({
 
                         if (cardType === 'explicit') {
                                 explicitCardIdsToDelete.push(cardId);
-                                /* EXPLICIT CARD DELETE LOGIC*/
+                                set(deleteExplicitCardAtom, cardId);
                         } else if (cardType === 'short') {
                                 shortCardIdsToDelete.push(cardId);
-                                /* SHORT CARD DELETE LOGIC */
+                                set(deleteShortCardAtom, cardId);
                         }
 
                         return {
@@ -125,16 +155,79 @@ function getDeleteReducerCallbackAndStartValue({
         ];
 }
 
-function getCardUpdateCallback(cardIdsOrder: string[]): CardUpdateCallback {
-        return (card, index) => {
+function getUpdateCardsReducerCallbackAndInitValue({
+        set,
+        cardIdsOrder,
+        explicitCardIds,
+        shortCardIds
+}: {
+        set: Setter;
+        cardIdsOrder: string[];
+        explicitCardIds: string[];
+        shortCardIds: string[];
+}): [CardUpdateReducer, UpdateCardsReducerOutput] {
+        const result: UpdateCardsReducerOutput = {
+                explicitCardIdsToInsertAfterTypeChange: [],
+                explicitCardIdsToDeleteAfterTypeChange: [],
+                shortCardIdsToDeleteAfterTypeChange: [],
+                shortCardIdsToInsertAfterTypeChange: []
+        };
+
+        const reducer: CardUpdateReducer = (_acc, card, index) => {
                 const cardId = cardIdsOrder[index];
+                const prevCardType = getCardType({
+                        targetId: cardIdsOrder[index],
+                        explicitCardIds,
+                        shortCardIds
+                });
+
+                const updateCard = () => {
+                        if (card.type === 'explicit') {
+                                set(updateExplicitCardViaText, {
+                                        ...(card as FullCardFromText),
+                                        id: cardId
+                                });
+                        } else {
+                                set(updateShortCardAtom, {
+                                        ...(card as FullTermDefinitionCardFromText),
+                                        id: cardId
+                                });
+                        }
+                };
+
+                if (card.type === prevCardType) {
+                        updateCard();
+                        return result;
+                }
 
                 if (card.type === 'explicit') {
-                        /* EXPLICIT CARD UPDATE LOGIC*/
-                } else if (card.type === 'short') {
-                        /* SHORT CARD UPDATE LOGIC */
+                        set(deleteShortCardViaTextAtom, cardId);
+                        updateCard();
+                        result.shortCardIdsToDeleteAfterTypeChange.push(cardId);
+                        result.explicitCardIdsToInsertAfterTypeChange.push(
+                                cardId
+                        );
+                } else if (card.type === "short") {
+                        set(deleteExplicitCardViaTextAtom, cardId);
+                        updateCard();
+                        result.explicitCardIdsToDeleteAfterTypeChange.push(
+                                cardId
+                        );
+                        result.shortCardIdsToInsertAfterTypeChange.push(cardId);
                 }
+
+                return result;
         };
+
+        return [
+                reducer,
+                {
+                        explicitCardIdsToInsertAfterTypeChange: [],
+                        explicitCardIdsToDeleteAfterTypeChange: [],
+                        shortCardIdsToDeleteAfterTypeChange: [],
+                        shortCardIdsToInsertAfterTypeChange: []
+                }
+        ];
 }
 
 function updateBookAtomHelper({
@@ -151,6 +244,12 @@ function updateBookAtomHelper({
                 shortCardIdsToInsert,
                 explicitCardIdsToInsert
         },
+        idsToUpdate: {
+                explicitCardIdsToInsertAfterTypeChange,
+                explicitCardIdsToDeleteAfterTypeChange,
+                shortCardIdsToInsertAfterTypeChange,
+                shortCardIdsToDeleteAfterTypeChange
+        },
         get,
         set,
         bookId
@@ -160,6 +259,7 @@ function updateBookAtomHelper({
         shortCardIds: string[];
         idsToInsert: InsertCardsReducerOutput;
         idsToDelete: DeleteCardsReducerOutput;
+        idsToUpdate: UpdateCardsReducerOutput;
         bookId: string;
         get: Getter;
         set: Setter;
@@ -167,45 +267,76 @@ function updateBookAtomHelper({
         const bookAtom = booksAtomFamily(bookId);
         const prevBook = get(bookAtom);
 
+        let newCardIdsOrder: string[] = cardIdsOrder;
+        let newExplicitCardIds: string[] = explicitCardIds;
+        let newShortCardIds: string[] = shortCardIds;
+
         if (cardIdsOrderToInsert.length > 0) {
-                const newCardIdsOrder = getListWithSuchIds(
+                // Handle new cards (cards that didn't exist before)
+                newCardIdsOrder = getListWithSuchIds(
                         cardIdsOrder,
                         cardIdsOrderToInsert
                 );
-                const newExplicitCardIds = getListWithSuchIds(
+                newExplicitCardIds = getListWithSuchIds(
                         explicitCardIds,
                         explicitCardIdsToInsert
                 );
-                const newShortCardIds = getListWithSuchIds(
+                newShortCardIds = getListWithSuchIds(
                         shortCardIds,
                         shortCardIdsToInsert
                 );
-                set(updateBookAtom, {
-                        ...prevBook,
-                        cardIdsOrder: newCardIdsOrder,
-                        explicitCardIds: newExplicitCardIds,
-                        shortCardIds: newShortCardIds
-                });
-        } else if (cardIdsOrderToDelete.length > 0) {
-                const newCardIdsOrder = getListWhereNoSuchIds(
+        }
+        if (cardIdsOrderToDelete.length > 0) {
+                // Handle cards to delete (These cards ones existed, but now they will be deleted)
+                newCardIdsOrder = getListWhereNoSuchIds(
                         cardIdsOrder,
                         cardIdsOrderToDelete
                 );
-                const newExplicitCardIds = getListWhereNoSuchIds(
+                newExplicitCardIds = getListWhereNoSuchIds(
                         explicitCardIds,
                         explicitCardIdsToDelete
                 );
-                const newShortCardIds = getListWhereNoSuchIds(
+                newShortCardIds = getListWhereNoSuchIds(
                         shortCardIds,
                         shortCardIdsToDelete
                 );
-                set(updateBookAtom, {
-                        ...prevBook,
-                        cardIdsOrder: newCardIdsOrder,
-                        explicitCardIds: newExplicitCardIds,
-                        shortCardIds: newShortCardIds
-                });
         }
+
+        if (explicitCardIdsToInsertAfterTypeChange.length > 0) {
+                // Previously card at this index was of type term-definition, but now at this index card of type explicit
+                newExplicitCardIds = getListWithSuchIds(
+                        newExplicitCardIds,
+                        explicitCardIdsToInsertAfterTypeChange
+                );
+                newShortCardIds = getListWhereNoSuchIds(
+                        newShortCardIds,
+                        shortCardIdsToDeleteAfterTypeChange
+                );
+        }
+        if (shortCardIdsToInsertAfterTypeChange.length > 0) {
+                // Previously card at this index was of type explicit, but now at this index card of type term-definition
+                newExplicitCardIds = getListWhereNoSuchIds(
+                        newExplicitCardIds,
+                        explicitCardIdsToDeleteAfterTypeChange
+                );
+                newShortCardIds = getListWithSuchIds(
+                        newShortCardIds,
+                        shortCardIdsToInsertAfterTypeChange
+                );
+        }
+
+        console.debug({
+                newCardIdsOrder,
+                newExplicitCardIds,
+                newShortCardIds
+        });
+
+        set(updateBookAtom, {
+                ...prevBook,
+                cardIdsOrder: newCardIdsOrder,
+                explicitCardIds: newExplicitCardIds,
+                shortCardIds: newShortCardIds
+        });
 }
 
 export default function useGetUpdateCardsFromText() {
@@ -214,6 +345,7 @@ export default function useGetUpdateCardsFromText() {
                         const cardsArray =
                                 parseTextIntoCardsArray(cardsTextUpToDate);
                         const bookId = get(currentBookIdAtom);
+
                         const { cardIdsOrder, shortCardIds, explicitCardIds } =
                                 get(booksAtomFamily(bookId));
 
@@ -221,7 +353,7 @@ export default function useGetUpdateCardsFromText() {
                                 cardsArray,
                                 cardIdsOrder
                         ).reduce<InsertCardsReducerOutput>(
-                                ...getInsertReducerCallbackAndStartValue()
+                                ...getInsertReducerCallbackAndStartValue(set)
                         );
 
                         const idsToDelete = getListWithIdsForDelete(
@@ -230,13 +362,24 @@ export default function useGetUpdateCardsFromText() {
                         ).reduce<DeleteCardsReducerOutput>(
                                 ...getDeleteReducerCallbackAndStartValue({
                                         shortCardIds,
+                                        explicitCardIds,
+                                        set
+                                })
+                        );
+
+                        const idsToUpdate = getListForUpdate(
+                                cardsArray,
+                                cardIdsOrder
+                        ).reduce<UpdateCardsReducerOutput>(
+                                ...getUpdateCardsReducerCallbackAndInitValue({
+                                        set,
+                                        cardIdsOrder,
+                                        shortCardIds,
                                         explicitCardIds
                                 })
                         );
 
-                        getListForUpdate(cardsArray, cardIdsOrder).forEach(
-                                getCardUpdateCallback(cardIdsOrder)
-                        );
+                        console.debug({ idsToUpdate });
 
                         updateBookAtomHelper({
                                 cardIdsOrder,
@@ -244,8 +387,10 @@ export default function useGetUpdateCardsFromText() {
                                 explicitCardIds,
                                 idsToDelete,
                                 idsToInsert,
+                                bookId,
                                 get,
-                                set
+                                set,
+                                idsToUpdate
                         });
                 }, [])
         );

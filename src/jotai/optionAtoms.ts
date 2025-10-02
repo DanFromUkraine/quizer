@@ -20,9 +20,7 @@ import { FullOptionFromText } from '@/src/types/cardsTextParser';
 
 export const updateOptionAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, newOption: Option) => {
-                await updateOptionIdb(mainDb, newOption).then(() =>
-                        console.debug('success option')
-                );
+                await updateOptionIdb(mainDb, newOption);
                 set(optionsAtomFamily(newOption.id), newOption);
         }
 );
@@ -53,7 +51,7 @@ export const deleteOptionAtom = getDerivedAtomWithIdb(
 export const addNewOptionViaTextAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, newOption: Option) => {
                 await updateOptionIdb(mainDb, newOption);
-                return (await set(
+                return ( set(
                         optionsAtomFamily(newOption.id),
                         newOption
                 )) as void;
@@ -64,22 +62,5 @@ export const deleteOptionViaTextAtom = getDerivedAtomWithIdb(
         async (_get, _set, mainDb, optionIdToDelete: string) => {
                 await deleteOptionIdb(mainDb, optionIdToDelete);
                 optionsAtomFamily.remove(optionIdToDelete);
-        }
-);
-
-export const updateOptionViaTextAtom = getDerivedAtomWithIdb(
-        async (
-                _get,
-                set,
-                mainDb,
-                newOptionData: FullOptionFromText,
-                optionId: string
-        ) => {
-                const newOption = {
-                        ...newOptionData,
-                        id: optionId
-                };
-                await updateOptionIdb(mainDb, newOption);
-                return set(optionsAtomFamily(optionId), newOption) as void;
         }
 );

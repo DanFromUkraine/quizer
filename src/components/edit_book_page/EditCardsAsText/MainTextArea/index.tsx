@@ -2,7 +2,7 @@
 
 import ExtendableTextArea from '@/src/components/general/ExtendableInput';
 import Quoted from '@/src/components/general/Quoted';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { cardsTextAtom } from '@/src/jotai/mainAtoms';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import { ChangeEventHandler } from 'react';

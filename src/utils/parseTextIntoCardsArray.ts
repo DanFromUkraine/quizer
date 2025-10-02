@@ -157,6 +157,7 @@ export default function parseTextIntoCardsArray(
                 )
                 .filter((val) => typeof val !== 'undefined')
                 .filter((val) => {
+                        /* 'todo' - move in other function */
                         if (val.type === 'explicit') {
                                 return val.cardTitle.length > 0;
                         } else if (val.type === 'short') {

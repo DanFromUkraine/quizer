@@ -11,7 +11,6 @@ import {
 import { useEffect } from 'react';
 import { dialogVisibilityFamilyAtom } from '@/src/jotai/dialogVisibilityFamily';
 import useGetUpdateCardsFromText from '@/src/hooks/useGetUpdateCardsFromText';
-import parseTextIntoCardsArray from '@/src/utils/parseTextIntoCardsArray';
 
 export default function useUpdateCardsFromTextOnDialogClose() {
         const [cardsText] = useAtom(cardsTextAtom);
@@ -26,8 +25,7 @@ export default function useUpdateCardsFromTextOnDialogClose() {
         useEffect(() => {
                 if (cardsText.length === 0 || modalVisible || !areAnyChanges)
                         return;
-                console.log(parseTextIntoCardsArray(cardsText))
-                // updateCards(cardsText);
+                updateCards(cardsText);
                 setChangesFlagState(false);
         }, [cardsText, modalVisible]);
 }
