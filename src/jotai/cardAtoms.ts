@@ -89,6 +89,8 @@ export const deleteShortCardAtom = getDerivedAtomWithIdb(
         }
 );
 
+
+
 // export const addNewCardViaTextAtom = atom(
 //         null,
 //         async (

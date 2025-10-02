@@ -23,9 +23,9 @@ export function getListWhereNoSuchIds(
 
 export function getListWithSuchIds(
         originalIdsList: string[],
-        idsToDelete: string[]
+        idsToInsert: string[]
 ) {
-        return [...originalIdsList, ...idsToDelete];
+        return [...originalIdsList, ...idsToInsert];
 }
 
 export function getCardType({

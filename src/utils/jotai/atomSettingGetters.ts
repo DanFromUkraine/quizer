@@ -1,7 +1,4 @@
-import {
-        FullCardFromText,
-        FullOptionFromText
-} from '@/src/utils/parseTextIntoCardsArray';
+
 import {
         booksAtomFamily,
         explicitCardsAtomFamily,
@@ -13,15 +10,14 @@ import {
         SetterAtomForUpdateViaTextProps
 } from '@/src/types/jotai/cardsTextParserFactories';
 import {
-        addNewCardViaTextAtom,
-        deleteCardViaTextAtom,
-        updateCardViaTextAtom
+
 } from '@/src/jotai/cardAtoms';
 import {
         addNewOptionViaTextAtom,
         deleteOptionViaTextAtom,
         updateOptionViaTextAtom
 } from '@/src/jotai/optionAtoms';
+import { FullCardFromText } from '@/src/types/cardsTextParser';
 
 export const getSettingsForUpdateCard = ({
         bookId,

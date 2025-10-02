@@ -21,7 +21,7 @@ export default function useUpdateCardsFromTextOnDialogClose() {
         const [areAnyChanges, setChangesFlagState] = useAtom(
                 textInModalHasBeenChanged
         );
-        // const updateCards = useGetUpdateCardsFromText();
+        const updateCards = useGetUpdateCardsFromText();
 
         useEffect(() => {
                 if (cardsText.length === 0 || modalVisible || !areAnyChanges)
