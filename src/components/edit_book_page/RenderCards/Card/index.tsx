@@ -1,37 +1,41 @@
-/* 'to-do' - додати можлживість видалити карточку
+/*
  * 'to-do' - змінити іконку для видалення
-
-*
-*  */
+ *  */
 
 import { createPropsProvider } from '@/src/utils/createPropsProvider';
-import CardIndex from './CardIndex';
-import DeleteCardButton from './DeleteCardButton';
-import QuestionTitle from './QuestionTitle';
-import RenderOptions from './RenderOptions';
+import { AvailableCardTypes } from '@/src/types/globals';
+import { IndexContextProvider } from '@/src/components/edit_book_page/RenderCards/Card/CardHeader/client';
+import CardHeader from '@/src/components/edit_book_page/RenderCards/Card/CardHeader';
+import ExplicitCardContent from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent';
+import TermDeterminationContent from '@/src/components/edit_book_page/RenderCards/Card/TermDeterminationContent';
 
 interface CardProps {
         cardId: string;
+        cardType: AvailableCardTypes;
 }
 
 export const { Provider: CardPropsProvider, usePropsContext: useCardProps } =
         createPropsProvider<CardProps>('card props context provider');
 
-export default function Card({ cardId }: CardProps) {
+export default function Card({
+        cardId,
+        cardIndex,
+        cardType
+}: CardProps & { cardIndex: number; cardType: AvailableCardTypes }) {
+        const content =
+                cardType === 'explicit' ? (
+                        <ExplicitCardContent />
+                ) : (
+                        <TermDeterminationContent />
+                );
         return (
-                <CardPropsProvider cardId={cardId}>
-                        <section className='questionCard'>
-                                <div className='flex justify-between items-center'>
-                                        <CardIndex />
-                                        <DeleteCardButton />
-                                </div>
-                                <div className='container items-center'>
-                                        <div className='w-11/12 flex flex-col gap-4'>
-                                                <QuestionTitle />
-                                                <RenderOptions />
-                                        </div>
-                                </div>
-                        </section>
-                </CardPropsProvider>
+                <IndexContextProvider value={cardIndex}>
+                        <CardPropsProvider cardType={cardType} cardId={cardId}>
+                                <section className='questionCard'>
+                                        <CardHeader />
+                                        {content}
+                                </section>
+                        </CardPropsProvider>
+                </IndexContextProvider>
         );
 }

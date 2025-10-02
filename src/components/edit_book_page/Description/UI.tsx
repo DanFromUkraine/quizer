@@ -2,11 +2,11 @@ import { ChangeEventHandler } from 'react';
 import ExtendableTextArea from '@/src/components/general/ExtendableInput';
 
 export default function DescriptionInputUI({
-        defaultValue,
+        value,
         onChange
 }: {
-        defaultValue: string;
-        onChange: ChangeEventHandler
+        value: string;
+        onChange: ChangeEventHandler;
 }) {
         return (
                 <section className='container'>
@@ -21,7 +21,7 @@ export default function DescriptionInputUI({
                                 name='book-description'
                                 id='book-description'
                                 placeholder='some description yata-yata'
-                                defaultValue={defaultValue}
+                                defaultValue={value}
                                 onChange={onChange}
                         />
                 </section>

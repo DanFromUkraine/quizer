@@ -5,10 +5,10 @@ import {
         SetterAtomForUpdateViaTextProps
 } from '@/src/types/jotai/cardsTextParserFactories';
 import {
-        getListForAssert,
+        getListForInsert,
         getListForUpdate,
         getListWithIdsForDelete
-} from '@/src/utils/getLists';
+} from '@/src/utils/lists';
 import waitForAsyncList from '@/src/utils/waitForAsyncList';
 import {
         addIdToAddToBankAtom,
@@ -103,7 +103,7 @@ export const getSetterAtomManyItemsForInsertionViaText = <Item>() =>
                 ) => {
                         const { childrenIds } = get(fatherFamily(fatherId));
 
-                        const itemsToInsert = getListForAssert(
+                        const itemsToInsert = getListForInsert(
                                 items,
                                 childrenIds
                         );

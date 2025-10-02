@@ -1,12 +1,12 @@
 'use client';
 
 import { useSetAtom } from 'jotai';
-import { editCardsAsTextModalVisibilityAtom } from '@/src/jotai/statusAtoms';
 import { FaRegEdit } from 'react-icons/fa';
+import { openDialogAtom } from '@/src/jotai/dialogVisibilityFamily';
 
 export default function OpenEditCardsModalButton() {
-        const setVisibility = useSetAtom(editCardsAsTextModalVisibilityAtom);
-        const onClick = () => setVisibility(true);
+        const openDialog = useSetAtom(openDialogAtom);
+        const onClick = () => openDialog("editCardsAsText");
 
         return (
                 <section className="container">

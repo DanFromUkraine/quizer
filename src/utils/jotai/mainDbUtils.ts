@@ -1,93 +1,108 @@
 import { atom, Getter, Setter, WritableAtom } from 'jotai';
-import { Book, Card, MainDbGlobal, Option, StoreMap } from '@/src/types/mainDbGlobal';
 import {
-        booksFamilyAtom,
-        booksIdsAtom,
-        cardsFamilyAtom,
-        currentBookIdAtom,
-        deleteCardAtom,
-        deleteOptionAtom,
-        mainAtoms,
-        optionsFamilyAtom
+        Book,
+        ExplicitCard,
+        MainDbGlobal,
+        StoreMap,
+        Story
+} from '@/src/types/mainDbGlobal';
+import {
+        booksAtomFamily,
+        explicitCardsAtomFamily,
+        mainDbAtom,
+        optionsAtomFamily,
+        shortCardsAtomFamily
 } from '@/src/jotai/mainAtoms';
 import { getFilteredIds } from '@/src/utils/idb/idUtils';
-import { getTemplate } from '@/src/utils/idb/main/templates';
+import {
+        getEmptyStoryTemplate,
+        getTemplate
+} from '@/src/utils/idb/main/templates';
+import { currentBookIdAtom } from '@/src/jotai/idManagers';
+import {
+        getCardType,
+        getListWhereNoSuchIds,
+        getListWithSuchIds
+} from '@/src/utils/lists';
+import { AvailableCardTypes } from '@/src/types/globals';
+import { CARD_TYPE_UNKNOWN } from '@/src/constants/errors';
 
-export function getAtomFactory<K extends keyof StoreMap>(storeName: K) {
-        return (
-                id: string
-        ): WritableAtom<StoreMap[K], [StoreMap[K]], unknown> =>
-                atom(getTemplate(storeName, id) as StoreMap[K]);
+export function getAtomFactory<K extends keyof Omit<StoreMap, 'history'>>(
+        storeName: K
+) {
+        return (id: string) => atom(getTemplate(storeName, id));
 }
 
-export function addEmptyBookAtomHelper(set: Setter, id: string) {
-        const newBookAtom = booksFamilyAtom(id);
-        const bookTemplate = getTemplate('books', id);
-        set(booksIdsAtom, (prev) => [...prev, id]);
-        set(newBookAtom, bookTemplate);
+export function getHistoryAtom(id: string) {
+        return atom<Story>(getEmptyStoryTemplate(id));
 }
 
-export function addEmptyCardAtomHelper(set: Setter, id: string) {
-        const newCardAtom = cardsFamilyAtom(id);
-        const cardTemplate = getTemplate('cards', id);
-        set(newCardAtom, cardTemplate);
-}
-
-export function deleteBookAtomHelper(set: Setter, id: string) {
-        set(booksIdsAtom, (prev) => prev.filter((lastId) => lastId !== id));
-        booksFamilyAtom.remove(id);
-}
-
-export function updateBookAtomHelper(set: Setter, newBook: Book) {
-        const bookAtom = booksFamilyAtom(newBook.id);
-        set(bookAtom, newBook);
-}
-
-export function deleteOptionAtomHelper() {}
-
-export function getNewBookWithFilteredIds(
+export function getNewBookWithDeletedCardId(
         get: Getter,
         idToDelete: string
 ): Book {
+        /* The probability that such ids exists in both explicitCardIds and shortCardIds is so low, that should not be considered*/
         const bookId = get(currentBookIdAtom);
-        const prevBook = get(booksFamilyAtom(bookId));
-        const filteredIds = getFilteredIds(prevBook.childrenIds, idToDelete);
+        const { cardIdsOrder, explicitCardIds, shortCardIds, ...other } = get(
+                booksAtomFamily(bookId)
+        );
+        const newCardIdsOrder = getListWhereNoSuchIds(cardIdsOrder, [
+                idToDelete
+        ]);
+        const newExplicitCardIdsList = getListWhereNoSuchIds(explicitCardIds, [
+                idToDelete
+        ]);
+        const newShortCardIdsList = getListWhereNoSuchIds(shortCardIds, [
+                idToDelete
+        ]);
+
         return {
-                ...prevBook,
-                childrenIds: filteredIds
+                ...other,
+                cardIdsOrder: newCardIdsOrder,
+                explicitCardIds: newExplicitCardIdsList,
+                shortCardIds: newShortCardIdsList
         };
 }
 
-export function getBookWithNewId(
-        get: Getter,
-        bookId: string,
-        cardId: string
-): Book {
-        const prevBook = get(booksFamilyAtom(bookId));
-        const updatedIds = [...prevBook.childrenIds, cardId];
-        return {
-                ...prevBook,
-                childrenIds: updatedIds
-        };
-}
+export function getBookWithNewId({
+        cardId,
+        cardType,
+        bookId,
+        get
+}: {
+        cardId: string;
+        cardType: AvailableCardTypes;
+        bookId: string;
+        get: Getter;
+}): Book {
+        const { cardIdsOrder, ...other } = get(booksAtomFamily(bookId));
+        const newCardIdsOrder = getListWithSuchIds(cardIdsOrder, [cardId]);
 
-export function updateCardAtomHelper(set: Setter, newCard: Card) {
-        const cardAtom = cardsFamilyAtom(newCard.id);
-        set(cardAtom, newCard);
-}
-
-export function updateOptionAtomHelper(set: Setter, newOption: Option) {
-        const optionAtom = optionsFamilyAtom(newOption.id);
-        set(optionAtom, newOption);
+        return cardType === 'explicit'
+                ? {
+                          ...other,
+                          cardIdsOrder: newCardIdsOrder,
+                          explicitCardIds: getListWithSuchIds(
+                                  other.explicitCardIds,
+                                  [cardId]
+                          )
+                  }
+                : {
+                          ...other,
+                          cardIdsOrder: newCardIdsOrder,
+                          shortCardIds: getListWithSuchIds(other.shortCardIds, [
+                                  cardId
+                          ])
+                  };
 }
 
 export function getCardWithNewOptionId(
         get: Getter,
         cardId: string,
         optionId: string
-): Card {
-        const cardAtom = cardsFamilyAtom(cardId);
-        const prevCard = get(cardAtom);
+): ExplicitCard {
+        const cardAtom = explicitCardsAtomFamily(cardId);
+        const prevCard = get(cardAtom) as ExplicitCard;
         const newIds = [...prevCard.childrenIds, optionId];
 
         return {
@@ -96,19 +111,13 @@ export function getCardWithNewOptionId(
         };
 }
 
-export function addEmptyOptionAtomHelper(set: Setter, optionId: string) {
-        const optionAtom = optionsFamilyAtom(optionId);
-        const newOption = getTemplate('options', optionId);
-        set(optionAtom, newOption);
-}
-
 export function getCardWithoutDeletedOptionId(
         get: Getter,
         cardId: string,
         optionId: string
-): Card {
-        const cardAtom = cardsFamilyAtom(cardId);
-        const prevCard = get(cardAtom);
+): ExplicitCard {
+        const cardAtom = explicitCardsAtomFamily(cardId);
+        const prevCard = get(cardAtom) as ExplicitCard;
         const newIds = getFilteredIds(prevCard.childrenIds, optionId);
 
         return {
@@ -117,7 +126,7 @@ export function getCardWithoutDeletedOptionId(
         };
 }
 
-export function getDerivedAtom<Args extends unknown[]>(
+export function getDerivedAtomWithIdb<Args extends unknown[]>(
         callback: (
                 get: Getter,
                 set: Setter,
@@ -128,7 +137,9 @@ export function getDerivedAtom<Args extends unknown[]>(
         return atom<null, Args, Promise<void>>(
                 null,
                 async (get, set, ...args: Args) => {
-                        const mainDb = get(mainAtoms) as MainDbGlobal | undefined;
+                        const mainDb = get(mainDbAtom) as
+                                | MainDbGlobal
+                                | undefined;
                         if (typeof mainDb === 'undefined') return;
 
                         try {
@@ -140,40 +151,45 @@ export function getDerivedAtom<Args extends unknown[]>(
         ) as WritableAtom<null, Args, Promise<void>>;
 }
 
-export function getCardsAsText(cardsIds: string[], get: Getter) {
-        return cardsIds.map((cardId) => {
-                const { cardTitle, childrenIds } = get(cardsFamilyAtom(cardId));
-                return `\n&& ${cardTitle} ${getOptionsAsText(childrenIds, get).join('')}`;
-        });
+export function getCardsAsText({
+        cardIdsOrder,
+        explicitCardIds,
+        shortCardIds,
+        get
+}: {
+        cardIdsOrder: string[];
+        explicitCardIds: string[];
+        shortCardIds: string[];
+        get: Getter;
+}) {
+        return cardIdsOrder.map((cardId) => {
+                const cardType = getCardType({
+                        targetId: cardId,
+                        explicitCardIds,
+                        shortCardIds
+                });
+                if (cardType === 'short') {
+                        const { term, definition } = get(
+                                shortCardsAtomFamily(cardId)
+                        );
+                        return `\n @@ ${term} - ${definition}`;
+                } else if (cardType === 'explicit') {
+                        const { cardTitle, childrenIds } = get(
+                                explicitCardsAtomFamily(cardId)
+                        );
+
+                        return `\n && ${cardTitle} ${getOptionsAsText(childrenIds, get)}`;
+                } else {
+                        throw CARD_TYPE_UNKNOWN;
+                }
+        }).join('')
 }
 
 export function getOptionsAsText(optionsIds: string[], get: Getter) {
         return optionsIds.map((optionId) => {
                 const { optionTitle, isCorrect } = get(
-                        optionsFamilyAtom(optionId)
+                        optionsAtomFamily(optionId)
                 );
                 return `\n \t %% ${isCorrect ? '%correct%' : ''} ${optionTitle}`;
         });
-}
-
-export async function deleteCardsOnBookDeleteAtomHelper(
-        get: Getter,
-        set: Setter,
-        bookId: string
-) {
-        const { childrenIds } = get(booksFamilyAtom(bookId));
-        for await (const cardId of childrenIds) {
-                await set(deleteCardAtom, cardId);
-        }
-}
-
-export async function deleteOptionsOnCardDeleteAtomHelper(
-        get: Getter,
-        set: Setter,
-        cardId: string
-) {
-        const { childrenIds } = get(cardsFamilyAtom(cardId));
-        for await (const optionId of childrenIds) {
-                await set(deleteOptionAtom, cardId, optionId);
-        }
 }

@@ -1,20 +1,32 @@
-import { Book, Card, ObjectStores, Option } from '@/src/types/mainDbGlobal';
+import {
+        Book,
+        ExplicitCard,
+        Option,
+        StoreMap,
+        Story,
+        TermDefinitionCard
+} from '@/src/types/mainDbGlobal';
 
 function getEmptyBookTemplate(id: string): Book {
         return {
                 id,
                 bookTitle: '',
                 lastChangeDate: Date.now(),
-                description: "",
-                childrenIds: []
+                description: '',
+                cardIdsOrder: [],
+                explicitCardIds: [],
+                shortCardIds: []
         };
 }
 
-function getEmptyCardTemplate(id: string): Card {
+function getEmptyCardTemplate(id: string): ExplicitCard {
         return {
                 id,
+                type: 'explicit',
                 cardTitle: '',
-                childrenIds: []
+                childrenIds: [],
+                explanation: '',
+                subtitle: ''
         };
 }
 
@@ -26,18 +38,46 @@ function getEmptyOptionTemplate(id: string): Option {
         };
 }
 
-export function getTemplate(templateType: 'books', id: string): Book;
-export function getTemplate(templateType: 'cards', id: string): Card;
-export function getTemplate(templateType: 'options', id: string): Option;
-export function getTemplate(
-        templateType: ObjectStores,
-        id: string
-): Book | Card | Option;
-export function getTemplate(templateType: ObjectStores, id: string) {
-        const templates = {
-                cards: getEmptyCardTemplate,
-                books: getEmptyBookTemplate,
-                options: getEmptyOptionTemplate
+function getEmptyTermDefinitionCard(id: string): TermDefinitionCard {
+        return {
+                id,
+                type: 'short',
+                term: '',
+                definition: ''
         };
-        return templates[templateType](id);
+}
+
+const templates = {
+        books: getEmptyBookTemplate,
+        explicitCards: getEmptyCardTemplate,
+        shortCards: getEmptyTermDefinitionCard,
+        options: getEmptyOptionTemplate
+};
+
+type Templates = typeof templates & {
+        [key in keyof typeof templates]: (id: string) => Templates[key];
+};
+
+export function getTemplate<Key extends keyof Omit<StoreMap, 'history'>>(
+        tp: Key,
+        id: string
+): StoreMap[Key] {
+        return templates[tp](id) as StoreMap[Key];
+}
+
+export function getEmptyStoryTemplate(storyId: string): Story {
+        return {
+                id: storyId,
+                bookId: '',
+                timeSpentSec: 0,
+                isCompleted: false,
+                choicePointers: [],
+                playStartDate: Date.now(),
+                bookData: {
+                        title: '',
+                        description: '',
+                        creationDate: 0,
+                        cards: []
+                }
+        };
 }

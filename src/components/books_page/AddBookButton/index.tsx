@@ -1,7 +1,7 @@
 'use client';
 import { useSetAtom } from 'jotai';
 import { IoAddCircle } from 'react-icons/io5';
-import { addEmptyBookAtom } from '@/src/jotai/mainAtoms';
+import { addEmptyBookAtom } from '@/src/jotai/bookAtoms';
 
 export default function AddBookButton() {
         const add = useSetAtom(addEmptyBookAtom);

@@ -14,9 +14,11 @@ export default function Quoted({
                                 'flex w-full gap-2 bg-gray-300 heading-3 font-medium rounded-md p-3',
                                 className
                         )}>
-                        <span>"</span>
+                        <span className='heading-3'>"</span>
                         {children}
-                        <span className='mt-auto'>"</span>
+                        <span className='mt-auto'>
+                                <sub className="heading-3">"</sub>
+                        </span>
                 </div>
         );
 }

@@ -1,0 +1,28 @@
+'use client';
+
+import TermOrDeterminationInput from '@/src/components/edit_book_page/RenderCards/Card/TermDeterminationContent/client';
+import {
+        getShortCardDefinitionAdapterAtom,
+        getShortCardTermAdapterAtom
+} from '@/src/utils/jotai/mainDbAtomAdapters';
+import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
+
+export default function TermDeterminationContent() {
+        const { cardId } = useCardProps();
+        return (
+                <section className='w-full grid grid-cols-2 gap-4'>
+                        <TermOrDeterminationInput
+                                underText='TERM'
+                                atomAdapterUnstable={getShortCardTermAdapterAtom(
+                                        cardId
+                                )}
+                        />
+                        <TermOrDeterminationInput
+                                underText='DEFINITION'
+                                atomAdapterUnstable={getShortCardDefinitionAdapterAtom(
+                                        cardId
+                                )}
+                        />
+                </section>
+        );
+}

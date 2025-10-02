@@ -1,16 +1,10 @@
 import {
-        ExplicitCardDataStore,
-        ExplicitOptionDataStore
+        FullCardFromText,
+        FullOptionFromText
 } from '@/src/utils/parseTextIntoCardsArray';
 import {
-        addNewCardViaTextAtom,
-        addNewOptionViaTextAtom,
-        booksFamilyAtom,
-        cardsFamilyAtom,
-        deleteCardViaTextAtom,
-        deleteOptionViaTextAtom,
-        updateCardViaTextAtom,
-        updateOptionViaTextAtom
+        booksAtomFamily,
+        explicitCardsAtomFamily,
 } from '@/src/jotai/mainAtoms';
 import {
         FatherFamilyAtom,
@@ -18,16 +12,26 @@ import {
         SetterAtomForInsertionViaTextProps,
         SetterAtomForUpdateViaTextProps
 } from '@/src/types/jotai/cardsTextParserFactories';
+import {
+        addNewCardViaTextAtom,
+        deleteCardViaTextAtom,
+        updateCardViaTextAtom
+} from '@/src/jotai/cardAtoms';
+import {
+        addNewOptionViaTextAtom,
+        deleteOptionViaTextAtom,
+        updateOptionViaTextAtom
+} from '@/src/jotai/optionAtoms';
 
 export const getSettingsForUpdateCard = ({
         bookId,
         cardsArray
 }: {
         bookId: string;
-        cardsArray: ExplicitCardDataStore[];
-}): SetterAtomForUpdateViaTextProps<ExplicitCardDataStore> => ({
+        cardsArray: FullCardFromText[];
+}): SetterAtomForUpdateViaTextProps<FullCardFromText> => ({
         fatherId: bookId,
-        fatherFamily: booksFamilyAtom as FatherFamilyAtom,
+        fatherFamily: booksAtomFamily as FatherFamilyAtom,
         items: cardsArray,
         updateActionAtom: updateCardViaTextAtom
 });
@@ -37,10 +41,10 @@ export const getSettingsForInsertCard = ({
         cardsArray
 }: {
         bookId: string;
-        cardsArray: ExplicitCardDataStore[];
-}): SetterAtomForInsertionViaTextProps<ExplicitCardDataStore> => ({
+        cardsArray: FullCardFromText[];
+}): SetterAtomForInsertionViaTextProps<FullCardFromText> => ({
         fatherId: bookId,
-        fatherFamily: booksFamilyAtom as FatherFamilyAtom,
+        fatherFamily: booksAtomFamily as FatherFamilyAtom,
         insertActionAtom: addNewCardViaTextAtom,
         items: cardsArray
 });
@@ -50,10 +54,10 @@ export const getSettingsForDeleteCard = ({
         cardsArray
 }: {
         bookId: string;
-        cardsArray: ExplicitCardDataStore[];
-}): SetterAtomForDeleteViaTextProps<ExplicitCardDataStore> => ({
+        cardsArray: FullCardFromText[];
+}): SetterAtomForDeleteViaTextProps<FullCardFromText> => ({
         fatherId: bookId,
-        fatherFamily: booksFamilyAtom as FatherFamilyAtom,
+        fatherFamily: booksAtomFamily as FatherFamilyAtom,
         deleteActionAtom: deleteCardViaTextAtom,
         items: cardsArray
 });
@@ -63,10 +67,10 @@ export const getSettingsForInsertOptions = ({
         options
 }: {
         cardId: string;
-        options: ExplicitOptionDataStore[];
-}): SetterAtomForInsertionViaTextProps<ExplicitOptionDataStore> => ({
+        options: FullOptionFromText[];
+}): SetterAtomForInsertionViaTextProps<FullOptionFromText> => ({
         fatherId: cardId,
-        fatherFamily: cardsFamilyAtom as FatherFamilyAtom,
+        fatherFamily: explicitCardsAtomFamily as FatherFamilyAtom,
         insertActionAtom: addNewOptionViaTextAtom,
         items: options
 });
@@ -76,10 +80,10 @@ export const getSettingsForDeleteOptions = ({
         options
 }: {
         cardId: string;
-        options: ExplicitOptionDataStore[];
-}): SetterAtomForDeleteViaTextProps<ExplicitOptionDataStore> => ({
+        options: FullOptionFromText[];
+}): SetterAtomForDeleteViaTextProps<FullOptionFromText> => ({
         fatherId: cardId,
-        fatherFamily: cardsFamilyAtom as FatherFamilyAtom,
+        fatherFamily: explicitCardsAtomFamily as FatherFamilyAtom,
         deleteActionAtom: deleteOptionViaTextAtom,
         items: options
 });
@@ -89,10 +93,10 @@ export const getSettingsForUpdateOptions = ({
         options
 }: {
         cardId: string;
-        options: ExplicitOptionDataStore[];
-}): SetterAtomForUpdateViaTextProps<ExplicitOptionDataStore> => ({
+        options: FullOptionFromText[];
+}): SetterAtomForUpdateViaTextProps<FullOptionFromText> => ({
         fatherId: cardId,
-        fatherFamily: cardsFamilyAtom as FatherFamilyAtom,
+        fatherFamily: explicitCardsAtomFamily as FatherFamilyAtom,
         updateActionAtom: updateOptionViaTextAtom,
         items: options
 });

@@ -1,21 +1,20 @@
-import useJotaiDeferredInput from '@/src/hooks/jotai/jotaiDeferedInput';
+'use client';
 import { useEditBookProps } from '@/app/edit/page';
-import { ChangeEventHandler } from 'react';
+import { useMemo } from 'react';
 import DescriptionInputUI from '@/src/components/edit_book_page/Description/UI';
-import { bookDescriptionAtomAdapter } from '@/src/utils/jotai/mainDbAtomAdapters';
+import { getBookDescriptionAtomAdapter } from '@/src/utils/jotai/mainDbAtomAdapters';
+import { useAtom } from 'jotai';
+import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 
 export default function BookDescriptionInput() {
         const { bookId } = useEditBookProps();
-        const [value, setValue] = useJotaiDeferredInput(
-                bookDescriptionAtomAdapter,
-                bookId
+        const stableAdapterAtom = useMemo(
+                () => getBookDescriptionAtomAdapter(bookId),
+                []
         );
+        const [value, setValue] = useAtom(stableAdapterAtom);
 
-        const onChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
-                const value = e.target.value;
-                if (typeof value !== 'string') return;
-                setValue(value);
-        };
+        const onChange = getInputChangeCallback((newVal) => setValue(newVal));
 
-        return <DescriptionInputUI onChange={onChange} defaultValue={value} />;
+        return <DescriptionInputUI onChange={onChange} value={value} />;
 }

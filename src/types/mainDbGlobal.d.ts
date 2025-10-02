@@ -8,40 +8,63 @@ export interface MainDbSchema extends DBSchema {
                 key: string;
                 value: Book;
         };
-        cards: {
+        explicitCards: {
                 key: string;
-                value: Card;
+                value: ExplicitCard;
+        };
+        shortCards: {
+                key: string;
+                value: TermDefinitionCard;
         };
         options: {
                 key: string;
                 value: Option;
         };
-        history: {};
+        history: {
+                key: string;
+                value: Story;
+        };
 }
 
-export type ObjectStores = keyof Pick<
+export type ObjectStoreKeysNoHistory = keyof Pick<
         MainDbSchema,
         'books' | 'cards' | 'options'
 >;
 
+export type ObjectStoreKeysAll = keyof StoreMap;
+
 export type StoreMap = {
         books: Book;
-        cards: Card;
+        explicitCards: ExplicitCard;
+        shortCards: TermDefinitionCard;
         options: Option;
+        history: Story;
 };
 
 export interface Book {
         id: string;
         bookTitle: string;
         lastChangeDate: number;
-        childrenIds: string[];
         description: string;
+        explicitCardIds: string[];
+        shortCardIds: string[];
+        cardIdsOrder: string[];
 }
 
-export interface Card {
+export interface ExplicitCard {
+        type: 'explicit';
         id: string;
         cardTitle: string;
         childrenIds: string[];
+        explanation: string;
+        subtitle: string;
+}
+
+export interface TermDefinitionCard {
+        type: 'short';
+        id: string;
+        term: string;
+        definition: string;
 }
 
 export interface Option {
@@ -65,9 +88,14 @@ interface FullOption {
         isCorrect: boolean;
 }
 
-interface FullCard {
+export interface FullCard {
         title: string;
         options: FullOption[];
+}
+
+export interface FullTermDefinition {
+        term: string;
+        definition: string;
 }
 
 interface FullBook {
@@ -77,8 +105,16 @@ interface FullBook {
         cards: FullCard[];
 }
 
-export interface History {
+export interface Story {
         id: string;
-        completionTimeSec: number;
+        isCompleted: boolean;
+        bookId: string;
+        timeSpentSec: number;
         bookData: FullBook;
+        playStartDate: number;
+        choicePointers: (number | string)[];
 }
+
+export type BooksAndStoriesAssociations = {
+        [key: string]: string[];
+};

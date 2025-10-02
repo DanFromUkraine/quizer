@@ -1,7 +1,8 @@
-import { WritableAtom } from 'jotai';
+import { WritableAtom, PrimitiveAtom } from 'jotai';
 
 
 export type StringAtomAdapter = AtomFamily<
+        string,
         WritableAtom<string, [newTitle: string], void>
 >;
 
@@ -20,3 +21,7 @@ export interface AtomFamily<Param, AtomType> {
          */
         unstable_listen(callback: Callback<Param, AtomType>): Cleanup;
 }
+
+export type AddNewStorySuccessHandler = (storyId: string) => void;
+
+export type IdManagerAtom =  PrimitiveAtom<string[]> & WithInitialValue<string[]>;
