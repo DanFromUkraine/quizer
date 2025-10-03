@@ -8,24 +8,36 @@ import { useEffect } from 'react';
 import { dialogVisibilityFamilyAtom } from '@/src/jotai/dialogVisibilityFamily';
 import {
         cardsTextAtom,
+        markupModeAtom,
         textInModalHasBeenChangedAtom
 } from '@/src/jotai/cardsAsTextAtoms';
-import { updateCardsFromTextAtom } from '@/src/jotai/cardAtoms';
+import {
+        updateAnyCardsFromTextAtom,
+        updateOnlyShortCardsFromTextAtom
+} from '@/src/jotai/cardAtoms';
 
 export default function useUpdateCardsFromTextOnDialogClose() {
         const [cardsText] = useAtom(cardsTextAtom);
+        const markupMode = useAtomValue(markupModeAtom);
         const modalVisible = useAtomValue(
                 dialogVisibilityFamilyAtom('editCardsAsText')
         );
         const [areAnyChanges, setChangesFlagState] = useAtom(
                 textInModalHasBeenChangedAtom
         );
-        const updateCards = useSetAtom(updateCardsFromTextAtom);
+        const updateAnyCards = useSetAtom(updateAnyCardsFromTextAtom);
+        const updateOnlyShortCards = useSetAtom(
+                updateOnlyShortCardsFromTextAtom
+        );
 
         useEffect(() => {
                 if (cardsText.length === 0 || modalVisible || !areAnyChanges)
                         return;
-                updateCards(cardsText);
+                if (markupMode === 'mixed') {
+                        updateAnyCards(cardsText);
+                } else if (markupMode === 'short-only') {
+                        updateOnlyShortCards(cardsText);
+                }
                 setChangesFlagState(false);
-        }, [cardsText, modalVisible]);
+        }, [cardsText, modalVisible, markupMode]);
 }

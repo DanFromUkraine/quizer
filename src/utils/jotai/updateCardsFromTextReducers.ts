@@ -26,6 +26,8 @@ import {
         InsertOptionReducer,
         ReducerDeleteCallback,
         ReducerInsertCallback,
+        ShortCardOnlyDeleteReducer,
+        ShortCardOnlyInsertReducer,
         UpdateCardsReducerOutput,
         UpdateOptionCallback,
         WithId
@@ -383,4 +385,105 @@ export async function updateCardAtomHelper({
                 ...usefulCardData,
                 childrenIds: newOptionIds
         });
+}
+
+export function getShortCardOnlyUpdateCallback({
+        set,
+        shortCardIds
+}: {
+        set: Setter;
+        shortCardIds: string[];
+}) {
+        return async (card: FullTermDefinitionCardFromText, i: number) => {
+                const cardId = shortCardIds[i];
+                await set(updateShortCardAtom, { ...card, id: cardId });
+        };
+}
+
+export function getShortCardOnlyInsertReducer(
+        set: Setter
+): [ShortCardOnlyInsertReducer, Promise<string[]>] {
+        const newIdsToInsert: string[] = [];
+
+        const reducer: ShortCardOnlyInsertReducer = async (_acc, card) => {
+                const newId = getUniqueID();
+                newIdsToInsert.push(newId);
+                await set(updateShortCardAtom, { ...card, id: newId });
+                return newIdsToInsert;
+        };
+
+        return [reducer, Promise.resolve([])];
+}
+
+export function getShortCardOnlyDeleteReducer(set: Setter): [ShortCardOnlyDeleteReducer, Promise<string[]>] {
+        const idsToDelete: string[] = [];
+        const reducer: ShortCardOnlyDeleteReducer = async (
+                _acc,
+                cardIdToDelete
+        ) => {
+                idsToDelete.push(cardIdToDelete)
+                await set(deleteShortCardViaTextAtom, cardIdToDelete);
+                return idsToDelete;
+        };
+        return [reducer, Promise.resolve([])];
+}
+
+export async function updateShortCardsOnlyAtomHelper({
+        cardIdsToInsert,
+        cardIdsToDelete,
+        get,
+        set,
+        bookId
+}: {
+        cardIdsToInsert: string[];
+        cardIdsToDelete: string[];
+        get: Getter;
+        set: Setter;
+        bookId: string;
+}) {
+        const bookAtom = booksAtomFamily(bookId);
+        const { cardIdsOrder, shortCardIds, ...other } = get(bookAtom);
+        let newCardIdsOrder = cardIdsOrder;
+        let newShortCardIds = shortCardIds;
+        const areAnyNew = cardIdsToInsert.length > 0;
+        const areAnyDeleted = cardIdsToDelete.length > 0;
+
+        console.debug({
+                cardIdsToInsert,
+                cardIdsToDelete
+        })
+
+        const updateBook = async () => {
+                await set(updateBookAtom, {
+                        ...other,
+                        cardIdsOrder: newCardIdsOrder,
+                        shortCardIds: newShortCardIds
+                });
+        };
+
+        if (areAnyNew) {
+                newCardIdsOrder = getListWithSuchIds(
+                        cardIdsOrder,
+                        cardIdsToInsert
+                );
+                newShortCardIds = getListWithSuchIds(
+                        shortCardIds,
+                        cardIdsToInsert
+                );
+        }
+
+        if (areAnyDeleted) {
+                newCardIdsOrder = getListWhereNoSuchIds(
+                        cardIdsOrder,
+                        cardIdsToDelete
+                );
+                newShortCardIds = getListWhereNoSuchIds(
+                        shortCardIds,
+                        cardIdsToDelete
+                );
+        }
+
+        if (areAnyNew || areAnyDeleted) {
+                await updateBook();
+        }
 }

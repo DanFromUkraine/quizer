@@ -12,21 +12,26 @@ export default function Dialog({
         children,
         dialogName,
         dialogClassName,
-        containerClassName
+        containerClassName,
+        onCloseSideEffect
 }: {
         children: ReactNode;
         dialogName: DialogNames;
         dialogClassName?: string;
         containerClassName?: string;
+        onCloseSideEffect?: () => void;
 }) {
         const containerRef = useRef<HTMLDivElement>(null);
         const [dialogVisible, setDialogVisible] = useAtom(
                 dialogVisibilityFamilyAtom(dialogName)
         );
         const dialogState = dialogVisible ? 'open' : 'closed';
-        useCloseModalWhenClickOnContainer(containerRef, () =>
-                setDialogVisible(false)
-        );
+        useCloseModalWhenClickOnContainer(containerRef, () => {
+                setDialogVisible(false);
+                if (typeof onCloseSideEffect === 'function') {
+                        onCloseSideEffect();
+                }
+        });
 
         console.log({ dialogVisible });
 

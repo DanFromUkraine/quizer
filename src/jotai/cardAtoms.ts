@@ -25,17 +25,21 @@ import {
         UpdateCardsReducerOutput,
         WithId
 } from '@/src/types/updateCardsFromText';
-import { parseTextIntoAnyCardsArray } from '@/src/utils/parseTextIntoCardsArray';
 import {
         getDeleteAnyCardsReducerCallbackAndInitValue,
         getInsertAnyCardsReducerCallbackAndInitValue,
         getReducerForDeleteOptionsAndInitData,
         getReducerForInsertOptionsAndInitData,
+        getShortCardOnlyDeleteReducer,
+        getShortCardOnlyInsertReducer,
+        getShortCardOnlyUpdateCallback,
         getUpdateAnyCardsReducerCallbackAndInitValue,
         getUpdateOptionCallback,
         updateBookAnyCardIdsAtomHelper,
-        updateCardAtomHelper
+        updateCardAtomHelper,
+        updateShortCardsOnlyAtomHelper
 } from '@/src/utils/jotai/updateCardsFromTextReducers';
+import { parseTextIntoAnyCardsArray, parseTextIntoOnlyShortCardsArray } from '@/src/utils/cardsAsText/fromTextToCards';
 
 export const addEmptyExplicitCardAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb) => {
@@ -178,7 +182,7 @@ export const updateExplicitCardViaText = atom(
         }
 );
 
-export const updateCardsFromTextAtom = atom(
+export const updateAnyCardsFromTextAtom = atom(
         null,
         async (get, set, cardsText: string) => {
                 const cardsArray = parseTextIntoAnyCardsArray(cardsText);
@@ -235,6 +239,47 @@ export const updateCardsFromTextAtom = atom(
                         get,
                         set,
                         idsToUpdate
+                });
+        }
+);
+
+export const updateOnlyShortCardsFromTextAtom = atom(
+        null,
+        async (get, set, cardsText: string) => {
+                const cardsArray = parseTextIntoOnlyShortCardsArray(cardsText);
+                const bookId = get(currentBookIdAtom);
+                const { shortCardIds } = get(
+                        booksAtomFamily(bookId)
+                );
+
+                const asyncVoidListToUpdate = getListForUpdate(
+                        cardsArray,
+                        shortCardIds
+                ).map(getShortCardOnlyUpdateCallback({ set, shortCardIds }));
+                const asyncIdsToInsert = getListForInsert(
+                        cardsArray,
+                        shortCardIds
+                ).reduce<Promise<string[]>>(
+                        ...getShortCardOnlyInsertReducer(set)
+                );
+
+                const asyncIdsToDelete = getListWithIdsForDelete(
+                        cardsArray,
+                        shortCardIds
+                ).reduce(...getShortCardOnlyDeleteReducer(set));
+
+                const [cardIdsToInsert, cardIdsToDelete] = await Promise.all([
+                        asyncIdsToInsert,
+                        asyncIdsToDelete,
+                        asyncVoidListToUpdate
+                ]);
+
+                await updateShortCardsOnlyAtomHelper({
+                        cardIdsToDelete,
+                        cardIdsToInsert,
+                        get,
+                        set,
+                        bookId
                 });
         }
 );

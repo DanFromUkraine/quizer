@@ -69,9 +69,17 @@ export type UpdateOptionCallback = (
         index: number
 ) => Promise<void>;
 
-
-export type MarkupModes = "mixed" | "short-only"
+export type MarkupModes = 'mixed' | 'short-only';
 export type MarkupModesUiList = {
-        modeId: MarkupModes,
-        title: string
-}[]
+        modeId: MarkupModes;
+        title: string;
+}[];
+
+export type ShortCardOnlyInsertReducer = (
+        acc: Promise<string[]>,
+        card: FullTermDefinitionCardFromText,
+) => Promise<string[]>;
+export type ShortCardOnlyDeleteReducer = (
+        acc: Promise<string[]>,
+        cardIdToDelete: string
+) => Promise<string[]>;
