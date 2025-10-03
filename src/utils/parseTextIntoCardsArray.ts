@@ -2,12 +2,12 @@
 // 'todo' - rewrite in AssemblyScript, to optimize it
 // 'todo' - add change flag, to show renderer, if a component actually needs render.
 
+import { CARD_TYPE_UNKNOWN } from '@/src/constants/errors';
 import {
         FullCardFromText,
         FullOptionFromText,
         FullTermDefinitionCardFromText
-} from '@/src/types/cardsTextParser';
-import { CARD_TYPE_UNKNOWN } from '@/src/constants/errors';
+} from '@/src/types/updateCardsFromText';
 
 const RULES = {
         FULL_CARD_MARKER: '&&',
@@ -138,11 +138,26 @@ function getProcessedCards({
         }
 }
 
-function deleteCardsWithEmptyTitle(cardTitle: string) {
-        return cardTitle.length > 0;
+type DeleteCardsWithEmptyTitleCallback = (
+        anyCard: FullCardFromText | FullTermDefinitionCardFromText
+) => boolean;
+
+function getFilterRuleToDeleteCardsWithEmptyTitle(): DeleteCardsWithEmptyTitleCallback {
+        return (anyCard) => {
+                if (anyCard.type === 'explicit') {
+                        return anyCard.cardTitle.length > 0;
+                } else if (anyCard.type === 'short') {
+                        return (
+                                anyCard.term.length > 0 &&
+                                anyCard.definition.length > 0
+                        );
+                } else {
+                        throw 'Cards from text array includes card without type (type should be "explicit", or "short"))';
+                }
+        };
 }
 
-export default function parseTextIntoCardsArray(
+export function parseTextIntoAnyCardsArray(
         targetText: string
 ): (FullCardFromText | FullTermDefinitionCardFromText)[] {
         const cardsUnprocessed = targetText.split(getCardSeparator());
@@ -156,17 +171,36 @@ export default function parseTextIntoCardsArray(
                         })
                 )
                 .filter((val) => typeof val !== 'undefined')
-                .filter((val) => {
-                        /* 'todo' - move in other function */
-                        if (val.type === 'explicit') {
-                                return val.cardTitle.length > 0;
-                        } else if (val.type === 'short') {
-                                return (
-                                        val.term.length > 0 &&
-                                        val.definition.length > 0
-                                );
-                        } else {
-                                throw 'Cards from text array includes card without type (type should be "explicit", or "short"))';
-                        }
-                });
+                .filter(getFilterRuleToDeleteCardsWithEmptyTitle());
+}
+
+export function getProcessedShortCardOnly(
+        cardText: string
+): FullTermDefinitionCardFromText | undefined {
+        if (typeof cardText === 'undefined') return;
+        const cleanValue = getValCleanFromSpecSigns(cardText);
+        if (cleanValue.length === 0) return;
+        let term = '';
+        let definition = '';
+        try {
+                const [t, d] = cardText.split(' - ');
+                term = t;
+                definition = d;
+        } catch (e) {}
+        return {
+                type: 'short',
+                term,
+                definition
+        };
+}
+
+export function parseTextIntoOnlyShortCardsArray(targetText: string) {
+        const cardsUnprocessed = targetText.split(/\n/g);
+
+        return cardsUnprocessed
+                .map((shortCardText) =>
+                        getProcessedShortCardOnly(shortCardText)
+                )
+                .filter((val) => typeof val !== 'undefined')
+                .filter(getFilterRuleToDeleteCardsWithEmptyTitle());
 }

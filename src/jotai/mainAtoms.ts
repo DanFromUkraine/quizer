@@ -17,13 +17,9 @@ import {
         BooksAndStoriesAssociations,
         MainDbGlobal
 } from '@/src/types/mainDbGlobal';
-import {
-        getAtomFactory,
-        getCardsAsText,
-        getHistoryAtom
-} from '@/src/utils/jotai/mainDbUtils';
+import { getAtomFactory, getHistoryAtom } from '@/src/utils/jotai/mainDbUtils';
 import computeBooksAndStoriesAssociations from '@/src/utils/jotai/computeBooksAndStoriesAssociations';
-import { currentBookIdAtom, storyIdsAtom } from '@/src/jotai/idManagers';
+import { storyIdsAtom } from '@/src/jotai/idManagers';
 
 export const mainDbAtom = atom<MainDbGlobal>();
 export const booksAtomFamily = atomFamily(getAtomFactory('books'));
@@ -53,28 +49,3 @@ export const getAssociationsForBookAtomOnlyIncomplete = (bookId: string) =>
                 });
         });
 
-const cardsTextLocalAtom = atom('');
-export const textInModalHasBeenChanged = atom(false);
-
-export const cardsTextAtom = atom(
-        (get) => {
-                const bookId = get(currentBookIdAtom);
-                const { cardIdsOrder, explicitCardIds, shortCardIds } = get(
-                        booksAtomFamily(bookId)
-                );
-                const hasSomethingChanged = get(textInModalHasBeenChanged);
-
-                return hasSomethingChanged
-                        ? get(cardsTextLocalAtom)
-                        : getCardsAsText({
-                                  cardIdsOrder,
-                                  explicitCardIds,
-                                  shortCardIds,
-                                  get
-                          });
-        },
-        (_get, set, newVal: string) => {
-                set(textInModalHasBeenChanged, true);
-                set(cardsTextLocalAtom, newVal);
-        }
-);

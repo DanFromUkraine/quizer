@@ -2,7 +2,7 @@
 
 import useUpdateCardsFromTextOnDialogClose from '@/src/hooks/edit_book_page/useUpdateCardsFromTextOnDialogClose';
 import Dialog from '@/src/components/general/Dialog';
-import MainTextArea from '@/src/components/edit_book_page/EditCardsAsText/MainTextArea';
+import { MainTextArea, ModeTools } from '@/src/components/edit_book_page/EditCardsAsText/client';
 
 export default function EditCardsAsTextDialog() {
         useUpdateCardsFromTextOnDialogClose();
@@ -13,6 +13,7 @@ export default function EditCardsAsTextDialog() {
                                 <h2 className='heading-2'>
                                         Here you can edit your cards as a text
                                 </h2>
+                                <ModeTools />
                                 <MainTextArea />
                         </div>
                 </Dialog>

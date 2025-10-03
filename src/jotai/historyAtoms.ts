@@ -25,58 +25,58 @@ import {
 } from '@/src/jotai/idManagers';
 import getNewStory from '@/src/utils/getNewStory';
 import { StoriesByBook } from '@/src/types/historyPage';
-
-function getFullOption({
-        get,
-        optionId
-}: {
-        get: Getter;
-        optionId: string;
-}): FullOption {
-        const { optionTitle, isCorrect } = get(optionsAtomFamily(optionId));
-        return {
-                title: optionTitle,
-                isCorrect
-        };
-}
-
-function getFullCard({
-        get,
-        cardId
-}: {
-        get: Getter;
-        cardId: string;
-}): FullCard | FullTermDefinition {
-        const card = get(explicitCardsAtomFamily(cardId));
-        if (card.type === 'explicit') {
-                return {
-                        title: card.cardTitle,
-                        options: card.childrenIds.map((optionId) =>
-                                getFullOption({ get, optionId })
-                        )
-                };
-        } else {
-                return {
-                        term: card.term,
-                        definition: card.definition
-                };
-        }
-}
-
-function getFullBook(bookId: string) {
-        return atom((get) => {
-                const { bookTitle, description, lastChangeDate, childrenIds } =
-                        get(booksAtomFamily(bookId));
-                return {
-                        title: bookTitle,
-                        description,
-                        creationDate: lastChangeDate,
-                        cards: childrenIds.map((cardId) =>
-                                getFullCard({ get, cardId })
-                        )
-                } as FullBook;
-        });
-}
+//
+// function getFullOption({
+//         get,
+//         optionId
+// }: {
+//         get: Getter;
+//         optionId: string;
+// }): FullOption {
+//         const { optionTitle, isCorrect } = get(optionsAtomFamily(optionId));
+//         return {
+//                 title: optionTitle,
+//                 isCorrect
+//         };
+// }
+//
+// function getFullCard({
+//         get,
+//         cardId
+// }: {
+//         get: Getter;
+//         cardId: string;
+// }): FullCard | FullTermDefinition {
+//         const card = get(explicitCardsAtomFamily(cardId));
+//         if (card.type === 'explicit') {
+//                 return {
+//                         title: card.cardTitle,
+//                         options: card.childrenIds.map((optionId) =>
+//                                 getFullOption({ get, optionId })
+//                         )
+//                 };
+//         } else {
+//                 return {
+//                         term: card.term,
+//                         definition: card.definition
+//                 };
+//         }
+// }
+//
+// function getFullBook(bookId: string) {
+//         return atom((get) => {
+//                 const { bookTitle, description, lastChangeDate, childrenIds } =
+//                         get(booksAtomFamily(bookId));
+//                 return {
+//                         title: bookTitle,
+//                         description,
+//                         creationDate: lastChangeDate,
+//                         cards: childrenIds.map((cardId) =>
+//                                 getFullCard({ get, cardId })
+//                         )
+//                 } as FullBook;
+//         });
+// }
 
 export const addNewStoryAtom = getDerivedAtomWithIdb(
         async (
@@ -86,13 +86,13 @@ export const addNewStoryAtom = getDerivedAtomWithIdb(
                 bookId: string,
                 successCallback: AddNewStorySuccessHandler
         ) => {
-                const fullBook = get(getFullBook(bookId));
-                const newStoryId = getUniqueID();
-                const newStory = getNewStory({ fullBook, bookId, newStoryId });
-                await updateStoryIdb(mainDb, newStory);
-                set(storiesAtomFamily(newStoryId), newStory);
-                set(pushNewIdAtom, storyIdsAtom, newStoryId);
-                successCallback(newStoryId);
+                // const fullBook = get(getFullBook(bookId));
+                // const newStoryId = getUniqueID();
+                // const newStory = getNewStory({ fullBook, bookId, newStoryId });
+                // await updateStoryIdb(mainDb, newStory);
+                // set(storiesAtomFamily(newStoryId), newStory);
+                // set(pushNewIdAtom, storyIdsAtom, newStoryId);
+                // successCallback(newStoryId);
         }
 );
 

@@ -1,13 +1,9 @@
+/* 'todo' - This file is kinda huge. Need to divide it into small peaces
+ */
+
 import getUniqueID from '@/src/utils/getUniqueID';
-import {
-        getBookWithNewId,
-        getDerivedAtomWithIdb,
-        getNewBookWithDeletedCardId
-} from '@/src/utils/jotai/mainDbUtils';
-import {
-        explicitCardsAtomFamily,
-        shortCardsAtomFamily
-} from '@/src/jotai/mainAtoms';
+import { getBookWithNewId, getDerivedAtomWithIdb, getNewBookWithDeletedCardId } from '@/src/utils/jotai/mainDbUtils';
+import { booksAtomFamily, explicitCardsAtomFamily, shortCardsAtomFamily } from '@/src/jotai/mainAtoms';
 import {
         addEmptyExplicitCardIdb,
         addEmptyShortCardIdb,
@@ -18,27 +14,28 @@ import {
         updateShortCardIdb
 } from '@/src/utils/idb/main/actions';
 import { ExplicitCard, TermDefinitionCard } from '@/src/types/mainDbGlobal';
-import {
-        deleteOptionsOnCardDeleteAtomHelper,
-        updateBookAtomHelper
-} from '@/src/utils/jotai/helpers';
+import { deleteOptionsOnCardDeleteAtomHelper, updateBookAtomHelper } from '@/src/utils/jotai/helpers';
 import { currentBookIdAtom } from '@/src/jotai/idManagers';
-import { atom, Setter } from 'jotai';
+import { atom } from 'jotai';
+import { getListForInsert, getListForUpdate, getListWithIdsForDelete } from '@/src/utils/lists';
 import {
+        DeleteCardsReducerOutput,
         FullCardFromText,
-        FullOptionFromText
-} from '@/src/types/cardsTextParser';
+        InsertCardsReducerOutput,
+        UpdateCardsReducerOutput,
+        WithId
+} from '@/src/types/updateCardsFromText';
+import { parseTextIntoAnyCardsArray } from '@/src/utils/parseTextIntoCardsArray';
 import {
-        getListForInsert,
-        getListForUpdate,
-        getListWhereNoSuchIds,
-        getListWithIdsForDelete,
-        getListWithSuchIds
-} from '@/src/utils/lists';
-import {
-        deleteOptionViaTextAtom,
-        updateOptionAtom
-} from '@/src/jotai/optionAtoms';
+        getDeleteAnyCardsReducerCallbackAndInitValue,
+        getInsertAnyCardsReducerCallbackAndInitValue,
+        getReducerForDeleteOptionsAndInitData,
+        getReducerForInsertOptionsAndInitData,
+        getUpdateAnyCardsReducerCallbackAndInitValue,
+        getUpdateOptionCallback,
+        updateBookAnyCardIdsAtomHelper,
+        updateCardAtomHelper
+} from '@/src/utils/jotai/updateCardsFromTextReducers';
 
 export const addEmptyExplicitCardAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb) => {
@@ -74,6 +71,12 @@ export const addEmptyTermShortCard = getDerivedAtomWithIdb(
 
 export const updateExplicitCardAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, newCard: ExplicitCard) => {
+                console.debug(`
+                
+                Update explicit card 
+                
+                `);
+
                 await updateExplicitCardIdb(mainDb, newCard);
                 set(explicitCardsAtomFamily(newCard.id), newCard);
         }
@@ -81,6 +84,12 @@ export const updateExplicitCardAtom = getDerivedAtomWithIdb(
 
 export const updateShortCardAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, newCard: TermDefinitionCard) => {
+                console.debug(`
+                
+                Update short card 
+                
+                `);
+
                 await updateShortCardIdb(mainDb, newCard);
                 set(shortCardsAtomFamily(newCard.id), newCard);
         }
@@ -107,143 +116,125 @@ export const deleteShortCardAtom = getDerivedAtomWithIdb(
         }
 );
 
-export const deleteExplicitCardViaTextAtom = getDerivedAtomWithIdb(async(get, set, mainDb, cardId: string) => {
-        await deleteExplicitCardIdb(mainDb, cardId);
-        explicitCardsAtomFamily.remove(cardId);
-})
-
-export const deleteShortCardViaTextAtom = getDerivedAtomWithIdb(async(get, set, mainDb, cardId: string) => {
-        await deleteShortCardIdb(mainDb, cardId);
-        shortCardsAtomFamily.remove(cardId);
-})
-
-type WithId = {
-        id: string;
-};
-
-type InsertOptionReducer = (
-        acc: string[],
-        option: FullOptionFromText
-) => string[];
-type DeleteOptionReducer = (acc: string[], deleteOptionId: string) => string[];
-type UpdateOptionCallback = (option: FullOptionFromText, index: number) => void;
-
-function getReducerForInsertOptionsAndInitData(
-        set: Setter
-): [InsertOptionReducer, string[]] {
-        const newOptionIds: string[] = [];
-        return [
-                (_acc, { optionTitle, isCorrect }) => {
-                        const newOptionId = getUniqueID();
-                        newOptionIds.push(newOptionId);
-                        set(updateOptionAtom, {
-                                id: newOptionId,
-                                optionTitle,
-                                isCorrect
-                        });
-                        return newOptionIds;
-                },
-                []
-        ];
-}
-
-function getReducerForDeleteOptionsAndInitData(
-        set: Setter
-): [DeleteOptionReducer, string[]] {
-        const optionIdsToDelete: string[] = [];
-
-        return [
-                (_acc, optionId) => {
-                        optionIdsToDelete.push(optionId);
-                        set(deleteOptionViaTextAtom, optionId);
-                        return optionIdsToDelete;
-                },
-                []
-        ];
-}
-
-function getUpdateOptionCallback({
-        optionIds,
-        set
-}: {
-        optionIds: string[];
-        set: Setter;
-}): UpdateOptionCallback {
-        return (option, index) => {
-                const optionId = optionIds[index];
-                set(updateOptionAtom, {
-                        id: optionId,
-                        ...option
-                });
-        };
-}
-
-function updateCardAtomHelper({
-        optionIdsToInsert,
-        optionIdsToDelete,
-        optionIds,
-        set,
-        card: { options: _options, ...usefulCardData }
-}: {
-        optionIdsToInsert: string[];
-        optionIdsToDelete: string[];
-        optionIds: string[];
-        card: FullCardFromText & WithId;
-        set: Setter;
-}) {
-        let newOptionIds: string[] = optionIds;
-
-        if (optionIdsToInsert.length > 0) {
-                newOptionIds = getListWithSuchIds(optionIds, optionIdsToInsert);
-        } else if (optionIdsToDelete.length > 0) {
-                newOptionIds = getListWhereNoSuchIds(
-                        optionIds,
-                        optionIdsToDelete
-                );
+export const deleteExplicitCardViaTextAtom = getDerivedAtomWithIdb(
+        async (_get, _set, mainDb, cardId: string) => {
+                await deleteExplicitCardIdb(mainDb, cardId);
+                explicitCardsAtomFamily.remove(cardId);
         }
+);
 
-        set(updateExplicitCardAtom, {
-                ...usefulCardData,
-                childrenIds: newOptionIds
-        });
-}
+export const deleteShortCardViaTextAtom = getDerivedAtomWithIdb(
+        async (_get, _set, mainDb, cardId: string) => {
+                await deleteShortCardIdb(mainDb, cardId);
+                shortCardsAtomFamily.remove(cardId);
+        }
+);
 
 export const updateExplicitCardViaText = atom(
         null,
-        (get, set, newCard: FullCardFromText & WithId) => {
+        async (get, set, newCard: FullCardFromText & WithId) => {
                 const { childrenIds } = get(
                         explicitCardsAtomFamily(newCard.id)
                 );
                 const options = newCard.options;
 
-                console.debug({ options });
-
-                const optionIdsToInsert = getListForInsert(
+                const asyncOptionIdsToInsert = getListForInsert(
                         options,
                         childrenIds
-                ).reduce<string[]>(
+                ).reduce<Promise<string[]>>(
                         ...getReducerForInsertOptionsAndInitData(set)
                 );
-                const optionIdsToDelete = getListWithIdsForDelete(
+                const asyncOptionIdsToDelete = getListWithIdsForDelete(
                         options,
                         childrenIds
-                ).reduce<string[]>(
+                ).reduce<Promise<string[]>>(
                         ...getReducerForDeleteOptionsAndInitData(set)
                 );
 
-                getListForUpdate(options, childrenIds).forEach(
+                const asyncVoidListToUpdate = getListForUpdate(
+                        options,
+                        childrenIds
+                ).map(
                         getUpdateOptionCallback({
                                 optionIds: childrenIds,
                                 set
                         })
                 );
 
-                updateCardAtomHelper({
+                const [optionIdsToInsert, optionIdsToDelete] =
+                        await Promise.all([
+                                asyncOptionIdsToInsert,
+                                asyncOptionIdsToDelete,
+                                asyncVoidListToUpdate
+                        ]);
+
+                await updateCardAtomHelper({
                         optionIds: childrenIds,
                         optionIdsToInsert,
                         optionIdsToDelete,
                         card: newCard,
                         set
+                });
+        }
+);
+
+export const updateCardsFromTextAtom = atom(
+        null,
+        async (get, set, cardsText: string) => {
+                const cardsArray = parseTextIntoAnyCardsArray(cardsText);
+                const bookId = get(currentBookIdAtom);
+
+                const { cardIdsOrder, shortCardIds, explicitCardIds } = get(
+                        booksAtomFamily(bookId)
+                );
+
+                const asyncIdsToInsert = getListForInsert(
+                        cardsArray,
+                        cardIdsOrder
+                ).reduce<Promise<InsertCardsReducerOutput>>(
+                        ...getInsertAnyCardsReducerCallbackAndInitValue(set)
+                );
+
+                const asyncIdsToDelete = getListWithIdsForDelete(
+                        cardsArray,
+                        cardIdsOrder
+                ).reduce<Promise<DeleteCardsReducerOutput>>(
+                        ...getDeleteAnyCardsReducerCallbackAndInitValue({
+                                shortCardIds,
+                                explicitCardIds,
+                                set
+                        })
+                );
+
+                const asyncIdsToUpdate = getListForUpdate(
+                        cardsArray,
+                        cardIdsOrder
+                ).reduce<Promise<UpdateCardsReducerOutput>>(
+                        ...getUpdateAnyCardsReducerCallbackAndInitValue({
+                                set,
+                                cardIdsOrder,
+                                shortCardIds,
+                                explicitCardIds
+                        })
+                );
+
+                const [idsToInsert, idsToDelete, idsToUpdate] =
+                        await Promise.all([
+                                asyncIdsToInsert,
+                                asyncIdsToDelete,
+                                asyncIdsToUpdate
+                        ]);
+
+                await updateBookAnyCardIdsAtomHelper({
+                        cardIdsOrder,
+                        shortCardIds,
+                        explicitCardIds,
+                        idsToDelete,
+                        idsToInsert,
+                        bookId,
+                        get,
+                        set,
+                        idsToUpdate
                 });
         }
 );

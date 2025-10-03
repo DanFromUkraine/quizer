@@ -13,10 +13,7 @@ import {
 } from '@/src/utils/idb/main/actions';
 
 import { useSetAtom } from 'jotai';
-import {
-        FamilyAtomForInit,
-        useInitAtomFamily
-} from '@/src/hooks/jotaiRelated/initializers';
+import { useInitAtomFamily } from '@/src/hooks/jotaiRelated/initializers';
 import {
         booksAtomFamily,
         explicitCardsAtomFamily,
@@ -28,7 +25,13 @@ import {
 import { pickIds } from '@/src/utils/idb/idUtils';
 import dynamic from 'next/dynamic';
 import { booksIdsAtom, storyIdsAtom } from '@/src/jotai/idManagers';
-import { Story } from '@/src/types/mainDbGlobal';
+import {
+        Book,
+        ExplicitCard,
+        Option,
+        Story,
+        TermDefinitionCard
+} from '@/src/types/mainDbGlobal';
 
 export function InitAllMainDbAtoms_DO_NOT_IMPORT() {
         const asyncMainDb = getMainDb();
@@ -36,16 +39,17 @@ export function InitAllMainDbAtoms_DO_NOT_IMPORT() {
         const setBooksIds = useSetAtom(booksIdsAtom);
         const setHistoryIds = useSetAtom(storyIdsAtom);
 
-        const initBooksAtomFamily = useInitAtomFamily(booksAtomFamily);
-        const initExplicitCardsAtomFamily = useInitAtomFamily(
+        const initBooksAtomFamily = useInitAtomFamily<Book>(booksAtomFamily);
+        const initExplicitCardsAtomFamily = useInitAtomFamily<ExplicitCard>(
                 explicitCardsAtomFamily
         );
         const initShortCardsAtomFamily =
-                useInitAtomFamily(shortCardsAtomFamily);
-        const initOptionsAtomFamily = useInitAtomFamily(optionsAtomFamily);
-        const initStoriesAtomFamily = useInitAtomFamily(
-                storiesAtomFamily as FamilyAtomForInit<Story>
-        );
+                useInitAtomFamily<TermDefinitionCard>(shortCardsAtomFamily);
+        const initOptionsAtomFamily =
+                useInitAtomFamily<Option>(optionsAtomFamily);
+        const initStoriesAtomFamily =
+                useInitAtomFamily<Story>(storiesAtomFamily);
+
 
         getAllBooksFromAsyncDb(asyncMainDb).then((books) => {
                 setBooksIds(pickIds(books));

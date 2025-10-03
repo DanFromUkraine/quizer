@@ -3,14 +3,14 @@
 
 'use client';
 
-import { useAtom, useAtomValue } from 'jotai';
-import {
-        cardsTextAtom,
-        textInModalHasBeenChanged
-} from '@/src/jotai/mainAtoms';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { dialogVisibilityFamilyAtom } from '@/src/jotai/dialogVisibilityFamily';
-import useGetUpdateCardsFromText from '@/src/hooks/useGetUpdateCardsFromText';
+import {
+        cardsTextAtom,
+        textInModalHasBeenChangedAtom
+} from '@/src/jotai/cardsAsTextAtoms';
+import { updateCardsFromTextAtom } from '@/src/jotai/cardAtoms';
 
 export default function useUpdateCardsFromTextOnDialogClose() {
         const [cardsText] = useAtom(cardsTextAtom);
@@ -18,9 +18,9 @@ export default function useUpdateCardsFromTextOnDialogClose() {
                 dialogVisibilityFamilyAtom('editCardsAsText')
         );
         const [areAnyChanges, setChangesFlagState] = useAtom(
-                textInModalHasBeenChanged
+                textInModalHasBeenChangedAtom
         );
-        const updateCards = useGetUpdateCardsFromText();
+        const updateCards = useSetAtom(updateCardsFromTextAtom);
 
         useEffect(() => {
                 if (cardsText.length === 0 || modalVisible || !areAnyChanges)

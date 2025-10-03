@@ -16,7 +16,8 @@ import {
         explicitCardsAtomFamily,
         optionsAtomFamily
 } from '@/src/jotai/mainAtoms';
-import { FullOptionFromText } from '@/src/types/cardsTextParser';
+
+import { FullOptionFromText } from '@/src/types/updateCardsFromText';
 
 export const updateOptionAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, newOption: Option) => {
