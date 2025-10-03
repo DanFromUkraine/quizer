@@ -9,9 +9,16 @@ import { getCardType } from '@/src/utils/lists';
 
 export function RenderCards() {
         const { bookId } = useEditBookProps();
-        const bookAtom = useMemo(() => booksAtomFamily(bookId), [bookId]);
+        const bookAtom = useMemo(() => booksAtomFamily(bookId), []);
         const { cardIdsOrder, explicitCardIds, shortCardIds } =
                 useAtomValue(bookAtom);
+
+        console.debug('Render cards update', {
+                cardIdsOrder,
+                explicitCardIds,
+                shortCardIds
+        });
+
 
         return (
                 <section>
@@ -19,13 +26,12 @@ export function RenderCards() {
                                 {cardIdsOrder.map((cardId, i) => (
                                         <Card
                                                 key={cardId}
-                                                cardIndex={i}
-                                                cardType={getCardType({
-                                                        targetId: cardId,
+                                                {...{
                                                         explicitCardIds,
-                                                        shortCardIds
-                                                })}
-                                                cardId={cardId}
+                                                        shortCardIds,
+                                                        cardId,
+                                                        cardIndex: i
+                                                }}
                                         />
                                 ))}
                         </div>

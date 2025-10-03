@@ -10,6 +10,7 @@ import OpenEditCardsModalButton from '@/src/components/edit_book_page/OpenEditCa
 import EditCardsAsTextDialog from '@/src/components/edit_book_page/EditCardsAsText';
 import useHydrateBookIdAtom from '@/src/hooks/jotaiRelated/useHydrateBookIdAtom';
 import AddCardButtons from '@/src/components/edit_book_page/AddCardButton';
+import WarningDialogWithAction from '@/src/components/general/WarningDialog';
 
 type EditBookProps = {
         bookId: string;
@@ -37,6 +38,7 @@ export default function EditBookPage({
                 <EditBookPropsProvider bookId={bookId}>
                         <Initializer_CLIENT_ONLY />
                         <EditCardsAsTextDialog />
+                        <WarningDialogWithAction />
                         <main className='mainContainer'>
                                 <BookTitleInput />
                                 <BookDescriptionInput />
