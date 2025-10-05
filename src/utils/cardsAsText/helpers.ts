@@ -16,7 +16,7 @@ export function getProcessedShortCardOnly(
         let term = '';
         let definition = '';
         try {
-                const [t, d] = cardText.split(' - ');
+                const [t, d] = cardText.split(/ - | – |: /);
                 term = t;
                 definition = d;
         } catch (e) {}
@@ -82,7 +82,7 @@ export function getProcessedOptions(optionText: string): FullOptionFromText {
 export function getProcessedShortCard(
         shortCardText: string
 ): FullTermDefinitionCardFromText {
-        const [term, definition] = shortCardText.split(' - ');
+        const [term, definition] = shortCardText.split(/ - | – |: /);
         return {
                 type: 'short',
                 term,
