@@ -1,11 +1,11 @@
 import { ChangeEventHandler } from 'react';
 
 export default function OptionTitleUI({
-        defaultValue,
+                                              value,
         onChange,
         optionId
 }: {
-        defaultValue: string;
+        value: string;
         onChange: ChangeEventHandler;
         optionId: string;
 }) {
@@ -13,7 +13,7 @@ export default function OptionTitleUI({
                 <input
                         name={`option-${optionId}`}
                         type='text'
-                        value={defaultValue}
+                        value={value}
                         onChange={onChange}
                         data-testid='optionTextField'
                         className='w-full p-3 bg-gray-200 group-hover:bg-gray-300 duration-100'

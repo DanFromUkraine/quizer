@@ -36,7 +36,7 @@ export function getAnyCardsAsTextAtomHelper({
                                         explicitCardsAtomFamily(cardId)
                                 );
 
-                                return `\n && ${cardTitle} ${getOptionsAsText(childrenIds, get)}`;
+                                return `\n && ${cardTitle} ${getOptionsAsText(childrenIds, get).join('')}`;
                         } else {
                                 throw CARD_TYPE_UNKNOWN;
                         }

@@ -3,6 +3,7 @@
 import { useAtom, WritableAtom } from 'jotai';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import Quoted from '@/src/components/general/Quoted';
+import useJotaiDeferredInput from '@/src/hooks/jotaiRelated/jotaiDeferedInput';
 
 export default function TermOrDeterminationInput({
         underText,
@@ -11,7 +12,7 @@ export default function TermOrDeterminationInput({
         underText: string;
         atomAdapterUnstable: WritableAtom<string, [newVal: string], void>;
 }) {
-        const [value, updateValue] = useAtom(atomAdapterUnstable);
+        const [value, updateValue] = useJotaiDeferredInput(atomAdapterUnstable);
 
         const onChange = getInputChangeCallback((newVal) =>
                 updateValue(newVal)

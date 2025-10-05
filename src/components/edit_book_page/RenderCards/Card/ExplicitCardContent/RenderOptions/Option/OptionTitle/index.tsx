@@ -8,15 +8,16 @@ import {
         getCardOptionTitleAtomAdapter
 } from '@/src/utils/jotai/mainDbAtomAdapters';
 import { useMemo } from 'react';
+import useJotaiDeferredInput from '@/src/hooks/jotaiRelated/jotaiDeferedInput';
 
 export default function OptionTitle() {
         const { optionId } = useOptionProps();
         const stableAdapterAtom = useMemo(() => getCardOptionTitleAtomAdapter(optionId), [])
-        const [value, setValue] = useAtom(stableAdapterAtom);
+        const [value, setValue] = useJotaiDeferredInput(stableAdapterAtom);
 
         return (
                 <OptionTitleUI
-                        defaultValue={value}
+                        value={value}
                         onChange={getInputChangeCallback(setValue)}
                         optionId={optionId}
                 />

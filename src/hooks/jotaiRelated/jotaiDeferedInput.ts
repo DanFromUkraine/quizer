@@ -8,18 +8,16 @@
  *
  * */
 
-import { useDeferredValue, useEffect, useMemo, useState } from 'react';
+import { useDeferredValue, useEffect, useState } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { loadable } from 'jotai/utils';
-import { StringAtomAdapter } from '@/src/types/jotaiGlobal';
+import { StringAdapterAtom } from '@/src/types/jotaiGlobal';
 
-export default function useJotaiDeferredInput(
-        atomAdapter: StringAtomAdapter,
-        itemId: string
-) {
-        const itemAtom = useMemo(() => atomAdapter(itemId), []);
-        const jotaiValue = useAtomValue(loadable(itemAtom));
-        const setJotaiValue = useSetAtom(itemAtom);
+export default function useJotaiDeferredInput(adapterAtom: StringAdapterAtom) {
+        const jotaiValue = useAtomValue(
+                loadable<StringAdapterAtom>(adapterAtom)
+        );
+        const setJotaiValue = useSetAtom(adapterAtom);
         const [value, setValue] = useState('');
         const deferredValue = useDeferredValue(value);
         const shouldSkip =

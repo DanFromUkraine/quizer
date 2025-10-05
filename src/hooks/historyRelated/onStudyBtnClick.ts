@@ -13,13 +13,18 @@ import { openBookStoryDialog } from '@/src/jotai/storiesForBookDialogInfoAtoms';
 export default function useStudyButtonClickHandler(bookId: string) {
         const router = useRouter();
         return useAtomCallback((get, set) => {
-                const { childrenIds: cardIds } = get(booksAtomFamily(bookId));
+
+                const { cardIdsOrder } = get(booksAtomFamily(bookId));
+
+
 
                 const booksAndStoriesAssociations = get(
                         booksAndStoriesAssociationsAtom
                 );
 
-                if (cardIds.length === 0) {
+                console.log({booksAndStoriesAssociations})
+
+                if (cardIdsOrder.length === 0) {
                         set(showSnackbarAtom, {
                                 snackbarName: 'noCardsErrorSnackbar',
                                 timeMS: 5_000

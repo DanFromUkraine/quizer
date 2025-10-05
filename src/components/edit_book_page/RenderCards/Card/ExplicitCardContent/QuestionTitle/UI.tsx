@@ -16,12 +16,36 @@ export default function MainQuestionTitleUI({
                 <Quoted>
                         <ExtendableTextArea
                                 data-testid='questionTitle'
-                                defaultValue={value}
+                                value={value}
                                 name={`card-title-${cardId}`}
                                 placeholder='Enter text'
                                 onChange={onChange}
                                 className={clsx('w-full')}
                         />
                 </Quoted>
+        );
+}
+
+export function SubtitleUI({
+        value,
+        onChange,
+        cardId
+}: {
+        value: string;
+        onChange: ChangeEventHandler;
+        cardId: string;
+}) {
+        return (
+                <div className='w-full flex justify-center'>
+                        <Quoted className="!w-fit">
+                                <input
+                                        value={value}
+                                        onChange={onChange}
+                                        id={`subtitle-${cardId}`}
+                                        placeholder='subtitle'
+                                        className='heading-4 field-sizing-content'
+                                />
+                        </Quoted>
+                </div>
         );
 }

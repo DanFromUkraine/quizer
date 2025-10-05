@@ -1,4 +1,5 @@
 import { ChangeEventHandler } from 'react';
+import Quoted from '@/src/components/general/Quoted';
 
 export default function HeaderUI({
         defaultValue,
@@ -10,18 +11,17 @@ export default function HeaderUI({
         return (
                 <header className='flex items-center justify-start gap-3'>
                         <h3 className='heading-1'>Edit book</h3>
-                        <div className='heading-1 p-1 px-3 bg-gray-400 !text-gray-700 rounded-md'>
-                                <span>'</span>
+                        <Quoted variant="heading" className="!text-gray-700 heading-1 p-1 px-3 !w-fit">
                                 <input
                                         type='text'
                                         name='book-title'
-                                        className='field-sizing-content'
+                                        className='field-sizing-content heading-1'
                                         placeholder="Book's title"
                                         defaultValue={defaultValue}
                                         onChange={onChange}
                                 />
-                                <span>'</span>
-                        </div>
+                        </Quoted>
+
                 </header>
         );
 }
