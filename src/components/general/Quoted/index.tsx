@@ -3,23 +3,25 @@ import { ReactNode } from 'react';
 
 type QuotationMarks = 'large-heading' | 'heading' | 'subtitle';
 
-function getSigns(variant: QuotationMarks): [ReactNode, ReactNode] | undefined {
+function getSigns(variant: QuotationMarks): [ReactNode, ReactNode] {
         if (variant === 'large-heading') {
-
-        } else if (variant === 'heading') {
                 return [
-                        <span className='heading-3'>'</span>,
+                        <span>
+                                <sub>„</sub>
+                        </span>,
                         <span className='mt-auto'>
-                                <sub className='heading-3'>'</sub>
+                                <sup>”</sup>
                         </span>
                 ];
+        } else if (variant === 'heading') {
+                return [<span>"</span>, <span>"</span>];
         } else if (variant === 'subtitle') {
                 return [
                         <span className='heading-3'>«</span>,
                         <span className='heading-3'>»</span>
                 ]; // « »
         } else {
-                throw `variant ${variant} is not of allowed QuotationMarks types`
+                throw `variant ${variant} is not of allowed QuotationMarks types`;
         }
 }
 
@@ -37,6 +39,8 @@ export default function Quoted({
         return (
                 <div
                         className={clsx(
+                                { 'p-0.5 py-0 bg-gray-200 text-gray-700': variant === 'subtitle' },
+
                                 'flex w-full gap-2 bg-gray-300 rounded-md p-3',
                                 className
                         )}>

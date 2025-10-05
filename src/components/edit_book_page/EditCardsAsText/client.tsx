@@ -22,7 +22,7 @@ export function MainTextArea() {
         }) as unknown as ChangeEventHandler<HTMLTextAreaElement>;
 
         return (
-                <Quoted className='h-full max-h-[80vh] overflow-y-scroll'>
+                <Quoted variant="heading" className='h-full max-h-[80vh] overflow-y-scroll'>
                         <ExtendableTextArea
                                 name='cards text input'
                                 className='w-full h-full '

@@ -14,31 +14,44 @@ import { loadable } from 'jotai/utils';
 import { StringAdapterAtom } from '@/src/types/jotaiGlobal';
 
 export default function useJotaiDeferredInput(adapterAtom: StringAdapterAtom) {
-        const jotaiValue = useAtomValue(
-                loadable<StringAdapterAtom>(adapterAtom)
-        );
+        const jotaiLoadable = useAtomValue(loadable<StringAdapterAtom>(adapterAtom));
         const setJotaiValue = useSetAtom(adapterAtom);
+
         const [value, setValue] = useState('');
         const deferredValue = useDeferredValue(value);
-        const shouldSkip =
-                jotaiValue.state === 'loading' ||
-                jotaiValue.state === 'hasError';
-        const jotaiDataTypeSafe = shouldSkip ? undefined : jotaiValue.data;
 
-        useEffect(() => {
-                if (shouldSkip || jotaiValue.data.length === 0) return;
-                setValue(jotaiValue.data);
-        }, [jotaiValue.state, jotaiDataTypeSafe]);
+        const isLoadingOrError =
+                jotaiLoadable.state === 'loading' || jotaiLoadable.state === 'hasError';
+        const jotaiData =
+                !isLoadingOrError && typeof jotaiLoadable.data === 'string'
+                        ? jotaiLoadable.data
+                        : undefined;
 
+        // Sync initial/remote -> local input when valid and different
         useEffect(() => {
-                if (shouldSkip || value.length > 0) return;
-                setJotaiValue('');
-        }, [jotaiValue.state, jotaiDataTypeSafe, value]);
+                if (!jotaiData) return;
+                if (jotaiData === value) return;
+                setValue(jotaiData);
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [jotaiData]); // залежимо тільки від фактичних даних
 
+        // Centralized update logic: decide when to write back to jotai
         useEffect(() => {
-                if (shouldSkip || deferredValue.length === 0) return;
-                setJotaiValue(deferredValue);
-        }, [deferredValue]);
+                if (isLoadingOrError) return;
+
+                // If user cleared local input, clear atom
+                if (value === '') {
+                        if (jotaiData !== '') {
+                                setJotaiValue('');
+                        }
+                        return;
+                }
+
+                // Use deferred value for writes (debounced by React)
+                if (typeof deferredValue === 'string' && deferredValue !== jotaiData) {
+                        setJotaiValue(deferredValue);
+                }
+        }, [isLoadingOrError, value, deferredValue, jotaiData, setJotaiValue]);
 
         return [value, setValue] as const;
 }

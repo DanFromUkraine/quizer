@@ -4,6 +4,7 @@ import { useAtom, WritableAtom } from 'jotai';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import Quoted from '@/src/components/general/Quoted';
 import useJotaiDeferredInput from '@/src/hooks/jotaiRelated/jotaiDeferedInput';
+import { useMemo } from 'react';
 
 export default function TermOrDeterminationInput({
         underText,
@@ -12,7 +13,8 @@ export default function TermOrDeterminationInput({
         underText: string;
         atomAdapterUnstable: WritableAtom<string, [newVal: string], void>;
 }) {
-        const [value, updateValue] = useJotaiDeferredInput(atomAdapterUnstable);
+        const stableAdapterAtom = useMemo(() => atomAdapterUnstable, []);
+        const [value, updateValue] = useJotaiDeferredInput(stableAdapterAtom);
 
         const onChange = getInputChangeCallback((newVal) =>
                 updateValue(newVal)
@@ -20,7 +22,7 @@ export default function TermOrDeterminationInput({
 
         return (
                 <section className='flex flex-col gap-2'>
-                        <Quoted>
+                        <Quoted variant="heading">
                                 <input
                                         defaultValue={value}
                                         onChange={onChange}
