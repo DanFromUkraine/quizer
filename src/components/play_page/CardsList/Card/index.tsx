@@ -19,8 +19,6 @@ export default function PlayCard({
         const { choicePointers } = useAtomValue(storiesAtomFamily(storyId))
         const choicePointer = choicePointers[cardIndex];
 
-        console.debug({choicePointer})
-
         return (
                 <li className='questionCard items-center w-full'>
                         <h3 className='heading-2'>{`'${card.title}'`}</h3>

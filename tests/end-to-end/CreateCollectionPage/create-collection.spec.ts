@@ -301,7 +301,6 @@ test.describe('This tests bundle will describe collection creation process', () 
                         });
 
                         expect(collectionData).toBeTruthy();
-                        console.log('ok 5');
                 });
         });
 });

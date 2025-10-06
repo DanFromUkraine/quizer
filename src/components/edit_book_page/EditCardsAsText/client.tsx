@@ -38,7 +38,6 @@ export function ModeTools() {
 
         const getOnClick = useAtomCallback(
                 (_get, set, modeId: MarkupModes) => () => {
-                        console.debug("click")
                         set(changeMarkupMode, modeId);
                 }
         );

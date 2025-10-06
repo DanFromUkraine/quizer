@@ -1,7 +1,6 @@
 import { getCardType } from '@/src/utils/lists';
 import {
         explicitCardsAtomFamily,
-        optionsAtomFamily,
         shortCardsAtomFamily
 } from '@/src/jotai/mainAtoms';
 import { CARD_TYPE_UNKNOWN } from '@/src/constants/errors';
@@ -32,19 +31,20 @@ export function getAnyCardsAsTextAtomHelper({
                                 );
                                 return `\n @@ ${term} - ${definition}`;
                         } else if (cardType === 'explicit') {
-                                const { cardTitle, childrenIds } = get(
-                                        explicitCardsAtomFamily(cardId)
-                                );
+                                const {
+                                        cardTitle,
+                                        childrenIds,
+                                        subtitle,
+                                        explanation
+                                } = get(explicitCardsAtomFamily(cardId));
 
-                                return `\n && ${cardTitle} ${getOptionsAsText(childrenIds, get).join('')}`;
+                                return `\n&& ${cardTitle} \n${subtitle.length > 0 ? `&s ${subtitle}` : ''}\t${getOptionsAsText(childrenIds, get).join('')}\n${explanation.length > 0 ? `\n&e ${explanation}` : ''}\n`;
                         } else {
                                 throw CARD_TYPE_UNKNOWN;
                         }
                 })
                 .join('');
 }
-
-
 
 export function getShortCardsOnlyAsTextAtomHelper({
         shortCardIds,

@@ -16,7 +16,7 @@ export default function AddEmptyOptionButton() {
                 <button
                         type='button'
                         data-testid='add-option-btn'
-                        onClick={onAddOptionClick} className="text-black">
+                        onClick={onAddOptionClick} className="bg-gray-400 hover:bg-gray-300 duration-100 w-fit rounded-lg px-1.5 py-0.5 mx-auto text-white">
                         Add option
                 </button>
         );

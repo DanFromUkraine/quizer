@@ -4,13 +4,11 @@ import ExtendableTextArea from '@/src/components/general/ExtendableInput';
 export default function ExplanationInputUI({
         cardId,
         onContainerClick,
-        textareaRef,
         value,
         onChange
 }: {
         cardId: string;
         onContainerClick: MouseEventHandler;
-        textareaRef: RefObject<HTMLTextAreaElement | null>;
         value: string;
         onChange: ChangeEventHandler
 }) {

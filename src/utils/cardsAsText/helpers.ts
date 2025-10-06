@@ -29,9 +29,9 @@ export function getProcessedShortCardOnly(
 
 const RULES = {
         FULL_CARD_MARKER: '&&',
-        SUBTITLE_MARKER: '*s',
+        SUBTITLE_MARKER: '&s',
         DEFAULT_OPTION_MARKER: '%%',
-        EXPLANATION_MARKER: '*e',
+        EXPLANATION_MARKER: '&e',
         SHORT_CARD_MARKER: '@@',
         OPTION_CORRECT_MARKER: '%correct%'
 };
@@ -41,7 +41,7 @@ export function getCardSeparator() {
 }
 
 function getAllRulesAsRegExp(): RegExp {
-        return /&&|%%|\*e|@@/g;
+        return /&&|%%|&s|&e|@@/g;
 }
 
 function splitByIndex(str: string, index: number) {
@@ -90,6 +90,35 @@ export function getProcessedShortCard(
         };
 }
 
+function getClearOptionTextList(explicitCardText: string) {
+        const optionsUnfiltered = explicitCardText.split(/(%%)/);
+        const resultOptions: string[] = [];
+        let prevItemWasOptSymbol = false;
+
+        console.debug({ optionsUnfiltered });
+
+        for (let i = 1; i < optionsUnfiltered.length; i++) {
+                const prevItem = optionsUnfiltered[i - 1];
+                console.debug(i, { prevItem });
+                if (prevItem === '%%') {
+                        const optWithRubbish = optionsUnfiltered[i];
+
+                        console.debug(i, { optWithRubbish });
+
+                        const [option] = optWithRubbish.split(/&e|&s/);
+
+                        console.debug(i, { option });
+
+                        resultOptions.push(option);
+                        prevItemWasOptSymbol = false;
+                }
+        }
+
+        console.debug({ resultOptions });
+
+        return resultOptions;
+}
+
 export function getProcessedExplicitCard(
         explicitCardText: string
 ): FullCardFromText {
@@ -99,17 +128,15 @@ export function getProcessedExplicitCard(
                 explicitCardText,
                 RULES.EXPLANATION_MARKER
         );
-        const optionsUnfiltered = explicitCardText.split(
-                RULES.DEFAULT_OPTION_MARKER
-        );
-        optionsUnfiltered.shift();
+        const textOptionList = getClearOptionTextList(explicitCardText);
+        console.debug({ textOptionList });
 
         return {
                 type: 'explicit',
                 cardTitle,
                 subtitle,
                 explanation,
-                options: optionsUnfiltered.map((optionText) =>
+                options: textOptionList.map((optionText) =>
                         getProcessedOptions(optionText)
                 )
         };

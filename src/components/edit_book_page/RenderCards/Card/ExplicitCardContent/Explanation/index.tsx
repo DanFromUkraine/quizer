@@ -1,20 +1,22 @@
 'use client';
 
 import ExplanationInputUI from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/Explanation/UI';
-import { MouseEvent, useCallback, useEffect, useMemo, useRef } from 'react';
+import { MouseEvent, useCallback, useMemo } from 'react';
 import { getExplicitCardExplanationAtomAdapter } from '@/src/utils/jotai/mainDbAtomAdapters';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
-import useJotaiDeferredInput from '@/src/hooks/jotaiRelated/jotaiDeferedInput';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
+import { useAtom } from 'jotai';
 
 export default function Explanation() {
         const { cardId } = useCardProps();
-        const textareaRef = useRef<HTMLTextAreaElement>(null);
         const stableAtom = useMemo(
                 () => getExplicitCardExplanationAtomAdapter(cardId),
                 []
         );
-        const [value, setValue] = useJotaiDeferredInput(stableAtom);
+        const [value, setValue] =
+                useAtom(
+                        stableAtom
+                ); /* 'todo' change it with updateAdapter, when you have time*/
 
         const onContainerClick = useCallback(
                 (event: MouseEvent<HTMLDivElement>) => {
@@ -25,30 +27,14 @@ export default function Explanation() {
                                 lastChild.focus();
                         }
                 },
-                [textareaRef.current]
+                []
         );
 
         const onChange = getInputChangeCallback(setValue);
 
-        useEffect(() => {
-                const inputListener = (ev: Event) => {
-                        const target = ev.target as HTMLTextAreaElement | null;
-                        if (target) {
-                                setValue(target.value);
-                        }
-                };
-
-                document.addEventListener('input', inputListener);
-
-                return () => {
-                        document.removeEventListener('input', inputListener);
-                };
-        }, []);
-
         return (
                 <ExplanationInputUI
                         {...{
-                                textareaRef,
                                 onContainerClick,
                                 cardId,
                                 value,

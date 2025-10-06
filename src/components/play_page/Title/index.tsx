@@ -10,7 +10,6 @@ export default function PageTitle() {
 
         const { bookData } = useAtomValue(storiesAtomFamily(storyId));
 
-        console.debug({storyIdInPageTitle: bookData})
 
 
         return (

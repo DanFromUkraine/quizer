@@ -39,7 +39,6 @@ export function DeleteCardButton() {
         const { cardId, cardType } = useCardProps();
 
         const onClick = useAtomCallback(useCallback(async (_get, set) => {
-                console.debug({cardId, cardType})
                 if (cardType === 'explicit') {
                         await set(deleteExplicitCardAtom, cardId);
                 } else {

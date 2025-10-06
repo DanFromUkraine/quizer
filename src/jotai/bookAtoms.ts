@@ -27,7 +27,6 @@ export const deleteBookAtom = getDerivedAtomWithIdb(
 
 export const updateBookAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, newBook: Book) => {
-                console.debug({ bookUpdate: newBook });
                 await mainDb.put('books', newBook);
                 set(booksAtomFamily(newBook.id), newBook);
         }
