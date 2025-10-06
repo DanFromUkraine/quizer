@@ -8,6 +8,7 @@ import {
         getShortCardsOnlyAsTextAtomHelper
 } from '@/src/utils/cardsAsText/fromCardsToText';
 
+
 export const markupModeAtom = atom<MarkupModes>('mixed');
 export const textInModalHasBeenChangedAtom = atom(false);
 

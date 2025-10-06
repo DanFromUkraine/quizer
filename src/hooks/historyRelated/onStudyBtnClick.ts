@@ -22,8 +22,6 @@ export default function useStudyButtonClickHandler(bookId: string) {
                         booksAndStoriesAssociationsAtom
                 );
 
-                console.log({booksAndStoriesAssociations})
-
                 if (cardIdsOrder.length === 0) {
                         set(showSnackbarAtom, {
                                 snackbarName: 'noCardsErrorSnackbar',

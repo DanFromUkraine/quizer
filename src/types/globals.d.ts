@@ -8,3 +8,4 @@ export type DB<DataType extends {}> = IDBPDatabase<DataType>;
 
 export type Serializable = string | number | boolean | bigint | symbol;
 export type AvailableCardTypes = 'explicit' | 'short';
+

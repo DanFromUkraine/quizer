@@ -42,7 +42,6 @@ export default function Card({
                         <TermDeterminationContent />
                 );
 
-        console.debug('Card update', { cardType });
 
         return (
                 <IndexContextProvider value={cardIndex}>

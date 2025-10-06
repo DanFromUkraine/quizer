@@ -18,9 +18,6 @@ export default function PlayOption({
         cardChoiceIndex: number;
         cardIndex: number;
 }) {
-
-        console.debug({cardChoiceIndex, option})
-
         const [isCorrect, setIsCorrect] = useState<boolean>();
 
         useEffect(() => {

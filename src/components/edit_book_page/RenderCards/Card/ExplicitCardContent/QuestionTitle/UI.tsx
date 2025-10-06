@@ -13,14 +13,14 @@ export default function MainQuestionTitleUI({
         cardId: string;
 }) {
         return (
-                <Quoted>
+                <Quoted variant="heading" className="heading-3">
                         <ExtendableTextArea
                                 data-testid='questionTitle'
                                 value={value}
                                 name={`card-title-${cardId}`}
                                 placeholder='Enter text'
                                 onChange={onChange}
-                                className={clsx('w-full')}
+                                className={clsx('w-full ')}
                         />
                 </Quoted>
         );
@@ -37,7 +37,7 @@ export function SubtitleUI({
 }) {
         return (
                 <div className='w-full flex justify-center'>
-                        <Quoted className="!w-fit">
+                        <Quoted variant="subtitle" className="!w-fit">
                                 <input
                                         value={value}
                                         onChange={onChange}

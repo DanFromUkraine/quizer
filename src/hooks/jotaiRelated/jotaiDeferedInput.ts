@@ -1,44 +1,54 @@
-'use client';
-
-/*
- * Проблеми:
- * 1. Перша ініціалізація jotaiRelated може бути пустою строкою, відбудеться рендер, й він перезапишеться пустиою строкою
- * 2. Deferred хук не оновлюється, якщо різниця з оригіналом -1
- * 3. Враховуючи попередні 2 правила, має бути можливість стерти перший символ
- *
- * */
-
-import { useDeferredValue, useEffect, useState } from 'react';
-import { useAtomValue, useSetAtom } from 'jotai';
-import { loadable } from 'jotai/utils';
-import { StringAdapterAtom } from '@/src/types/jotaiGlobal';
-
-export default function useJotaiDeferredInput(adapterAtom: StringAdapterAtom) {
-        const jotaiValue = useAtomValue(
-                loadable<StringAdapterAtom>(adapterAtom)
-        );
-        const setJotaiValue = useSetAtom(adapterAtom);
-        const [value, setValue] = useState('');
-        const deferredValue = useDeferredValue(value);
-        const shouldSkip =
-                jotaiValue.state === 'loading' ||
-                jotaiValue.state === 'hasError';
-        const jotaiDataTypeSafe = shouldSkip ? undefined : jotaiValue.data;
-
-        useEffect(() => {
-                if (shouldSkip || jotaiValue.data.length === 0) return;
-                setValue(jotaiValue.data);
-        }, [jotaiValue.state, jotaiDataTypeSafe]);
-
-        useEffect(() => {
-                if (shouldSkip || value.length > 0) return;
-                setJotaiValue('');
-        }, [jotaiValue.state, jotaiDataTypeSafe, value]);
-
-        useEffect(() => {
-                if (shouldSkip || deferredValue.length === 0) return;
-                setJotaiValue(deferredValue);
-        }, [deferredValue]);
-
-        return [value, setValue] as const;
-}
+// 'use client';
+//
+// There's fundamental problem, that with sync atoms you cannot now, whether atom it just empty, or it hasn't just been updated yet
+// I need to rewrite all main atom families into async style, but I think that currently I have higher priorities, that that
+//
+// import { useDeferredValue, useEffect, useRef, useState } from 'react';
+// import { useAtom, useAtomValue } from 'jotai';
+// import { StringAdapterAtom } from '@/src/types/jotaiGlobal';
+// import { updateCardViaTextAtomFamily } from '@/src/jotai/cardAtoms';
+//
+// export default function useJotaiDeferredUpdateAdapter({
+//         adapterAtom,
+//         cardId
+// }: {
+//         adapterAtom: StringAdapterAtom;
+//         cardId: string;
+// }) {
+//         /* This hook should only be used in components, that can be updated via text */
+//         const prevUpdateCountNum = useRef(0);
+//         const initPerformed = useRef(false);
+//         const updateCount = useAtomValue(updateCardViaTextAtomFamily(cardId));
+//         const [inputValue, setInputValue] = useState('');
+//         const [jotaiValue, setJotaiValue] = useAtom(adapterAtom);
+//         const deferredValue = useDeferredValue(inputValue);
+//
+//         useEffect(() => {
+//                 if (!initPerformed.current && jotaiValue.length > 0) {
+//                         setInputValue(jotaiValue);
+//                         initPerformed.current = true;
+//                 }
+//         }, [jotaiValue]);
+//
+//         useEffect(() => {
+//                 /* Update local value, if card was updated via text */
+//                 if (updateCount > prevUpdateCountNum.current && jotaiValue) {
+//                         setInputValue(jotaiValue);
+//                         prevUpdateCountNum.current = updateCount;
+//                 }
+//         }, [updateCount, jotaiValue]);
+//
+//
+//
+//         useEffect(() => {
+//                 /* Update idb, if local value has been changed */
+//                 if (
+//                         updateCount === prevUpdateCountNum.current &&
+//                         jotaiValue.length > 0
+//                 ) {
+//                         setJotaiValue(deferredValue);
+//                 }
+//         }, [deferredValue, jotaiValue, updateCount]);
+//
+//         return [inputValue, setInputValue] as const;
+// }

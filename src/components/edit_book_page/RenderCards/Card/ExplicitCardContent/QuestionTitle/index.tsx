@@ -6,7 +6,7 @@ import {
 
 export default function QuestionTitle() {
         return (
-                <section className="flex flex-col w-full">
+                <section className="flex flex-col gap-2 w-full">
                         <MainQuestionTitle />
                         <SubQuestionTitle />
                 </section>

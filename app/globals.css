@@ -17,6 +17,8 @@
     --color-darkBlueOne: #001D75;
     --color-darkerBlueOne: #00185E;
     --color-lightBlueOne: #0040FF;
+    --color-muted: #ececf0;
+    --color-muted-foreground: #717182;
 
     --color-statusBarLinearBlue: linear-gradient(
             270deg,
@@ -122,7 +124,7 @@
     }
 
     .glass {
-       @apply backdrop-blur-lg bg-gray-400/30 border border-gray-400/40;
+        @apply backdrop-blur-lg bg-gray-400/30 border border-gray-400/40;
     }
 
     .tr {

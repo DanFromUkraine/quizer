@@ -40,6 +40,13 @@ import {
         updateShortCardsOnlyAtomHelper
 } from '@/src/utils/jotai/updateCardsFromTextReducers';
 import { parseTextIntoAnyCardsArray, parseTextIntoOnlyShortCardsArray } from '@/src/utils/cardsAsText/fromTextToCards';
+import { atomFamily } from 'jotai/utils';
+
+export const updateCardViaTextAtomFamily = atomFamily((_cardId: string) => atom(0));
+
+export const incrementUpdateCountAtom = atom(null, (get, set, cardId: string) => {
+        set(updateCardViaTextAtomFamily(cardId), (prev) => prev + 1);
+});
 
 export const addEmptyExplicitCardAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb) => {
@@ -75,12 +82,6 @@ export const addEmptyTermShortCard = getDerivedAtomWithIdb(
 
 export const updateExplicitCardAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, newCard: ExplicitCard) => {
-                console.debug(`
-                
-                Update explicit card 
-                
-                `);
-
                 await updateExplicitCardIdb(mainDb, newCard);
                 set(explicitCardsAtomFamily(newCard.id), newCard);
         }
@@ -88,12 +89,6 @@ export const updateExplicitCardAtom = getDerivedAtomWithIdb(
 
 export const updateShortCardAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, newCard: TermDefinitionCard) => {
-                console.debug(`
-                
-                Update short card 
-                
-                `);
-
                 await updateShortCardIdb(mainDb, newCard);
                 set(shortCardsAtomFamily(newCard.id), newCard);
         }
@@ -188,6 +183,7 @@ export const updateAnyCardsFromTextAtom = atom(
                 const cardsArray = parseTextIntoAnyCardsArray(cardsText);
                 const bookId = get(currentBookIdAtom);
 
+
                 const { cardIdsOrder, shortCardIds, explicitCardIds } = get(
                         booksAtomFamily(bookId)
                 );
@@ -248,9 +244,7 @@ export const updateOnlyShortCardsFromTextAtom = atom(
         async (get, set, cardsText: string) => {
                 const cardsArray = parseTextIntoOnlyShortCardsArray(cardsText);
                 const bookId = get(currentBookIdAtom);
-                const { shortCardIds } = get(
-                        booksAtomFamily(bookId)
-                );
+                const { shortCardIds } = get(booksAtomFamily(bookId));
 
                 const asyncVoidListToUpdate = getListForUpdate(
                         cardsArray,

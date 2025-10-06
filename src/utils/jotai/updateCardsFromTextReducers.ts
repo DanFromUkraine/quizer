@@ -4,6 +4,7 @@ import {
         deleteExplicitCardViaTextAtom,
         deleteShortCardAtom,
         deleteShortCardViaTextAtom,
+        incrementUpdateCountAtom,
         updateExplicitCardAtom,
         updateExplicitCardViaText,
         updateShortCardAtom
@@ -106,10 +107,10 @@ export function getDeleteAnyCardsReducerCallbackAndInitValue({
 
                 if (cardType === 'explicit') {
                         explicitCardIdsToDelete.push(cardId);
-                        set(deleteExplicitCardAtom, cardId);
+                        set(deleteExplicitCardViaTextAtom, cardId);
                 } else if (cardType === 'short') {
                         shortCardIdsToDelete.push(cardId);
-                        set(deleteShortCardAtom, cardId);
+                        set(deleteShortCardViaTextAtom, cardId);
                 }
 
                 return {
@@ -167,6 +168,7 @@ export function getUpdateAnyCardsReducerCallbackAndInitValue({
                                         id: cardId
                                 });
                         }
+                        set(incrementUpdateCountAtom, cardId);
                 };
 
                 if (card.type === prevCardType) {
@@ -299,6 +301,8 @@ export async function updateBookAnyCardIdsAtomHelper({
                 );
         }
 
+        console.debug({ newCardIdsOrder, newExplicitCardIds, newShortCardIds });
+
         await set(updateBookAtom, {
                 ...prevBook,
                 cardIdsOrder: newCardIdsOrder,
@@ -397,6 +401,7 @@ export function getShortCardOnlyUpdateCallback({
         return async (card: FullTermDefinitionCardFromText, i: number) => {
                 const cardId = shortCardIds[i];
                 await set(updateShortCardAtom, { ...card, id: cardId });
+                set(incrementUpdateCountAtom, cardId);
         };
 }
 
@@ -415,13 +420,15 @@ export function getShortCardOnlyInsertReducer(
         return [reducer, Promise.resolve([])];
 }
 
-export function getShortCardOnlyDeleteReducer(set: Setter): [ShortCardOnlyDeleteReducer, Promise<string[]>] {
+export function getShortCardOnlyDeleteReducer(
+        set: Setter
+): [ShortCardOnlyDeleteReducer, Promise<string[]>] {
         const idsToDelete: string[] = [];
         const reducer: ShortCardOnlyDeleteReducer = async (
                 _acc,
                 cardIdToDelete
         ) => {
-                idsToDelete.push(cardIdToDelete)
+                idsToDelete.push(cardIdToDelete);
                 await set(deleteShortCardViaTextAtom, cardIdToDelete);
                 return idsToDelete;
         };
@@ -447,11 +454,6 @@ export async function updateShortCardsOnlyAtomHelper({
         let newShortCardIds = shortCardIds;
         const areAnyNew = cardIdsToInsert.length > 0;
         const areAnyDeleted = cardIdsToDelete.length > 0;
-
-        console.debug({
-                cardIdsToInsert,
-                cardIdsToDelete
-        })
 
         const updateBook = async () => {
                 await set(updateBookAtom, {

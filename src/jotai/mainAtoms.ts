@@ -1,14 +1,3 @@
-// 'todo' - when everything will be ready, I need to create more factories, to shorten amount of code
-// 'todo' - need to create adequate way to manage delete/add id lists. Because 30 async overwrites of db in a row with difference in 1 item ain't so good rn
-
-/*
-
-        now only few problems:
-        1. For some reason if erase all the text, all the elements except the last one stay, until page is not reloaded.
-        2.
-
- */
-
 'use client';
 
 import { atom } from 'jotai';
@@ -23,7 +12,9 @@ import { storyIdsAtom } from '@/src/jotai/idManagers';
 
 export const mainDbAtom = atom<MainDbGlobal>();
 export const booksAtomFamily = atomFamily(getAtomFactory('books'));
-export const explicitCardsAtomFamily = atomFamily(getAtomFactory('explicitCards'));
+export const explicitCardsAtomFamily = atomFamily(
+        getAtomFactory('explicitCards')
+);
 export const optionsAtomFamily = atomFamily(getAtomFactory('options'));
 export const storiesAtomFamily = atomFamily(getHistoryAtom);
 export const shortCardsAtomFamily = atomFamily(getAtomFactory('shortCards'));
@@ -34,8 +25,6 @@ export const booksAndStoriesAssociationsAtom =
                 const allStories = storyIds.map((storyId) =>
                         get(storiesAtomFamily(storyId))
                 );
-
-                console.debug({ allStories });
 
                 return computeBooksAndStoriesAssociations(allStories);
         });
@@ -48,4 +37,3 @@ export const getAssociationsForBookAtomOnlyIncomplete = (bookId: string) =>
                         return !fullStory.isCompleted;
                 });
         });
-

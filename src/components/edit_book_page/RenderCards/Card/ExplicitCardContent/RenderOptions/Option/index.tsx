@@ -18,7 +18,7 @@ export default function Option({ optionId, optionIndex }: OptionProps) {
                 <OptionPropsProvider {...{ optionIndex, optionId }}>
                         <div
                                 data-testid='container-option'
-                                className='group flex justify-between bg-fillbg rounded-normal overflow-hidden w-full text-questTextColor font-semibold'>
+                                className='group flex justify-between bg-muted rounded-normal overflow-hidden w-full text-questTextColor font-semibold'>
                                 <CorrectnessMarketButton />
                                 <OptionTitle />
                                 <DeleteOptionButton />

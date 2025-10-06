@@ -11,11 +11,11 @@ export default function HeaderUI({
         return (
                 <header className='flex items-center justify-start gap-3'>
                         <h3 className='heading-1'>Edit book</h3>
-                        <Quoted variant="heading" className="!text-gray-700 heading-1 p-1 px-3 !w-fit">
+                        <Quoted variant="large-heading" className="!text-gray-700 heading-1 p-1 px-3 !w-fit">
                                 <input
                                         type='text'
                                         name='book-title'
-                                        className='field-sizing-content heading-1'
+                                        className='field-sizing-content heading-1 !text-gray-700 !mb-0'
                                         placeholder="Book's title"
                                         defaultValue={defaultValue}
                                         onChange={onChange}

@@ -10,7 +10,6 @@ export default function PlayCardsList() {
         const {
                 bookData: { cards }
         } = useAtomValue(storiesAtomFamily(storyId));
-        console.debug({ cards });
         return (
                 <ul>
                         {cards.map((card, i) => (
