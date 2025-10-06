@@ -107,10 +107,10 @@ export function getDeleteAnyCardsReducerCallbackAndInitValue({
 
                 if (cardType === 'explicit') {
                         explicitCardIdsToDelete.push(cardId);
-                        set(deleteExplicitCardAtom, cardId);
+                        set(deleteExplicitCardViaTextAtom, cardId);
                 } else if (cardType === 'short') {
                         shortCardIdsToDelete.push(cardId);
-                        set(deleteShortCardAtom, cardId);
+                        set(deleteShortCardViaTextAtom, cardId);
                 }
 
                 return {
@@ -300,6 +300,8 @@ export async function updateBookAnyCardIdsAtomHelper({
                         shortCardIdsToInsertAfterTypeChange
                 );
         }
+
+        console.debug({ newCardIdsOrder, newExplicitCardIds, newShortCardIds });
 
         await set(updateBookAtom, {
                 ...prevBook,

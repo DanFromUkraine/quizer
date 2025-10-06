@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useEditBookProps } from '@/app/edit/page';
 import { booksAtomFamily } from '@/src/jotai/mainAtoms';
 import { useAtomValue } from 'jotai';
@@ -11,6 +11,18 @@ export function RenderCards() {
         const bookAtom = useMemo(() => booksAtomFamily(bookId), []);
         const { cardIdsOrder, explicitCardIds, shortCardIds } =
                 useAtomValue(bookAtom);
+
+        useEffect(() => {
+                console.debug("bookId update");
+        }, [bookId]);
+
+        useEffect(() => {
+                console.debug("bookAtom atom update")
+        }, [bookAtom]);
+        useEffect(() => {
+                console.debug("book update")
+        }, [cardIdsOrder])
+
 
         return (
                 <section>

@@ -31,7 +31,7 @@ export default function useUpdateCardsFromTextOnDialogClose() {
         );
 
         useEffect(() => {
-                if (cardsText.length === 0 || modalVisible || !areAnyChanges)
+                if (modalVisible || !areAnyChanges)
                         return;
                 if (markupMode === 'mixed') {
                         updateAnyCards(cardsText);

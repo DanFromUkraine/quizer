@@ -183,6 +183,7 @@ export const updateAnyCardsFromTextAtom = atom(
                 const cardsArray = parseTextIntoAnyCardsArray(cardsText);
                 const bookId = get(currentBookIdAtom);
 
+
                 const { cardIdsOrder, shortCardIds, explicitCardIds } = get(
                         booksAtomFamily(bookId)
                 );
