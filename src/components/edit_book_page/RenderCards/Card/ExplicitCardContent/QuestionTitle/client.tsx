@@ -1,9 +1,9 @@
 'use client';
 import { useMemo } from 'react';
 import {
-        getExplicitCardSubtitleAtomAdapter,
-        getExplicitCardTitleAtomAdapter
-} from '@/src/utils/jotai/mainDbAtomAdapters';
+        getExplicitCardSubtitleFamilyAdapterAtom,
+        getExplicitCardTitleFamilyAdapterAtom
+} from '@/src/utils/jotai/atomAdapters';
 import MainQuestionTitleUI, {
         SubtitleUI
 } from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/QuestionTitle/UI';
@@ -14,7 +14,7 @@ import { useAtom } from 'jotai';
 export function MainQuestionTitle() {
         const { cardId } = useCardProps();
         const stableAtom = useMemo(
-                () => getExplicitCardTitleAtomAdapter(cardId),
+                () => getExplicitCardTitleFamilyAdapterAtom(cardId),
                 []
         );
         const [value, setValue] =
@@ -30,7 +30,7 @@ export function SubQuestionTitle() {
         const { cardId } = useCardProps();
 
         const stableAtom = useMemo(
-                () => getExplicitCardSubtitleAtomAdapter(cardId),
+                () => getExplicitCardSubtitleFamilyAdapterAtom(cardId),
                 []
         );
         const [value, setValue] =

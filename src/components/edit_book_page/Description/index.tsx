@@ -2,14 +2,14 @@
 import { useEditBookProps } from '@/app/edit/page';
 import { useMemo } from 'react';
 import DescriptionInputUI from '@/src/components/edit_book_page/Description/UI';
-import { getBookDescriptionAtomAdapter } from '@/src/utils/jotai/mainDbAtomAdapters';
+import { getBookDescriptionFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 import { useAtom } from 'jotai';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 
 export default function BookDescriptionInput() {
         const { bookId } = useEditBookProps();
         const stableAdapterAtom = useMemo(
-                () => getBookDescriptionAtomAdapter(bookId),
+                () => getBookDescriptionFamilyAdapterAtom(bookId),
                 []
         );
         const [value, setValue] = useAtom(stableAdapterAtom);

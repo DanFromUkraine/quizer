@@ -14,7 +14,7 @@ export default function BookStoryDialog() {
         return (
                 <Dialog
                         dialogName='storiesForBook'
-                        dialogClassName='bg-white p-6'>
+                        className='bg-white p-6'>
                         <h2 className='heading-2'>
                                 {`Some options already exist for '${bookTitle}' book. Choose one you want to resume, or create a new story`}
                         </h2>

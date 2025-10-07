@@ -2,9 +2,9 @@
 
 import TermOrDeterminationInput from '@/src/components/edit_book_page/RenderCards/Card/TermDeterminationContent/client';
 import {
-        getShortCardDefinitionAdapterAtom,
-        getShortCardTermAdapterAtom
-} from '@/src/utils/jotai/mainDbAtomAdapters';
+        getShortCardDefinitionFamilyAdapterAtom,
+        getShortCardTermFamilyAdapterAtom
+} from '@/src/utils/jotai/atomAdapters';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
 
 export default function TermDeterminationContent() {
@@ -13,13 +13,13 @@ export default function TermDeterminationContent() {
                 <section className='w-full grid grid-cols-2 gap-4'>
                         <TermOrDeterminationInput
                                 underText='TERM'
-                                atomAdapterUnstable={getShortCardTermAdapterAtom(
+                                atomAdapterUnstable={getShortCardTermFamilyAdapterAtom(
                                         cardId
                                 )}
                         />
                         <TermOrDeterminationInput
                                 underText='DEFINITION'
-                                atomAdapterUnstable={getShortCardDefinitionAdapterAtom(
+                                atomAdapterUnstable={getShortCardDefinitionFamilyAdapterAtom(
                                         cardId
                                 )}
                         />

@@ -3,7 +3,7 @@
 import { useOptionProps } from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option';
 import OptionTitleUI from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/OptionTitle/UI';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
-import { getCardOptionTitleAtomAdapter } from '@/src/utils/jotai/mainDbAtomAdapters';
+import { getCardOptionTitleFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 import { useMemo } from 'react';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
 import { useAtom } from 'jotai';
@@ -12,7 +12,7 @@ export default function OptionTitle() {
         const { optionId } = useOptionProps();
         const { cardId } = useCardProps();
         const stableAdapterAtom = useMemo(
-                () => getCardOptionTitleAtomAdapter(optionId),
+                () => getCardOptionTitleFamilyAdapterAtom(optionId),
                 []
         );
         const [value, setValue] =

@@ -2,7 +2,7 @@
 
 import ExplanationInputUI from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/Explanation/UI';
 import { MouseEvent, useCallback, useMemo } from 'react';
-import { getExplicitCardExplanationAtomAdapter } from '@/src/utils/jotai/mainDbAtomAdapters';
+import { getExplicitCardExplanationFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import { useAtom } from 'jotai';
@@ -10,7 +10,7 @@ import { useAtom } from 'jotai';
 export default function Explanation() {
         const { cardId } = useCardProps();
         const stableAtom = useMemo(
-                () => getExplicitCardExplanationAtomAdapter(cardId),
+                () => getExplicitCardExplanationFamilyAdapterAtom(cardId),
                 []
         );
         const [value, setValue] =
