@@ -4,12 +4,12 @@ import CorrectnessMarketButtonUI from '@/src/components/edit_book_page/RenderCar
 import { useOptionProps } from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option';
 import { useAtom } from 'jotai';
 import { useMemo } from 'react';
-import { getOptionCorrectnessMarkerAtomAdapter } from '@/src/utils/jotai/mainDbAtomAdapters';
+import { getOptionCorrectnessMarkerFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 
 export default function CorrectnessMarketButton() {
         const { optionId, optionIndex } = useOptionProps();
         const stableAdapterAtom = useMemo(
-                () => getOptionCorrectnessMarkerAtomAdapter(optionId),
+                () => getOptionCorrectnessMarkerFamilyAdapterAtom(optionId),
                 []
         );
 

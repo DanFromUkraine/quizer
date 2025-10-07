@@ -11,13 +11,13 @@ import clsx from 'clsx';
 export default function Dialog({
         children,
         dialogName,
-        dialogClassName,
+        className,
         containerClassName,
         onCloseSideEffect
 }: {
         children: ReactNode;
         dialogName: DialogNames;
-        dialogClassName?: string;
+        className?: string;
         containerClassName?: string;
         onCloseSideEffect?: () => void;
 }) {
@@ -47,7 +47,7 @@ export default function Dialog({
                                 data-state={dialogState}
                                 className={clsx(
                                         'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 flex flex-col translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border shadow-lg duration-200 w-8/12',
-                                        dialogClassName
+                                        className
                                 )}>
                                 {children}
                         </section>

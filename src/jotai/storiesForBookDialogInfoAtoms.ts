@@ -8,9 +8,9 @@ import {
         hideDialogAtom,
         openDialogAtom
 } from '@/src/jotai/dialogVisibilityFamily';
-import { addNewStoryAtom } from '@/src/jotai/historyAtoms';
 import { AddNewStorySuccessHandler } from '@/src/types/jotaiGlobal';
 import { currentBookIdForStoriesDialogAtom } from '@/src/jotai/idManagers';
+import { openNewStorySettingsDialogAtom } from '@/src/jotai/createNewStory';
 
 interface BookStoryDialogInfo {
         bookTitle: string;
@@ -38,7 +38,7 @@ export const updateBookStoriesDataAtom = atom(
         (get, set, bookId: string) => {
                 const newAssociations = get(booksAndStoriesAssociationsAtom);
                 const storyIds = newAssociations[bookId];
-                if (typeof storyIds === "undefined") {
+                if (typeof storyIds === 'undefined') {
                         set(hideDialogAtom, 'storiesForBook');
                 } else {
                         set(storiesForBookDialogInfoAtom, (prev) => ({
@@ -52,11 +52,10 @@ export const updateBookStoriesDataAtom = atom(
 export const openBookStoryDialog = atom(null, (get, set, bookId: string) => {
         const { bookTitle } = get(booksAtomFamily(bookId));
         const storyIds = get(getAssociationsForBookAtomOnlyIncomplete(bookId));
-        const createOnAddNewStoryClick =
-                (onSuccess: AddNewStorySuccessHandler) => () => {
-                        set(closeAndClearBookStoryDialog);
-                        set(addNewStoryAtom, bookId, onSuccess);
-                };
+        const createOnAddNewStoryClick = () => () => {
+                set(closeAndClearBookStoryDialog);
+                set(openNewStorySettingsDialogAtom, bookId);
+        };
 
         set(currentBookIdForStoriesDialogAtom, bookId);
 

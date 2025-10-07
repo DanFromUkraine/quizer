@@ -15,8 +15,9 @@ import {
         updateShortCardAtom
 } from '@/src/jotai/cardAtoms';
 import { updateOptionAtom } from '@/src/jotai/optionAtoms';
+import { newStorySettingsAtom } from '@/src/jotai/createNewStory';
 
-function getAtomAdapter<Item extends {}, K extends keyof Item>({
+function getAtomFamilyAdapter<Item extends {}, K extends keyof Item>({
         targetAtomFamily,
         targetProperty,
         targetUpdateAtom
@@ -47,56 +48,105 @@ function getAtomAdapter<Item extends {}, K extends keyof Item>({
                 );
 }
 
-export const getBookTitleAtomAdapter = getAtomAdapter({
+function getAtomAdapter<Item extends {}, K extends keyof Item>({
+        targetAtom,
+        targetProperty
+}: {
+        targetAtom: WritableAtom<Item, [newVal: Item], unknown>;
+        targetProperty: K;
+}) {
+        return atom(
+                (get) => get(targetAtom)[targetProperty],
+                (get, set, newVal: Item[K]) => {
+                        const prevAtomValue = get(targetAtom);
+                        const newAtomValue = {
+                                ...prevAtomValue,
+                                [targetProperty]: newVal
+                        };
+                        set(targetAtom, newAtomValue);
+                }
+        );
+}
+
+export const getBookTitleFamilyAdapterAtom = getAtomFamilyAdapter({
         targetAtomFamily: booksAtomFamily,
         targetProperty: 'bookTitle',
         targetUpdateAtom: updateBookAtom
 });
 
-export const getBookDescriptionAtomAdapter = getAtomAdapter({
+export const getBookDescriptionFamilyAdapterAtom = getAtomFamilyAdapter({
         targetAtomFamily: booksAtomFamily,
         targetProperty: 'description',
         targetUpdateAtom: updateBookAtom
 });
 
-export const getExplicitCardTitleAtomAdapter = getAtomAdapter({
+export const getExplicitCardTitleFamilyAdapterAtom = getAtomFamilyAdapter({
         targetAtomFamily: explicitCardsAtomFamily,
         targetProperty: 'cardTitle',
         targetUpdateAtom: updateExplicitCardAtom
 });
 
-export const getExplicitCardSubtitleAtomAdapter = getAtomAdapter({
+export const getExplicitCardSubtitleFamilyAdapterAtom = getAtomFamilyAdapter({
         targetAtomFamily: explicitCardsAtomFamily,
         targetProperty: 'subtitle',
         targetUpdateAtom: updateExplicitCardAtom
 });
 
-export const getExplicitCardExplanationAtomAdapter = getAtomAdapter({
-        targetAtomFamily: explicitCardsAtomFamily,
-        targetProperty: 'explanation',
-        targetUpdateAtom: updateExplicitCardAtom
-});
+export const getExplicitCardExplanationFamilyAdapterAtom = getAtomFamilyAdapter(
+        {
+                targetAtomFamily: explicitCardsAtomFamily,
+                targetProperty: 'explanation',
+                targetUpdateAtom: updateExplicitCardAtom
+        }
+);
 
-export const getCardOptionTitleAtomAdapter = getAtomAdapter({
+export const getCardOptionTitleFamilyAdapterAtom = getAtomFamilyAdapter({
         targetAtomFamily: optionsAtomFamily,
         targetProperty: 'optionTitle',
         targetUpdateAtom: updateOptionAtom
 });
 
-export const getOptionCorrectnessMarkerAtomAdapter = getAtomAdapter({
-        targetAtomFamily: optionsAtomFamily,
-        targetProperty: 'isCorrect',
-        targetUpdateAtom: updateOptionAtom
-});
+export const getOptionCorrectnessMarkerFamilyAdapterAtom = getAtomFamilyAdapter(
+        {
+                targetAtomFamily: optionsAtomFamily,
+                targetProperty: 'isCorrect',
+                targetUpdateAtom: updateOptionAtom
+        }
+);
 
-export const getShortCardTermAdapterAtom = getAtomAdapter({
+export const getShortCardTermFamilyAdapterAtom = getAtomFamilyAdapter({
         targetAtomFamily: shortCardsAtomFamily,
         targetProperty: 'term',
         targetUpdateAtom: updateShortCardAtom
 });
 
-export const getShortCardDefinitionAdapterAtom = getAtomAdapter({
+export const getShortCardDefinitionFamilyAdapterAtom = getAtomFamilyAdapter({
         targetAtomFamily: shortCardsAtomFamily,
         targetProperty: 'definition',
         targetUpdateAtom: updateShortCardAtom
+});
+
+export const getNewStoryIsSmartModeParamAdapterAtom = getAtomAdapter({
+        targetAtom: newStorySettingsAtom,
+        targetProperty: 'isSmartMode'
+});
+
+export const getNewStoryNumOfNormalCardsParamAdapterAtom = getAtomAdapter({
+        targetAtom: newStorySettingsAtom,
+        targetProperty: 'numOfNormalCards'
+});
+
+export const getNewStoryNumOfExplicitCardsParamAdapterAtom = getAtomAdapter({
+        targetAtom: newStorySettingsAtom,
+        targetProperty: 'numOfExplicitCards'
+});
+
+export const getNewStoryNumOfTypeInCardsParamAdapterAtom = getAtomAdapter({
+        targetAtom: newStorySettingsAtom,
+        targetProperty: 'numOfTypeInCards'
+});
+
+export const getNewStoryNumOfIsCorrectCardsParamAdapterAtom = getAtomAdapter({
+        targetAtom: newStorySettingsAtom,
+        targetProperty: 'numOfIsCorrectCards'
 });

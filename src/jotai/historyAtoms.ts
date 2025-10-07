@@ -31,17 +31,6 @@ type TemporaryDefinition = {
         id: string;
 };
 
-export const addNewStoryAtom = getDerivedAtomWithIdb(
-        async (
-                get,
-                set,
-                mainDb,
-                bookId: string,
-                successCallback: AddNewStorySuccessHandler
-        ) => {
-
-        }
-);
 
 export const deleteStoryAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb, storyId: string) => {

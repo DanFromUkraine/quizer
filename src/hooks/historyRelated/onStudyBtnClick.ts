@@ -5,18 +5,14 @@ import {
         booksAndStoriesAssociationsAtom,
         booksAtomFamily
 } from '@/src/jotai/mainAtoms';
-import { useRouter } from 'next/navigation';
-import { addNewStoryAtom } from '@/src/jotai/historyAtoms';
 import { showSnackbarAtom } from '@/src/jotai/snackbarAtoms';
 import { openBookStoryDialog } from '@/src/jotai/storiesForBookDialogInfoAtoms';
+import { openDialogAtom } from '@/src/jotai/dialogVisibilityFamily';
+import { openNewStorySettingsDialogAtom } from '@/src/jotai/createNewStory';
 
 export default function useStudyButtonClickHandler(bookId: string) {
-        const router = useRouter();
         return useAtomCallback((get, set) => {
-
                 const { cardIdsOrder } = get(booksAtomFamily(bookId));
-
-
 
                 const booksAndStoriesAssociations = get(
                         booksAndStoriesAssociationsAtom
@@ -30,9 +26,8 @@ export default function useStudyButtonClickHandler(bookId: string) {
                 } else if (bookId in booksAndStoriesAssociations) {
                         set(openBookStoryDialog, bookId);
                 } else {
-                        set(addNewStoryAtom, bookId, (newStoryId) => {
-                                router.push(`/play?storyId=${newStoryId}`);
-                        });
+                        console.debug("call")
+                        set(openNewStorySettingsDialogAtom, bookId);
                 }
         });
 }
