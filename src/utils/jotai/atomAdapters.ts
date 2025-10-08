@@ -150,3 +150,23 @@ export const getNewStoryNumOfIsCorrectCardsParamAdapterAtom = getAtomAdapter({
         targetAtom: newStorySettingsAtom,
         targetProperty: 'numOfIsCorrectCards'
 });
+
+export const getNewStoryMaxNumOfExplicitCardsAdapterAtom = getAtomAdapter({
+        targetAtom: newStorySettingsAtom,
+        targetProperty: "maxNumOfExplicitCards"
+})
+
+export const getNewStoryMaxNumOfNormalCardsAdapterAtom = getAtomAdapter({
+        targetAtom: newStorySettingsAtom,
+        targetProperty: "maxNumOfNormalCards"
+})
+
+export const getNewStoryMaxNumOfTypeInCardsAdapterAtom = getAtomAdapter({
+        targetAtom: newStorySettingsAtom,
+        targetProperty: "maxNumOfTypeInCards"
+})
+
+export const getNewStoryMaxNumOfIsCorrectCardsAdapterAtom = getAtomAdapter({
+        targetAtom: newStorySettingsAtom,
+        targetProperty: "maxNumOfIsCorrectCards"
+})

@@ -16,7 +16,7 @@ export default function NewStoryParamsDialog() {
                                 <IsSmartModeToggle />
                                 <ul>
                                         <li>
-                                                <h3 className='heading-3'>
+                                                <h3 className='heading-3 mb-5'>
                                                         Custom settings:
                                                 </h3>
                                         </li>
@@ -27,6 +27,7 @@ export default function NewStoryParamsDialog() {
                                                 />
                                         ))}
                                 </ul>
+
                         </div>
                 </Dialog>
         );

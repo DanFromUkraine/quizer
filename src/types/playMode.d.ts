@@ -1,5 +1,13 @@
+interface FullBook {
+        title: string;
+        creationDate: number;
+        description: string;
+        cards: FullCard[];
+}
 
 export interface PlayOption {
+        relatedCardId: string;
+        id: string;
         title: string;
         isCorrect: boolean;
 }

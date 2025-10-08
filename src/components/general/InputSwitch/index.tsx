@@ -12,6 +12,8 @@ export default function InputSwitch({
                 setCurrState(!currState);
         };
 
+        console.debug({currState})
+
         return (
                 <label
                         data-ischecked={currState}
@@ -20,7 +22,7 @@ export default function InputSwitch({
                                 type='checkbox'
                                 name="toggle-input"
                                 className='absolute top-0 left-0 w-full h-full opacity-0 bg-transparent peer'
-                                defaultChecked={currState}
+                                checked={currState}
                                 onChange={onChange}
                         />
                         <span
