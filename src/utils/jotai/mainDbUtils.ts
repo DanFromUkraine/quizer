@@ -13,7 +13,6 @@ import {
 } from '@/src/jotai/mainAtoms';
 import { getFilteredIds } from '@/src/utils/idb/idUtils';
 import {
-        getEmptyStoryTemplate,
         getTemplate
 } from '@/src/utils/idb/main/templates';
 import { currentBookIdAtom } from '@/src/jotai/idManagers';
@@ -26,9 +25,6 @@ export function getAtomFactory<K extends keyof Omit<StoreMap, 'history'>>(
         return (id: string) => atom(getTemplate(storeName, id));
 }
 
-export function getHistoryAtom(id: string) {
-        return atom<Story>(getEmptyStoryTemplate(id));
-}
 
 export function getNewBookWithDeletedCardId(
         get: Getter,

@@ -3,21 +3,48 @@
 import { atom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
 import {
+        Book,
         BooksAndStoriesAssociations,
-        MainDbGlobal
+        ExplicitCard,
+        ExplicitCardStory,
+        IsCorrectCardStory,
+        MainDbGlobal,
+        Option,
+        Story,
+        TermDefinitionCard,
+        TypeInCardStory
 } from '@/src/types/mainDbGlobal';
-import { getAtomFactory, getHistoryAtom } from '@/src/utils/jotai/mainDbUtils';
+import { getAtomFactory } from '@/src/utils/jotai/mainDbUtils';
 import computeBooksAndStoriesAssociations from '@/src/utils/jotai/computeBooksAndStoriesAssociations';
 import { storyIdsAtom } from '@/src/jotai/idManagers';
 
+export const allBooksAtom = atom<Book[]>([]);
+export const allExpCardsAtom = atom<ExplicitCard[]>([]);
+export const allOptionsAtom = atom<Option[]>([]);
+export const allStoriesAtom = atom<Story[]>([]);
+export const allShortCardsAtom = atom<TermDefinitionCard[]>([]);
+export const allExpCardStoriesAtom = atom<ExplicitCardStory[]>([]);
+export const allTypeInCardStoriesAtom = atom<TypeInCardStory[]>([]);
+export const allIsCorrectCardStoriesAtom = atom<IsCorrectCardStory[]>([]);
+
+export const isInitializationFromIdbCompletedAtom = atom(false);
 export const mainDbAtom = atom<MainDbGlobal>();
 export const booksAtomFamily = atomFamily(getAtomFactory('books'));
 export const explicitCardsAtomFamily = atomFamily(
         getAtomFactory('explicitCards')
 );
 export const optionsAtomFamily = atomFamily(getAtomFactory('options'));
-export const storiesAtomFamily = atomFamily(getHistoryAtom);
+export const storiesAtomFamily = atomFamily(getAtomFactory('stories'));
 export const shortCardsAtomFamily = atomFamily(getAtomFactory('shortCards'));
+export const explicitCardStoriesAtomFamily = atomFamily(
+        getAtomFactory('explicitCardStories')
+);
+export const typeInCardStoriesAtomFamily = atomFamily(
+        getAtomFactory('typeInCardStories')
+);
+export const isCorrectCardStoriesAtomFamily = atomFamily(
+        getAtomFactory('isCorrectCardStories')
+);
 
 export const booksAndStoriesAssociationsAtom =
         atom<BooksAndStoriesAssociations>((get) => {

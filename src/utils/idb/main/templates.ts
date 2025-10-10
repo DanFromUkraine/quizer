@@ -96,15 +96,26 @@ function getEmptyIsCorrectCardStory(id: string): IsCorrectCardStory {
         };
 }
 
-const templates = {
+export type Templates = {
+        books: (id: string) => Book;
+        explicitCards: (id: string) => ExplicitCard;
+        shortCards: (id: string) => TermDefinitionCard;
+        options: (id: string) => Option;
+        stories: (storyId: string) => Story;
+        explicitCardStories: (id: string) => ExplicitCardStory;
+        typeInCardStories: (id: string) => TypeInCardStory;
+        isCorrectCardStories: (id: string) => IsCorrectCardStory;
+};
+
+const templates: Templates = {
         books: getEmptyBookTemplate,
         explicitCards: getEmptyCardTemplate,
         shortCards: getEmptyTermDefinitionCard,
         options: getEmptyOptionTemplate,
         stories: getEmptyStoryTemplate,
-        explicitCardStoryIds: getEmptyExplicitCardStory,
-        typeInCardStoryIds: getEmptyTypeInCardStory,
-        isCorrectCardStoryIds: getEmptyIsCorrectCardStory
+        explicitCardStories: getEmptyExplicitCardStory,
+        typeInCardStories: getEmptyTypeInCardStory,
+        isCorrectCardStories: getEmptyIsCorrectCardStory
 };
 
 export function getTemplate<Key extends keyof StoreMap>(

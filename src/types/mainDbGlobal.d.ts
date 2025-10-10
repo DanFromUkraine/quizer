@@ -39,10 +39,6 @@ export interface MainDbSchema extends DBSchema {
         };
 }
 
-export type ObjectStoreKeysNoHistory = keyof Pick<
-        MainDbSchema,
-        'books' | 'cards' | 'options'
->;
 
 export type ObjectStoreKeysAll = keyof StoreMap;
 
