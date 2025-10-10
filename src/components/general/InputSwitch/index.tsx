@@ -12,8 +12,6 @@ export default function InputSwitch({
                 setCurrState(!currState);
         };
 
-        console.debug({currState})
-
         return (
                 <label
                         data-ischecked={currState}

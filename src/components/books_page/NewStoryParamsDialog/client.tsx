@@ -1,30 +1,45 @@
 'use client';
 
-import InputSwitch from '@/src/components/general/InputSwitch';
 import { useAtom, useAtomValue } from 'jotai';
-import { getNewStoryIsSmartModeParamAdapterAtom } from '@/src/utils/jotai/atomAdapters';
-import { Hr, HrWrapper } from '@/src/components/general/Hr';
+import {
+        getNewStoryIsSmartModeParamAdapterAtom,
+        getNewStoryShowAnswersImmediatelyParamAdapterAtom
+} from '@/src/utils/jotai/atomAdapters';
+import { Hr } from '@/src/components/general/Hr';
 import { NewStoryParam } from '@/src/constants/newCardParams';
 import {
-        addNewStory,
+        addNewStoryAtom,
         closeNewStorySettingsDialogAtom,
         newStorySettingsAtom
 } from '@/src/jotai/createNewStory';
 import { useAtomCallback } from 'jotai/utils';
 import { useRouter } from 'next/navigation';
 import getDefaultPathToPlayPage from '@/src/utils/getDefPathToPlayPage';
+import { ParamWithToggleUI } from '@/src/components/books_page/NewStoryParamsDialog/UI';
 
 export function IsSmartModeToggle() {
         const [currState, setCurrState] = useAtom(
                 getNewStoryIsSmartModeParamAdapterAtom
         );
         return (
-                <HrWrapper>
-                        <section className='flex justify-between'>
-                                <h3 className='heading-3'>Smart Mode:</h3>
-                                <InputSwitch {...{ currState, setCurrState }} />
-                        </section>
-                </HrWrapper>
+                <ParamWithToggleUI
+                        {...{ currState, setCurrState, title: 'Smart mode' }}
+                />
+        );
+}
+
+export function ShowAnswersImmediately() {
+        const [currState, setCurrState] = useAtom(
+                getNewStoryShowAnswersImmediatelyParamAdapterAtom
+        );
+        return (
+                <ParamWithToggleUI
+                        {...{
+                                currState,
+                                setCurrState,
+                                title: 'Show answers immediately'
+                        }}
+                />
         );
 }
 
@@ -70,13 +85,15 @@ export function SubmitButton() {
         const submit = useAtomCallback((get, set) => {
                 const newStorySettings = get(newStorySettingsAtom);
                 set(closeNewStorySettingsDialogAtom);
-                set(addNewStory, {
+                set(addNewStoryAtom, {
                         settings: newStorySettings,
                         bookId: newStorySettings.bookId,
                         successCallback: (newStoryId) => {
-                                router.push(getDefaultPathToPlayPage(newStoryId));
+                                router.push(
+                                        getDefaultPathToPlayPage(newStoryId)
+                                );
                         }
-                })
+                });
         });
 
         return (

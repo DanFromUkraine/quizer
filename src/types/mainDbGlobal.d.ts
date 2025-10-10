@@ -74,16 +74,15 @@ export interface Option {
         optionTitle: string;
 }
 
-
-
 export interface Story {
         id: string;
         isCompleted: boolean;
+        showAnswersImmediately: boolean;
         bookId: string;
         timeSpentSec: number;
         bookData: FullBook;
         playStartDate: number;
-        choicePointers: (number | string)[];
+        choicePointers: (number | string | null)[];
 }
 
 export type BooksAndStoriesAssociations = {

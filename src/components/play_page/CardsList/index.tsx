@@ -1,6 +1,6 @@
 'use client';
 
-import { Provider, useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { currentStoryIdAtom } from '@/src/jotai/idManagers';
 import { storiesAtomFamily } from '@/src/jotai/mainAtoms';
 import ExplicitCard from '@/src/components/play_page/CardsList/ExplicitCard';
@@ -14,24 +14,23 @@ export default function PlayCardsList() {
         } = useAtomValue(storiesAtomFamily(storyId));
         return (
                 <ul>
-                        <Provider>
-                                {cards.map((card) => {
-                                        if (
-                                                card.type === 'play-explicit' ||
-                                                card.type === 'play-normal'
-                                        ) {
-                                                return (
-                                                        <ExplicitCard
-                                                                {...card}
-                                                        />
-                                                );
-                                        } else if (card.type === "play-typeIn") {
-                                                return <TypeInCard />
-                                        } else if (card.type === "play-isCorrect") {
-                                                return <IsCorrectCard />
-                                        }
-                                })}
-                        </Provider>
+                        {cards.map((card, i) => {
+                                if (
+                                        card.type === 'play-explicit' ||
+                                        card.type === 'play-normal'
+                                ) {
+                                        return (
+                                                <ExplicitCard
+                                                        cardIndex={i}
+                                                        {...card}
+                                                />
+                                        );
+                                } else if (card.type === 'play-typeIn') {
+                                        return <TypeInCard />;
+                                } else if (card.type === 'play-isCorrect') {
+                                        return <IsCorrectCard />;
+                                }
+                        })}
                 </ul>
         );
 }

@@ -4,11 +4,7 @@ import {
         booksAtomFamily,
         storiesAtomFamily
 } from '@/src/jotai/mainAtoms';
-import {
-        ExplicitCard,
-        Story,
-        TermDefinitionCard
-} from '@/src/types/mainDbGlobal';
+import { Story } from '@/src/types/mainDbGlobal';
 import { getDerivedAtomWithIdb } from '@/src/utils/jotai/mainDbUtils';
 import { deleteStoryIdb, updateStoryIdb } from '@/src/utils/idb/main/actions';
 import {
@@ -17,17 +13,12 @@ import {
         storyIdsAtom
 } from '@/src/jotai/idManagers';
 import { StoriesByBook } from '@/src/types/historyPage';
-
-type TemporaryExplicitCard = Omit<ExplicitCard, 'type' | 'childrenIds' | 'id'>;
-type TemporaryShortCard = Omit<TermDefinitionCard, 'type'>;
-
-type TemporaryDefinition = {
-        definition: string;
-        id: string;
-};
+import { StorySettings } from '@/src/types/newStory';
+import { getCardsForStoryModeRelated } from '@/src/utils/createNewStory/getAllCards';
+import getUniqueID from '@/src/utils/getUniqueID';
 
 export const deleteStoryAtom = getDerivedAtomWithIdb(
-        async (get, set, mainDb, storyId: string) => {
+        async (_get, set, mainDb, storyId: string) => {
                 await deleteStoryIdb(mainDb, storyId);
                 storiesAtomFamily.remove(storyId);
                 set(deleteIdAtom, {
@@ -49,7 +40,7 @@ export const finishStoryAtom = getDerivedAtomWithIdb(
         }
 );
 
-export const getChoiceIndexMade = (cardIndex: number) =>
+export const getChoiceInfoAtom = (cardIndex: number) =>
         atom((get) => {
                 const storyId = get(currentStoryIdAtom);
                 return get(storiesAtomFamily(storyId)).choicePointers[
@@ -57,7 +48,7 @@ export const getChoiceIndexMade = (cardIndex: number) =>
                 ];
         });
 
-export const saveChoice = getDerivedAtomWithIdb(
+export const updateChoiceAtom = getDerivedAtomWithIdb(
         async (
                 get,
                 set,
@@ -71,9 +62,13 @@ export const saveChoice = getDerivedAtomWithIdb(
                 const { choicePointers, ...other } = get(
                         storiesAtomFamily(storyId)
                 );
-                if (typeof choicePointers[cardIndex] !== 'undefined') return;
                 const newChoicePointers = [...choicePointers];
-                newChoicePointers[cardIndex] = optionIndex;
+
+                if (!choicePointers[cardIndex]) {
+                        newChoicePointers[cardIndex] = optionIndex;
+                } else {
+                        newChoicePointers[cardIndex] = null;
+                }
                 const newStory: Story = {
                         ...other,
                         choicePointers: newChoicePointers
@@ -96,7 +91,44 @@ export const storiesSortedByBookAtom = atom((get) => {
         }) as StoriesByBook[];
 });
 
-export const canRevealChoicesAtom =
-        /* Important: this atom is meant to be used by few independent components with their own local Provider scopes*/ atom(
-                false
-        );
+export const addNewStoryAtom = getDerivedAtomWithIdb(
+        async (
+                get,
+                set,
+                mainDb,
+                {
+                        settings,
+                        bookId,
+                        successCallback
+                }: {
+                        settings: StorySettings;
+                        bookId: string;
+                        successCallback: (storyId: string) => void;
+                }
+        ) => {
+                const { bookTitle, description } = get(booksAtomFamily(bookId));
+                const allCards = getCardsForStoryModeRelated({
+                        ...settings,
+                        bookId,
+                        get
+                });
+                const newStoryId = getUniqueID();
+                const newStory: Story = {
+                        id: newStoryId,
+                        showAnswersImmediately: false,
+                        isCompleted: false,
+                        timeSpentSec: 0,
+                        playStartDate: 0,
+                        choicePointers: new Array(allCards.length).fill(null),
+                        bookId,
+                        bookData: {
+                                title: bookTitle,
+                                description,
+                                creationDate: Date.now(),
+                                cards: allCards
+                        }
+                };
+                await updateStoryIdb(mainDb, newStory);
+                successCallback(newStoryId);
+        }
+);

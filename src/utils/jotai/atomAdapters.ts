@@ -15,7 +15,10 @@ import {
         updateShortCardAtom
 } from '@/src/jotai/cardAtoms';
 import { updateOptionAtom } from '@/src/jotai/optionAtoms';
-import { newStorySettingsAtom } from '@/src/jotai/createNewStory';
+import {
+        newStorySettingsAtom,
+        newStoryTemporaryInfoAtom
+} from '@/src/jotai/createNewStory';
 
 function getAtomFamilyAdapter<Item extends {}, K extends keyof Item>({
         targetAtomFamily,
@@ -131,6 +134,13 @@ export const getNewStoryIsSmartModeParamAdapterAtom = getAtomAdapter({
         targetProperty: 'isSmartMode'
 });
 
+export const getNewStoryShowAnswersImmediatelyParamAdapterAtom = getAtomAdapter(
+        {
+                targetAtom: newStorySettingsAtom,
+                targetProperty: 'showAnswersImmediately'
+        }
+);
+
 export const getNewStoryNumOfNormalCardsParamAdapterAtom = getAtomAdapter({
         targetAtom: newStorySettingsAtom,
         targetProperty: 'numOfNormalCards'
@@ -152,21 +162,21 @@ export const getNewStoryNumOfIsCorrectCardsParamAdapterAtom = getAtomAdapter({
 });
 
 export const getNewStoryMaxNumOfExplicitCardsAdapterAtom = getAtomAdapter({
-        targetAtom: newStorySettingsAtom,
-        targetProperty: "maxNumOfExplicitCards"
-})
+        targetAtom: newStoryTemporaryInfoAtom,
+        targetProperty: 'maxNumOfExplicitCards'
+});
 
 export const getNewStoryMaxNumOfNormalCardsAdapterAtom = getAtomAdapter({
-        targetAtom: newStorySettingsAtom,
-        targetProperty: "maxNumOfNormalCards"
-})
+        targetAtom: newStoryTemporaryInfoAtom,
+        targetProperty: 'maxNumOfNormalCards'
+});
 
 export const getNewStoryMaxNumOfTypeInCardsAdapterAtom = getAtomAdapter({
-        targetAtom: newStorySettingsAtom,
-        targetProperty: "maxNumOfTypeInCards"
-})
+        targetAtom: newStoryTemporaryInfoAtom,
+        targetProperty: 'maxNumOfTypeInCards'
+});
 
 export const getNewStoryMaxNumOfIsCorrectCardsAdapterAtom = getAtomAdapter({
-        targetAtom: newStorySettingsAtom,
-        targetProperty: "maxNumOfIsCorrectCards"
-})
+        targetAtom: newStoryTemporaryInfoAtom,
+        targetProperty: 'maxNumOfIsCorrectCards'
+});

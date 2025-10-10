@@ -1,11 +1,12 @@
 'use client';
 
-import ExplanationInputUI from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/Explanation/UI';
 import { MouseEvent, useCallback, useMemo } from 'react';
 import { getExplicitCardExplanationFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import { useAtom } from 'jotai';
+import LikeExplanationUI from '@/src/components/general/interfacesUI/explanation';
+import ExtendableTextArea from '@/src/components/general/ExtendableInput';
 
 export default function Explanation() {
         const { cardId } = useCardProps();
@@ -33,13 +34,12 @@ export default function Explanation() {
         const onChange = getInputChangeCallback(setValue);
 
         return (
-                <ExplanationInputUI
-                        {...{
-                                onContainerClick,
-                                cardId,
-                                value,
-                                onChange
-                        }}
-                />
+                <LikeExplanationUI onContainerClick={onContainerClick}>
+                        <ExtendableTextArea
+                                value={value}
+                                onChange={onChange}
+                                className='text-muted-foreground w-full'
+                                id={`explanation-${cardId}`}></ExtendableTextArea>
+                </LikeExplanationUI>
         );
 }
