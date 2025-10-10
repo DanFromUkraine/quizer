@@ -2,7 +2,7 @@ interface FullBook {
         title: string;
         creationDate: number;
         description: string;
-        cards: FullCard[];
+        cards: AnyCard[];
 }
 
 export interface PlayOption {

@@ -17,8 +17,11 @@ import {
         PlayOption,
         PlayTypeInCard
 } from '@/src/types/playMode';
-import { TermDefinitionCard } from '@/src/types/mainDbGlobal';
+import { Story, TermDefinitionCard } from '@/src/types/mainDbGlobal';
 import shuffleList from '@/src/utils/fisherYatesShafle';
+import getUniqueID from '@/src/utils/getUniqueID';
+import { updateStoryIdb } from '@/src/utils/idb/main/actions';
+import { getDerivedAtomWithIdb } from '@/src/utils/jotai/mainDbUtils';
 
 interface StorySettings {
         isSmartMode: boolean;
@@ -30,6 +33,7 @@ interface StorySettings {
         numOfNormalCards: number;
         numOfTypeInCards: number;
         numOfIsCorrectCards: number;
+        bookId: string;
 }
 
 const EMPTY_STORY_SETTINGS_ATOM: StorySettings = {
@@ -41,7 +45,8 @@ const EMPTY_STORY_SETTINGS_ATOM: StorySettings = {
         numOfExplicitCards: 0,
         numOfNormalCards: 0,
         numOfTypeInCards: 0,
-        numOfIsCorrectCards: 0
+        numOfIsCorrectCards: 0,
+        bookId: ""
 };
 
 export const newStorySettingsAtom = atom<StorySettings>(
@@ -113,7 +118,8 @@ const setNewStorySettingsAtomToDefaultAtom = atom(
                         numOfExplicitCards: explicitCardIds.length,
                         numOfNormalCards: maxNumOfNormalCards,
                         numOfTypeInCards,
-                        numOfIsCorrectCards
+                        numOfIsCorrectCards,
+                        bookId
                 });
         }
 );
@@ -195,7 +201,7 @@ function fiftyFifty() {
 }
 
 function getRandomItem<T>(array: T[]) {
-        const randomIndex = Math.floor(Math.random() * (array.length - 1));
+        const randomIndex = Math.floor(Math.random() * array.length);
         return array[randomIndex];
 }
 
@@ -203,7 +209,8 @@ function getCorrectOptionFromExplicitCard(explicitCard: PlayExplicitCard) {
         const correctOption = explicitCard.options.find(
                 (option) => option.isCorrect
         );
-        if (!correctOption) throw 'No correct option in an explicit card';
+        if (!correctOption)
+                throw new Error('No correct option in an explicit card');
         return correctOption;
 }
 
@@ -245,19 +252,24 @@ function getCardsForAlgorithm({
         shortCards: TermDefinitionCard[];
         playExplicitCards: PlayExplicitCard[];
 }): [TermDefinitionCard[], PlayExplicitCard[]] {
-        const shortCardsOverlayNum = shortCards.length - requiredNum;
-
+        const shortCardsNeeded = Math.min(requiredNum, shortCards.length);
         const shortCardsForAlgo = getRandomItemsFromList(
                 shortCards,
-                requiredNum
-        ).slice(0, requiredNum);
+                shortCardsNeeded
+        );
+
+        const explicitNeeded = Math.max(0, requiredNum - shortCards.length);
         const explicitCardsForAlgo =
-                shortCardsOverlayNum < 0
+                explicitNeeded > 0
                         ? getRandomItemsFromList(
                                   playExplicitCards,
-                                  shortCardsOverlayNum
-                          ).slice(shortCardsOverlayNum)
+                                  Math.min(
+                                          explicitNeeded,
+                                          playExplicitCards.length
+                                  )
+                          )
                         : [];
+
         return [shortCardsForAlgo, explicitCardsForAlgo];
 }
 
@@ -317,21 +329,21 @@ export function getIsCorrectCards({
                         getCorrectOptionFromExplicitCard(explicitCard);
                 if (isCorrect) {
                         isCorrectCards.push(
-                                getIncorrectCard({
+                                getCorrectCard({
                                         t: explicitCard.title,
                                         d: correctOption.title
                                 })
                         );
                 } else {
-                        isCorrectCards.push({
-                                type: 'play-isCorrect',
-                                isCorrect: false,
-                                term: explicitCard.title,
-                                definition: getRandomOptAvoidingCurr({
-                                        allOptions,
-                                        targetOpt: correctOption.title
+                        isCorrectCards.push(
+                                getIncorrectCard({
+                                        t: explicitCard.title,
+                                        d: getRandomOptAvoidingCurr({
+                                                allOptions,
+                                                targetOpt: correctOption.title
+                                        })
                                 })
-                        });
+                        );
                 }
         });
 
@@ -406,7 +418,7 @@ export function getNormalCards({
                         options[i] = {
                                 isCorrect: false,
                                 title: randomOption,
-                                id: 'dumb_id'
+                                id: getUniqueID()
                         };
                 }
                 return {
@@ -538,33 +550,39 @@ export function getCardsForStory({
         return shuffleList(resultArray);
 }
 
-/* get cards for story
-*
-*
-/* get array of all explicit cards */
-/* get array of all short cards */
-/* Heap of all options */
-/* result array of normal cards */
-/* result array of type-in cards */
-/* result array of is-correct cards */
-/* result array of explicit cards */
-
-/* If smart mode, that: */
-// count, how many cards of each type we want to receive
-// get those cards
-// write them to result arrays
-
-/* If not smart mode, that: */
-// read from settings, how many cards of each type we want to receive
-//get those cards
-// write them to result arrays
-
-// merge all arrays into one, and mix it
-
-export const addNewStory = atom(null, (get, set, settings: StorySettings) => {
-        // get book info
-        // get all cards
-        // create new story id
-        // write all needed data into db
-        // execute callback with new story id
-});
+export const addNewStory = getDerivedAtomWithIdb(
+        async (
+                get,
+                set,
+                mainDb,
+                {
+                        settings,
+                        bookId,
+                        successCallback
+                }: {
+                        settings: StorySettings;
+                        bookId: string;
+                        successCallback: (storyId: string) => void;
+                }
+        ) => {
+                const { bookTitle, description } = get(booksAtomFamily(bookId));
+                const allCards = getCardsForStory({ ...settings, bookId, get });
+                const newStoryId = getUniqueID();
+                const newStory: Story = {
+                        id: newStoryId,
+                        isCompleted: false,
+                        timeSpentSec: 0,
+                        playStartDate: 0,
+                        choicePointers: new Array(allCards.length),
+                        bookId,
+                        bookData: {
+                                title: bookTitle,
+                                description,
+                                creationDate: Date.now(),
+                                cards: allCards
+                        }
+                };
+                await updateStoryIdb(mainDb, newStory);
+                successCallback(newStoryId);
+        }
+);

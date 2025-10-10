@@ -6,10 +6,13 @@ import { getNewStoryIsSmartModeParamAdapterAtom } from '@/src/utils/jotai/atomAd
 import { Hr, HrWrapper } from '@/src/components/general/Hr';
 import { NewStoryParam } from '@/src/constants/newCardParams';
 import {
+        addNewStory,
         closeNewStorySettingsDialogAtom,
         newStorySettingsAtom
 } from '@/src/jotai/createNewStory';
 import { useAtomCallback } from 'jotai/utils';
+import { useRouter } from 'next/navigation';
+import getDefaultPathToPlayPage from '@/src/utils/getDefPathToPlayPage';
 
 export function IsSmartModeToggle() {
         const [currState, setCurrState] = useAtom(
@@ -63,9 +66,17 @@ export function CustomParam({ adapterAtom, title, maxNumAtom }: NewStoryParam) {
 }
 
 export function SubmitButton() {
+        const router = useRouter();
         const submit = useAtomCallback((get, set) => {
                 const newStorySettings = get(newStorySettingsAtom);
                 set(closeNewStorySettingsDialogAtom);
+                set(addNewStory, {
+                        settings: newStorySettings,
+                        bookId: newStorySettings.bookId,
+                        successCallback: (newStoryId) => {
+                                router.push(getDefaultPathToPlayPage(newStoryId));
+                        }
+                })
         });
 
         return (

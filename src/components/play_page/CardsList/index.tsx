@@ -1,9 +1,11 @@
 'use client';
 
-import { useAtomValue } from 'jotai';
+import { Provider, useAtomValue } from 'jotai';
 import { currentStoryIdAtom } from '@/src/jotai/idManagers';
 import { storiesAtomFamily } from '@/src/jotai/mainAtoms';
-import PlayCard from '@/src/components/play_page/CardsList/Card';
+import ExplicitCard from '@/src/components/play_page/CardsList/ExplicitCard';
+import TypeInCard from '@/src/components/play_page/CardsList/TypeInCard';
+import IsCorrectCard from '@/src/components/play_page/CardsList/IsCorrectCard';
 
 export default function PlayCardsList() {
         const storyId = useAtomValue(currentStoryIdAtom);
@@ -12,9 +14,24 @@ export default function PlayCardsList() {
         } = useAtomValue(storiesAtomFamily(storyId));
         return (
                 <ul>
-                        {cards.map((card, i) => (
-                                <PlayCard key={i} cardIndex={i} card={card} />
-                        ))}
+                        <Provider>
+                                {cards.map((card) => {
+                                        if (
+                                                card.type === 'play-explicit' ||
+                                                card.type === 'play-normal'
+                                        ) {
+                                                return (
+                                                        <ExplicitCard
+                                                                {...card}
+                                                        />
+                                                );
+                                        } else if (card.type === "play-typeIn") {
+                                                return <TypeInCard />
+                                        } else if (card.type === "play-isCorrect") {
+                                                return <IsCorrectCard />
+                                        }
+                                })}
+                        </Provider>
                 </ul>
         );
 }

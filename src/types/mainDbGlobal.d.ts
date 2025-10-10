@@ -1,5 +1,6 @@
 import { DBSchema } from 'idb';
 import { DB } from '@/src/types/globals';
+import { FullBook } from '@/src/types/playMode';
 
 export type MainDbGlobal = DB<MainDbSchema>;
 

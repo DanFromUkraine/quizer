@@ -1,7 +1,7 @@
 import Dialog from '@/src/components/general/Dialog';
 import {
         CustomParam,
-        IsSmartModeToggle
+        IsSmartModeToggle, SubmitButton
 } from '@/src/components/books_page/NewStoryParamsDialog/client';
 import { NEW_STORY_PARAMS } from '@/src/constants/newCardParams';
 
@@ -28,6 +28,7 @@ export default function NewStoryParamsDialog() {
                                         ))}
                                 </ul>
 
+                                <SubmitButton />
                         </div>
                 </Dialog>
         );

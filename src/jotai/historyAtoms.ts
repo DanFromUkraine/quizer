@@ -2,20 +2,15 @@ import { atom } from 'jotai';
 import {
         booksAndStoriesAssociationsAtom,
         booksAtomFamily,
-        explicitCardsAtomFamily,
-        optionsAtomFamily,
-        shortCardsAtomFamily,
         storiesAtomFamily
 } from '@/src/jotai/mainAtoms';
 import {
         ExplicitCard,
-        FullOption,
         Story,
         TermDefinitionCard
 } from '@/src/types/mainDbGlobal';
 import { getDerivedAtomWithIdb } from '@/src/utils/jotai/mainDbUtils';
 import { deleteStoryIdb, updateStoryIdb } from '@/src/utils/idb/main/actions';
-import { AddNewStorySuccessHandler } from '@/src/types/jotaiGlobal';
 import {
         currentStoryIdAtom,
         deleteIdAtom,
@@ -30,7 +25,6 @@ type TemporaryDefinition = {
         definition: string;
         id: string;
 };
-
 
 export const deleteStoryAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb, storyId: string) => {
@@ -101,3 +95,8 @@ export const storiesSortedByBookAtom = atom((get) => {
                 };
         }) as StoriesByBook[];
 });
+
+export const canRevealChoicesAtom =
+        /* Important: this atom is meant to be used by few independent components with their own local Provider scopes*/ atom(
+                false
+        );
