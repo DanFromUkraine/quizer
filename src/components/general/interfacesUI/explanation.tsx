@@ -1,23 +1,21 @@
-import { ChangeEventHandler, MouseEventHandler, RefObject } from 'react';
 import ExtendableTextArea from '@/src/components/general/ExtendableInput';
+import { MouseEventHandler, ReactNode } from 'react';
 
-export default function ExplanationInputUI({
-        cardId,
+export default function LikeExplanationUI({
         onContainerClick,
-        value,
-        onChange
+        children
 }: {
-        cardId: string;
-        onContainerClick: MouseEventHandler;
-        value: string;
-        onChange: ChangeEventHandler
+        onContainerClick?: MouseEventHandler;
+        children: ReactNode;
 }) {
         return (
                 <section
                         className='flex flex-col gap-2 p-3.5 rounded-lg bg-muted w-full'
                         onClick={onContainerClick}>
                         <h4 className='font-medium '>Explanation</h4>
-
+                        <div className='text-muted-foreground w-full [&>*]:w-full'>
+                                {children}
+                        </div>
                 </section>
         );
 }

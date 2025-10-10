@@ -85,8 +85,8 @@ export function getProcessedShortCard(
         const [term, definition] = shortCardText.split(/ - | – |: /);
         return {
                 type: 'short',
-                term,
-                definition
+                term: term || '',
+                definition: definition || '' // definition can be undefined, so we need such solution, so in further checks program doesn't lay down
         };
 }
 

@@ -1,7 +1,9 @@
 import Dialog from '@/src/components/general/Dialog';
 import {
         CustomParam,
-        IsSmartModeToggle
+        IsSmartModeToggle,
+        ShowAnswersImmediately,
+        SubmitButton
 } from '@/src/components/books_page/NewStoryParamsDialog/client';
 import { NEW_STORY_PARAMS } from '@/src/constants/newCardParams';
 
@@ -12,11 +14,12 @@ export default function NewStoryParamsDialog() {
                         className='bg-white w-xl p-6'>
                         <h2 className='heading-2'>Set up your new story</h2>
 
-                        <div>
+                        <div className='flex flex-col'>
                                 <IsSmartModeToggle />
+                                <ShowAnswersImmediately />
                                 <ul>
                                         <li>
-                                                <h3 className='heading-3'>
+                                                <h3 className='heading-3 mb-5'>
                                                         Custom settings:
                                                 </h3>
                                         </li>
@@ -27,6 +30,8 @@ export default function NewStoryParamsDialog() {
                                                 />
                                         ))}
                                 </ul>
+
+                                <SubmitButton />
                         </div>
                 </Dialog>
         );

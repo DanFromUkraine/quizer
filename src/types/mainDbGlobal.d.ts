@@ -1,5 +1,6 @@
 import { DBSchema } from 'idb';
 import { DB } from '@/src/types/globals';
+import { FullBook } from '@/src/types/playMode';
 
 export type MainDbGlobal = DB<MainDbSchema>;
 
@@ -73,46 +74,15 @@ export interface Option {
         optionTitle: string;
 }
 
-interface OptionTermD {
-        term: string;
-        determination: string;
-}
-
-interface OptionTypeIn {
-        term: string;
-        expectedResult: string;
-}
-
-interface FullOption {
-        title: string;
-        isCorrect: boolean;
-}
-
-export interface FullCard {
-        title: string;
-        options: FullOption[];
-}
-
-export interface FullTermDefinition {
-        term: string;
-        definition: string;
-}
-
-interface FullBook {
-        title: string;
-        creationDate: number;
-        description: string;
-        cards: FullCard[];
-}
-
 export interface Story {
         id: string;
         isCompleted: boolean;
+        showAnswersImmediately: boolean;
         bookId: string;
         timeSpentSec: number;
         bookData: FullBook;
         playStartDate: number;
-        choicePointers: (number | string)[];
+        choicePointers: (number | string | null)[];
 }
 
 export type BooksAndStoriesAssociations = {

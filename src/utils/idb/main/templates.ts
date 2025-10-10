@@ -54,9 +54,6 @@ const templates = {
         options: getEmptyOptionTemplate
 };
 
-type Templates = typeof templates & {
-        [key in keyof typeof templates]: (id: string) => Templates[key];
-};
 
 export function getTemplate<Key extends keyof Omit<StoreMap, 'history'>>(
         tp: Key,
@@ -70,6 +67,7 @@ export function getEmptyStoryTemplate(storyId: string): Story {
                 id: storyId,
                 bookId: '',
                 timeSpentSec: 0,
+                showAnswersImmediately: false,
                 isCompleted: false,
                 choicePointers: [],
                 playStartDate: Date.now(),

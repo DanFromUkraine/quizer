@@ -4,12 +4,11 @@ import {
         getExplicitCardSubtitleFamilyAdapterAtom,
         getExplicitCardTitleFamilyAdapterAtom
 } from '@/src/utils/jotai/atomAdapters';
-import MainQuestionTitleUI, {
-        SubtitleUI
-} from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/QuestionTitle/UI';
+import MainQuestionTitleUI from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/QuestionTitle/UI';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
 import { useAtom } from 'jotai';
+import LikeSubtitleUI from '@/src/components/general/interfacesUI/subtitle';
 
 export function MainQuestionTitle() {
         const { cardId } = useCardProps();
@@ -39,5 +38,15 @@ export function SubQuestionTitle() {
                 ); /* 'todo' change it with updateAdapter, when you have time*/
         const onChange = getInputChangeCallback((newVal) => setValue(newVal));
 
-        return <SubtitleUI {...{ value, onChange, cardId }} />;
+        return (
+                <LikeSubtitleUI>
+                        <input
+                                value={value}
+                                onChange={onChange}
+                                id={`subtitle-${cardId}`}
+                                placeholder='subtitle'
+                                className='heading-4 field-sizing-content'
+                        />
+                </LikeSubtitleUI>
+        );
 }
