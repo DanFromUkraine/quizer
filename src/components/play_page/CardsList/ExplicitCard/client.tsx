@@ -1,7 +1,7 @@
 'use client';
 
 import LikeOptionUI from '@/src/components/general/interfacesUI/option';
-import { getChoiceInfoAtom, updateChoiceAtom } from '@/src/jotai/historyAtoms';
+import { getChoiceInfoAtom, selectOptionAtom } from '@/src/jotai/historyAtoms';
 import { useAtomValue } from 'jotai';
 import { useAtomCallback } from 'jotai/utils';
 import LikeSubtitleUI from '@/src/components/general/interfacesUI/subtitle';
@@ -18,7 +18,11 @@ export function Subtitle({ subtitle }: { subtitle: string }) {
 }
 
 export function Explanation({ explanation }: { explanation: string }) {
-        return <LikeExplanationUI>{explanation}</LikeExplanationUI>;
+        return explanation.length > 0 ? (
+                <LikeExplanationUI>{explanation}</LikeExplanationUI>
+        ) : (
+                <></>
+        );
 }
 
 export default function Option({
@@ -33,7 +37,7 @@ export default function Option({
         const choiceInfo = useAtomValue(getChoiceInfoAtom(cardIndex));
         const isSelected = choiceInfo === optionIndex;
         const updateChoice = useAtomCallback((get, set) => {
-                set(updateChoiceAtom, { optionIndex, cardIndex });
+                set(selectOptionAtom, { optionIndex, cardIndex });
         });
 
         return (

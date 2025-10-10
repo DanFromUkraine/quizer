@@ -20,6 +20,18 @@ export const UPGRADE_MAIN_DB = (database: MainDbGlobal) => {
         });
         createObjectStoreEnhanced<MainDbSchema>({
                 db: database,
-                storeName: 'history'
+                storeName: 'stories'
+        });
+        createObjectStoreEnhanced<MainDbSchema>({
+                db: database,
+                storeName: 'explicitCardStories'
+        });
+        createObjectStoreEnhanced<MainDbSchema>({
+                db: database,
+                storeName: 'typeInCardStories'
+        });
+        createObjectStoreEnhanced<MainDbSchema>({
+                db: database,
+                storeName: 'isCorrectCardStories'
         });
 };

@@ -16,9 +16,9 @@ import {
 } from '@/src/jotai/cardAtoms';
 import { updateOptionAtom } from '@/src/jotai/optionAtoms';
 import {
-        newStorySettingsAtom,
         newStoryTemporaryInfoAtom
-} from '@/src/jotai/createNewStory';
+} from '@/src/jotai/newStoryParamsModal';
+import { newStorySettingsAtom } from '@/src/jotai/historyAtoms';
 
 function getAtomFamilyAdapter<Item extends {}, K extends keyof Item>({
         targetAtomFamily,

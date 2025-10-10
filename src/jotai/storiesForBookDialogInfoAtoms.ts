@@ -10,7 +10,7 @@ import {
 } from '@/src/jotai/dialogVisibilityFamily';
 import { AddNewStorySuccessHandler } from '@/src/types/jotaiGlobal';
 import { currentBookIdForStoriesDialogAtom } from '@/src/jotai/idManagers';
-import { openNewStorySettingsDialogAtom } from '@/src/jotai/createNewStory';
+import { openNewStorySettingsDialogAtom } from '@/src/jotai/newStoryParamsModal';
 
 interface BookStoryDialogInfo {
         bookTitle: string;

@@ -1,5 +1,6 @@
 import type { PlayExplicitCard, PlayNormalCard } from '@/src/types/playMode';
 import Option, {
+        Explanation,
         Subtitle
 } from '@/src/components/play_page/CardsList/ExplicitCard/client';
 
@@ -9,6 +10,8 @@ export default function ExplicitCard({
         cardIndex,
         ...otherData
 }: (PlayExplicitCard | PlayNormalCard) & { cardIndex: number }) {
+
+
         return (
                 <li className='questionCard items-center w-full'>
                         <h3 className='heading-2'>{`'${title}'`}</h3>
@@ -29,6 +32,13 @@ export default function ExplicitCard({
                                         />
                                 ))}
                         </ul>
+                        <Explanation
+                                explanation={
+                                        otherData.type === 'play-explicit'
+                                                ? otherData.explanation
+                                                : ''
+                                }
+                        />
                 </li>
         );
 }

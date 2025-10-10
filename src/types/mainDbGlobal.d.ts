@@ -1,6 +1,6 @@
 import { DBSchema } from 'idb';
 import { DB } from '@/src/types/globals';
-import { FullBook } from '@/src/types/playMode';
+import { PlayOption } from '@/src/types/playMode';
 
 export type MainDbGlobal = DB<MainDbSchema>;
 
@@ -21,9 +21,21 @@ export interface MainDbSchema extends DBSchema {
                 key: string;
                 value: Option;
         };
-        history: {
+        stories: {
                 key: string;
                 value: Story;
+        };
+        explicitCardStories: {
+                key: string;
+                value: ExplicitCardStory;
+        };
+        typeInCardStories: {
+                key: string;
+                value: TypeInCardStory;
+        };
+        isCorrectCardStories: {
+                key: string;
+                value: IsCorrectCardStory;
         };
 }
 
@@ -39,7 +51,10 @@ export type StoreMap = {
         explicitCards: ExplicitCard;
         shortCards: TermDefinitionCard;
         options: Option;
-        history: Story;
+        stories: Story;
+        explicitCardStories: ExplicitCardStory;
+        typeInCardStories: TypeInCardStory;
+        isCorrectCardStories: IsCorrectCardStory;
 };
 
 export interface Book {
@@ -76,13 +91,40 @@ export interface Option {
 
 export interface Story {
         id: string;
+        bookId: string;
         isCompleted: boolean;
         showAnswersImmediately: boolean;
-        bookId: string;
         timeSpentSec: number;
-        bookData: FullBook;
         playStartDate: number;
-        choicePointers: (number | string | null)[];
+        cardIdsOrder: string[];
+        explicitCardStoryIds: string[];
+        typeInCardStoryIds: string[];
+        isCorrectCardStoryIds: string[];
+        bookData: {
+                title: string;
+                description: string;
+        };
+}
+
+export interface ExplicitCardStory {
+        id: string;
+        title: string;
+        subtitle: string;
+        explanation: string;
+        options: PlayOption[];
+}
+
+export interface TypeInCardStory {
+        id: string;
+        definition: string;
+        expectedInput: string;
+}
+
+export interface IsCorrectCardStory {
+        id: string;
+        term: string;
+        definition: string;
+        isCorrect: boolean;
 }
 
 export type BooksAndStoriesAssociations = {
