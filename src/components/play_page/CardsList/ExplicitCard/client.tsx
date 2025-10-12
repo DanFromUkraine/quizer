@@ -1,11 +1,14 @@
 'use client';
 
-import LikeOptionUI from '@/src/components/general/interfacesUI/option';
-import { getChoiceInfoAtom, selectOptionAtom } from '@/src/jotai/historyAtoms';
-import { useAtomValue } from 'jotai';
-import { useAtomCallback } from 'jotai/utils';
+import LikeOptionUI, {
+        OptionColorSchema
+} from '@/src/components/general/interfacesUI/option';
+import { useAtom } from 'jotai';
 import LikeSubtitleUI from '@/src/components/general/interfacesUI/subtitle';
 import LikeExplanationUI from '@/src/components/general/interfacesUI/explanation';
+import { getExplicitCardStoryCurrValFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
+import { useMemo } from 'react';
+import { usePlayModeProps } from '@/src/components/play_page/CardsList';
 
 export function Subtitle({ subtitle }: { subtitle: string }) {
         return subtitle.length > 0 ? (
@@ -25,27 +28,62 @@ export function Explanation({ explanation }: { explanation: string }) {
         );
 }
 
-export default function Option({
+function useOptionStatus({
         optionIndex,
-        cardIndex,
-        title
+        currCardChoice,
+        isCorrect,
+        showAnswersImmediately
 }: {
         optionIndex: number;
-        cardIndex: number;
-        title: string;
+        currCardChoice: number | null;
+        isCorrect: boolean;
+        showAnswersImmediately: boolean;
 }) {
-        const choiceInfo = useAtomValue(getChoiceInfoAtom(cardIndex));
-        const isSelected = choiceInfo === optionIndex;
-        const updateChoice = useAtomCallback((get, set) => {
-                set(selectOptionAtom, { optionIndex, cardIndex });
+        const isSelected = optionIndex === currCardChoice;
+        let color: OptionColorSchema = 'gray';
+        if (isSelected && isCorrect && showAnswersImmediately) color = 'green';
+        if (isSelected && !isCorrect && showAnswersImmediately) color = 'red';
+        if (!isSelected && isCorrect && showAnswersImmediately) color = 'green';
+
+        return { isSelected, color };
+}
+
+export function Option({
+        optionIndex,
+        title,
+        cardId,
+        isCorrect
+}: {
+        optionIndex: number;
+        title: string;
+        cardId: string;
+        isCorrect: boolean;
+}) {
+        const { showAnswersImmediately } = usePlayModeProps();
+        const stableAdapterAtom = useMemo(
+                () => getExplicitCardStoryCurrValFamilyAdapterAtom(cardId),
+                []
+        );
+        const [currCardChoice, setCurrCardChoice] = useAtom(stableAdapterAtom);
+
+        const onOptionClick = () => {
+                if (showAnswersImmediately && currCardChoice) return;
+                setCurrCardChoice(optionIndex);
+        };
+
+        const { isSelected, color } = useOptionStatus({
+                optionIndex,
+                currCardChoice,
+                isCorrect,
+                showAnswersImmediately
         });
 
         return (
                 <LikeOptionUI
                         {...{
                                 title,
-                                onClick: updateChoice,
-                                color: 'gray',
+                                onClick: onOptionClick,
+                                color,
                                 isSelected,
                                 optionIndex
                         }}

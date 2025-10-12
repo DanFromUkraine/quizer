@@ -3,8 +3,7 @@ import {
         Book,
         ExplicitCard,
         MainDbGlobal,
-        StoreMap,
-        Story
+        StoreMap
 } from '@/src/types/mainDbGlobal';
 import {
         booksAtomFamily,
@@ -12,19 +11,14 @@ import {
         mainDbAtom
 } from '@/src/jotai/mainAtoms';
 import { getFilteredIds } from '@/src/utils/idb/idUtils';
-import {
-        getTemplate
-} from '@/src/utils/idb/main/templates';
+import { getTemplate } from '@/src/utils/idb/main/templates';
 import { currentBookIdAtom } from '@/src/jotai/idManagers';
 import { getListWhereNoSuchIds, getListWithSuchIds } from '@/src/utils/lists';
 import { AvailableCardTypes } from '@/src/types/globals';
 
-export function getAtomFactory<K extends keyof Omit<StoreMap, 'history'>>(
-        storeName: K
-) {
+export function getAtomFactory<K extends keyof StoreMap>(storeName: K) {
         return (id: string) => atom(getTemplate(storeName, id));
 }
-
 
 export function getNewBookWithDeletedCardId(
         get: Getter,

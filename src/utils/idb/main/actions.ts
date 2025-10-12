@@ -8,6 +8,7 @@ import {
         Book,
         ExplicitCard,
         ExplicitCardStory,
+        IsCorrectCardStory,
         MainDbGlobal,
         MainDbSchema,
         Option,
@@ -79,17 +80,17 @@ export const updateOptionIdb = (mainDb: MainDbGlobal, newRecord: Option) =>
         updateRecord(mainDb, 'options', newRecord);
 export const updateStoryIdb = (mainDb: MainDbGlobal, newRecord: Story) =>
         updateRecord(mainDb, 'stories', newRecord);
-export const updateExplicitCardStory = (
+export const updateExplicitCardStoryIdb = (
         mainDb: MainDbGlobal,
         newRecord: ExplicitCardStory
 ) => updateRecord(mainDb, 'explicitCardStories', newRecord);
-export const updateTypeInCardStory = (
+export const updateTypeInCardStoryIdb = (
         mainDb: MainDbGlobal,
         newRecord: TypeInCardStory
 ) => updateRecord(mainDb, 'typeInCardStories', newRecord);
-export const updateIsCorrectCardStory = (
+export const updateIsCorrectCardStoryIdb = (
         mainDb: MainDbGlobal,
-        newRecord: TypeInCardStory
+        newRecord: IsCorrectCardStory
 ) => updateRecord(mainDb, 'isCorrectCardStories', newRecord);
 
 export const deleteBookIdb = (mainDb: MainDbGlobal, id: string) =>
@@ -102,9 +103,9 @@ export const deleteOptionIdb = (mainDb: MainDbGlobal, id: string) =>
         deleteRecord(mainDb, 'options', id);
 export const deleteStoryIdb = (mainDb: MainDbGlobal, id: string) =>
         deleteRecord(mainDb, 'stories', id);
-export const deleteExplicitCardStory = (mainDb: MainDbGlobal, id: string) =>
+export const deleteExplicitCardStoryIdb = (mainDb: MainDbGlobal, id: string) =>
         deleteRecord(mainDb, 'explicitCardStories', id);
-export const deleteTypeInCardStory = (mainDb: MainDbGlobal, id: string) =>
+export const deleteTypeInCardStoryIdb = (mainDb: MainDbGlobal, id: string) =>
         deleteRecord(mainDb, 'typeInCardStories', id);
-export const deleteIsCorrectCardStory = (mainDb: MainDbGlobal, id: string) =>
+export const deleteIsCorrectCardStoryIdb = (mainDb: MainDbGlobal, id: string) =>
         deleteRecord(mainDb, 'isCorrectCardStories', id);

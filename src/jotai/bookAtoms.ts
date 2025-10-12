@@ -1,11 +1,15 @@
 import { getDerivedAtomWithIdb } from '@/src/utils/jotai/mainDbUtils';
 import getUniqueID from '@/src/utils/getUniqueID';
-import { addEmptyBookIdb, deleteBookIdb } from '@/src/utils/idb/main/actions';
-import { Book } from '@/src/types/mainDbGlobal';
+import {
+        addEmptyBookIdb,
+        deleteBookIdb,
+        updateBookIdb
+} from '@/src/utils/idb/main/actions';
 import {
         addEmptyBookAtomHelper,
         deleteBookAtomHelper,
-        deleteCardsOnBookDeleteAtomHelper
+        deleteCardsOnBookDeleteAtomHelper,
+        getAtomFamilyUpdateAtom
 } from '@/src/utils/jotai/helpers';
 import { booksAtomFamily } from '@/src/jotai/mainAtoms';
 
@@ -25,11 +29,7 @@ export const deleteBookAtom = getDerivedAtomWithIdb(
         }
 );
 
-export const updateBookAtom = getDerivedAtomWithIdb(
-        async (_get, set, mainDb, newBook: Book) => {
-                console.debug("somebody updated book atom")
-                await mainDb.put('books', newBook);
-                set(booksAtomFamily(newBook.id), newBook);
-        }
-);
-
+export const updateBookAtom = getAtomFamilyUpdateAtom({
+        atomFamily: booksAtomFamily,
+        updateIdb: updateBookIdb
+});

@@ -75,7 +75,8 @@ function getEmptyExplicitCardStory(id: string): ExplicitCardStory {
                 title: '',
                 explanation: '',
                 subtitle: '',
-                options: []
+                options: [],
+                currentValue: null
         };
 }
 
@@ -83,7 +84,9 @@ function getEmptyTypeInCardStory(id: string): TypeInCardStory {
         return {
                 id,
                 definition: '',
-                expectedInput: ''
+                expectedInput: '',
+                currentValue: '',
+                answerRevealed: false,
         };
 }
 
@@ -92,7 +95,8 @@ function getEmptyIsCorrectCardStory(id: string): IsCorrectCardStory {
                 id,
                 term: '',
                 definition: '',
-                isCorrect: false
+                isCorrect: false,
+                currentValue: null
         };
 }
 

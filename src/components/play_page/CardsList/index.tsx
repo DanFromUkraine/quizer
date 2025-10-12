@@ -6,32 +6,57 @@ import { storiesAtomFamily } from '@/src/jotai/mainAtoms';
 import ExplicitCard from '@/src/components/play_page/CardsList/ExplicitCard';
 import TypeInCard from '@/src/components/play_page/CardsList/TypeInCard';
 import IsCorrectCard from '@/src/components/play_page/CardsList/IsCorrectCard';
+import { createPropsProvider } from '@/src/utils/createPropsProvider';
+import { getPlayCardType } from '@/src/utils/lists';
+
+interface PlayModeProps {
+        showAnswersImmediately: boolean;
+}
+export const {
+        Provider: PlayCardsListProvider,
+        usePropsContext: usePlayModeProps
+} = createPropsProvider<PlayModeProps>('play cards list');
 
 export default function PlayCardsList() {
         const storyId = useAtomValue(currentStoryIdAtom);
         const {
-                bookData: { cards }
+                showAnswersImmediately,
+                cardIdsOrder,
+                explicitCardStoryIds,
+                typeInCardStoryIds,
+                isCorrectCardStoryIds
         } = useAtomValue(storiesAtomFamily(storyId));
 
         return (
-                <ul>
-                        {cards.map((card, i) => {
-                                if (
-                                        card.type === 'play-explicit' ||
-                                        card.type === 'play-normal'
-                                ) {
-                                        return (
-                                                <ExplicitCard
-                                                        cardIndex={i}
-                                                        {...card}
-                                                />
-                                        );
-                                } else if (card.type === 'play-typeIn') {
-                                        return <TypeInCard />;
-                                } else if (card.type === 'play-isCorrect') {
-                                        return <IsCorrectCard />;
-                                }
-                        })}
-                </ul>
+                <PlayCardsListProvider
+                        showAnswersImmediately={showAnswersImmediately}>
+                        <ul>
+                                {cardIdsOrder.map((cardId, i) => {
+                                        const cardType = getPlayCardType({
+                                                targetId: cardId,
+                                                explicitCardStoryIds,
+                                                typeInCardStoryIds,
+                                                isCorrectCardStoryIds
+                                        });
+
+                                        if (cardType === 'play-explicit') {
+                                                return (
+                                                        <ExplicitCard
+                                                                cardIndex={i}
+                                                                cardId={cardId}
+                                                        />
+                                                );
+                                        } else if (
+                                                cardType === "play-typeIn"
+                                        ) {
+                                                return <TypeInCard cardId={cardId}/>;
+                                        } else if (
+                                                card.type === 'play-isCorrect'
+                                        ) {
+                                                return <IsCorrectCard />;
+                                        }
+                                })}
+                        </ul>
+                </PlayCardsListProvider>
         );
 }

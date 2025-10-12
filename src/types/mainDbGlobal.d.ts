@@ -39,7 +39,6 @@ export interface MainDbSchema extends DBSchema {
         };
 }
 
-
 export type ObjectStoreKeysAll = keyof StoreMap;
 
 export type StoreMap = {
@@ -108,12 +107,15 @@ export interface ExplicitCardStory {
         subtitle: string;
         explanation: string;
         options: PlayOption[];
+        currentValue: null | number;
 }
 
 export interface TypeInCardStory {
         id: string;
         definition: string;
         expectedInput: string;
+        currentValue: string;
+        answerRevealed: boolean;
 }
 
 export interface IsCorrectCardStory {
@@ -121,8 +123,22 @@ export interface IsCorrectCardStory {
         term: string;
         definition: string;
         isCorrect: boolean;
+        currentValue: null | boolean;
 }
 
 export type BooksAndStoriesAssociations = {
         [key: string]: string[];
 };
+
+export type AddEmptyAction<T> = (
+        mainDb: MainDbGlobal,
+        Item: T
+) => Promise<unknown>;
+export type UpdateAction<T> = (
+        mainDb: MainDbGlobal,
+        Item: T
+) => Promise<unknown>;
+export type DeleteAction = (
+        mainDb: MainDbGlobal,
+        deleteId: string
+) => Promise<unknown>;
