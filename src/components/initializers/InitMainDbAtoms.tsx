@@ -15,14 +15,6 @@ import {
 import { useSetAtom } from 'jotai';
 import { useInitAtomFamily } from '@/src/hooks/jotaiRelated/initializers';
 import {
-        allBooksAtom,
-        allExpCardsAtom,
-        allExpCardStoriesAtom,
-        allIsCorrectCardStoriesAtom,
-        allOptionsAtom,
-        allShortCardsAtom,
-        allStoriesAtom,
-        allTypeInCardStoriesAtom,
         booksAtomFamily,
         explicitCardsAtomFamily,
         explicitCardStoriesAtomFamily,
@@ -57,12 +49,12 @@ async function initEntity<T extends ObjWithId>({
         initFamily
 }: {
         promise: Promise<T[]>;
-        setAll: (items: T[]) => void;
+        setAll?: (items: T[]) => void;
         setIds?: (ids: string[]) => void;
         initFamily: (items: T[]) => void;
 }) {
         return promise.then((items) => {
-                setAll(items);
+                if (setAll) setAll(items);
                 if (setIds) setIds(pickIds(items));
                 initFamily(items);
         });
@@ -70,63 +62,53 @@ async function initEntity<T extends ObjWithId>({
 
 async function useGetInitBooks(asyncMainDb: Promise<MainDbGlobal>) {
         const setBooksIds = useSetAtom(booksIdsAtom);
-        const setAllBooks = useSetAtom(allBooksAtom);
         const initBooksAtomFamily = useInitAtomFamily<Book>(booksAtomFamily);
 
         return initEntity({
                 promise: getAllBooksFromAsyncDb(asyncMainDb),
-                setAll: setAllBooks,
                 setIds: setBooksIds,
                 initFamily: initBooksAtomFamily
         });
 }
 
 async function useGetInitExplicitCards(asyncMainDb: Promise<MainDbGlobal>) {
-        const setAllExpCards = useSetAtom(allExpCardsAtom);
         const initExplicitCardsAtomFamily = useInitAtomFamily<ExplicitCard>(
                 explicitCardsAtomFamily
         );
 
         return initEntity({
                 promise: getAllExplicitCardsFromAsyncDb(asyncMainDb),
-                setAll: setAllExpCards,
                 initFamily: initExplicitCardsAtomFamily
         });
 }
 
 async function useGetInitOptions(asyncMainDb: Promise<MainDbGlobal>) {
-        const setAllOptions = useSetAtom(allOptionsAtom);
         const initOptionsAtomFamily =
                 useInitAtomFamily<Option>(optionsAtomFamily);
 
         return initEntity({
                 promise: getAllOptionsFromAsyncDb(asyncMainDb),
-                setAll: setAllOptions,
                 initFamily: initOptionsAtomFamily
         });
 }
 
 async function useGetInitShortCards(asyncMainDb: Promise<MainDbGlobal>) {
-        const setAllShortCards = useSetAtom(allShortCardsAtom);
         const initShortCardsAtomFamily =
                 useInitAtomFamily<TermDefinitionCard>(shortCardsAtomFamily);
 
         return initEntity({
                 promise: getAllShortCardsFromAsyncDb(asyncMainDb),
-                setAll: setAllShortCards,
                 initFamily: initShortCardsAtomFamily
         });
 }
 
 async function useGetInitStories(asyncMainDb: Promise<MainDbGlobal>) {
         const setStoryIds = useSetAtom(storyIdsAtom);
-        const setAllStories = useSetAtom(allStoriesAtom);
         const initStoriesAtomFamily =
                 useInitAtomFamily<Story>(storiesAtomFamily);
 
         return initEntity({
                 promise: getAllStoriesFromAsyncDb(asyncMainDb),
-                setAll: setAllStories,
                 setIds: setStoryIds,
                 initFamily: initStoriesAtomFamily
         });
@@ -135,26 +117,22 @@ async function useGetInitStories(asyncMainDb: Promise<MainDbGlobal>) {
 async function useGetInitExplicitCardStories(
         asyncMainDb: Promise<MainDbGlobal>
 ) {
-        const setAllExpCardStories = useSetAtom(allExpCardStoriesAtom);
         const initExpCardStoriesAtomFamily =
                 useInitAtomFamily<ExplicitCardStory>(
                         explicitCardStoriesAtomFamily
                 );
         return initEntity({
                 promise: getAllExplicitCardStoriesFromAsyncDb(asyncMainDb),
-                setAll: setAllExpCardStories,
                 initFamily: initExpCardStoriesAtomFamily
         });
 }
 
 async function useGetInitTypeInCardStories(asyncMainDb: Promise<MainDbGlobal>) {
-        const setAllTypeInCardStories = useSetAtom(allTypeInCardStoriesAtom);
         const initTypeInCardStoriesAtomFamily =
                 useInitAtomFamily<TypeInCardStory>(typeInCardStoriesAtomFamily);
 
         return initEntity({
                 promise: getAllTypeInCardStoriesFromAsyncDb(asyncMainDb),
-                setAll: setAllTypeInCardStories,
                 initFamily: initTypeInCardStoriesAtomFamily
         });
 }
@@ -162,9 +140,6 @@ async function useGetInitTypeInCardStories(asyncMainDb: Promise<MainDbGlobal>) {
 async function useGetInitIsCorrectCardStories(
         asyncMainDb: Promise<MainDbGlobal>
 ) {
-        const setAllIsCorrectCardStories = useSetAtom(
-                allIsCorrectCardStoriesAtom
-        );
         const initIsCorrectCardStoriesAtomFamily =
                 useInitAtomFamily<IsCorrectCardStory>(
                         isCorrectCardStoriesAtomFamily
@@ -172,7 +147,6 @@ async function useGetInitIsCorrectCardStories(
 
         return initEntity({
                 promise: getAllIsCorrectCardStoriesFromAsyncDb(asyncMainDb),
-                setAll: setAllIsCorrectCardStories,
                 initFamily: initIsCorrectCardStoriesAtomFamily
         });
 }

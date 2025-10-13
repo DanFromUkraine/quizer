@@ -1,14 +1,8 @@
-import { atom, Getter, Setter, WritableAtom } from 'jotai';
-import {
-        Book,
-        ExplicitCard,
-        MainDbGlobal,
-        StoreMap
-} from '@/src/types/mainDbGlobal';
+import { atom, Getter } from 'jotai';
+import type { Book, ExplicitCard, StoreMap } from '@/src/types/mainDbGlobal';
 import {
         booksAtomFamily,
-        explicitCardsAtomFamily,
-        mainDbAtom
+        explicitCardsAtomFamily
 } from '@/src/jotai/mainAtoms';
 import { getFilteredIds } from '@/src/utils/idb/idUtils';
 import { getTemplate } from '@/src/utils/idb/main/templates';
@@ -107,29 +101,4 @@ export function getCardWithoutDeletedOptionId(
                 ...prevCard,
                 childrenIds: newIds
         };
-}
-
-export function getDerivedAtomWithIdb<Args extends unknown[]>(
-        callback: (
-                get: Getter,
-                set: Setter,
-                mainDb: MainDbGlobal,
-                ...args: Args
-        ) => Promise<void>
-): WritableAtom<null, Args, Promise<void>> {
-        return atom<null, Args, Promise<void>>(
-                null,
-                async (get, set, ...args: Args) => {
-                        const mainDb = get(mainDbAtom) as
-                                | MainDbGlobal
-                                | undefined;
-                        if (typeof mainDb === 'undefined') return;
-
-                        try {
-                                await callback(get, set, mainDb, ...args);
-                        } catch (e) {
-                                return await Promise.reject(e);
-                        }
-                }
-        ) as WritableAtom<null, Args, Promise<void>>;
 }

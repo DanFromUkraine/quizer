@@ -2,30 +2,13 @@
 
 import { atom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
-import {
-        Book,
+import type {
         BooksAndStoriesAssociations,
-        ExplicitCard,
-        ExplicitCardStory,
-        IsCorrectCardStory,
-        MainDbGlobal,
-        Option,
-        Story,
-        TermDefinitionCard,
-        TypeInCardStory
+        MainDbGlobal
 } from '@/src/types/mainDbGlobal';
 import { getAtomFactory } from '@/src/utils/jotai/mainDbUtils';
 import computeBooksAndStoriesAssociations from '@/src/utils/jotai/computeBooksAndStoriesAssociations';
 import { storyIdsAtom } from '@/src/jotai/idManagers';
-
-export const allBooksAtom = atom<Book[]>([]);
-export const allExpCardsAtom = atom<ExplicitCard[]>([]);
-export const allOptionsAtom = atom<Option[]>([]);
-export const allStoriesAtom = atom<Story[]>([]);
-export const allShortCardsAtom = atom<TermDefinitionCard[]>([]);
-export const allExpCardStoriesAtom = atom<ExplicitCardStory[]>([]);
-export const allTypeInCardStoriesAtom = atom<TypeInCardStory[]>([]);
-export const allIsCorrectCardStoriesAtom = atom<IsCorrectCardStory[]>([]);
 
 export const isInitializationFromIdbCompletedAtom = atom(false);
 export const mainDbAtom = atom<MainDbGlobal>();

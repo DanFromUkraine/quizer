@@ -5,7 +5,6 @@ import {
         storiesAtomFamily
 } from '@/src/jotai/mainAtoms';
 import { MainDbGlobal, Story } from '@/src/types/mainDbGlobal';
-import { getDerivedAtomWithIdb } from '@/src/utils/jotai/mainDbUtils';
 import { deleteStoryIdb, updateStoryIdb } from '@/src/utils/idb/main/actions';
 import {
         currentStoryIdAtom,
@@ -17,6 +16,7 @@ import { StorySettings } from '@/src/types/newStory';
 import { getCardsForStoryModeRelated } from '@/src/utils/createNewStory/getAllCards';
 import getUniqueID from '@/src/utils/getUniqueID';
 import { EMPTY_STORY_SETTINGS_ATOM } from '@/src/constants/emptyObjects';
+import { getDerivedAtomWithIdb } from '@/src/utils/jotai/getDerivedAtomWithIdb';
 
 export const deleteStoryAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, storyId: string) => {
@@ -41,110 +41,10 @@ export const finishStoryAtom = getDerivedAtomWithIdb(
         }
 );
 
-export const getChoiceInfoAtom = (cardIndex: number) =>
-        atom((get) => {
-                const storyId = get(currentStoryIdAtom);
-                return get(storiesAtomFamily(storyId)).choicePointers[
-                        cardIndex
-                ];
-        });
 
-export async function updateChoiceAtomHelper({
-        get,
-        set,
-        cardIndex,
-        mainDb,
-        newVal,
-        storyId
-}: {
-        mainDb: MainDbGlobal;
-        get: Getter;
-        set: Setter;
-        cardIndex: number;
-        newVal: string | number | boolean | null;
-        storyId: string;
-}) {
-        const { choicePointers, ...other } = get(storiesAtomFamily(storyId));
-        const newChoicePointers = [...choicePointers];
 
-        newChoicePointers[cardIndex] = newVal;
 
-        const newStory: Story = {
-                ...other,
-                choicePointers: newChoicePointers
-        };
-        await updateStoryIdb(mainDb, newStory);
-        set(storiesAtomFamily(storyId), newStory);
-}
 
-export const selectOptionAtom = getDerivedAtomWithIdb(
-        async (
-                get,
-                set,
-                mainDb,
-                {
-                        cardIndex,
-                        optionIndex
-                }: { cardIndex: number; optionIndex: number }
-        ) => {
-                const storyId = get(currentStoryIdAtom);
-                const { choicePointers } = get(storiesAtomFamily(storyId));
-                const newSelectChoice = choicePointers[cardIndex]
-                        ? null
-                        : optionIndex;
-                await updateChoiceAtomHelper({
-                        mainDb,
-                        get,
-                        set,
-                        cardIndex,
-                        newVal: newSelectChoice,
-                        storyId
-                });
-        }
-);
-
-export const updateChoiceTextAtom = getDerivedAtomWithIdb(
-        async (
-                get,
-                set,
-                mainDb,
-                { cardIndex, newText }: { cardIndex: number; newText: string }
-        ) => {
-                const storyId = get(currentStoryIdAtom);
-
-                await updateChoiceAtomHelper({
-                        mainDb,
-                        get,
-                        set,
-                        cardIndex,
-                        storyId,
-                        newVal: newText
-                });
-        }
-);
-
-export const updateIsCorrectChoiceAtom = getDerivedAtomWithIdb(
-        async (
-                get,
-                set,
-                mainDb,
-                {
-                        cardIndex,
-                        newState
-                }: { cardIndex: number; newState: boolean }
-        ) => {
-                const storyId = get(currentStoryIdAtom);
-
-                await updateChoiceAtomHelper({
-                        mainDb,
-                        get,
-                        set,
-                        cardIndex,
-                        storyId,
-                        newVal: newState
-                });
-        }
-);
 
 export const storiesSortedByBookAtom = atom((get) => {
         const bookAndStoriesAssociations = get(booksAndStoriesAssociationsAtom);
@@ -191,13 +91,14 @@ export const addNewStoryAtom = getDerivedAtomWithIdb(
                         isCompleted: false,
                         timeSpentSec: 0,
                         playStartDate: 0,
-                        choicePointers: new Array(allCards.length).fill(null),
                         bookId,
+                        cardIdsOrder: [],
+                        explicitCardStoryIds: [],
+                        typeInCardStoryIds: [],
+                        isCorrectCardStoryIds: [],
                         bookData: {
                                 title: bookTitle,
                                 description,
-                                creationDate: Date.now(),
-                                cards: allCards
                         }
                 };
                 await updateStoryIdb(mainDb, newStory);

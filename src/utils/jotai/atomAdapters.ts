@@ -146,12 +146,20 @@ export const getTypeInCardStoryCurrValFamilyAdapterAtom = getAtomFamilyAdapter({
         targetUpdateAtom: updateTypeInCardStoryAtom
 });
 
+export const getTypeInCardStoryAnswerRevealedFamilyAdapterAtom = getAtomFamilyAdapter({
+        targetAtomFamily: typeInCardStoriesAtomFamily,
+        targetProperty: "answerRevealed",
+        targetUpdateAtom: updateTypeInCardStoryAtom
+})
+
 export const getIsCorrectCardStoryCurrValFamilyAdapterAtom =
         getAtomFamilyAdapter({
                 targetAtomFamily: isCorrectCardStoriesAtomFamily,
                 targetProperty: 'currentValue',
                 targetUpdateAtom: updateIsCorrectCardStoryAtom
         });
+
+
 
 export const getNewStoryIsSmartModeParamAdapterAtom = getAtomAdapter({
         targetAtom: newStorySettingsAtom,

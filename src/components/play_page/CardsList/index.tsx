@@ -42,16 +42,17 @@ export default function PlayCardsList() {
                                         if (cardType === 'play-explicit') {
                                                 return (
                                                         <ExplicitCard
-                                                                cardIndex={i}
+                                                                cardId={cardId}
+                                                        />
+                                                );
+                                        } else if (cardType === 'play-typeIn') {
+                                                return (
+                                                        <TypeInCard
                                                                 cardId={cardId}
                                                         />
                                                 );
                                         } else if (
-                                                cardType === "play-typeIn"
-                                        ) {
-                                                return <TypeInCard cardId={cardId}/>;
-                                        } else if (
-                                                card.type === 'play-isCorrect'
+                                                cardType === 'play-isCorrect'
                                         ) {
                                                 return <IsCorrectCard />;
                                         }

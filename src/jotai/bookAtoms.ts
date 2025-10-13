@@ -1,4 +1,4 @@
-import { getDerivedAtomWithIdb } from '@/src/utils/jotai/mainDbUtils';
+import { getDerivedAtomWithIdb } from '@/src/utils/jotai/getDerivedAtomWithIdb';
 import getUniqueID from '@/src/utils/getUniqueID';
 import {
         addEmptyBookIdb,
@@ -8,10 +8,14 @@ import {
 import {
         addEmptyBookAtomHelper,
         deleteBookAtomHelper,
-        deleteCardsOnBookDeleteAtomHelper,
         getAtomFamilyUpdateAtom
 } from '@/src/utils/jotai/helpers';
 import { booksAtomFamily } from '@/src/jotai/mainAtoms';
+import {
+        deleteExplicitCardAtom,
+        deleteShortCardAtom
+} from '@/src/jotai/cardAtoms';
+import { Getter, Setter } from 'jotai';
 
 export const addEmptyBookAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb) => {
@@ -20,6 +24,20 @@ export const addEmptyBookAtom = getDerivedAtomWithIdb(
                 addEmptyBookAtomHelper(set, id);
         }
 );
+
+async function deleteCardsOnBookDeleteAtomHelper(
+        get: Getter,
+        set: Setter,
+        bookId: string
+) {
+        const { explicitCardIds, shortCardIds } = get(booksAtomFamily(bookId));
+        for await (const cardId of explicitCardIds) {
+                await set(deleteExplicitCardAtom, cardId);
+        }
+        for await (const cardId of shortCardIds) {
+                await set(deleteShortCardAtom, cardId);
+        }
+}
 
 export const deleteBookAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb, bookId: string) => {

@@ -1,8 +1,9 @@
 /* 'todo' - This file is kinda huge. Need to divide it into small peaces
  */
 
+import { getDerivedAtomWithIdb } from '@/src/utils/jotai/getDerivedAtomWithIdb';
 import getUniqueID from '@/src/utils/getUniqueID';
-import { getBookWithNewId, getDerivedAtomWithIdb, getNewBookWithDeletedCardId } from '@/src/utils/jotai/mainDbUtils';
+import { getBookWithNewId, getNewBookWithDeletedCardId } from '@/src/utils/jotai/mainDbUtils';
 import { booksAtomFamily, explicitCardsAtomFamily, shortCardsAtomFamily } from '@/src/jotai/mainAtoms';
 import {
         addEmptyExplicitCardIdb,
@@ -14,13 +15,12 @@ import {
         updateShortCardIdb
 } from '@/src/utils/idb/main/actions';
 import {
-        deleteOptionsOnCardDeleteAtomHelper,
         getAtomFamilyDeleteAtom_NoFatherUpdate,
         getAtomFamilyUpdateAtom,
         updateBookAtomHelper
 } from '@/src/utils/jotai/helpers';
 import { currentBookIdAtom } from '@/src/jotai/idManagers';
-import { atom } from 'jotai';
+import { atom, Getter, Setter } from 'jotai';
 import { getListForInsert, getListForUpdate, getListWithIdsForDelete } from '@/src/utils/lists';
 import {
         DeleteCardsReducerOutput,
@@ -45,6 +45,7 @@ import {
 } from '@/src/utils/jotai/updateCardsFromTextReducers';
 import { parseTextIntoAnyCardsArray, parseTextIntoOnlyShortCardsArray } from '@/src/utils/cardsAsText/fromTextToCards';
 import { atomFamily } from 'jotai/utils';
+import { deleteOptionAtom } from '@/src/jotai/optionAtoms';
 
 export const updateCardViaTextAtomFamily = atomFamily((_cardId: string) =>
         atom(0)
@@ -120,15 +121,17 @@ export const deleteShortCardAtom = getDerivedAtomWithIdb(
         }
 );
 
-export const deleteExplicitCardViaTextAtom = getAtomFamilyDeleteAtom_NoFatherUpdate({
-        atomFamily: explicitCardsAtomFamily,
-        deleteIdb: deleteExplicitCardIdb
-})
+export const deleteExplicitCardViaTextAtom =
+        getAtomFamilyDeleteAtom_NoFatherUpdate({
+                atomFamily: explicitCardsAtomFamily,
+                deleteIdb: deleteExplicitCardIdb
+        });
 
-export const deleteShortCardViaTextAtom = getAtomFamilyDeleteAtom_NoFatherUpdate({
-        atomFamily: shortCardsAtomFamily,
-        deleteIdb: deleteShortCardIdb
-})
+export const deleteShortCardViaTextAtom =
+        getAtomFamilyDeleteAtom_NoFatherUpdate({
+                atomFamily: shortCardsAtomFamily,
+                deleteIdb: deleteShortCardIdb
+        });
 
 export const updateExplicitCardViaText = atom(
         null,
@@ -177,6 +180,9 @@ export const updateExplicitCardViaText = atom(
                 });
         }
 );
+
+
+
 
 export const updateAnyCardsFromTextAtom = atom(
         null,
@@ -277,3 +283,14 @@ export const updateOnlyShortCardsFromTextAtom = atom(
                 });
         }
 );
+
+async function deleteOptionsOnCardDeleteAtomHelper(
+        get: Getter,
+        set: Setter,
+        cardId: string
+) {
+        const { childrenIds } = get(explicitCardsAtomFamily(cardId));
+        for await (const optionId of childrenIds) {
+                await set(deleteOptionAtom, cardId, optionId);
+        }
+}

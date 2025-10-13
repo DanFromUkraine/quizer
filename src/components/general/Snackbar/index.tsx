@@ -1,3 +1,5 @@
+"use client"
+
 import { SnackbarNames } from '@/src/jotai/snackbarAtoms';
 import { useAtomValue } from 'jotai';
 import { IoWarning } from 'react-icons/io5';

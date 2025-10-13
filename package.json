@@ -30,7 +30,7 @@
     "immer": "^10.1.3",
     "jotai": "^2.15.0",
     "jotai-immer": "^0.4.1",
-    "next": "15.3.2",
+    "next": "15.4.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.64.0",

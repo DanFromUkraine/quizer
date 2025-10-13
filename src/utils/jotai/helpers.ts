@@ -1,13 +1,17 @@
-import { booksAtomFamily, explicitCardsAtomFamily } from '@/src/jotai/mainAtoms';
+console.trace('[IMPORTER] trace');
+
+import {
+        booksAtomFamily,
+        explicitCardsAtomFamily
+} from '@/src/jotai/mainAtoms';
 import { getTemplate } from '@/src/utils/idb/main/templates';
 import { Book, DeleteAction, UpdateAction } from '@/src/types/mainDbGlobal';
-import { deleteExplicitCardAtom, deleteShortCardAtom } from '@/src/jotai/cardAtoms';
-import { deleteOptionAtom } from '@/src/jotai/optionAtoms';
+
 import { Getter, PrimitiveAtom, Setter } from 'jotai';
 import { booksIdsAtom } from '@/src/jotai/idManagers';
-import { getDerivedAtomWithIdb } from '@/src/utils/jotai/mainDbUtils';
 import { AtomFamily, WithInitialValue } from '@/src/types/jotaiGlobal';
 import { ObjWithId } from '@/src/types/globals';
+import { getDerivedAtomWithIdb } from '@/src/utils/jotai/getDerivedAtomWithIdb';
 
 export function addEmptyBookAtomHelper(set: Setter, id: string) {
         const newBookAtom = booksAtomFamily(id);
@@ -26,30 +30,8 @@ export function updateBookAtomHelper(set: Setter, newBook: Book) {
         set(bookAtom, newBook);
 }
 
-export async function deleteCardsOnBookDeleteAtomHelper(
-        get: Getter,
-        set: Setter,
-        bookId: string
-) {
-        const { explicitCardIds, shortCardIds } = get(booksAtomFamily(bookId));
-        for await (const cardId of explicitCardIds) {
-                await set(deleteExplicitCardAtom, cardId);
-        }
-        for await (const cardId of shortCardIds) {
-                await set(deleteShortCardAtom, cardId);
-        }
-}
 
-export async function deleteOptionsOnCardDeleteAtomHelper(
-        get: Getter,
-        set: Setter,
-        cardId: string
-) {
-        const { childrenIds } = get(explicitCardsAtomFamily(cardId));
-        for await (const optionId of childrenIds) {
-                await set(deleteOptionAtom, cardId, optionId);
-        }
-}
+
 
 export function getAtomFamilyUpdateAtom<T extends ObjWithId>({
         atomFamily,
@@ -58,6 +40,8 @@ export function getAtomFamilyUpdateAtom<T extends ObjWithId>({
         atomFamily: AtomFamily<string, PrimitiveAtom<T> & WithInitialValue<T>>;
         updateIdb: UpdateAction<T>;
 }) {
+        console.log('hello, world!!!');
+
         return getDerivedAtomWithIdb(async (get, set, mainDb, newItem: T) => {
                 await updateIdb(mainDb, newItem);
                 set(atomFamily(newItem.id), newItem);
@@ -80,10 +64,10 @@ export function getAtomFamilyDeleteAtom_NoFatherUpdate<T extends ObjWithId>({
 }
 
 /*
-* you also can create such factories for
-*
-* add empty with father ids update
-*
-* delete item with father ids update
-*
-* */
+ * you also can create such factories for
+ *
+ * add empty with father ids update
+ *
+ * delete item with father ids update
+ *
+ * */

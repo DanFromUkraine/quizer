@@ -1,7 +1,6 @@
 import {
         getCardWithNewOptionId,
         getCardWithoutDeletedOptionId,
-        getDerivedAtomWithIdb
 } from '@/src/utils/jotai/mainDbUtils';
 import {
         addEmptyOptionIdb,
@@ -16,8 +15,7 @@ import {
         explicitCardsAtomFamily,
         optionsAtomFamily
 } from '@/src/jotai/mainAtoms';
-
-import { FullOptionFromText } from '@/src/types/updateCardsFromText';
+import { getDerivedAtomWithIdb } from '@/src/utils/jotai/getDerivedAtomWithIdb';
 
 export const updateOptionAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, newOption: Option) => {
@@ -52,10 +50,7 @@ export const deleteOptionAtom = getDerivedAtomWithIdb(
 export const addNewOptionViaTextAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, newOption: Option) => {
                 await updateOptionIdb(mainDb, newOption);
-                return ( set(
-                        optionsAtomFamily(newOption.id),
-                        newOption
-                )) as void;
+                return set(optionsAtomFamily(newOption.id), newOption) as void;
         }
 );
 
