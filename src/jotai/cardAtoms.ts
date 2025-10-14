@@ -1,8 +1,9 @@
 /* 'todo' - This file is kinda huge. Need to divide it into small peaces
  */
 
+import { getDerivedAtomWithIdb } from '@/src/utils/jotai/getDerivedAtomWithIdb';
 import getUniqueID from '@/src/utils/getUniqueID';
-import { getBookWithNewId, getDerivedAtomWithIdb, getNewBookWithDeletedCardId } from '@/src/utils/jotai/mainDbUtils';
+import { getBookWithNewId, getNewBookWithDeletedCardId } from '@/src/utils/jotai/mainDbUtils';
 import { booksAtomFamily, explicitCardsAtomFamily, shortCardsAtomFamily } from '@/src/jotai/mainAtoms';
 import {
         addEmptyExplicitCardIdb,
@@ -13,10 +14,13 @@ import {
         updateExplicitCardIdb,
         updateShortCardIdb
 } from '@/src/utils/idb/main/actions';
-import { ExplicitCard, TermDefinitionCard } from '@/src/types/mainDbGlobal';
-import { deleteOptionsOnCardDeleteAtomHelper, updateBookAtomHelper } from '@/src/utils/jotai/helpers';
+import {
+        getAtomFamilyDeleteAtom_NoFatherUpdate,
+        getAtomFamilyUpdateAtom,
+        updateBookAtomHelper
+} from '@/src/utils/jotai/helpers';
 import { currentBookIdAtom } from '@/src/jotai/idManagers';
-import { atom } from 'jotai';
+import { atom, Getter, Setter } from 'jotai';
 import { getListForInsert, getListForUpdate, getListWithIdsForDelete } from '@/src/utils/lists';
 import {
         DeleteCardsReducerOutput,
@@ -41,12 +45,18 @@ import {
 } from '@/src/utils/jotai/updateCardsFromTextReducers';
 import { parseTextIntoAnyCardsArray, parseTextIntoOnlyShortCardsArray } from '@/src/utils/cardsAsText/fromTextToCards';
 import { atomFamily } from 'jotai/utils';
+import { deleteOptionAtom } from '@/src/jotai/optionAtoms';
 
-export const updateCardViaTextAtomFamily = atomFamily((_cardId: string) => atom(0));
+export const updateCardViaTextAtomFamily = atomFamily((_cardId: string) =>
+        atom(0)
+);
 
-export const incrementUpdateCountAtom = atom(null, (get, set, cardId: string) => {
-        set(updateCardViaTextAtomFamily(cardId), (prev) => prev + 1);
-});
+export const incrementUpdateCountAtom = atom(
+        null,
+        (get, set, cardId: string) => {
+                set(updateCardViaTextAtomFamily(cardId), (prev) => prev + 1);
+        }
+);
 
 export const addEmptyExplicitCardAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb) => {
@@ -80,19 +90,15 @@ export const addEmptyTermShortCard = getDerivedAtomWithIdb(
         }
 );
 
-export const updateExplicitCardAtom = getDerivedAtomWithIdb(
-        async (_get, set, mainDb, newCard: ExplicitCard) => {
-                await updateExplicitCardIdb(mainDb, newCard);
-                set(explicitCardsAtomFamily(newCard.id), newCard);
-        }
-);
+export const updateExplicitCardAtom = getAtomFamilyUpdateAtom({
+        atomFamily: explicitCardsAtomFamily,
+        updateIdb: updateExplicitCardIdb
+});
 
-export const updateShortCardAtom = getDerivedAtomWithIdb(
-        async (_get, set, mainDb, newCard: TermDefinitionCard) => {
-                await updateShortCardIdb(mainDb, newCard);
-                set(shortCardsAtomFamily(newCard.id), newCard);
-        }
-);
+export const updateShortCardAtom = getAtomFamilyUpdateAtom({
+        atomFamily: shortCardsAtomFamily,
+        updateIdb: updateShortCardIdb
+});
 
 export const deleteExplicitCardAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb, cardId: string) => {
@@ -115,19 +121,17 @@ export const deleteShortCardAtom = getDerivedAtomWithIdb(
         }
 );
 
-export const deleteExplicitCardViaTextAtom = getDerivedAtomWithIdb(
-        async (_get, _set, mainDb, cardId: string) => {
-                await deleteExplicitCardIdb(mainDb, cardId);
-                explicitCardsAtomFamily.remove(cardId);
-        }
-);
+export const deleteExplicitCardViaTextAtom =
+        getAtomFamilyDeleteAtom_NoFatherUpdate({
+                atomFamily: explicitCardsAtomFamily,
+                deleteIdb: deleteExplicitCardIdb
+        });
 
-export const deleteShortCardViaTextAtom = getDerivedAtomWithIdb(
-        async (_get, _set, mainDb, cardId: string) => {
-                await deleteShortCardIdb(mainDb, cardId);
-                shortCardsAtomFamily.remove(cardId);
-        }
-);
+export const deleteShortCardViaTextAtom =
+        getAtomFamilyDeleteAtom_NoFatherUpdate({
+                atomFamily: shortCardsAtomFamily,
+                deleteIdb: deleteShortCardIdb
+        });
 
 export const updateExplicitCardViaText = atom(
         null,
@@ -177,12 +181,14 @@ export const updateExplicitCardViaText = atom(
         }
 );
 
+
+
+
 export const updateAnyCardsFromTextAtom = atom(
         null,
         async (get, set, cardsText: string) => {
                 const cardsArray = parseTextIntoAnyCardsArray(cardsText);
                 const bookId = get(currentBookIdAtom);
-
 
                 const { cardIdsOrder, shortCardIds, explicitCardIds } = get(
                         booksAtomFamily(bookId)
@@ -277,3 +283,14 @@ export const updateOnlyShortCardsFromTextAtom = atom(
                 });
         }
 );
+
+async function deleteOptionsOnCardDeleteAtomHelper(
+        get: Getter,
+        set: Setter,
+        cardId: string
+) {
+        const { childrenIds } = get(explicitCardsAtomFamily(cardId));
+        for await (const optionId of childrenIds) {
+                await set(deleteOptionAtom, cardId, optionId);
+        }
+}

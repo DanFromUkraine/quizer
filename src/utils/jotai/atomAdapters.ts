@@ -4,8 +4,11 @@
 import {
         booksAtomFamily,
         explicitCardsAtomFamily,
+        explicitCardStoriesAtomFamily,
+        isCorrectCardStoriesAtomFamily,
         optionsAtomFamily,
-        shortCardsAtomFamily
+        shortCardsAtomFamily,
+        typeInCardStoriesAtomFamily
 } from '@/src/jotai/mainAtoms';
 import { atom, PrimitiveAtom, WritableAtom } from 'jotai';
 import { AtomFamily, WithInitialValue } from '@/src/types/jotaiGlobal';
@@ -15,10 +18,11 @@ import {
         updateShortCardAtom
 } from '@/src/jotai/cardAtoms';
 import { updateOptionAtom } from '@/src/jotai/optionAtoms';
-import {
-        newStorySettingsAtom,
-        newStoryTemporaryInfoAtom
-} from '@/src/jotai/createNewStory';
+import { newStoryTemporaryInfoAtom } from '@/src/jotai/newStoryParamsModal';
+import { newStorySettingsAtom } from '@/src/jotai/historyAtoms';
+import { updateExplicitCardStoryAtom } from '@/src/jotai/explicitCardStoryAtoms';
+import { updateTypeInCardStoryAtom } from '@/src/jotai/typeInCardStoryAtoms';
+import { updateIsCorrectCardStoryAtom } from '@/src/jotai/isCorrectCardStoryAtoms';
 
 function getAtomFamilyAdapter<Item extends {}, K extends keyof Item>({
         targetAtomFamily,
@@ -128,6 +132,34 @@ export const getShortCardDefinitionFamilyAdapterAtom = getAtomFamilyAdapter({
         targetProperty: 'definition',
         targetUpdateAtom: updateShortCardAtom
 });
+
+export const getExplicitCardStoryCurrValFamilyAdapterAtom =
+        getAtomFamilyAdapter({
+                targetAtomFamily: explicitCardStoriesAtomFamily,
+                targetProperty: 'currentValue',
+                targetUpdateAtom: updateExplicitCardStoryAtom
+        });
+
+export const getTypeInCardStoryCurrValFamilyAdapterAtom = getAtomFamilyAdapter({
+        targetAtomFamily: typeInCardStoriesAtomFamily,
+        targetProperty: 'currentValue',
+        targetUpdateAtom: updateTypeInCardStoryAtom
+});
+
+export const getTypeInCardStoryAnswerRevealedFamilyAdapterAtom = getAtomFamilyAdapter({
+        targetAtomFamily: typeInCardStoriesAtomFamily,
+        targetProperty: "answerRevealed",
+        targetUpdateAtom: updateTypeInCardStoryAtom
+})
+
+export const getIsCorrectCardStoryCurrValFamilyAdapterAtom =
+        getAtomFamilyAdapter({
+                targetAtomFamily: isCorrectCardStoriesAtomFamily,
+                targetProperty: 'currentValue',
+                targetUpdateAtom: updateIsCorrectCardStoryAtom
+        });
+
+
 
 export const getNewStoryIsSmartModeParamAdapterAtom = getAtomAdapter({
         targetAtom: newStorySettingsAtom,

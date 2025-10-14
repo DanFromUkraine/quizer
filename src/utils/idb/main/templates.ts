@@ -1,10 +1,13 @@
-import {
+import type {
         Book,
         ExplicitCard,
+        ExplicitCardStory,
+        IsCorrectCardStory,
         Option,
         StoreMap,
         Story,
-        TermDefinitionCard
+        TermDefinitionCard,
+        TypeInCardStory
 } from '@/src/types/mainDbGlobal';
 
 function getEmptyBookTemplate(id: string): Book {
@@ -47,35 +50,81 @@ function getEmptyTermDefinitionCard(id: string): TermDefinitionCard {
         };
 }
 
-const templates = {
-        books: getEmptyBookTemplate,
-        explicitCards: getEmptyCardTemplate,
-        shortCards: getEmptyTermDefinitionCard,
-        options: getEmptyOptionTemplate
-};
-
-
-export function getTemplate<Key extends keyof Omit<StoreMap, 'history'>>(
-        tp: Key,
-        id: string
-): StoreMap[Key] {
-        return templates[tp](id) as StoreMap[Key];
-}
-
-export function getEmptyStoryTemplate(storyId: string): Story {
+function getEmptyStoryTemplate(storyId: string): Story {
         return {
                 id: storyId,
                 bookId: '',
                 timeSpentSec: 0,
                 showAnswersImmediately: false,
                 isCompleted: false,
-                choicePointers: [],
                 playStartDate: Date.now(),
+                cardIdsOrder: [],
+                explicitCardStoryIds: [],
+                typeInCardStoryIds: [],
+                isCorrectCardStoryIds: [],
                 bookData: {
                         title: '',
-                        description: '',
-                        creationDate: 0,
-                        cards: []
+                        description: ''
                 }
         };
+}
+
+function getEmptyExplicitCardStory(id: string): ExplicitCardStory {
+        return {
+                id,
+                title: '',
+                explanation: '',
+                subtitle: '',
+                options: [],
+                currentValue: null
+        };
+}
+
+function getEmptyTypeInCardStory(id: string): TypeInCardStory {
+        return {
+                id,
+                definition: '',
+                expectedInput: '',
+                currentValue: '',
+                answerRevealed: false,
+        };
+}
+
+function getEmptyIsCorrectCardStory(id: string): IsCorrectCardStory {
+        return {
+                id,
+                term: '',
+                definition: '',
+                isCorrect: false,
+                currentValue: null
+        };
+}
+
+export type Templates = {
+        books: (id: string) => Book;
+        explicitCards: (id: string) => ExplicitCard;
+        shortCards: (id: string) => TermDefinitionCard;
+        options: (id: string) => Option;
+        stories: (storyId: string) => Story;
+        explicitCardStories: (id: string) => ExplicitCardStory;
+        typeInCardStories: (id: string) => TypeInCardStory;
+        isCorrectCardStories: (id: string) => IsCorrectCardStory;
+};
+
+const templates: Templates = {
+        books: getEmptyBookTemplate,
+        explicitCards: getEmptyCardTemplate,
+        shortCards: getEmptyTermDefinitionCard,
+        options: getEmptyOptionTemplate,
+        stories: getEmptyStoryTemplate,
+        explicitCardStories: getEmptyExplicitCardStory,
+        typeInCardStories: getEmptyTypeInCardStory,
+        isCorrectCardStories: getEmptyIsCorrectCardStory
+};
+
+export function getTemplate<Key extends keyof StoreMap>(
+        tp: Key,
+        id: string
+): StoreMap[Key] {
+        return templates[tp](id) as StoreMap[Key];
 }

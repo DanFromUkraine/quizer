@@ -1,11 +1,14 @@
-import { PlayExplicitCard, PlayIsCorrectCard } from '@/src/types/playMode';
-import { TermDefinitionCard } from '@/src/types/mainDbGlobal';
+import {
+        TermDefinitionCard
+} from '@/src/types/mainDbGlobal';
 import {
         fiftyFifty,
         getCardsForAlgorithm,
         getCorrectOptionFromExplicitCard,
         getRandomOptAvoidingCurr
 } from '@/src/utils/createNewStory/helpers';
+import getUniqueID from '@/src/utils/getUniqueID';
+import { ExplicitCardStory, IsCorrectCardStory } from '@/src/types/stories';
 
 export function getIsCorrectCards({
         requiredNum,
@@ -14,11 +17,11 @@ export function getIsCorrectCards({
         allOptions
 }: {
         requiredNum: number;
-        playExplicitCards: PlayExplicitCard[];
+        playExplicitCards: ExplicitCardStory[];
         shortCards: TermDefinitionCard[];
         allOptions: string[];
 }) {
-        const isCorrectCards: PlayIsCorrectCard[] = [];
+        const isCorrectCards: IsCorrectCardStory[] = [];
         const [shortCardsForAlgo, explicitCardsForAlgo] = getCardsForAlgorithm({
                 requiredNum,
                 playExplicitCards,
@@ -32,15 +35,15 @@ export function getIsCorrectCards({
                                 getCorrectCard({ t: term, d: definition })
                         );
                 } else {
-                        isCorrectCards.push({
-                                type: 'play-isCorrect',
-                                isCorrect: false,
-                                term,
-                                definition: getRandomOptAvoidingCurr({
-                                        allOptions,
-                                        targetOpt: definition
+                        isCorrectCards.push(
+                                getIncorrectCard({
+                                        t: term,
+                                        d: getRandomOptAvoidingCurr({
+                                                allOptions,
+                                                targetOpt: definition
+                                        })
                                 })
-                        });
+                        );
                 }
         });
 
@@ -77,18 +80,28 @@ function getIncorrectCard({
 }: {
         t: string;
         d: string;
-}): PlayIsCorrectCard {
+}): IsCorrectCardStory {
         return {
-                type: 'play-isCorrect',
+                id: getUniqueID(),
+                type: 'story-isCorrectCard',
+                currentValue: null,
                 isCorrect: false,
                 term: t,
                 definition: d
         };
 }
 
-function getCorrectCard({ t, d }: { t: string; d: string }): PlayIsCorrectCard {
+function getCorrectCard({
+        t,
+        d
+}: {
+        t: string;
+        d: string;
+}): IsCorrectCardStory {
         return {
-                type: 'play-isCorrect',
+                id: getUniqueID(),
+                type: 'story-isCorrectCard',
+                currentValue: null,
                 isCorrect: true,
                 term: t,
                 definition: d

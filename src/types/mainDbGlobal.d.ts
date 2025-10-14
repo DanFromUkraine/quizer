@@ -1,6 +1,11 @@
 import { DBSchema } from 'idb';
 import { DB } from '@/src/types/globals';
-import { FullBook } from '@/src/types/playMode';
+import type {
+        ExplicitCardStory,
+        IsCorrectCardStory,
+        Story,
+        TypeInCardStory
+} from '@/src/types/stories';
 
 export type MainDbGlobal = DB<MainDbSchema>;
 
@@ -21,16 +26,23 @@ export interface MainDbSchema extends DBSchema {
                 key: string;
                 value: Option;
         };
-        history: {
+        stories: {
                 key: string;
                 value: Story;
         };
+        explicitCardStories: {
+                key: string;
+                value: ExplicitCardStory;
+        };
+        typeInCardStories: {
+                key: string;
+                value: TypeInCardStory;
+        };
+        isCorrectCardStories: {
+                key: string;
+                value: IsCorrectCardStory;
+        };
 }
-
-export type ObjectStoreKeysNoHistory = keyof Pick<
-        MainDbSchema,
-        'books' | 'cards' | 'options'
->;
 
 export type ObjectStoreKeysAll = keyof StoreMap;
 
@@ -39,7 +51,10 @@ export type StoreMap = {
         explicitCards: ExplicitCard;
         shortCards: TermDefinitionCard;
         options: Option;
-        history: Story;
+        stories: Story;
+        explicitCardStories: ExplicitCardStory;
+        typeInCardStories: TypeInCardStory;
+        isCorrectCardStories: IsCorrectCardStory;
 };
 
 export interface Book {
@@ -74,17 +89,19 @@ export interface Option {
         optionTitle: string;
 }
 
-export interface Story {
-        id: string;
-        isCompleted: boolean;
-        showAnswersImmediately: boolean;
-        bookId: string;
-        timeSpentSec: number;
-        bookData: FullBook;
-        playStartDate: number;
-        choicePointers: (number | string | null)[];
-}
-
 export type BooksAndStoriesAssociations = {
         [key: string]: string[];
 };
+
+export type AddEmptyAction<T> = (
+        mainDb: MainDbGlobal,
+        Item: T
+) => Promise<unknown>;
+export type UpdateAction<T> = (
+        mainDb: MainDbGlobal,
+        Item: T
+) => Promise<unknown>;
+export type DeleteAction = (
+        mainDb: MainDbGlobal,
+        deleteId: string
+) => Promise<unknown>;

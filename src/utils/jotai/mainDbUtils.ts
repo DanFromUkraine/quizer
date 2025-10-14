@@ -1,33 +1,17 @@
-import { atom, Getter, Setter, WritableAtom } from 'jotai';
-import {
-        Book,
-        ExplicitCard,
-        MainDbGlobal,
-        StoreMap,
-        Story
-} from '@/src/types/mainDbGlobal';
+import { atom, Getter } from 'jotai';
+import type { Book, ExplicitCard, StoreMap } from '@/src/types/mainDbGlobal';
 import {
         booksAtomFamily,
-        explicitCardsAtomFamily,
-        mainDbAtom
+        explicitCardsAtomFamily
 } from '@/src/jotai/mainAtoms';
 import { getFilteredIds } from '@/src/utils/idb/idUtils';
-import {
-        getEmptyStoryTemplate,
-        getTemplate
-} from '@/src/utils/idb/main/templates';
+import { getTemplate } from '@/src/utils/idb/main/templates';
 import { currentBookIdAtom } from '@/src/jotai/idManagers';
 import { getListWhereNoSuchIds, getListWithSuchIds } from '@/src/utils/lists';
 import { AvailableCardTypes } from '@/src/types/globals';
 
-export function getAtomFactory<K extends keyof Omit<StoreMap, 'history'>>(
-        storeName: K
-) {
+export function getAtomFactory<K extends keyof StoreMap>(storeName: K) {
         return (id: string) => atom(getTemplate(storeName, id));
-}
-
-export function getHistoryAtom(id: string) {
-        return atom<Story>(getEmptyStoryTemplate(id));
 }
 
 export function getNewBookWithDeletedCardId(
@@ -117,29 +101,4 @@ export function getCardWithoutDeletedOptionId(
                 ...prevCard,
                 childrenIds: newIds
         };
-}
-
-export function getDerivedAtomWithIdb<Args extends unknown[]>(
-        callback: (
-                get: Getter,
-                set: Setter,
-                mainDb: MainDbGlobal,
-                ...args: Args
-        ) => Promise<void>
-): WritableAtom<null, Args, Promise<void>> {
-        return atom<null, Args, Promise<void>>(
-                null,
-                async (get, set, ...args: Args) => {
-                        const mainDb = get(mainDbAtom) as
-                                | MainDbGlobal
-                                | undefined;
-                        if (typeof mainDb === 'undefined') return;
-
-                        try {
-                                await callback(get, set, mainDb, ...args);
-                        } catch (e) {
-                                return await Promise.reject(e);
-                        }
-                }
-        ) as WritableAtom<null, Args, Promise<void>>;
 }

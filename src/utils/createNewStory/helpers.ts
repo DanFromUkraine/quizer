@@ -1,5 +1,4 @@
 import { TermDefinitionCard } from '@/src/types/mainDbGlobal';
-import { PlayExplicitCard, PlayOption } from '@/src/types/playMode';
 import { Getter } from 'jotai';
 import {
         explicitCardsAtomFamily,
@@ -7,6 +6,8 @@ import {
         shortCardsAtomFamily
 } from '@/src/jotai/mainAtoms';
 import shuffleList from '@/src/utils/fisherYatesShafle';
+import { ExplicitCardStory, OptionStory } from '@/src/types/stories';
+import getUniqueID from '@/src/utils/getUniqueID';
 
 export function getOption({
         get,
@@ -14,24 +15,26 @@ export function getOption({
 }: {
         get: Getter;
         optionId: string;
-}): PlayOption {
+}): OptionStory {
         const { optionTitle, isCorrect, id } = get(optionsAtomFamily(optionId));
-        return { title: optionTitle, isCorrect, id };
+        return { title: optionTitle, isCorrect };
 }
 
-export function getExplicitCard({
+export function getExplicitCardStory({
         get,
         cardId
 }: {
         get: Getter;
         cardId: string;
-}): PlayExplicitCard {
+}): ExplicitCardStory {
         const { cardTitle, explanation, childrenIds, subtitle } = get(
                 explicitCardsAtomFamily(cardId)
         );
 
         return {
-                type: 'play-explicit',
+                id: getUniqueID(),
+                currentValue: null,
+                type: 'story-explicitCard',
                 title: cardTitle,
                 subtitle,
                 explanation,
@@ -49,7 +52,7 @@ export function getAllExplicitCards({
         explicitCardIds: string[];
 }) {
         return explicitCardIds.map((cardId) =>
-                getExplicitCard({ get, cardId })
+                getExplicitCardStory({ get, cardId })
         );
 }
 
@@ -67,7 +70,7 @@ export function getOptionsHeap({
         playExplicitCards,
         shortCards
 }: {
-        playExplicitCards: PlayExplicitCard[];
+        playExplicitCards: ExplicitCardStory[];
         shortCards: TermDefinitionCard[];
 }) {
         const optionsFromExpCards = playExplicitCards.flatMap(({ options }) => {
@@ -96,8 +99,8 @@ export function getCardsForAlgorithm({
 }: {
         requiredNum: number;
         shortCards: TermDefinitionCard[];
-        playExplicitCards: PlayExplicitCard[];
-}): [TermDefinitionCard[], PlayExplicitCard[]] {
+        playExplicitCards: ExplicitCardStory[];
+}): [TermDefinitionCard[], ExplicitCardStory[]] {
         const shortCardsNeeded = Math.min(requiredNum, shortCards.length);
         const shortCardsForAlgo = getRandomItemsFromList(
                 shortCards,
@@ -138,7 +141,7 @@ function getRandomItem<T>(array: T[]) {
 }
 
 export function getCorrectOptionFromExplicitCard(
-        explicitCard: PlayExplicitCard
+        explicitCard: ExplicitCardStory
 ) {
         const correctOption = explicitCard.options.find(
                 (option) => option.isCorrect

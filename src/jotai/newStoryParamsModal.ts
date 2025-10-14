@@ -7,20 +7,12 @@ import {
         hideDialogAtom,
         openDialogAtom
 } from '@/src/jotai/dialogVisibilityFamily';
-import { Story } from '@/src/types/mainDbGlobal';
-import getUniqueID from '@/src/utils/getUniqueID';
-import { updateStoryIdb } from '@/src/utils/idb/main/actions';
-import { getDerivedAtomWithIdb } from '@/src/utils/jotai/mainDbUtils';
-import { NewStoryTemporaryInfo, StorySettings } from '@/src/types/newStory';
+import { NewStoryTemporaryInfo } from '@/src/types/newStory';
 import {
         EMPTY_NEW_STORY_TEMPORARY_INFO,
         EMPTY_STORY_SETTINGS_ATOM
 } from '@/src/constants/emptyObjects';
-import { getCardsForStoryModeRelated } from '@/src/utils/createNewStory/getAllCards';
-
-export const newStorySettingsAtom = atom<StorySettings>(
-        EMPTY_STORY_SETTINGS_ATOM
-);
+import { newStorySettingsAtom } from '@/src/jotai/historyAtoms';
 
 export const newStoryTemporaryInfoAtom = atom<NewStoryTemporaryInfo>(
         EMPTY_NEW_STORY_TEMPORARY_INFO
@@ -100,4 +92,3 @@ const setNewStorySettingsAtomToDefaultAtom = atom(
                 });
         }
 );
-

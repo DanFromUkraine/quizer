@@ -2,22 +2,32 @@
 
 import { atom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
-import {
+import type {
         BooksAndStoriesAssociations,
         MainDbGlobal
 } from '@/src/types/mainDbGlobal';
-import { getAtomFactory, getHistoryAtom } from '@/src/utils/jotai/mainDbUtils';
+import { getAtomFactory } from '@/src/utils/jotai/mainDbUtils';
 import computeBooksAndStoriesAssociations from '@/src/utils/jotai/computeBooksAndStoriesAssociations';
 import { storyIdsAtom } from '@/src/jotai/idManagers';
 
+export const isInitializationFromIdbCompletedAtom = atom(false);
 export const mainDbAtom = atom<MainDbGlobal>();
 export const booksAtomFamily = atomFamily(getAtomFactory('books'));
 export const explicitCardsAtomFamily = atomFamily(
         getAtomFactory('explicitCards')
 );
 export const optionsAtomFamily = atomFamily(getAtomFactory('options'));
-export const storiesAtomFamily = atomFamily(getHistoryAtom);
+export const storiesAtomFamily = atomFamily(getAtomFactory('stories'));
 export const shortCardsAtomFamily = atomFamily(getAtomFactory('shortCards'));
+export const explicitCardStoriesAtomFamily = atomFamily(
+        getAtomFactory('explicitCardStories')
+);
+export const typeInCardStoriesAtomFamily = atomFamily(
+        getAtomFactory('typeInCardStories')
+);
+export const isCorrectCardStoriesAtomFamily = atomFamily(
+        getAtomFactory('isCorrectCardStories')
+);
 
 export const booksAndStoriesAssociationsAtom =
         atom<BooksAndStoriesAssociations>((get) => {

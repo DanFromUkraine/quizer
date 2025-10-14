@@ -1,9 +1,27 @@
-import { PlayExplicitCard, PlayTypeInCard } from '@/src/types/playMode';
 import { TermDefinitionCard } from '@/src/types/mainDbGlobal';
 import {
         getCardsForAlgorithm,
         getCorrectOptionFromExplicitCard
 } from '@/src/utils/createNewStory/helpers';
+import getUniqueID from '@/src/utils/getUniqueID';
+import { ExplicitCardStory, TypeInCardStory } from '@/src/types/stories';
+
+function getTypeInCard({
+        def,
+        expInp
+}: {
+        def: string;
+        expInp: string;
+}): TypeInCardStory {
+        return {
+                id: getUniqueID(),
+                type: 'story-typeInCard',
+                currentValue: '',
+                answerRevealed: false,
+                definition: def,
+                expectedInput: expInp
+        };
+}
 
 export function getTypeInCards({
         requiredNum,
@@ -11,7 +29,7 @@ export function getTypeInCards({
         shortCards
 }: {
         requiredNum: number;
-        playExplicitCards: PlayExplicitCard[];
+        playExplicitCards: ExplicitCardStory[];
         shortCards: TermDefinitionCard[];
 }) {
         const [shortCardsForAlgo, explicitCardsForAlgo] = getCardsForAlgorithm({
@@ -19,26 +37,24 @@ export function getTypeInCards({
                 requiredNum,
                 shortCards
         });
-        const typeInCardsResult: PlayTypeInCard[] = [];
+        const typeInCardsResult: TypeInCardStory[] = [];
 
         shortCardsForAlgo.forEach(({ term, definition }) => {
-                typeInCardsResult.push({
-                        type: 'play-typeIn',
-                        definition,
-                        expectedInput: term
-                });
+                typeInCardsResult.push(
+                        getTypeInCard({ def: definition, expInp: term })
+                );
         });
 
         explicitCardsForAlgo.forEach((explicitCard) => {
-                typeInCardsResult.push({
-                        type: 'play-typeIn',
-                        definition: explicitCard.title,
-                        expectedInput:
-                                getCorrectOptionFromExplicitCard(explicitCard)
-                                        .title
-                });
+                typeInCardsResult.push(
+                        getTypeInCard({
+                                def: getCorrectOptionFromExplicitCard(
+                                        explicitCard
+                                ).title,
+                                expInp: explicitCard.title
+                        })
+                );
         });
 
         return typeInCardsResult;
 }
-

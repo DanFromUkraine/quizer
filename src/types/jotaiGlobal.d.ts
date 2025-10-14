@@ -1,4 +1,4 @@
-import { WritableAtom, PrimitiveAtom } from 'jotai';
+import type { WritableAtom, PrimitiveAtom } from 'jotai';
 
 
 

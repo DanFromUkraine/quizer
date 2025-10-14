@@ -43,3 +43,24 @@ export function getCardType({
         if (idIsInShortCardIds) return 'short';
         throw `id ${targetId} is absent in both explicit card ids and short card ids`;
 }
+
+export function getPlayCardType({
+        targetId,
+        explicitCardStoryIds,
+        typeInCardStoryIds,
+        isCorrectCardStoryIds
+}: {
+        targetId: string;
+        explicitCardStoryIds: string[];
+        typeInCardStoryIds: string[];
+        isCorrectCardStoryIds: string[];
+}) {
+        const idIsInExplicitCardStoryIds =
+                explicitCardStoryIds.includes(targetId);
+        const idIsInTypeInCardStoryIds = typeInCardStoryIds.includes(targetId);
+        const idIsInIsCorrectCardStoryIds =
+                isCorrectCardStoryIds.includes(targetId);
+        if (idIsInExplicitCardStoryIds) return 'play-explicit';
+        if (idIsInIsCorrectCardStoryIds) return 'play-isCorrect';
+        if (idIsInTypeInCardStoryIds) return 'play-typeIn'
+}

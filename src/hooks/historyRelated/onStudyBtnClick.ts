@@ -7,8 +7,7 @@ import {
 } from '@/src/jotai/mainAtoms';
 import { showSnackbarAtom } from '@/src/jotai/snackbarAtoms';
 import { openBookStoryDialog } from '@/src/jotai/storiesForBookDialogInfoAtoms';
-import { openDialogAtom } from '@/src/jotai/dialogVisibilityFamily';
-import { openNewStorySettingsDialogAtom } from '@/src/jotai/createNewStory';
+import { openNewStorySettingsDialogAtom } from '@/src/jotai/newStoryParamsModal';
 
 export default function useStudyButtonClickHandler(bookId: string) {
         return useAtomCallback((get, set) => {

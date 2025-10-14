@@ -1,13 +1,21 @@
-import { getDerivedAtomWithIdb } from '@/src/utils/jotai/mainDbUtils';
+import { getDerivedAtomWithIdb } from '@/src/utils/jotai/getDerivedAtomWithIdb';
 import getUniqueID from '@/src/utils/getUniqueID';
-import { addEmptyBookIdb, deleteBookIdb } from '@/src/utils/idb/main/actions';
-import { Book } from '@/src/types/mainDbGlobal';
+import {
+        addEmptyBookIdb,
+        deleteBookIdb,
+        updateBookIdb
+} from '@/src/utils/idb/main/actions';
 import {
         addEmptyBookAtomHelper,
         deleteBookAtomHelper,
-        deleteCardsOnBookDeleteAtomHelper
+        getAtomFamilyUpdateAtom
 } from '@/src/utils/jotai/helpers';
 import { booksAtomFamily } from '@/src/jotai/mainAtoms';
+import {
+        deleteExplicitCardAtom,
+        deleteShortCardAtom
+} from '@/src/jotai/cardAtoms';
+import { Getter, Setter } from 'jotai';
 
 export const addEmptyBookAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb) => {
@@ -17,6 +25,20 @@ export const addEmptyBookAtom = getDerivedAtomWithIdb(
         }
 );
 
+async function deleteCardsOnBookDeleteAtomHelper(
+        get: Getter,
+        set: Setter,
+        bookId: string
+) {
+        const { explicitCardIds, shortCardIds } = get(booksAtomFamily(bookId));
+        for await (const cardId of explicitCardIds) {
+                await set(deleteExplicitCardAtom, cardId);
+        }
+        for await (const cardId of shortCardIds) {
+                await set(deleteShortCardAtom, cardId);
+        }
+}
+
 export const deleteBookAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb, bookId: string) => {
                 await deleteBookIdb(mainDb, bookId);
@@ -25,11 +47,7 @@ export const deleteBookAtom = getDerivedAtomWithIdb(
         }
 );
 
-export const updateBookAtom = getDerivedAtomWithIdb(
-        async (_get, set, mainDb, newBook: Book) => {
-                console.debug("somebody updated book atom")
-                await mainDb.put('books', newBook);
-                set(booksAtomFamily(newBook.id), newBook);
-        }
-);
-
+export const updateBookAtom = getAtomFamilyUpdateAtom({
+        atomFamily: booksAtomFamily,
+        updateIdb: updateBookIdb
+});

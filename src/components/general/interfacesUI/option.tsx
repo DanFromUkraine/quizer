@@ -1,7 +1,7 @@
 import IndexMarker from '@/src/components/general/IndexMarker';
 import clsx from 'clsx';
 
-type OptionColorSchema = 'green' | 'red' | 'gray';
+export type OptionColorSchema = 'green' | 'red' | 'gray';
 
 export default function LikeOptionUI({
         onClick,

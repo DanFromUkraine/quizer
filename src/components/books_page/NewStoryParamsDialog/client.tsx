@@ -8,14 +8,16 @@ import {
 import { Hr } from '@/src/components/general/Hr';
 import { NewStoryParam } from '@/src/constants/newCardParams';
 import {
-        addNewStoryAtom,
         closeNewStorySettingsDialogAtom,
-        newStorySettingsAtom
-} from '@/src/jotai/createNewStory';
+} from '@/src/jotai/newStoryParamsModal';
 import { useAtomCallback } from 'jotai/utils';
 import { useRouter } from 'next/navigation';
 import getDefaultPathToPlayPage from '@/src/utils/getDefPathToPlayPage';
 import { ParamWithToggleUI } from '@/src/components/books_page/NewStoryParamsDialog/UI';
+import {
+        addNewStoryAtom,
+        newStorySettingsAtom
+} from '@/src/jotai/historyAtoms';
 
 export function IsSmartModeToggle() {
         const [currState, setCurrState] = useAtom(

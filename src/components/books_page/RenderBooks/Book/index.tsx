@@ -8,7 +8,6 @@ import OtherInfo from '@/src/components/books_page/RenderBooks/Book/OtherInfo';
 import Toolbar from '@/src/components/books_page/RenderBooks/Book/BookToolbar';
 import StudyButton from '@/src/components/books_page/RenderBooks/Book/StudyButton';
 import { createPropsProvider } from '@/src/utils/createPropsProvider';
-import BookStoryDialog from '@/src/components/books_page/BookStoryDialog';
 
 type BookProps = {
         bookTitle: string;
