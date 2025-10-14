@@ -59,7 +59,7 @@ export function Option({
         cardId: string;
         isCorrect: boolean;
 }) {
-        const { showAnswersImmediately } = usePlayModeProps();
+        const { showAnswersImmediately, isCompleted } = usePlayModeProps();
         const stableAdapterAtom = useMemo(
                 () => getExplicitCardStoryCurrValFamilyAdapterAtom(cardId),
                 []
@@ -67,7 +67,8 @@ export function Option({
         const [currCardChoice, setCurrCardChoice] = useAtom(stableAdapterAtom);
 
         const onOptionClick = () => {
-                if (showAnswersImmediately && currCardChoice) return;
+                if ((showAnswersImmediately && currCardChoice) || isCompleted)
+                        return;
                 setCurrCardChoice(optionIndex);
         };
 

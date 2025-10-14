@@ -6,5 +6,5 @@ export default function shuffleList<Item>(array: Item[]) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [newList[i], newList[j]] = [newList[j], newList[i]];
         }
-        return array;
+        return newList;
 }

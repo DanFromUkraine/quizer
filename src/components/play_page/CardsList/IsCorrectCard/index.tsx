@@ -10,10 +10,12 @@ type CardStatus = 'correct' | 'incorrect' | 'unchosen';
 
 function useCurrVal({
         cardId,
-        showAnswersImmediately
+        showAnswersImmediately,
+        isCompleted
 }: {
         cardId: string;
         showAnswersImmediately: boolean;
+        isCompleted: boolean;
 }) {
         const currValAdapterAtom = useMemo(
                 () => getIsCorrectCardStoryCurrValFamilyAdapterAtom(cardId),
@@ -23,7 +25,11 @@ function useCurrVal({
 
         const setCurrVal = useCallback(
                 (newVal: boolean) => {
-                        if (showAnswersImmediately && currVal !== null) return;
+                        if (
+                                (showAnswersImmediately && currVal !== null) ||
+                                isCompleted
+                        )
+                                return;
                         setCurrVal_localOnly(newVal);
                 },
                 [currVal, showAnswersImmediately]
@@ -48,14 +54,15 @@ function useIsCorrectCardStatus({
 }
 
 export default function IsCorrectCard({ cardId }: { cardId: string }) {
-        const { showAnswersImmediately } = usePlayModeProps();
+        const { showAnswersImmediately, isCompleted } = usePlayModeProps();
         const { definition, isCorrect, term } = useAtomValue(
                 isCorrectCardStoriesAtomFamily(cardId)
         );
 
         const [currVal, setCurrVal] = useCurrVal({
                 cardId,
-                showAnswersImmediately
+                showAnswersImmediately,
+                isCompleted
         });
 
         const setTrue = () => setCurrVal(true);
@@ -63,27 +70,27 @@ export default function IsCorrectCard({ cardId }: { cardId: string }) {
 
         let cardStatus: CardStatus = 'unchosen';
 
-
         return (
-                <div
-                        data-status={cardStatus}
-                        className='flex flex-col gap-2 data-[iscorrect=correct]:bg-green-200 border border-gray-500 rounded-xl p-4'>
-                        <p>
-                                <b>{term}</b> - {definition}
-                        </p>
-                        <div>
+                <div data-status={cardStatus} className='questionCard'>
+                        <div className='flex items-center gap-1'>
+                                <h2 className='heading-2'>{term} - </h2>
+                                <h2 className='heading-2 !font-normal'>
+                                        {definition}
+                                </h2>
+                        </div>
+                        <div className='flex gap-2'>
                                 <button
-                                       
                                         type='button'
+                                        data-selected={currVal}
                                         onClick={setTrue}
-                                        className='data-[status=correct]:bg-green-500 '>
+                                        className='data-[status=correct]:bg-green-500 data-[selected=true]:bg-gray-200 py-4 px-8 border hover:bg-gray-200 duration-100 border-gray-400 rounded-md heading-3'>
                                         True
                                 </button>
                                 <button
-
                                         type='button'
+                                        data-selected={currVal === false}
                                         onClick={setFalse}
-                                        className='data-[status=correct]:bg-green-500'>
+                                        className='data-[status=correct]:bg-green-500 data-[selected=true]:bg-gray-200 py-4 px-8 border hover:bg-gray-200 duration-100 border-gray-400 rounded-md heading-3'>
                                         False
                                 </button>
                         </div>

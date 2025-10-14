@@ -1,6 +1,5 @@
 'use client';
 
-import Quoted from '@/src/components/general/Quoted';
 import { useAtom, useAtomValue } from 'jotai';
 import { typeInCardStoriesAtomFamily } from '@/src/jotai/mainAtoms';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -53,10 +52,12 @@ function useGetIsCorrect({
 
 function useCurrVal({
         cardId,
-        answerRevealed
+        answerRevealed,
+        isCompleted
 }: {
         cardId: string;
         answerRevealed: boolean;
+        isCompleted: boolean;
 }) {
         const currentValueAdapterAtom = useMemo(
                 () => getTypeInCardStoryCurrValFamilyAdapterAtom(cardId),
@@ -67,20 +68,25 @@ function useCurrVal({
         );
 
         const setCurrVal = useCallback((newVal: string) => {
-                if (!answerRevealed) setCurrVal_localOnly(newVal);
+                if (answerRevealed || isCompleted) return;
+                setCurrVal_localOnly(newVal);
         }, []);
 
         return [currVal, setCurrVal] as const;
 }
 
 export default function TypeInCard({ cardId }: { cardId: string }) {
-        const { showAnswersImmediately } = usePlayModeProps();
+        const { showAnswersImmediately, isCompleted } = usePlayModeProps();
         const { definition, expectedInput } = useAtomValue(
                 typeInCardStoriesAtomFamily(cardId)
         );
 
         const { answerRevealed, onRevealButtonClick } = useRevealAnswer(cardId);
-        const [currVal, setCurrVal] = useCurrVal({ cardId, answerRevealed });
+        const [currVal, setCurrVal] = useCurrVal({
+                cardId,
+                answerRevealed,
+                isCompleted
+        });
         const isCorrect = useGetIsCorrect({
                 answerRevealed,
                 expectedInput,
@@ -92,12 +98,11 @@ export default function TypeInCard({ cardId }: { cardId: string }) {
         return (
                 <li
                         data-correct={isCorrect}
-                        className='flex flex-col w-full border border-gray-500 rounded-xl p-4 data-[correct=true]:!bg-green-200 data-[correct=false]:!bg-red-200'>
-                        <Quoted variant='heading'>
-                                <h3 className='h3'>{definition}</h3>
-                        </Quoted>
+                        className=' questionCard w-full data-[correct=true]:!bg-green-200 data-[correct=false]:!bg-red-200'>
+                        <h3 className='heading-2 mx-auto'>{`'${definition}'`}</h3>
+
                         <input
-                                className='w-full border border-gray-400 rounded-xl p-4'
+                                className='w-full border border-gray-400 rounded-md p-4 focus:border-2'
                                 value={currVal}
                                 onChange={onChange}
                         />
