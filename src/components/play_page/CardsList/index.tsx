@@ -11,6 +11,7 @@ import { getPlayCardType } from '@/src/utils/lists';
 
 interface PlayModeProps {
         showAnswersImmediately: boolean;
+        isCompleted: boolean;
 }
 export const {
         Provider: PlayCardsListProvider,
@@ -24,15 +25,16 @@ export default function PlayCardsList() {
                 cardIdsOrder,
                 explicitCardStoryIds,
                 typeInCardStoryIds,
-                isCorrectCardStoryIds
+                isCorrectCardStoryIds,
+                isCompleted
         } = useAtomValue(storiesAtomFamily(storyId));
 
         console.debug({ cardIdsOrder });
 
         return (
                 <PlayCardsListProvider
-                        showAnswersImmediately={showAnswersImmediately}>
-                        <ul>
+                        {...{ showAnswersImmediately, isCompleted }}>
+                        <ul className='flex flex-col gap-4'>
                                 {cardIdsOrder.map((cardId, i) => {
                                         const cardType = getPlayCardType({
                                                 targetId: cardId,
