@@ -1,6 +1,11 @@
 import { DBSchema } from 'idb';
 import { DB } from '@/src/types/globals';
-import { PlayOption } from '@/src/types/playMode';
+import type {
+        ExplicitCardStory,
+        IsCorrectCardStory,
+        Story,
+        TypeInCardStory
+} from '@/src/types/stories';
 
 export type MainDbGlobal = DB<MainDbSchema>;
 
@@ -82,48 +87,6 @@ export interface Option {
         id: string;
         isCorrect: boolean;
         optionTitle: string;
-}
-
-export interface Story {
-        id: string;
-        bookId: string;
-        isCompleted: boolean;
-        showAnswersImmediately: boolean;
-        timeSpentSec: number;
-        playStartDate: number;
-        cardIdsOrder: string[];
-        explicitCardStoryIds: string[];
-        typeInCardStoryIds: string[];
-        isCorrectCardStoryIds: string[];
-        bookData: {
-                title: string;
-                description: string;
-        };
-}
-
-export interface ExplicitCardStory {
-        id: string;
-        title: string;
-        subtitle: string;
-        explanation: string;
-        options: PlayOption[];
-        currentValue: null | number;
-}
-
-export interface TypeInCardStory {
-        id: string;
-        definition: string;
-        expectedInput: string;
-        currentValue: string;
-        answerRevealed: boolean;
-}
-
-export interface IsCorrectCardStory {
-        id: string;
-        term: string;
-        definition: string;
-        isCorrect: boolean;
-        currentValue: null | boolean;
 }
 
 export type BooksAndStoriesAssociations = {

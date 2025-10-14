@@ -1,13 +1,8 @@
-console.trace('[IMPORTER] trace');
-
-import {
-        booksAtomFamily,
-        explicitCardsAtomFamily
-} from '@/src/jotai/mainAtoms';
+import { booksAtomFamily } from '@/src/jotai/mainAtoms';
 import { getTemplate } from '@/src/utils/idb/main/templates';
 import { Book, DeleteAction, UpdateAction } from '@/src/types/mainDbGlobal';
 
-import { Getter, PrimitiveAtom, Setter } from 'jotai';
+import { PrimitiveAtom, Setter } from 'jotai';
 import { booksIdsAtom } from '@/src/jotai/idManagers';
 import { AtomFamily, WithInitialValue } from '@/src/types/jotaiGlobal';
 import { ObjWithId } from '@/src/types/globals';
@@ -30,9 +25,6 @@ export function updateBookAtomHelper(set: Setter, newBook: Book) {
         set(bookAtom, newBook);
 }
 
-
-
-
 export function getAtomFamilyUpdateAtom<T extends ObjWithId>({
         atomFamily,
         updateIdb
@@ -40,8 +32,6 @@ export function getAtomFamilyUpdateAtom<T extends ObjWithId>({
         atomFamily: AtomFamily<string, PrimitiveAtom<T> & WithInitialValue<T>>;
         updateIdb: UpdateAction<T>;
 }) {
-        console.log('hello, world!!!');
-
         return getDerivedAtomWithIdb(async (get, set, mainDb, newItem: T) => {
                 await updateIdb(mainDb, newItem);
                 set(atomFamily(newItem.id), newItem);

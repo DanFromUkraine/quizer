@@ -1,14 +1,10 @@
 import { TermDefinitionCard } from '@/src/types/mainDbGlobal';
-import {
-        PlayExplicitCard,
-        PlayNormalCard,
-        PlayOption
-} from '@/src/types/playMode';
 import getUniqueID from '@/src/utils/getUniqueID';
 import {
         getRandomItemsFromList,
         getRandomOptAvoidingCurr
 } from '@/src/utils/createNewStory/helpers';
+import { ExplicitCardStory, OptionStory } from '@/src/types/stories';
 
 export function getNormalCards({
         requiredNum,
@@ -18,17 +14,16 @@ export function getNormalCards({
         requiredNum: number;
         shortCards: TermDefinitionCard[];
         allOptions: string[];
-}): PlayNormalCard[] {
+}): ExplicitCardStory[] {
         const shortCardsForAlgo = getRandomItemsFromList(
                 shortCards,
                 requiredNum
         );
 
         return shortCardsForAlgo.map(({ term, definition, id }) => {
-                const options: PlayOption[] = Array(4);
+                const options: OptionStory[] = Array(4);
                 const corrOptInd = Math.floor(Math.random() * 4);
                 options[corrOptInd] = {
-                        id,
                         isCorrect: true,
                         title: definition
                 };
@@ -40,16 +35,18 @@ export function getNormalCards({
                         });
                         options[i] = {
                                 isCorrect: false,
-                                title: randomOption,
-                                id: getUniqueID()
+                                title: randomOption
                         };
                 }
+
                 return {
-                        type: 'play-normal',
+                        id: getUniqueID(),
+                        type: 'story-explicitCard',
+                        currentValue: null,
                         title: term,
-                        options
+                        options,
+                        explanation: '',
+                        subtitle: ''
                 };
         });
 }
-
-

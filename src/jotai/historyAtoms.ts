@@ -1,22 +1,22 @@
-import { atom, Getter, Setter } from 'jotai';
+import { atom, PrimitiveAtom } from 'jotai';
 import {
         booksAndStoriesAssociationsAtom,
         booksAtomFamily,
-        storiesAtomFamily
+        explicitCardStoriesAtomFamily,
+        isCorrectCardStoriesAtomFamily,
+        storiesAtomFamily,
+        typeInCardStoriesAtomFamily
 } from '@/src/jotai/mainAtoms';
-import { MainDbGlobal, Story } from '@/src/types/mainDbGlobal';
 import { deleteStoryIdb, updateStoryIdb } from '@/src/utils/idb/main/actions';
-import {
-        currentStoryIdAtom,
-        deleteIdAtom,
-        storyIdsAtom
-} from '@/src/jotai/idManagers';
+import { deleteIdAtom, storyIdsAtom } from '@/src/jotai/idManagers';
 import { StoriesByBook } from '@/src/types/historyPage';
 import { StorySettings } from '@/src/types/newStory';
-import { getCardsForStoryModeRelated } from '@/src/utils/createNewStory/getAllCards';
+import { initPlayCardsAndGetTheirIds } from '@/src/utils/createNewStory/getAllCards';
 import getUniqueID from '@/src/utils/getUniqueID';
 import { EMPTY_STORY_SETTINGS_ATOM } from '@/src/constants/emptyObjects';
 import { getDerivedAtomWithIdb } from '@/src/utils/jotai/getDerivedAtomWithIdb';
+import { Story } from '@/src/types/stories';
+import { AtomFamily, WithInitialValue } from '@/src/types/jotaiGlobal';
 
 export const deleteStoryAtom = getDerivedAtomWithIdb(
         async (_get, set, mainDb, storyId: string) => {
@@ -40,11 +40,6 @@ export const finishStoryAtom = getDerivedAtomWithIdb(
                 set(storiesAtomFamily(storyId), newStory);
         }
 );
-
-
-
-
-
 
 export const storiesSortedByBookAtom = atom((get) => {
         const bookAndStoriesAssociations = get(booksAndStoriesAssociationsAtom);
@@ -79,11 +74,18 @@ export const addNewStoryAtom = getDerivedAtomWithIdb(
                 }
         ) => {
                 const { bookTitle, description } = get(booksAtomFamily(bookId));
-                const allCards = getCardsForStoryModeRelated({
+                const {
+                        cardIdsOrder,
+                        playExplicitCardIds,
+                        typeInCardIds,
+                        isCorrectCardIds
+                } = initPlayCardsAndGetTheirIds({
                         ...settings,
                         bookId,
-                        get
+                        get,
+                        set
                 });
+
                 const newStoryId = getUniqueID();
                 const newStory: Story = {
                         id: newStoryId,
@@ -92,16 +94,108 @@ export const addNewStoryAtom = getDerivedAtomWithIdb(
                         timeSpentSec: 0,
                         playStartDate: 0,
                         bookId,
-                        cardIdsOrder: [],
-                        explicitCardStoryIds: [],
-                        typeInCardStoryIds: [],
-                        isCorrectCardStoryIds: [],
+                        cardIdsOrder,
+                        explicitCardStoryIds: playExplicitCardIds,
+                        typeInCardStoryIds: typeInCardIds,
+                        isCorrectCardStoryIds: isCorrectCardIds,
                         bookData: {
                                 title: bookTitle,
-                                description,
+                                description
                         }
                 };
                 await updateStoryIdb(mainDb, newStory);
                 successCallback(newStoryId);
         }
 );
+
+export function getNumOfChoicesCalculator<
+        T extends { currentValue: unknown | null }
+>(
+        /* 'todo' - move this function somewhere else, where it should be  */
+        targetAtomFamily: AtomFamily<
+                string,
+                PrimitiveAtom<T> & WithInitialValue<T>
+        >
+) {
+        return (ids: string[]) =>
+                atom((get) => {
+                        let count = 0;
+
+                        ids.forEach((id) => {
+                                const { currentValue } = get(
+                                        targetAtomFamily(id)
+                                );
+                                if (currentValue !== null) count++;
+                        });
+
+                        return count;
+                });
+}
+
+const getCalcNumOfChoicesInExpCardStoriesAtom = getNumOfChoicesCalculator(
+        explicitCardStoriesAtomFamily
+);
+const getCalcNumOfChoicesInTypeInCardStoriesAtom = getNumOfChoicesCalculator(
+        typeInCardStoriesAtomFamily
+);
+const getCalcNumOfChoicesInIsCorrectCardStoriesAtom = getNumOfChoicesCalculator(
+        isCorrectCardStoriesAtomFamily
+);
+
+const getCalcNumOfChoicesAtom = ({
+        explicitCardStoryIds,
+        typeInCardStoryIds,
+        isCorrectCardStoryIds
+}: {
+        explicitCardStoryIds: string[];
+        typeInCardStoryIds: string[];
+        isCorrectCardStoryIds: string[];
+}) =>
+        atom((get) => {
+                const expCardChoicesCount = get(
+                        getCalcNumOfChoicesInExpCardStoriesAtom(
+                                explicitCardStoryIds
+                        )
+                );
+                const typeInCardChoicesCount = get(
+                        getCalcNumOfChoicesInTypeInCardStoriesAtom(
+                                typeInCardStoryIds
+                        )
+                );
+                const isCorrectCardChoicesCount = get(
+                        getCalcNumOfChoicesInIsCorrectCardStoriesAtom(
+                                isCorrectCardStoryIds
+                        )
+                );
+                return (
+                        expCardChoicesCount +
+                        typeInCardChoicesCount +
+                        isCorrectCardChoicesCount
+                );
+        });
+
+export const getStoryCompletionDataAtom = (storyId: string) =>
+        atom((get) => {
+                const {
+                        cardIdsOrder,
+                        explicitCardStoryIds,
+                        typeInCardStoryIds,
+                        isCorrectCardStoryIds
+                } = get(storiesAtomFamily(storyId));
+                const numOfCards = cardIdsOrder.length;
+                const numOfChoices = get(
+                        getCalcNumOfChoicesAtom({
+                                explicitCardStoryIds,
+                                typeInCardStoryIds,
+                                isCorrectCardStoryIds
+                        })
+                );
+                const completionPercentage =
+                        Math.round(numOfChoices / numOfCards) * 100;
+
+                return {
+                        completionPercentage,
+                        numOfChoices,
+                        numOfCards
+                };
+        });

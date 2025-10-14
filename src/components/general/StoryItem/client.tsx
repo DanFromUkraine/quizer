@@ -1,29 +1,28 @@
 'use client';
 
 import Bread from '@/src/components/general/Bread';
-import useStoryCompletionData from '@/src/hooks/historyRelated/useStoryCompletionData';
-import { MouseEventHandler } from 'react';
+import { MouseEventHandler, useMemo } from 'react';
 import { useAtomCallback } from 'jotai/utils';
 import { MdDeleteOutline } from 'react-icons/md';
-import { deleteStoryAtom } from '@/src/jotai/historyAtoms';
+import {
+        deleteStoryAtom,
+        getStoryCompletionDataAtom
+} from '@/src/jotai/historyAtoms';
 import { updateBookStoriesDataAtom } from '@/src/jotai/storiesForBookDialogInfoAtoms';
 import { currentBookIdForStoriesDialogAtom } from '@/src/jotai/idManagers';
-import useStoryCompletionPercentage from '@/src/hooks/historyRelated/useStoryCompletionData';
 import DateBread from '@/src/components/general/DateBread';
 import { useAtomValue } from 'jotai';
 import { storiesAtomFamily } from '@/src/jotai/mainAtoms';
 
-export function CompletionRateLikeBread({
-                                                        storyId
-                                                }: {
-        storyId: string;
-}) {
-        const { numOfChoices, numOfCards } = useStoryCompletionData(storyId);
+export function CompletionRateLikeBread({ storyId }: { storyId: string }) {
+        const stableAtom = useMemo(
+                () => getStoryCompletionDataAtom(storyId),
+                []
+        );
+
+        const { numOfChoices, numOfCards } = useAtomValue(stableAtom);
         return <Bread items={[numOfChoices, numOfCards]} className='mr-auto' />;
 }
-
-
-
 
 export function DeleteStoryButton({ storyId }: { storyId: string }) {
         const onDeleteButtonClick: MouseEventHandler<HTMLDivElement> =
@@ -43,9 +42,12 @@ export function DeleteStoryButton({ storyId }: { storyId: string }) {
         );
 }
 
-
 export function CompletionRate({ storyId }: { storyId: string }) {
-        const { completionPercentage } = useStoryCompletionPercentage(storyId);
+        const stableAtom = useMemo(
+                () => getStoryCompletionDataAtom(storyId),
+                []
+        );
+        const { completionPercentage } = useAtomValue(stableAtom);
         const isPercentageGreen = completionPercentage > 49;
 
         return (
@@ -56,8 +58,6 @@ export function CompletionRate({ storyId }: { storyId: string }) {
                 </h2>
         );
 }
-
-
 
 export function StoryCreationDate({ storyId }: { storyId: string }) {
         const { playStartDate } = useAtomValue(storiesAtomFamily(storyId));

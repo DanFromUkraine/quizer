@@ -27,6 +27,8 @@ export default function PlayCardsList() {
                 isCorrectCardStoryIds
         } = useAtomValue(storiesAtomFamily(storyId));
 
+        console.debug({ cardIdsOrder });
+
         return (
                 <PlayCardsListProvider
                         showAnswersImmediately={showAnswersImmediately}>
@@ -42,19 +44,26 @@ export default function PlayCardsList() {
                                         if (cardType === 'play-explicit') {
                                                 return (
                                                         <ExplicitCard
+                                                                key={cardId}
                                                                 cardId={cardId}
                                                         />
                                                 );
                                         } else if (cardType === 'play-typeIn') {
                                                 return (
                                                         <TypeInCard
+                                                                key={cardId}
                                                                 cardId={cardId}
                                                         />
                                                 );
                                         } else if (
                                                 cardType === 'play-isCorrect'
                                         ) {
-                                                return <IsCorrectCard />;
+                                                return (
+                                                        <IsCorrectCard
+                                                                key={cardId}
+                                                                cardId={cardId}
+                                                        />
+                                                );
                                         }
                                 })}
                         </ul>
