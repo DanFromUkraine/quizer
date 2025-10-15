@@ -126,6 +126,11 @@ export function getNumOfChoicesCalculator<
                                         targetAtomFamily(id)
                                 );
                                 if (currentValue !== null) count++;
+                                if (
+                                        typeof currentValue === 'string' &&
+                                        currentValue.length > 0
+                                )
+                                        count++;
                         });
 
                         return count;
@@ -198,4 +203,23 @@ export const getStoryCompletionDataAtom = (storyId: string) =>
                         numOfChoices,
                         numOfCards
                 };
+        });
+
+export const getExpStoryCardCorrectOptionIndex = (cardId: string) =>
+        atom((get) => {
+                /* 'todo' - need to make it suitable for multichoice cards */
+                const { options } = get(explicitCardStoriesAtomFamily(cardId));
+                return options.findIndex((opt) => opt.isCorrect);
+        });
+
+export const getIfExpStoryCardCorrect = (cardId: string) =>
+        atom((get) => {
+                const { currentValue } = get(
+                        explicitCardStoriesAtomFamily(cardId)
+                );
+                const correctIndex = get(
+                        getExpStoryCardCorrectOptionIndex(cardId)
+                );
+
+                return currentValue === correctIndex;
         });

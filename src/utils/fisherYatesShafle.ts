@@ -1,4 +1,3 @@
-
 export default function shuffleList<Item>(array: Item[]) {
         const newList = [...array];
 

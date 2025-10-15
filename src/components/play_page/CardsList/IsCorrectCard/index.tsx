@@ -71,7 +71,7 @@ export default function IsCorrectCard({ cardId }: { cardId: string }) {
         let cardStatus: CardStatus = 'unchosen';
 
         return (
-                <div data-status={cardStatus} className='questionCard'>
+                <div data-status={cardStatus} className='questionCard !w-full'>
                         <div className='flex items-center gap-1'>
                                 <h2 className='heading-2'>{term} - </h2>
                                 <h2 className='heading-2 !font-normal'>

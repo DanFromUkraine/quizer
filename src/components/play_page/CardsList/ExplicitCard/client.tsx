@@ -32,18 +32,21 @@ function useOptionStatus({
         optionIndex,
         currCardChoice,
         isCorrect,
-        showAnswersImmediately
+        showAnswersImmediately,
+        isCompleted
 }: {
         optionIndex: number;
         currCardChoice: number | null;
         isCorrect: boolean;
         showAnswersImmediately: boolean;
+        isCompleted: boolean;
 }) {
         const isSelected = optionIndex === currCardChoice;
-        let color: OptionColorSchema = 'gray';
-        if (isSelected && isCorrect && showAnswersImmediately) color = 'green';
-        if (isSelected && !isCorrect && showAnswersImmediately) color = 'red';
-        if (!isSelected && isCorrect && showAnswersImmediately) color = 'green';
+        let color: OptionColorSchema = 'unchosen';
+
+        if (isCorrect && (showAnswersImmediately || isCompleted))
+                color = 'correct';
+
 
         return { isSelected, color };
 }
@@ -76,8 +79,10 @@ export function Option({
                 optionIndex,
                 currCardChoice,
                 isCorrect,
-                showAnswersImmediately
+                showAnswersImmediately,
+                isCompleted
         });
+
 
         return (
                 <LikeOptionUI
