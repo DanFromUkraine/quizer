@@ -72,7 +72,7 @@ export function OneBooleanButton({
                         data-selected={isSelected}
                         data-iscorrect={isCorrect}
                         onClick={onClickAction}
-                        className='data-[iscorrect=true]:bg-green-500 data-[selected=true]:bg-gray-200 py-4 px-8 border hover:bg-gray-200 duration-100 border-gray-400 rounded-md heading-3'>
+                        className='data-[iscorrect=true]:bg-green-400 data-[selected=true]:bg-gray-200 py-4 px-8 border hover:bg-gray-200 duration-100 border-gray-400 rounded-md heading-3'>
                         {textContent}
                 </button>
         );

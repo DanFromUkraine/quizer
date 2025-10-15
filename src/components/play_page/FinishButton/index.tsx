@@ -2,15 +2,13 @@
 
 import { finishStoryAtom } from '@/src/jotai/historyAtoms';
 import { useAtomCallback } from 'jotai/utils';
-import { currentStoryIdAtom } from '@/src/jotai/idManagers';
 import { useRouter } from 'next/navigation';
 import { usePlayModeProps } from '@/app/play/page';
 
 export default function FinishButton() {
         const router = useRouter();
-        const { isCompleted } = usePlayModeProps();
+        const { isCompleted, storyId } = usePlayModeProps();
         const onClick = useAtomCallback(async (get, set) => {
-                const storyId = get(currentStoryIdAtom);
                 await set(finishStoryAtom, storyId);
                 router.push('/history');
         });

@@ -140,12 +140,9 @@ function getRandomItem<T>(array: T[]) {
         return array[randomIndex];
 }
 
-export function getCorrectOptionFromExplicitCard(
-        explicitCard: ExplicitCardStory
-) {
-        const correctOption = explicitCard.options.find(
-                (option) => option.isCorrect
-        );
+
+export function getCorrectOptionFromOptions(options: OptionStory[]) {
+        const correctOption = options.find((option) => option.isCorrect);
         if (!correctOption)
                 throw new Error('No correct option in an explicit card');
         return correctOption;

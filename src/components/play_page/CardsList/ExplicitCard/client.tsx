@@ -28,7 +28,7 @@ export function Explanation({ explanation }: { explanation: string }) {
         );
 }
 
-function useOptionStatus({
+function getOptionStatus({
         optionIndex,
         currCardChoice,
         isCorrect,
@@ -75,7 +75,7 @@ export function Option({
                 setCurrCardChoice(optionIndex);
         };
 
-        const { isSelected, color } = useOptionStatus({
+        const { isSelected, color } = getOptionStatus({
                 optionIndex,
                 currCardChoice,
                 isCorrect,
