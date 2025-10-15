@@ -7,9 +7,9 @@ import {
 } from '@/src/components/play_page/CardsList/ExplicitCard/client';
 import { useAtomValue } from 'jotai';
 import { explicitCardStoriesAtomFamily } from '@/src/jotai/mainAtoms';
-import { usePlayModeProps } from '@/src/components/play_page/CardsList';
 import { useMemo } from 'react';
 import { getIfExpStoryCardCorrect } from '@/src/jotai/historyAtoms';
+import { usePlayModeProps } from '@/app/play/page';
 
 function useIfExpCardStoryCorrect(cardId: string) {
         const stableAtom = useMemo(() => getIfExpStoryCardCorrect(cardId), []);

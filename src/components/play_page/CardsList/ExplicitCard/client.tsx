@@ -8,7 +8,7 @@ import LikeSubtitleUI from '@/src/components/general/interfacesUI/subtitle';
 import LikeExplanationUI from '@/src/components/general/interfacesUI/explanation';
 import { getExplicitCardStoryCurrValFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 import { useMemo } from 'react';
-import { usePlayModeProps } from '@/src/components/play_page/CardsList';
+import { usePlayModeProps } from '@/app/play/page';
 
 export function Subtitle({ subtitle }: { subtitle: string }) {
         return subtitle.length > 0 ? (
