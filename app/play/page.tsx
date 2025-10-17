@@ -8,6 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { createPropsProvider } from '@/src/utils/createPropsProvider';
 import { useAtomValue } from 'jotai';
 import { storiesAtomFamily } from '@/src/jotai/mainAtoms';
+import Results from '@/src/components/play_page/Results';
 
 interface PlayModeProps {
         showAnswersImmediately: boolean;
@@ -38,8 +39,9 @@ export default function PlayPage() {
                                         storyId
                                 }}>
                                 <main className='mainContainer'>
-                                        {/*<Results />*/}
                                         <PageTitle />
+                                        <Results />
+
                                         <CardsList />
                                         <FinishButton />
                                 </main>

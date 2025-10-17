@@ -350,8 +350,9 @@ export const getStoryResultsAtom = (storyId: string) =>
                 );
                 const countAllPoints = get(getOverAllCountAtom(storyId));
 
-                const successPercentage =
-                        Math.floor(countGainedPoints / countGainedPoints) * 100;
+                const successPercentage = Math.floor(
+                        (countGainedPoints / countAllPoints) * 100
+                );
                 const markIn12PointsSystem = Math.round(
                         (successPercentage * 12) / 100
                 );

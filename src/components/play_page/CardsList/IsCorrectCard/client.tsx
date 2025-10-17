@@ -101,7 +101,7 @@ export function BooleanButtons({ cardId }: { cardId: string }) {
                                         textContent: 'False',
                                         onClickAction: setFalse,
                                         isSelected: currVal === false,
-                                        isCorrect
+                                        isCorrect: currVal === false
                                 }}
                         />
                 </div>
