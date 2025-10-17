@@ -1,4 +1,4 @@
-import { atom, PrimitiveAtom } from 'jotai';
+import { atom, Atom, PrimitiveAtom } from 'jotai';
 import {
         booksAndStoriesAssociationsAtom,
         booksAtomFamily,
@@ -126,6 +126,11 @@ export function getNumOfChoicesCalculator<
                                         targetAtomFamily(id)
                                 );
                                 if (currentValue !== null) count++;
+                                if (
+                                        typeof currentValue === 'string' &&
+                                        currentValue.length > 0
+                                )
+                                        count++;
                         });
 
                         return count;
@@ -197,5 +202,165 @@ export const getStoryCompletionDataAtom = (storyId: string) =>
                         completionPercentage,
                         numOfChoices,
                         numOfCards
+                };
+        });
+
+export const getExpStoryCardCorrectOptionIndexAtom = (cardId: string) =>
+        atom((get) => {
+                /* 'todo' - need to make it suitable for multichoice cards */
+                const { options } = get(explicitCardStoriesAtomFamily(cardId));
+                return options.findIndex((opt) => opt.isCorrect);
+        });
+
+export const getIfExpStoryCardCorrectAtom = (cardId: string) =>
+        atom((get) => {
+                const { currentValue } = get(
+                        explicitCardStoriesAtomFamily(cardId)
+                );
+                const correctIndex = get(
+                        getExpStoryCardCorrectOptionIndexAtom(cardId)
+                );
+
+                return currentValue === correctIndex;
+        });
+
+export const getIfTypeInCardCorrectAtom = (cardId: string) =>
+        atom((get) => {
+                const { currentValue, expectedInput } = get(
+                        typeInCardStoriesAtomFamily(cardId)
+                );
+
+                return (
+                        currentValue.toLowerCase().trim() ===
+                        expectedInput.toLowerCase().trim()
+                );
+        });
+
+export const getIsCorrectCardCorrectAtom = (cardId: string) =>
+        atom((get) => {
+                const { currentValue, isCorrect } = get(
+                        isCorrectCardStoriesAtomFamily(cardId)
+                );
+
+                return currentValue === isCorrect;
+        });
+
+export const countCorrectChoicesAtom = ({
+        cardIds,
+        counter,
+        step
+}: {
+        cardIds: string[];
+        counter: (cardId: string) => Atom<boolean>;
+        step: number;
+}) =>
+        atom((get) => {
+                let count = 0;
+
+                for (const cardId of cardIds) {
+                        const isCorrect = get(counter(cardId));
+                        if (isCorrect) count += step;
+                }
+
+                return count;
+        });
+
+// 'todo' - move these to constants
+export const EXPLICIT_CARD_STEP = 1;
+export const TYPE_IN_CARD_STEP = 2;
+export const IS_CORRECT_CARD_STEP = 0.5;
+
+export const getOverAllCountOfCorrectAnswersAtom = (storyId: string) =>
+        atom((get) => {
+                const {
+                        explicitCardStoryIds,
+                        typeInCardStoryIds,
+                        isCorrectCardStoryIds
+                } = get(storiesAtomFamily(storyId));
+
+                const countOfAllCorrChoicesExpCardStories = get(
+                        countCorrectChoicesAtom({
+                                cardIds: explicitCardStoryIds,
+                                counter: getIfExpStoryCardCorrectAtom,
+                                step: EXPLICIT_CARD_STEP
+                        })
+                );
+                const countOfAllCorrChoicesTypeInCardStories = get(
+                        countCorrectChoicesAtom({
+                                cardIds: typeInCardStoryIds,
+                                counter: getIfTypeInCardCorrectAtom,
+                                step: TYPE_IN_CARD_STEP
+                        })
+                );
+                const countOfAllCorrChoicesIsCorrectCardStories = get(
+                        countCorrectChoicesAtom({
+                                cardIds: isCorrectCardStoryIds,
+                                counter: getIsCorrectCardCorrectAtom,
+                                step: IS_CORRECT_CARD_STEP
+                        })
+                );
+
+                return (
+                        countOfAllCorrChoicesExpCardStories +
+                        countOfAllCorrChoicesTypeInCardStories +
+                        countOfAllCorrChoicesIsCorrectCardStories
+                );
+        });
+
+const countCardsPointsAtom = ({
+        numOfCards,
+        multiplier
+}: {
+        numOfCards: number;
+        multiplier: number;
+}) => numOfCards * multiplier;
+
+export const getOverAllCountAtom = (storyId: string) =>
+        atom((get) => {
+                const {
+                        explicitCardStoryIds,
+                        typeInCardStoryIds,
+                        isCorrectCardStoryIds
+                } = get(storiesAtomFamily(storyId));
+
+                const expCardStoriesPointsCount = countCardsPointsAtom({
+                        numOfCards: explicitCardStoryIds.length,
+                        multiplier: EXPLICIT_CARD_STEP
+                });
+                const typeInCardStoriesPointsCount = countCardsPointsAtom({
+                        numOfCards: typeInCardStoryIds.length,
+                        multiplier: TYPE_IN_CARD_STEP
+                });
+                const isCorrectCardStoriesPointsCount = countCardsPointsAtom({
+                        numOfCards: isCorrectCardStoryIds.length,
+                        multiplier: IS_CORRECT_CARD_STEP
+                });
+
+                return (
+                        expCardStoriesPointsCount +
+                        typeInCardStoriesPointsCount +
+                        isCorrectCardStoriesPointsCount
+                );
+        });
+
+export const getStoryResultsAtom = (storyId: string) =>
+        atom((get) => {
+                const countGainedPoints = get(
+                        getOverAllCountOfCorrectAnswersAtom(storyId)
+                );
+                const countAllPoints = get(getOverAllCountAtom(storyId));
+
+                const successPercentage = Math.floor(
+                        (countGainedPoints / countAllPoints) * 100
+                );
+                const markIn12PointsSystem = Math.round(
+                        (successPercentage * 12) / 100
+                );
+
+                return {
+                        countAllPoints,
+                        countGainedPoints,
+                        successPercentage,
+                        markIn12PointsSystem
                 };
         });

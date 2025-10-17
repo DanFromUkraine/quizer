@@ -1,7 +1,7 @@
 import IndexMarker from '@/src/components/general/IndexMarker';
 import clsx from 'clsx';
 
-export type OptionColorSchema = 'green' | 'red' | 'gray';
+export type OptionColorSchema = 'correct' | 'incorrect' | 'unchosen';
 
 export default function LikeOptionUI({
         onClick,
@@ -24,11 +24,11 @@ export default function LikeOptionUI({
                                 'w-full items-center flex border gap-2 rounded-md p-4 duration-100',
                                 {
                                         'border-gray-400 hover:bg-gray-300 data-[selected=true]:bg-gray-300':
-                                                color === 'gray',
+                                                color === 'unchosen',
                                         'border-red-700  bg-[repeating-linear-gradient(45deg,theme(colors.red.300)_0_10px,transparent_10px_20px)]':
-                                                color === 'red',
+                                                color === 'incorrect',
                                         'border-green-700 bg-green-300':
-                                                color === 'green'
+                                                color === 'correct'
                                 }
                         )}>
                         <IndexMarker index={optionIndex} />

@@ -15,7 +15,7 @@ export default function InputSwitch({
         return (
                 <label
                         data-ischecked={currState}
-                        className='relative flex w-10 h-6 p-0.5 has-[:checked]:!bg-blue-400 bg-red-200 duration-100 rounded-xl'>
+                        className='relative flex w-10 h-6 p-0.5 has-[:checked]:!bg-blue-400 bg-red-100 duration-100 rounded-xl'>
                         <input
                                 type='checkbox'
                                 name="toggle-input"

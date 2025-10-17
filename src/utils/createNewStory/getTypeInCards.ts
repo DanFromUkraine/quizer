@@ -1,7 +1,7 @@
 import { TermDefinitionCard } from '@/src/types/mainDbGlobal';
 import {
         getCardsForAlgorithm,
-        getCorrectOptionFromExplicitCard
+        getCorrectOptionFromOptions
 } from '@/src/utils/createNewStory/helpers';
 import getUniqueID from '@/src/utils/getUniqueID';
 import { ExplicitCardStory, TypeInCardStory } from '@/src/types/stories';
@@ -45,13 +45,11 @@ export function getTypeInCards({
                 );
         });
 
-        explicitCardsForAlgo.forEach((explicitCard) => {
+        explicitCardsForAlgo.forEach(({ title, options }) => {
                 typeInCardsResult.push(
                         getTypeInCard({
-                                def: getCorrectOptionFromExplicitCard(
-                                        explicitCard
-                                ).title,
-                                expInp: explicitCard.title
+                                def: getCorrectOptionFromOptions(options).title,
+                                expInp: title
                         })
                 );
         });

@@ -29,18 +29,21 @@ import {
 import { pickIds } from '@/src/utils/idb/idUtils';
 import dynamic from 'next/dynamic';
 import { booksIdsAtom, storyIdsAtom } from '@/src/jotai/idManagers';
-import {
+import type {
         Book,
         ExplicitCard,
-        ExplicitCardStory,
-        IsCorrectCardStory,
         MainDbGlobal,
         Option,
-        Story,
-        TermDefinitionCard,
-        TypeInCardStory
+        TermDefinitionCard
 } from '@/src/types/mainDbGlobal';
 import { ObjWithId } from '@/src/types/globals';
+import { memo } from 'react';
+import {
+        ExplicitCardStory,
+        IsCorrectCardStory,
+        Story,
+        TypeInCardStory
+} from '@/src/types/stories';
 
 async function initEntity<T extends ObjWithId>({
         promise,
@@ -151,34 +154,44 @@ async function useGetInitIsCorrectCardStories(
         });
 }
 
-export function InitAllMainDbAtoms_DO_NOT_IMPORT() {
-        const asyncMainDb = getMainDb();
-        const setMainDb = useSetAtom(mainDbAtom);
-        const setIsInitCompleted = useSetAtom(
-                isInitializationFromIdbCompletedAtom
-        );
+export const InitAllMainDbAtoms_DO_NOT_IMPORT = memo(
+        function InitAllMainDbAtoms_DO_NOT_IMPORT() {
+                const asyncMainDb = getMainDb();
+                const setMainDb = useSetAtom(mainDbAtom);
+                const setIsInitCompleted = useSetAtom(
+                        isInitializationFromIdbCompletedAtom
+                );
 
-        const p1 = useGetInitBooks(asyncMainDb);
-        const p2 = useGetInitExplicitCards(asyncMainDb);
-        const p3 = useGetInitOptions(asyncMainDb);
-        const p4 = useGetInitShortCards(asyncMainDb);
-        const p5 = useGetInitStories(asyncMainDb);
-        const p6 = useGetInitExplicitCardStories(asyncMainDb);
-        const p7 = useGetInitTypeInCardStories(asyncMainDb);
-        const p8 = useGetInitIsCorrectCardStories(asyncMainDb);
+                const p1 = useGetInitBooks(asyncMainDb);
+                const p2 = useGetInitExplicitCards(asyncMainDb);
+                const p3 = useGetInitOptions(asyncMainDb);
+                const p4 = useGetInitShortCards(asyncMainDb);
+                const p5 = useGetInitStories(asyncMainDb);
+                const p6 = useGetInitExplicitCardStories(asyncMainDb);
+                const p7 = useGetInitTypeInCardStories(asyncMainDb);
+                const p8 = useGetInitIsCorrectCardStories(asyncMainDb);
 
-        const mainDbPromise = asyncMainDb.then((db) => {
-                setMainDb(db);
-        });
+                const mainDbPromise = asyncMainDb.then((db) => {
+                        setMainDb(db);
+                });
 
-        Promise.all([p1, p2, p3, p4, p5, p6, p7, p8, mainDbPromise]).then(
-                () => {
+                Promise.all([
+                        p1,
+                        p2,
+                        p3,
+                        p4,
+                        p5,
+                        p6,
+                        p7,
+                        p8,
+                        mainDbPromise
+                ]).then(() => {
                         setIsInitCompleted(true);
-                }
-        );
+                });
 
-        return <></>;
-}
+                return <></>;
+        }
+);
 
 export default dynamic(
         () =>

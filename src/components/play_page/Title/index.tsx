@@ -6,11 +6,7 @@ import { currentStoryIdAtom } from '@/src/jotai/idManagers';
 
 export default function PageTitle() {
         const storyId = useAtomValue(currentStoryIdAtom);
-
-
         const { bookData } = useAtomValue(storiesAtomFamily(storyId));
-
-
 
         return (
                 <h1 className='heading-1'>

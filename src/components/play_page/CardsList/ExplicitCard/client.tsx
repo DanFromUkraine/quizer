@@ -8,7 +8,7 @@ import LikeSubtitleUI from '@/src/components/general/interfacesUI/subtitle';
 import LikeExplanationUI from '@/src/components/general/interfacesUI/explanation';
 import { getExplicitCardStoryCurrValFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 import { useMemo } from 'react';
-import { usePlayModeProps } from '@/src/components/play_page/CardsList';
+import { usePlayModeProps } from '@/app/play/page';
 
 export function Subtitle({ subtitle }: { subtitle: string }) {
         return subtitle.length > 0 ? (
@@ -28,22 +28,25 @@ export function Explanation({ explanation }: { explanation: string }) {
         );
 }
 
-function useOptionStatus({
+function getOptionStatus({
         optionIndex,
         currCardChoice,
         isCorrect,
-        showAnswersImmediately
+        showAnswersImmediately,
+        isCompleted
 }: {
         optionIndex: number;
         currCardChoice: number | null;
         isCorrect: boolean;
         showAnswersImmediately: boolean;
+        isCompleted: boolean;
 }) {
         const isSelected = optionIndex === currCardChoice;
-        let color: OptionColorSchema = 'gray';
-        if (isSelected && isCorrect && showAnswersImmediately) color = 'green';
-        if (isSelected && !isCorrect && showAnswersImmediately) color = 'red';
-        if (!isSelected && isCorrect && showAnswersImmediately) color = 'green';
+        let color: OptionColorSchema = 'unchosen';
+
+        if (isCorrect && (showAnswersImmediately || isCompleted))
+                color = 'correct';
+
 
         return { isSelected, color };
 }
@@ -72,12 +75,14 @@ export function Option({
                 setCurrCardChoice(optionIndex);
         };
 
-        const { isSelected, color } = useOptionStatus({
+        const { isSelected, color } = getOptionStatus({
                 optionIndex,
                 currCardChoice,
                 isCorrect,
-                showAnswersImmediately
+                showAnswersImmediately,
+                isCompleted
         });
+
 
         return (
                 <LikeOptionUI

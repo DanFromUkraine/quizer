@@ -24,6 +24,7 @@ export function ColorStatusBar() {
                                         }
                                 )}
                         />
+                        <span className="font-semibold text-white text-lg absolute top-2 left-2">Beta</span>
                 </section>
         );
 }

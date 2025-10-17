@@ -1,10 +1,8 @@
-import {
-        TermDefinitionCard
-} from '@/src/types/mainDbGlobal';
+import { TermDefinitionCard } from '@/src/types/mainDbGlobal';
 import {
         fiftyFifty,
         getCardsForAlgorithm,
-        getCorrectOptionFromExplicitCard,
+        getCorrectOptionFromOptions,
         getRandomOptAvoidingCurr
 } from '@/src/utils/createNewStory/helpers';
 import getUniqueID from '@/src/utils/getUniqueID';
@@ -47,21 +45,20 @@ export function getIsCorrectCards({
                 }
         });
 
-        explicitCardsForAlgo.forEach((explicitCard) => {
+        explicitCardsForAlgo.forEach(({ title, options }) => {
                 const isCorrect = fiftyFifty();
-                const correctOption =
-                        getCorrectOptionFromExplicitCard(explicitCard);
+                const correctOption = getCorrectOptionFromOptions(options);
                 if (isCorrect) {
                         isCorrectCards.push(
                                 getCorrectCard({
-                                        t: explicitCard.title,
+                                        t: title,
                                         d: correctOption.title
                                 })
                         );
                 } else {
                         isCorrectCards.push(
                                 getIncorrectCard({
-                                        t: explicitCard.title,
+                                        t: title,
                                         d: getRandomOptAvoidingCurr({
                                                 allOptions,
                                                 targetOpt: correctOption.title
