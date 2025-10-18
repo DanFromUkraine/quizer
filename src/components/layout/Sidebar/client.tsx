@@ -17,7 +17,7 @@ const NAV_LINKS: LinkType[] = [
         {
                 href: '/',
                 Icon: BsFillCollectionFill,
-                text: 'Home Page'
+                text: 'Home'
         },
         {
                 href: '/history',
@@ -30,7 +30,7 @@ export function RenderNavLinks() {
         const pathname = usePathname();
 
         return (
-                <section className='flex flex-col items-start static'>
+                <section className='navLinks'>
                         {NAV_LINKS.map((link) => (
                                 <NavLinkUI
                                         key={link.href}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
         getTypeInCardStoryAnswerRevealedFamilyAdapterAtom,
         getTypeInCardStoryCurrValFamilyAdapterAtom
@@ -36,8 +36,6 @@ export function useGetIsCorrect(cardId: string) {
 
         useEffect(() => {
                 if (answerRevealed || isCompleted) {
-                        console.debug({ expectedInput, currentValue });
-
                         setIsCorrect(
                                 expectedInput.toLowerCase().trim() ===
                                         currentValue.toLowerCase().trim()
@@ -58,9 +56,11 @@ export function useCurrVal(cardId: string) {
                 () => getTypeInCardStoryCurrValFamilyAdapterAtom(cardId),
                 []
         );
+
         const [currVal, setCurrVal_localOnly] = useAtom(
                 currentValueStableAdapterAtom
         );
+
 
         const setCurrVal = useCallback((newVal: string) => {
                 if (answerRevealed || isCompleted) return;
@@ -77,19 +77,31 @@ export function TypeInCardStoryInput({ cardId }: { cardId: string }) {
         const { expectedInput } = useAtomValue(
                 typeInCardStoriesAtomFamily(cardId)
         );
+        const inputRef = useRef<HTMLInputElement>(null);
+
+        const onContainerClick = () => {
+                if (inputRef.current) {
+                        inputRef.current.focus();
+                }
+        };
 
         return (
-                <div className='flex items-center gap-2 w-full border border-gray-400 rounded-md p-4 has-[:focus]:border-2'>
+                <div
+                        className='flex items-center gap-2 w-full border border-gray-400 rounded-md p-4 has-[:focus]:border-2'
+                        onClick={onContainerClick}>
                         <input
+                                ref={inputRef}
                                 name='play-typeInCard'
                                 data-correct={isCorrect}
+                                placeholder='enter definition'
                                 className='data-[correct=false]:!line-through field-sizing-content'
                                 value={currVal}
                                 onChange={onChange}
                         />
-                        {typeof expectedInput === 'string' && !isCorrect && (
-                                <span>{expectedInput}</span>
-                        )}
+                        {typeof expectedInput === 'string' &&
+                                isCorrect === false && (
+                                        <span>{expectedInput}</span>
+                                )}
                 </div>
         );
 }

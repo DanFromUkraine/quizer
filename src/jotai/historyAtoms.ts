@@ -125,12 +125,13 @@ export function getNumOfChoicesCalculator<
                                 const { currentValue } = get(
                                         targetAtomFamily(id)
                                 );
-                                if (currentValue !== null) count++;
+
                                 if (
                                         typeof currentValue === 'string' &&
-                                        currentValue.length > 0
+                                        currentValue.length === 0
                                 )
-                                        count++;
+                                        return;
+                                if (currentValue !== null) count++;
                         });
 
                         return count;
@@ -172,6 +173,8 @@ const getCalcNumOfChoicesAtom = ({
                                 isCorrectCardStoryIds
                         )
                 );
+
+
                 return (
                         expCardChoicesCount +
                         typeInCardChoicesCount +
@@ -196,7 +199,7 @@ export const getStoryCompletionDataAtom = (storyId: string) =>
                         })
                 );
                 const completionPercentage =
-                        Math.round(numOfChoices / numOfCards) * 100;
+                        Math.round(numOfChoices / numOfCards * 100``);
 
                 return {
                         completionPercentage,
@@ -282,21 +285,21 @@ export const getOverAllCountOfCorrectAnswersAtom = (storyId: string) =>
                         countCorrectChoicesAtom({
                                 cardIds: explicitCardStoryIds,
                                 counter: getIfExpStoryCardCorrectAtom,
-                                step: EXPLICIT_CARD_STEP
+                                step: 1
                         })
                 );
                 const countOfAllCorrChoicesTypeInCardStories = get(
                         countCorrectChoicesAtom({
                                 cardIds: typeInCardStoryIds,
                                 counter: getIfTypeInCardCorrectAtom,
-                                step: TYPE_IN_CARD_STEP
+                                step: 1
                         })
                 );
                 const countOfAllCorrChoicesIsCorrectCardStories = get(
                         countCorrectChoicesAtom({
                                 cardIds: isCorrectCardStoryIds,
                                 counter: getIsCorrectCardCorrectAtom,
-                                step: IS_CORRECT_CARD_STEP
+                                step: 1
                         })
                 );
 

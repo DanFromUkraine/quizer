@@ -4,7 +4,7 @@ export function ColorStatusBar() {
         const color = undefined;
 
         return (
-                <section className='border-b border-b-lightGray w-full h-32  relative'>
+                <section className='colorStatusBar'>
                         <div className='statusBarLayer statusBarBlueGradient' />
                         <div
                                 className={clsx(
@@ -24,7 +24,7 @@ export function ColorStatusBar() {
                                         }
                                 )}
                         />
-                        <span className="font-semibold text-white text-lg absolute top-2 left-2">Beta</span>
+                        <span className="font-semibold text-white text-lg absolute top-2 left-2 max-sm:text-xs">Beta</span>
                 </section>
         );
 }

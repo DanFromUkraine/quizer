@@ -59,26 +59,24 @@ export function OneBooleanButton({
         textContent,
         onClickAction,
         isSelected,
-        isCorrect
 }: {
         textContent: string;
         onClickAction: () => void;
         isSelected: boolean;
-        isCorrect: boolean;
 }) {
         return (
                 <button
                         type='button'
                         data-selected={isSelected}
-                        data-iscorrect={isCorrect}
                         onClick={onClickAction}
-                        className='data-[iscorrect=true]:bg-green-400 data-[selected=true]:bg-gray-200 py-4 px-8 border hover:bg-gray-200 duration-100 border-gray-400 rounded-md heading-3'>
+                        className=' data-[selected=true]:bg-gray-200 py-4 px-8 border hover:bg-gray-200 duration-100 border-gray-400 rounded-md heading-3'>
                         {textContent}
                 </button>
         );
 }
 
 export function BooleanButtons({ cardId }: { cardId: string }) {
+        const cardStatus = useIsCorrectCardStatus(cardId);
         const [currVal, setCurrVal] = useCurrVal(cardId);
         const setTrue = () => setCurrVal(true);
         const setFalse = () => setCurrVal(false);
@@ -92,16 +90,14 @@ export function BooleanButtons({ cardId }: { cardId: string }) {
                                 {...{
                                         textContent: 'True',
                                         onClickAction: setTrue,
-                                        isSelected: Boolean(currVal),
-                                        isCorrect
+                                        isSelected: Boolean(currVal)
                                 }}
                         />
                         <OneBooleanButton
                                 {...{
                                         textContent: 'False',
                                         onClickAction: setFalse,
-                                        isSelected: currVal === false,
-                                        isCorrect: currVal === false
+                                        isSelected: currVal === false
                                 }}
                         />
                 </div>
