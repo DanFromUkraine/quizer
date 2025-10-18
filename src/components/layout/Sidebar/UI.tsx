@@ -11,16 +11,13 @@ export function NavLinkUI({
         return (
                 <Link
                         href={href}
-                        className='flex items-center justify-center m-3 gap-2'>
-                        <Icon
-                                className={clsx('navIcon', {
-                                        'bg-lightBg': pathname === href
-                                })}
-                        />
-                        <p className='flex select-none whitespace-nowrap'>
+                        className={clsx('navLink', {
+                                'bg-gray-200': pathname === href
+                        })}>
+                        <Icon className='navIcon' />
+                        <p className='flex select-none whitespace-nowrap max-[350px]:hidden'>
                                 {text}
                         </p>
                 </Link>
         );
 }
-

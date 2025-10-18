@@ -6,8 +6,8 @@ import { addEmptyBookAtom } from '@/src/jotai/bookAtoms';
 export default function AddBookButton() {
         const add = useSetAtom(addEmptyBookAtom);
         return (
-                <button onClick={add} className='fixed bottom-5 right-5'>
-                        <IoAddCircle className='text-6xl hover:rotate-45 duration-200' />
+                <button onClick={add} className='fixed bottom-[25px] right-5'>
+                        <IoAddCircle className='text-6xl hover:rotate-45 duration-200 bg-white rounded-full shadow-xl' />
                 </button>
         );
 }

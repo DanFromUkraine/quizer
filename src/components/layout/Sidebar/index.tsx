@@ -8,7 +8,7 @@ export default function Sidebar() {
 
         return (
                 <nav
-                        className='flex flex-col items-center  w-auto h-screen border-r border-r-lightGray sticky top-0 left-0'>
+                        className='sidebar'>
                         <ColorStatusBar />
                         <RenderNavLinks />
                 </nav>
