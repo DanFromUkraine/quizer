@@ -7,7 +7,7 @@ export default function SortTools() {
         return (
                 <section>
                         <h2 className="heading-2">Sort by:</h2>
-                        <ul className="flex gap-2">
+                        <ul className="flex gap-2 w-[calc(100vw - 40px)] overflow-x-scroll ">
                                 {STORIES_SORT_TOOLS.map((sortTool, i) => (
                                         <SortTool key={i} sortRuleSelected={sortRuleSelected} {...sortTool} />
                                 ))}

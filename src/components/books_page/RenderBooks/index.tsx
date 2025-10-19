@@ -4,6 +4,7 @@ import { useAtomValue } from 'jotai';
 import BookItem from '@/src/components/books_page/RenderBooks/Book';
 import { Suspense } from 'react';
 import { booksIdsAtom } from '@/src/jotai/idManagers';
+import NothingYetMessage from '@/src/components/general/NothingYet';
 
 export default function RenderBooks() {
         const booksIds = useAtomValue(booksIdsAtom);
@@ -17,6 +18,10 @@ export default function RenderBooks() {
                                         <BookItem id={id} />
                                 </Suspense>
                         ))}
+                        <NothingYetMessage
+                                message='No books yet'
+                                listLength={booksIds.length}
+                        />
                 </div>
         );
 }

@@ -15,7 +15,7 @@ export default function BookTitleInput() {
 
         return (
                 <HeaderUI
-                        defaultValue={value}
+                        value={value}
                         onChange={onChange}
                 />
         );
