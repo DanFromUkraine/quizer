@@ -10,7 +10,6 @@ import { useAtom } from 'jotai';
 
 export default function OptionTitle() {
         const { optionId } = useOptionProps();
-        const { cardId } = useCardProps();
         const stableAdapterAtom = useMemo(
                 () => getCardOptionTitleFamilyAdapterAtom(optionId),
                 []

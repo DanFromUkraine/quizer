@@ -54,7 +54,7 @@
     }
 
     .questionCard {
-        @apply w-10/12 flex flex-col gap-3 border border-gray-400 p-6 rounded-normal;
+        @apply w-10/12 flex flex-col gap-3 border border-gray-400 p-6 rounded-normal max-[540px]:w-11/12;
     }
 
 
@@ -147,6 +147,25 @@
 
             .navLink {
                 @apply flex items-center m-3 max-sm:m-0 gap-2 p-3 rounded-xl;
+            }
+        }
+    }
+
+
+    .explicitCard {
+        .optionContainer {
+            @apply w-full relative rounded-normal h-12 overflow-hidden flex;
+
+            .beforeOptionMobile {
+                @apply absolute top-0 left-0 w-1/2 h-full bg-red-500  z-0 rounded-xl min-[540px]:hidden data-[iscorrect=true]:bg-green-500;
+            }
+
+            .option {
+                @apply relative  h-12 min-[540px]:pointer-events-none flex justify-between z-[10] bg-muted  rounded-normal overflow-hidden w-full text-questTextColor font-semibold;
+            }
+
+            .afterOptionMobile {
+                @apply absolute top-0 right-0 w-1/2 h-full bg-red-500 z-0 flex justify-end items-center rounded-xl min-[540px]:hidden;
             }
         }
     }
