@@ -1,4 +1,4 @@
-import { Story } from '@/src/types/mainDbGlobal';
+import { Story } from '@/src/types/stories';
 
 type AssociationsEntries = [arg0: string, string[]][];
 

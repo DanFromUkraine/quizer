@@ -7,19 +7,22 @@ import { getDB } from '@/src/utils/idb/getDb';
 import {
         Book,
         ExplicitCard,
-        ExplicitCardStory,
-        IsCorrectCardStory,
+
         MainDbGlobal,
         MainDbSchema,
         Option,
-        Story,
         TermDefinitionCard,
-        TypeInCardStory
 } from '@/src/types/mainDbGlobal';
 import { DB_NAMES } from '@/src/constants/dbNames';
 import { UPGRADE_MAIN_DB } from '@/src/constants/mainDb';
 import { getCatchCallback } from '@/src/utils/errorHandling/catchCallbackEnhanced';
 import { addEmptyRecord, deleteRecord, getAllRecordsAsync, updateRecord } from '@/src/utils/idb/main/factories';
+import {
+        ExplicitCardStory,
+        IsCorrectCardStory,
+        Story,
+        TypeInCardStory
+} from '@/src/types/stories';
 
 export function getMainDb() {
         return getDB<MainDbSchema>({

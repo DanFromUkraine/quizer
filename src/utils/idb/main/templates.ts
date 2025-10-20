@@ -1,14 +1,16 @@
 import type {
         Book,
         ExplicitCard,
-        ExplicitCardStory,
-        IsCorrectCardStory,
         Option,
         StoreMap,
-        Story,
-        TermDefinitionCard,
-        TypeInCardStory
+        TermDefinitionCard
 } from '@/src/types/mainDbGlobal';
+import {
+        ExplicitCardStory,
+        IsCorrectCardStory,
+        Story,
+        TypeInCardStory
+} from '@/src/types/stories';
 
 function getEmptyBookTemplate(id: string): Book {
         return {
@@ -71,6 +73,7 @@ function getEmptyStoryTemplate(storyId: string): Story {
 
 function getEmptyExplicitCardStory(id: string): ExplicitCardStory {
         return {
+                type: 'story-explicitCard',
                 id,
                 title: '',
                 explanation: '',
@@ -82,16 +85,18 @@ function getEmptyExplicitCardStory(id: string): ExplicitCardStory {
 
 function getEmptyTypeInCardStory(id: string): TypeInCardStory {
         return {
+                type: 'story-typeInCard',
                 id,
                 definition: '',
                 expectedInput: '',
                 currentValue: '',
-                answerRevealed: false,
+                answerRevealed: false
         };
 }
 
 function getEmptyIsCorrectCardStory(id: string): IsCorrectCardStory {
         return {
+                type: 'story-isCorrectCard',
                 id,
                 term: '',
                 definition: '',

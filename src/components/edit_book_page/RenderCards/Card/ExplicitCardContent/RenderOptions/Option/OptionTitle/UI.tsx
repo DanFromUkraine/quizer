@@ -16,7 +16,7 @@ export default function OptionTitleUI({
                         value={value}
                         onChange={onChange}
                         data-testid='optionTextField'
-                        className='w-full p-3 bg-gray-200 group-data-[status=correct]:!bg-green-200 group-hover:bg-gray-300 duration-100'
+                        className='w-full pointer-events-auto p-3 bg-gray-200 group-data-[status=correct]:!bg-green-200 group-hover:bg-gray-300 duration-100'
                 />
         );
 }
