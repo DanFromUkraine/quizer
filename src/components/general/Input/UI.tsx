@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useInputType } from './client';
+import { InputContainerProps } from '@/src/components/general/Input/types';
+import { IoClose } from 'react-icons/io5';
 
 export function ToggleVisibilityButtonUI({
         toggleInputType,

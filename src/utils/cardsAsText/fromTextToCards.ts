@@ -18,22 +18,24 @@ export function parseTextIntoAnyCardsArray(
 ): (FullCardFromText | FullTermDefinitionCardFromText)[] {
         const cardsUnprocessed = targetText.split(getCardSeparator());
 
-        return (
-                cardsUnprocessed
-                        .map((cardText, i, arr) =>
-                                getProcessedCards({
-                                        currentValue: cardText,
-                                        index: i,
-                                        fullArray: arr
-                                })
-                        )
-                        .filter((val) => typeof val !== 'undefined')
-                        .filter(getFilterRuleToDeleteCardsWithEmptyTitle())
-        );
+        console.debug('Call of a function that shouldn"t have been called');
+
+        return cardsUnprocessed
+                .map((cardText, i, arr) =>
+                        getProcessedCards({
+                                currentValue: cardText,
+                                index: i,
+                                fullArray: arr
+                        })
+                )
+                .filter((val) => typeof val !== 'undefined')
+                .filter(getFilterRuleToDeleteCardsWithEmptyTitle());
 }
 
 export function parseTextIntoOnlyShortCardsArray(targetText: string) {
         const cardsUnprocessed = targetText.split(/\n/g);
+
+        console.debug('And this one should have', { cardsUnprocessed });
 
         return cardsUnprocessed
                 .map((shortCardText) =>

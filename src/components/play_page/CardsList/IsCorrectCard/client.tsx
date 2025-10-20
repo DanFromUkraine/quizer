@@ -48,7 +48,7 @@ export function TermDefinitionTitle({ cardId }: { cardId: string }) {
         );
 
         return (
-                <div className='flex items-center gap-1'>
+                <div className='flex items-center gap-1 flex-wrap'>
                         <h2 className='heading-2'>{term} - </h2>
                         <h2 className='heading-2 !font-normal'>{definition}</h2>
                 </div>
