@@ -1,6 +1,7 @@
 'use client';
 import { ReactNode, useRef } from 'react';
-import useCloseModalWhenClickOnContainer from '@/src/hooks/useCloseModalWhenClickOnContainer';
+import useCloseModalWhenClickOutOfContainer from '@/src/hooks/useCloseModalWhenClickOutOfContainer';
+import { IoClose } from 'react-icons/io5';
 import {
         DialogNames,
         dialogVisibilityFamilyAtom
@@ -13,25 +14,28 @@ export default function Dialog({
         dialogName,
         className,
         containerClassName,
-        onCloseSideEffect
+        onCloseSideEffectAction
 }: {
         children: ReactNode;
         dialogName: DialogNames;
         className?: string;
         containerClassName?: string;
-        onCloseSideEffect?: () => void;
+        onCloseSideEffectAction?: () => void;
 }) {
         const containerRef = useRef<HTMLDivElement>(null);
         const [dialogVisible, setDialogVisible] = useAtom(
                 dialogVisibilityFamilyAtom(dialogName)
         );
         const dialogState = dialogVisible ? 'open' : 'closed';
-        useCloseModalWhenClickOnContainer(containerRef, () => {
+        useCloseModalWhenClickOutOfContainer(containerRef, () => {
                 setDialogVisible(false);
-                if (typeof onCloseSideEffect === 'function') {
-                        onCloseSideEffect();
+                if (typeof onCloseSideEffectAction === 'function') {
+                        onCloseSideEffectAction();
                 }
         });
+        const onCloseDialogButtonClick = () => {
+                setDialogVisible(false);
+        }
 
         return (
                 <section
@@ -39,16 +43,20 @@ export default function Dialog({
                         ref={containerRef}
                         data-state={dialogState}
                         className={clsx(
-                                'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50 data-[state=closed]:hidden',
+                                'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50 w-screen h-screen data-[state=closed]:hidden',
                                 containerClassName
                         )}>
+
                         <section
                                 tabIndex={-1}
                                 data-state={dialogState}
                                 className={clsx(
-                                        'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 flex flex-col translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border shadow-lg duration-200 w-8/12',
+                                        'fixed top-[50%] left-[50%] z-50 flex flex-col translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border shadow-lg duration-200 w-8/12 max-sm:!w-full max-sm:h-full',
                                         className
                                 )}>
+                                <button onClick={onCloseDialogButtonClick} type='button' className='ml-auto text-2xl text-black'>
+                                        <IoClose />
+                                </button>
                                 {children}
                         </section>
                 </section>

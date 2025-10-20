@@ -15,15 +15,13 @@ export default function TermOrDeterminationInput({
         const stableAdapterAtom = useMemo(() => atomAdapterUnstable, []);
         const [value, updateValue] = useAtom(stableAdapterAtom);
 
-        const onChange = getInputChangeCallback((newVal) =>
-                updateValue(newVal)
-        );
+        const onChange = getInputChangeCallback(updateValue);
 
         return (
                 <section className='flex flex-col gap-2'>
-                        <Quoted variant="heading">
+                        <Quoted variant='heading'>
                                 <input
-                                        defaultValue={value}
+                                        value={value}
                                         onChange={onChange}
                                         className='w-full'
                                         type='text'

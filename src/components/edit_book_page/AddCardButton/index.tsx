@@ -12,7 +12,7 @@ export default function AddCardButtons() {
         const addEmptyShortCard = useSetAtom(addEmptyTermShortCard);
 
         return (
-                <section className='mx-auto flex gap-2'>
+                <section className='mx-auto flex gap-2 max-[440px]:flex-col'>
                         <BtnWithShortcut
                                 textContent='New Explicit Card'
                                 shortcutKeys={['Alt', 'j']}
@@ -20,7 +20,7 @@ export default function AddCardButtons() {
                                 onClick={addEmptyCard}
                         />
                         <BtnWithShortcut
-                                textContent='New Term-Definition Card'
+                                textContent='New Short Card'
                                 className='bg-green-500 hover:bg-green-400'
                                 shortcutKeys={['Alt', 'l ']}
                                 buttonType={'button'}

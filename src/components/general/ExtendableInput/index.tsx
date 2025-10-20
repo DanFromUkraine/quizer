@@ -13,7 +13,7 @@ export default function ExtendableTextArea({
                         {...props}
                         ref={props?.ref}
                         className={clsx(
-                                'resize-none field-sizing-content focus-within:outline-none',
+                                'resize-none field-sizing-content focus-within:outline-none whitespace-pre-wrap break-normal [overflow-wrap:anywhere]',
                                 props.className
                         )}></textarea>
         );

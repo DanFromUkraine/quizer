@@ -28,7 +28,7 @@ export default function BtnWithShortcut({
                         onClick={onClick}
                         {...otherAttributes}>
                         <p className='heading-3 !text-white'>{textContent}</p>
-                        <div className='flex items-center gap-2'>
+                        <div className='flex items-center gap-2 max-xl:hidden'>
                                 <RenderShortcutKeys
                                         shortcutKeys={shortcutKeys}
                                 />

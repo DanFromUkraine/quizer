@@ -45,7 +45,7 @@ export function SubQuestionTitle() {
                                 onChange={onChange}
                                 id={`subtitle-${cardId}`}
                                 placeholder='subtitle'
-                                className='heading-4 field-sizing-content'
+                                className='heading-4 max-[540px]:w-full max-[540px]:field-sizing-fixed field-sizing-content '
                         />
                 </LikeSubtitleUI>
         );

@@ -14,8 +14,8 @@ export default function CorrectnessMarketButtonUI({
         defaultChecked: boolean;
 }) {
         return (
-                <label className='flex has-checked:bg-green-400 relative p-2 gap-2 justify-center items-center bg-red-400  duration-150'>
-                        <IndexMarker index={index}/>
+                <label className='pointer-events-auto flex has-checked:bg-green-400 relative p-2 gap-2 justify-center items-center bg-gray-400  duration-150 max-[540px]:hidden'>
+                        <IndexMarker index={index} />
                         <input
                                 type='checkbox'
                                 name={`option-checkbox-${optionId}`}

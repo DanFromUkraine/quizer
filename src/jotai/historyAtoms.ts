@@ -17,10 +17,31 @@ import { EMPTY_STORY_SETTINGS_ATOM } from '@/src/constants/emptyObjects';
 import { getDerivedAtomWithIdb } from '@/src/utils/jotai/getDerivedAtomWithIdb';
 import { Story } from '@/src/types/stories';
 import { AtomFamily, WithInitialValue } from '@/src/types/jotaiGlobal';
+import { deleteExplicitCardStoryAtom } from '@/src/jotai/explicitCardStoryAtoms';
+import { deleteTypeInCardStoryAtom } from '@/src/jotai/typeInCardStoryAtoms';
+import { deleteIsCorrectCardStoryAtom } from '@/src/jotai/isCorrectCardStoryAtoms';
 
 export const deleteStoryAtom = getDerivedAtomWithIdb(
-        async (_get, set, mainDb, storyId: string) => {
+        async (get, set, mainDb, storyId: string) => {
                 await deleteStoryIdb(mainDb, storyId);
+                const {
+                        explicitCardStoryIds,
+                        typeInCardStoryIds,
+                        isCorrectCardStoryIds
+                } = get(storiesAtomFamily(storyId));
+
+                await Promise.all([
+                        ...explicitCardStoryIds.map((id) =>
+                                set(deleteExplicitCardStoryAtom, id)
+                        ),
+                        ...typeInCardStoryIds.map((id) =>
+                                set(deleteTypeInCardStoryAtom, id)
+                        ),
+                        isCorrectCardStoryIds.map((id) =>
+                                set(deleteIsCorrectCardStoryAtom, id)
+                        )
+                ]);
+
                 storiesAtomFamily.remove(storyId);
                 set(deleteIdAtom, {
                         idManager: storyIdsAtom,
@@ -174,7 +195,6 @@ const getCalcNumOfChoicesAtom = ({
                         )
                 );
 
-
                 return (
                         expCardChoicesCount +
                         typeInCardChoicesCount +
@@ -198,8 +218,9 @@ export const getStoryCompletionDataAtom = (storyId: string) =>
                                 isCorrectCardStoryIds
                         })
                 );
-                const completionPercentage =
-                        Math.round(numOfChoices / numOfCards * 100``);
+                const completionPercentage = Math.round(
+                        (numOfChoices / numOfCards) * 100
+                );
 
                 return {
                         completionPercentage,

@@ -20,7 +20,7 @@ export default function MainQuestionTitleUI({
                                 name={`card-title-${cardId}`}
                                 placeholder='Enter text'
                                 onChange={onChange}
-                                className={clsx('w-full ')}
+                                className={clsx('w-full')}
                         />
                 </Quoted>
         );
