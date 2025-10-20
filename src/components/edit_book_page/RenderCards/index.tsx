@@ -12,7 +12,6 @@ export function RenderCards() {
         const { cardIdsOrder, explicitCardIds, shortCardIds } =
                 useAtomValue(bookAtom);
 
-        console.debug({cardIdsOrder, explicitCardIds, shortCardIds})
 
         return (
                 <section>

@@ -301,7 +301,6 @@ export async function updateBookAnyCardIdsAtomHelper({
                 );
         }
 
-        console.debug({ newCardIdsOrder, newExplicitCardIds, newShortCardIds });
 
         await set(updateBookAtom, {
                 ...prevBook,

@@ -125,7 +125,6 @@ function useSwipeOption(optionId: string) {
                 },
                 onRight: () => {
                         setIsOptionCorrect(!isOptionCorrect);
-                        console.debug('callR');
                 },
                 dependencies: [isOptionCorrect]
         });
@@ -138,7 +137,6 @@ function useSwipeOption(optionId: string) {
 
 export default function Option({ optionId, optionIndex }: OptionProps) {
         const { isOptionCorrect, optionRef } = useSwipeOption(optionId);
-        console.debug({ isOptionCorrect });
 
         return (
                 <OptionPropsProvider {...{ optionIndex, optionId }}>

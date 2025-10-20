@@ -95,26 +95,21 @@ function getClearOptionTextList(explicitCardText: string) {
         const resultOptions: string[] = [];
         let prevItemWasOptSymbol = false;
 
-        console.debug({ optionsUnfiltered });
 
         for (let i = 1; i < optionsUnfiltered.length; i++) {
                 const prevItem = optionsUnfiltered[i - 1];
-                console.debug(i, { prevItem });
                 if (prevItem === '%%') {
                         const optWithRubbish = optionsUnfiltered[i];
 
-                        console.debug(i, { optWithRubbish });
 
                         const [option] = optWithRubbish.split(/&e|&s/);
 
-                        console.debug(i, { option });
 
                         resultOptions.push(option);
                         prevItemWasOptSymbol = false;
                 }
         }
 
-        console.debug({ resultOptions });
 
         return resultOptions;
 }
@@ -129,7 +124,6 @@ export function getProcessedExplicitCard(
                 RULES.EXPLANATION_MARKER
         );
         const textOptionList = getClearOptionTextList(explicitCardText);
-        console.debug({ textOptionList });
 
         return {
                 type: 'explicit',

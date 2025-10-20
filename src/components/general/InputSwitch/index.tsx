@@ -8,7 +8,6 @@ export default function InputSwitch({
         setCurrState: (newVal: boolean) => void;
 }) {
         const onChange = () => {
-                console.debug("change should've happened");
                 setCurrState(!currState);
         };
 

@@ -10,7 +10,6 @@ import {
 export default function TypeInCard({ cardId }: { cardId: string }) {
         const isCorrect = useGetIsCorrect(cardId);
 
-        console.debug('type in card render')
 
         return (
                 <li

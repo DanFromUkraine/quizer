@@ -18,7 +18,6 @@ export function parseTextIntoAnyCardsArray(
 ): (FullCardFromText | FullTermDefinitionCardFromText)[] {
         const cardsUnprocessed = targetText.split(getCardSeparator());
 
-        console.debug('Call of a function that shouldn"t have been called');
 
         return cardsUnprocessed
                 .map((cardText, i, arr) =>
@@ -35,7 +34,6 @@ export function parseTextIntoAnyCardsArray(
 export function parseTextIntoOnlyShortCardsArray(targetText: string) {
         const cardsUnprocessed = targetText.split(/\n/g);
 
-        console.debug('And this one should have', { cardsUnprocessed });
 
         return cardsUnprocessed
                 .map((shortCardText) =>

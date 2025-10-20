@@ -25,7 +25,6 @@ export default function useStudyButtonClickHandler(bookId: string) {
                 } else if (bookId in booksAndStoriesAssociations) {
                         set(openBookStoryDialog, bookId);
                 } else {
-                        console.debug("call")
                         set(openNewStorySettingsDialogAtom, bookId);
                 }
         });

@@ -10,7 +10,6 @@ import {
 
 export default function IsCorrectCard({ cardId }: { cardId: string }) {
         const cardStatus = useIsCorrectCardStatus(cardId);
-        console.debug({cardStatus})
 
         return (
                 <div data-status={cardStatus} className='questionCard !w-full data-[status=correct]:bg-green-100 data-[status=incorrect]:bg-red-100'>

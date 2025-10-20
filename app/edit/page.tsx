@@ -25,7 +25,6 @@ export default function EditBookPage() {
         const searchParams = useSearchParams();
         const bookId = searchParams.get('bookId');
 
-        console.debug({ bookId });
 
         if (typeof bookId !== 'string') throw new Error('No Book ID in URL');
 
