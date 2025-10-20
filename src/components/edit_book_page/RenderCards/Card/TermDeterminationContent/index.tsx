@@ -11,7 +11,7 @@ export default function TermDeterminationContent() {
         const { cardId } = useCardProps();
 
         return (
-                <section className='w-full grid grid-cols-2 gap-4'>
+                <section className='w-full grid grid-cols-2 gap-4 max-sm:grid-cols-1'>
                         <TermOrDeterminationInput
                                 underText='TERM'
                                 atomAdapterUnstable={getShortCardTermFamilyAdapterAtom(

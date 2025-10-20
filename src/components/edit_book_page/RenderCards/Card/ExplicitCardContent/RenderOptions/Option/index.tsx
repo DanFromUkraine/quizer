@@ -98,7 +98,7 @@ function useSwipe({
         return targetElRef;
 }
 
-export default function Option({ optionId, optionIndex }: OptionProps) {
+function useSwipeOption(optionId: string) {
         const deleteOption = useSetAtom(deleteOptionAtom);
         const { cardId } = useCardProps();
         const stableAdapterAtom = useMemo(
@@ -120,7 +120,14 @@ export default function Option({ optionId, optionIndex }: OptionProps) {
                 dependencies: [isOptionCorrect]
         });
 
-        console.debug({ isOptionCorrect });
+        return {
+                optionRef,
+                isOptionCorrect
+        }
+}
+
+export default function Option({ optionId, optionIndex }: OptionProps) {
+        const {isOptionCorrect, optionRef} = useSwipeOption(optionId);
 
         return (
                 <OptionPropsProvider {...{ optionIndex, optionId }}>

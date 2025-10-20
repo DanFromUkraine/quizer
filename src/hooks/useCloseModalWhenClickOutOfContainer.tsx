@@ -2,7 +2,7 @@
 
 import { RefObject, useEffect } from 'react';
 
-export default function useCloseModalWhenClickOnContainer(
+export default function useCloseModalWhenClickOutOfContainer(
         containerRef: RefObject<HTMLDivElement | null>,
         callback: () => void
 ) {
