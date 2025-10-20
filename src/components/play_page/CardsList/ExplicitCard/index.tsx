@@ -11,8 +11,13 @@ import { useMemo } from 'react';
 import { getIfExpStoryCardCorrectAtom } from '@/src/jotai/historyAtoms';
 import { usePlayModeProps } from '@/app/play/page';
 
-function useIfExpCardStoryCorrect(cardId: string) {
-        const stableAtom = useMemo(() => getIfExpStoryCardCorrectAtom(cardId), []);
+export type ExpCardStatus = 'correct' | 'incorrect' | 'unchosen';
+
+function useIfExpCardStoryCorrect(cardId: string):ExpCardStatus {
+        const stableAtom = useMemo(
+                () => getIfExpStoryCardCorrectAtom(cardId),
+                []
+        );
         const { isCompleted, showAnswersImmediately } = usePlayModeProps();
         const isCurrentChoiceCorrect = useAtomValue(stableAtom);
 
@@ -22,12 +27,10 @@ function useIfExpCardStoryCorrect(cardId: string) {
 }
 
 export default function ExplicitCard({ cardId }: { cardId: string }) {
-        const { title, options, explanation, subtitle, currentValue } =
+        const { title, options, explanation, subtitle } =
                 useAtomValue(explicitCardStoriesAtomFamily(cardId));
 
         const expCardStatus = useIfExpCardStoryCorrect(cardId);
-
-
 
         return (
                 <li
@@ -45,7 +48,7 @@ export default function ExplicitCard({ cardId }: { cardId: string }) {
                                         />
                                 ))}
                         </ul>
-                        <Explanation explanation={explanation} />
+                        <Explanation explanation={explanation} cardStatus={expCardStatus}/>
                 </li>
         );
 }

@@ -10,6 +10,8 @@ import { useAtom, useSetAtom } from 'jotai';
 import { deleteOptionAtom } from '@/src/jotai/optionAtoms';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
 import { getOptionCorrectnessMarkerFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
+import { IoCheckmarkCircleOutline } from 'react-icons/io5';
+import { FaXmark } from 'react-icons/fa6';
 
 interface OptionProps {
         optionId: string;
@@ -62,9 +64,17 @@ function useSwipe({
 
                         if (currentX.current === 0) return;
 
-                        if (diff > MAX_DRAG_WIDTH_PX) {
+                        if (
+                                diff >
+                                MAX_DRAG_WIDTH_PX -
+                                        (MAX_DRAG_WIDTH_PX / 20) * 100
+                        ) {
                                 onRight();
-                        } else if (diff < -MAX_DRAG_WIDTH_PX) {
+                        } else if (
+                                diff <
+                                -MAX_DRAG_WIDTH_PX +
+                                        (MAX_DRAG_WIDTH_PX / 20) * 100
+                        ) {
                                 onLeft();
                         }
                         option.style.transform = 'translateX(0px)';
@@ -123,19 +133,25 @@ function useSwipeOption(optionId: string) {
         return {
                 optionRef,
                 isOptionCorrect
-        }
+        };
 }
 
 export default function Option({ optionId, optionIndex }: OptionProps) {
-        const {isOptionCorrect, optionRef} = useSwipeOption(optionId);
+        const { isOptionCorrect, optionRef } = useSwipeOption(optionId);
+        console.debug({ isOptionCorrect });
 
         return (
                 <OptionPropsProvider {...{ optionIndex, optionId }}>
                         <div className='optionContainer'>
                                 <div
                                         data-iscorrect={!isOptionCorrect}
-                                        className='beforeOptionMobile'
-                                />
+                                        className='beforeOptionMobile'>
+                                        {!isOptionCorrect ? (
+                                                <IoCheckmarkCircleOutline className='flex text-3xl text-semibold text-white ml-5 my-auto'/>
+                                        ) : (
+                                                <FaXmark className='flex text-2xl text-semibold text-white ml-5 my-auto'/>
+                                        )}
+                                </div>
                                 <div
                                         data-status={
                                                 isOptionCorrect

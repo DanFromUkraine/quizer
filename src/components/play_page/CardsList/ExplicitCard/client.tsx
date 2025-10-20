@@ -9,6 +9,7 @@ import LikeExplanationUI from '@/src/components/general/interfacesUI/explanation
 import { getExplicitCardStoryCurrValFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 import { useMemo } from 'react';
 import { usePlayModeProps } from '@/app/play/page';
+import { ExpCardStatus } from '@/src/components/play_page/CardsList/ExplicitCard/index';
 
 export function Subtitle({ subtitle }: { subtitle: string }) {
         return subtitle.length > 0 ? (
@@ -20,8 +21,14 @@ export function Subtitle({ subtitle }: { subtitle: string }) {
         );
 }
 
-export function Explanation({ explanation }: { explanation: string }) {
-        return explanation.length > 0 ? (
+export function Explanation({
+        explanation,
+        cardStatus
+}: {
+        explanation: string;
+        cardStatus: ExpCardStatus;
+}) {
+        return explanation.length > 0 && cardStatus !== 'unchosen' ? (
                 <LikeExplanationUI>{explanation}</LikeExplanationUI>
         ) : (
                 <></>
@@ -46,7 +53,6 @@ function getOptionStatus({
 
         if (isCorrect && (showAnswersImmediately || isCompleted))
                 color = 'correct';
-
 
         return { isSelected, color };
 }
@@ -82,7 +88,6 @@ export function Option({
                 showAnswersImmediately,
                 isCompleted
         });
-
 
         return (
                 <LikeOptionUI
