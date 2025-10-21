@@ -95,21 +95,17 @@ function getClearOptionTextList(explicitCardText: string) {
         const resultOptions: string[] = [];
         let prevItemWasOptSymbol = false;
 
-
         for (let i = 1; i < optionsUnfiltered.length; i++) {
                 const prevItem = optionsUnfiltered[i - 1];
                 if (prevItem === '%%') {
                         const optWithRubbish = optionsUnfiltered[i];
 
-
                         const [option] = optWithRubbish.split(/&e|&s/);
-
 
                         resultOptions.push(option);
                         prevItemWasOptSymbol = false;
                 }
         }
-
 
         return resultOptions;
 }
@@ -188,6 +184,11 @@ export function getFilterRuleToDeleteCardsWithEmptyTitle(): DeleteCardsWithEmpty
                 if (anyCard.type === 'explicit') {
                         return anyCard.cardTitle.length > 0;
                 } else if (anyCard.type === 'short') {
+                        if (
+                                typeof anyCard.term === 'undefined' ||
+                                anyCard.definition === 'undefined'
+                        )
+                                return false;
                         return (
                                 anyCard.term.length > 0 &&
                                 anyCard.definition.length > 0

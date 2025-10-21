@@ -13,7 +13,7 @@ export default function LikeExplanationUI({
                         className='flex flex-col gap-2 p-3.5 rounded-lg bg-muted w-full'
                         onClick={onContainerClick}>
                         <h4 className='font-medium '>Explanation</h4>
-                        <div className='text-muted-foreground w-full [&>*]:w-full'>
+                        <div className='text-muted-foreground w-full [&>*]:w-full has-[>[data-visible=false]]:h-0'>
                                 {children}
                         </div>
                 </section>

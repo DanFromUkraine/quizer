@@ -13,14 +13,15 @@ export default function MainQuestionTitleUI({
         cardId: string;
 }) {
         return (
-                <Quoted variant='heading' className='heading-3'>
+                <Quoted variant='heading' className='heading-3 has-[:invalid]:bg-red-300'>
                         <ExtendableTextArea
                                 data-testid='questionTitle'
                                 value={value}
                                 name={`card-title-${cardId}`}
                                 placeholder='Enter text'
                                 onChange={onChange}
-                                className={clsx('w-full')}
+                                className={'w-full'}
+                                required
                         />
                 </Quoted>
         );

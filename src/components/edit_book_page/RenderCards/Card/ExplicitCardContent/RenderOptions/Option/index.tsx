@@ -64,16 +64,18 @@ function useSwipe({
 
                         if (currentX.current === 0) return;
 
+
+                        console.debug({diff})
                         if (
                                 diff >
                                 MAX_DRAG_WIDTH_PX -
-                                        (MAX_DRAG_WIDTH_PX / 20) * 100
+                                        (MAX_DRAG_WIDTH_PX / 100) * 20
                         ) {
                                 onRight();
                         } else if (
                                 diff <
                                 -MAX_DRAG_WIDTH_PX +
-                                        (MAX_DRAG_WIDTH_PX / 20) * 100
+                                        (MAX_DRAG_WIDTH_PX / 100) * 20
                         ) {
                                 onLeft();
                         }

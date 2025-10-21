@@ -5,7 +5,7 @@ import Explanation from '@/src/components/edit_book_page/RenderCards/Card/Explic
 export default function ExplicitCardContent() {
 
         return (
-                <section className='flex flex-col gap-2 explicitCard'>
+                <section className='flex flex-col gap-2 explicitCard '>
                         <QuestionTitle />
                         <RenderOptions />
                         <Explanation />

@@ -19,8 +19,9 @@ export default function TermOrDeterminationInput({
 
         return (
                 <section className='flex flex-col gap-2'>
-                        <Quoted variant='heading'>
+                        <Quoted variant='heading' className='has-[:invalid]:bg-red-300'>
                                 <input
+                                        required
                                         value={value}
                                         onChange={onChange}
                                         className='w-full'

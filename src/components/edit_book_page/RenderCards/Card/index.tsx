@@ -46,7 +46,7 @@ export default function Card({
         return (
                 <IndexContextProvider value={cardIndex}>
                         <CardPropsProvider cardType={cardType} cardId={cardId}>
-                                <section className='questionCard'>
+                                <section className='questionCard has-[:invalid]:bg-red-100'>
                                         <CardHeader />
                                         {content}
                                 </section>
