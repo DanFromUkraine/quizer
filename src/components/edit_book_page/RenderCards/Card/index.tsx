@@ -9,6 +9,7 @@ import CardHeader from '@/src/components/edit_book_page/RenderCards/Card/CardHea
 import { getCardType } from '@/src/utils/lists';
 import ExplicitCardContent from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent';
 import TermDeterminationContent from '@/src/components/edit_book_page/RenderCards/Card/TermDeterminationContent';
+import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 interface CardProps {
         cardId: string;
@@ -42,11 +43,12 @@ export default function Card({
                         <TermDeterminationContent />
                 );
 
-
         return (
                 <IndexContextProvider value={cardIndex}>
                         <CardPropsProvider cardType={cardType} cardId={cardId}>
-                                <section className='questionCard has-[:invalid]:bg-red-100'>
+                                <section
+                                        data-testid={EP_TEST_IDS.card.me}
+                                        className='questionCard has-[:invalid]:bg-red-100'>
                                         <CardHeader />
                                         {content}
                                 </section>

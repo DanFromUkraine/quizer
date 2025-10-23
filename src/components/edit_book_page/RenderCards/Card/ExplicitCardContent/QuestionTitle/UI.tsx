@@ -1,7 +1,7 @@
-import clsx from 'clsx';
 import { ChangeEventHandler } from 'react';
 import ExtendableTextArea from '@/src/components/general/ExtendableInput';
 import Quoted from '@/src/components/general/Quoted';
+import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function MainQuestionTitleUI({
         value,
@@ -13,9 +13,14 @@ export default function MainQuestionTitleUI({
         cardId: string;
 }) {
         return (
-                <Quoted variant='heading' className='heading-3 has-[:invalid]:bg-red-300'>
+                <Quoted
+                        variant='heading'
+                        className='heading-3 has-[:invalid]:bg-red-300'>
                         <ExtendableTextArea
-                                data-testid='questionTitle'
+                                testId={
+                                        EP_TEST_IDS.card.explicitCardContent
+                                                .titleInp
+                                }
                                 value={value}
                                 name={`card-title-${cardId}`}
                                 placeholder='Enter text'

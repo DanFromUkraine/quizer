@@ -8,6 +8,7 @@ import {
 } from '@/src/jotai/cardAtoms';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { useAtomCallback } from 'jotai/utils';
+import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 export const IndexContext = createContext<number>(0);
 
@@ -38,17 +39,19 @@ export function CardIndex() {
 export function DeleteCardButton() {
         const { cardId, cardType } = useCardProps();
 
-        const onClick = useAtomCallback(useCallback(async (_get, set) => {
-                if (cardType === 'explicit') {
-                        await set(deleteExplicitCardAtom, cardId);
-                } else {
-                        await set(deleteShortCardAtom, cardId);
-                }
-        }, []));
+        const onClick = useAtomCallback(
+                useCallback(async (_get, set) => {
+                        if (cardType === 'explicit') {
+                                await set(deleteExplicitCardAtom, cardId);
+                        } else {
+                                await set(deleteShortCardAtom, cardId);
+                        }
+                }, [])
+        );
 
         return (
                 <FaRegTrashAlt
-                        data-testid='remove-card-btn'
+                        data-testid={EP_TEST_IDS.card.deleteBtn}
                         className='text-xl text-questTextColor'
                         onClick={onClick}
                 />

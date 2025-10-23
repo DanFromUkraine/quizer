@@ -4,17 +4,19 @@ import { HrWrapper } from '@/src/components/general/Hr';
 export function ParamWithToggleUI({
         currState,
         setCurrState,
-        title
+        title,
+        testId
 }: {
         currState: boolean;
         setCurrState: (newVal: boolean) => void;
         title: string;
+        testId: string;
 }) {
         return (
                 <HrWrapper>
                         <section className='flex justify-between'>
                                 <h3 className='heading-3'>{title}:</h3>
-                                <InputSwitch {...{ currState, setCurrState }} />
+                                <InputSwitch {...{ currState, setCurrState, testId }} />
                         </section>
                 </HrWrapper>
         );

@@ -186,7 +186,7 @@ export function getFilterRuleToDeleteCardsWithEmptyTitle(): DeleteCardsWithEmpty
                 } else if (anyCard.type === 'short') {
                         if (
                                 typeof anyCard.term === 'undefined' ||
-                                anyCard.definition === 'undefined'
+                                typeof anyCard.definition === 'undefined'
                         )
                                 return false;
                         return (

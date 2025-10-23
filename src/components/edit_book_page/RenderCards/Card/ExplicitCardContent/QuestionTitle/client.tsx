@@ -9,6 +9,7 @@ import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
 import { useAtom } from 'jotai';
 import LikeSubtitleUI from '@/src/components/general/interfacesUI/subtitle';
+import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 export function MainQuestionTitle() {
         const { cardId } = useCardProps();
@@ -41,6 +42,10 @@ export function SubQuestionTitle() {
         return (
                 <LikeSubtitleUI>
                         <input
+                                data-testid={
+                                        EP_TEST_IDS.card.explicitCardContent
+                                                .subtitleInp
+                                }
                                 value={value}
                                 onChange={onChange}
                                 id={`subtitle-${cardId}`}

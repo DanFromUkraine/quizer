@@ -3,11 +3,13 @@
 import { MdEdit } from 'react-icons/md';
 import { useBookProps } from '@/src/components/books_page/RenderBooks/Book';
 import Link from 'next/link';
+import { BP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function EditButton() {
         const { id } = useBookProps();
         return (
                 <Link
+                        data-testid={BP_TEST_IDS.bookCard.editBookBtn}
                         href={`/edit?bookId=${id}`}
                         className='flex gap-1 items-center bg-amber-500 rounded-md p-1 hover:bg-amber-300 text-xs tracking-widest font-semibold duration-100 text-white'>
                         <span>EDIT</span>

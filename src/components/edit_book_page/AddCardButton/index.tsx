@@ -6,6 +6,7 @@ import {
         addEmptyTermShortCard
 } from '@/src/jotai/cardAtoms';
 import BtnWithShortcut from '@/src/components/general/ButtonWithShortcut';
+import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function AddCardButtons() {
         const addEmptyCard = useSetAtom(addEmptyExplicitCardAtom);
@@ -14,17 +15,19 @@ export default function AddCardButtons() {
         return (
                 <section className='mx-auto flex gap-2 max-[440px]:flex-col'>
                         <BtnWithShortcut
+                                testId={EP_TEST_IDS.newExpCardBtn}
                                 textContent='New Explicit Card'
                                 shortcutKeys={['Alt', 'j']}
                                 buttonType='button'
-                                onClick={addEmptyCard}
+                                onClickAction={addEmptyCard}
                         />
                         <BtnWithShortcut
+                                testId={EP_TEST_IDS.newShortCardBtn}
                                 textContent='New Short Card'
                                 className='bg-green-500 hover:bg-green-400'
                                 shortcutKeys={['Alt', 'l ']}
                                 buttonType={'button'}
-                                onClick={addEmptyShortCard}
+                                onClickAction={addEmptyShortCard}
                         />
                 </section>
         );

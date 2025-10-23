@@ -8,6 +8,7 @@ import OtherInfo from '@/src/components/books_page/RenderBooks/Book/OtherInfo';
 import Toolbar from '@/src/components/books_page/RenderBooks/Book/BookToolbar';
 import StudyButton from '@/src/components/books_page/RenderBooks/Book/StudyButton';
 import { createPropsProvider } from '@/src/utils/createPropsProvider';
+import { BP_TEST_IDS } from '@/src/constants/testIds';
 
 type BookProps = {
         bookTitle: string;
@@ -33,7 +34,7 @@ export default function BookItem({ id }: { id: string }) {
                                 description,
                                 id
                         }}>
-                        <div className='w-full flex flex-col h-fit rounded-normal overflow-hidden border p-6 border-lightGray'>
+                        <div data-testid={BP_TEST_IDS.bookCard.me} className='w-full flex flex-col h-fit rounded-normal overflow-hidden border p-6 border-lightGray'>
                                 <Toolbar />
                                 <BookTitle />
                                 <BookDescription />

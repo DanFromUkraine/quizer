@@ -1,6 +1,7 @@
 import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import IndexMarker from '@/src/components/general/IndexMarker';
+import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function CorrectnessMarketButtonUI({
         optionId,
@@ -14,7 +15,12 @@ export default function CorrectnessMarketButtonUI({
         defaultChecked: boolean;
 }) {
         return (
-                <label className='pointer-events-auto flex has-checked:bg-green-400 relative p-2 gap-2 justify-center items-center bg-gray-400  duration-150 max-[540px]:hidden'>
+                <label
+                        data-testid={
+                                EP_TEST_IDS.card.explicitCardContent.option
+                                        .changeIsCorrectBtn
+                        }
+                        className='pointer-events-auto flex has-checked:bg-green-400 relative p-2 gap-2 justify-center items-center bg-gray-400  duration-150 max-[540px]:hidden'>
                         <IndexMarker index={index} />
                         <input
                                 type='checkbox'
