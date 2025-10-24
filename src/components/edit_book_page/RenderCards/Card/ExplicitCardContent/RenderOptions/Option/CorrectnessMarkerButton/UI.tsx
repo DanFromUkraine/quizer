@@ -16,13 +16,14 @@ export default function CorrectnessMarketButtonUI({
 }) {
         return (
                 <label
-                        data-testid={
-                                EP_TEST_IDS.card.explicitCardContent.option
-                                        .changeIsCorrectBtn
-                        }
+
                         className='pointer-events-auto flex has-checked:bg-green-400 relative p-2 gap-2 justify-center items-center bg-gray-400  duration-150 max-[540px]:hidden'>
                         <IndexMarker index={index} />
                         <input
+                                data-testid={
+                                        EP_TEST_IDS.card.explicitCardContent.option
+                                                .changeIsCorrectCheckbox
+                                }
                                 type='checkbox'
                                 name={`option-checkbox-${optionId}`}
                                 className='absolute inset-0 opacity-0 z-20 w-full'

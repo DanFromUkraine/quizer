@@ -12,6 +12,7 @@ import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
 import { getOptionCorrectnessMarkerFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 import { IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { FaXmark } from 'react-icons/fa6';
+import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 interface OptionProps {
         optionId: string;
@@ -64,8 +65,7 @@ function useSwipe({
 
                         if (currentX.current === 0) return;
 
-
-                        console.debug({diff})
+                        console.debug({ diff });
                         if (
                                 diff >
                                 MAX_DRAG_WIDTH_PX -
@@ -142,14 +142,19 @@ export default function Option({ optionId, optionIndex }: OptionProps) {
 
         return (
                 <OptionPropsProvider {...{ optionIndex, optionId }}>
-                        <div className='optionContainer'>
+                        <div
+                                className='optionContainer'
+                                data-testid={
+                                        EP_TEST_IDS.card.explicitCardContent
+                                                .option.me
+                                }>
                                 <div
                                         data-iscorrect={!isOptionCorrect}
                                         className='beforeOptionMobile'>
                                         {!isOptionCorrect ? (
-                                                <IoCheckmarkCircleOutline className='flex text-3xl text-semibold text-white ml-5 my-auto'/>
+                                                <IoCheckmarkCircleOutline className='flex text-3xl text-semibold text-white ml-5 my-auto' />
                                         ) : (
-                                                <FaXmark className='flex text-2xl text-semibold text-white ml-5 my-auto'/>
+                                                <FaXmark className='flex text-2xl text-semibold text-white ml-5 my-auto' />
                                         )}
                                 </div>
                                 <div

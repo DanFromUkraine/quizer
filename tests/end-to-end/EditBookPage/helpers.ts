@@ -1,6 +1,10 @@
 import { BASE_DIALOG_TEST_IDS, EP_TEST_IDS } from '@/src/constants/testIds';
-import test, { expect, Page } from '@playwright/test';
-import { getSelector } from '@/tests/end-to-end/helpers';
+import test, { expect, Locator, Page } from '@playwright/test';
+import {
+        getAddElementInListWithSuccessExpectations,
+        getRemoveElFromTheListWithSuccessExpectations,
+        getSelector
+} from '@/tests/end-to-end/helpers';
 
 export const getBookTitleInp = getSelector(EP_TEST_IDS.bookTitleInp);
 export const getBookDescInp = getSelector(EP_TEST_IDS.bookDescInp);
@@ -22,6 +26,13 @@ export const getMainInpCardsAsTextDialog = getSelector(
 );
 export const getAllCards = (page: Page) =>
         getSelector(EP_TEST_IDS.card.me)(page).all();
+export const getCard = getSelector(EP_TEST_IDS.card.me);
+export const getExpCardContent = getSelector(
+        EP_TEST_IDS.card.explicitCardContent.me
+);
+export const getShortCardContent = getSelector(
+        EP_TEST_IDS.card.shortCardContent.me
+);
 export const getAllExpCardContentEls = (page: Page) =>
         getSelector(EP_TEST_IDS.card.explicitCardContent.me)(page).all();
 export const getAllShortCardContentEls = (page: Page) =>
@@ -35,11 +46,16 @@ export const getExpCardSubtitleInp = getSelector(
 export const getExpCardExplanationInp = getSelector(
         EP_TEST_IDS.card.explicitCardContent.explanationInp
 );
+export const getAllOptions = (page: Locator) =>
+        getSelector(EP_TEST_IDS.card.explicitCardContent.option.me)(page).all();
 export const getExpCardNewOptBtn = getSelector(
         EP_TEST_IDS.card.explicitCardContent.newOptionBtn
 );
-export const getOptChangeIsCorrectBtn = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.option.changeIsCorrectBtn
+export const getOption = getSelector(
+        EP_TEST_IDS.card.explicitCardContent.option.me
+);
+export const getOptChangeIsCorrectCheckbox = getSelector(
+        EP_TEST_IDS.card.explicitCardContent.option.changeIsCorrectCheckbox
 );
 export const getOptTitle = getSelector(
         EP_TEST_IDS.card.explicitCardContent.option.title
@@ -75,52 +91,32 @@ export async function closeEditCardsAsTextDialog(page: Page) {
         });
 }
 
-export async function addNewExpCard(page: Page) {
-        await test.step('add new empty explicit card', async () => {
-                const initialCardsNum = await getAllCards(page);
-                const addNewExpCard = getAddNewExpCardBtn(page);
-                await addNewExpCard.click();
-                const newCardsNum = await getAllCards(page);
-                expect(newCardsNum.length - 1).toBe(initialCardsNum.length);
-        });
-}
+export const addNewExpCardStep = getAddElementInListWithSuccessExpectations({
+        testStepTitle: 'Add new empty explicit card',
+        getAddButton: getAddNewExpCardBtn,
+        getItemLocator: getCard
+});
 
-export async function addNewShortCard(page: Page) {
-        await test.step('add new empty short card', async () => {
-                const initialCardsNum = await getAllCards(page);
-                const addNewShortCardBtn = getAddNewShortCardBtn(page);
-                await addNewShortCardBtn.click();
-                const newCardsNum = await getAllCards(page);
-                expect(newCardsNum.length - 1).toBe(initialCardsNum.length);
-        });
-}
+export const addNewShortCardStep = getAddElementInListWithSuccessExpectations({
+        testStepTitle: 'Add new empty short card',
+        getAddButton: getAddNewShortCardBtn,
+        getItemLocator: getCard
+});
 
-export async function deleteCard(page: Page) {
-        await test.step('delete card (explicit | short)', async () => {
-                const initialCardsNum = await getAllCards(page);
-                const deleteCardBtn = getDeleteCardBtn(page);
-                await deleteCardBtn.click();
-                const newCardsNum = await getAllCards(page);
-                expect(newCardsNum.length + 1).toBe(initialCardsNum.length);
-        });
-}
+export const deleteCardStep = getRemoveElFromTheListWithSuccessExpectations({
+        testStepTitle: 'Delete card (explicit | short)',
+        getDeleteBtnEl: getDeleteCardBtn,
+        getItemLocator: getCard
+});
 
-export async function addNewOption({
-        page,
-        optInd,
-                                           expCardInd
-}: {
-        page: Page;
-        optInd: number;
-        expCardInd: number;
-}) {
-        
-}
+export const deleteOptionStep = getRemoveElFromTheListWithSuccessExpectations({
+        testStepTitle: "Delete explicit card's option",
+        getDeleteBtnEl: getOptDeleteBtn,
+        getItemLocator: getCard
+});
 
-export async function deleteOption({
-        page,
-        optInd
-}: {
-        page: Page;
-        optInd: number;
-}) {}
+export const addNewOptionStep = getAddElementInListWithSuccessExpectations({
+        testStepTitle: 'Add new option in explicit card',
+        getAddButton: getExpCardNewOptBtn,
+        getItemLocator: getCard
+});

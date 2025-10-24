@@ -53,7 +53,8 @@ export const EP_TEST_IDS = {
                         titleInp: 'edit explicit card --> title INPUT', 
                         subtitleInp: 'Edit explicit card --> subtitle INPUT', 
                         option: {
-                                changeIsCorrectBtn:
+                                me: 'OPTION',
+                                changeIsCorrectCheckbox:
                                         'Edit explicit card --> edit option --> change is option correct BUTTON', 
                                 title: 'Edit explicitCard --> edit option --> option title INPUT', 
                                 deleteBtn: 'Edit explicit card --> delete option BUTTON' 
