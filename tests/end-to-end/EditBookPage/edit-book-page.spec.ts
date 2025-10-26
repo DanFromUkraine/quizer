@@ -3,6 +3,8 @@ import { addNewBook, editBook } from '@/tests/end-to-end/BooksPage/helpers';
 import {
         addNewExpCardStep,
         addNewOptionStep,
+        addNewShortCardStep,
+        deleteCardStep,
         deleteOptionStep,
         getBookDescInp,
         getBookTitleInp,
@@ -12,7 +14,10 @@ import {
         getExpCardTitleInp,
         getOptChangeIsCorrectCheckbox,
         getOption,
-        getOptTitle
+        getOptTitle,
+        getShortCardContent,
+        getShortCardDefinitionInp,
+        getShortCardTermInp
 } from '@/tests/end-to-end/EditBookPage/helpers';
 import {
         expectInpToBeResilientToReloads,
@@ -26,6 +31,7 @@ test.describe('Set of checks for edit book page', () => {
                 'Create empty book and go to edit page of it',
                 async ({ page }) => {
                         await page.goto('/');
+                        await page.waitForFunction(() => 'indexedDB' in window);
                         await addNewBook(page);
                         await editBook({ page, bookInd: 0 });
                 }
@@ -88,9 +94,9 @@ test.describe('Set of checks for edit book page', () => {
                 const NUM_OF_OPTS_TO_CREATE = 10;
 
                 await addNewExpCardStep(page);
-                const expCardContent = getExpCardContent(page);
+
                 for (let i = 0; i < NUM_OF_OPTS_TO_CREATE; i++) {
-                        await addNewOptionStep(expCardContent);
+                        await addNewOptionStep(getExpCardContent(page));
                 }
                 await multiPageReloadStep(page);
 
@@ -106,14 +112,13 @@ test.describe('Set of checks for edit book page', () => {
                 const NUM_OF_OPTS_TO_DELETE = 5;
 
                 await addNewExpCardStep(page);
-                const expCardContent = getExpCardContent(page);
                 for (let i = 0; i < NUM_OF_OPTS_TO_CREATE; i++) {
-                        await addNewOptionStep(expCardContent);
+                        await addNewOptionStep(getExpCardContent(page));
                 }
                 await multiPageReloadStep(page);
 
                 for (let i = 0; i < NUM_OF_OPTS_TO_DELETE; i++) {
-                        await deleteOptionStep(expCardContent, i);
+                        await deleteOptionStep(getExpCardContent(page), i);
                 }
                 await multiPageReloadStep(page);
 
@@ -125,19 +130,16 @@ test.describe('Set of checks for edit book page', () => {
         test('Option update should be resilient to page reload', async ({
                 page
         }) => {
-                const expCardEl =
-                        await test.step('Create exp card', async () => {
-                                await addNewExpCardStep(page);
-                                return getExpCardContent(page);
-                        });
+                await addNewExpCardStep(page);
 
                 for (const { isCorrect, title } of UPDATE_OPTION_DATA) {
-                        await addNewOptionStep(expCardEl);
+                        await addNewOptionStep(getExpCardContent(page));
 
                         const { optTitleInpEl, optIsCorrectCheckboxEl } =
                                 await test.step('extract fields from option', () => {
-                                        const currOption =
-                                                getOption(expCardEl).last();
+                                        const currOption = getOption(
+                                                getExpCardContent(page)
+                                        ).last();
                                         const optTitleInpEl =
                                                 getOptTitle(currOption);
                                         const optIsCorrectCheckboxEl =
@@ -161,12 +163,16 @@ test.describe('Set of checks for edit book page', () => {
                 }
                 await multiPageReloadStep(page);
 
-                const allOptions = await getOption(expCardEl).all();
-                expect(allOptions.length).toBe(UPDATE_OPTION_DATA.length);
+                await expect(getOption(getExpCardContent(page))).toHaveCount(
+                        UPDATE_OPTION_DATA.length
+                );
 
-                for (let i = 0; i <= UPDATE_OPTION_DATA.length; i++) {
+                for (let i = 0; i < UPDATE_OPTION_DATA.length; i++) {
+                        console.log(getExpCardContent(page));
                         const expectedData = UPDATE_OPTION_DATA[i];
-                        const currOptionEl = allOptions[i];
+                        const currOptionEl = getOption(
+                                getExpCardContent(page)
+                        ).nth(i);
                         const optTitleInpEl = getOptTitle(currOptionEl);
                         const isCorrectCheckboxEl =
                                 getOptChangeIsCorrectCheckbox(currOptionEl);
@@ -174,17 +180,95 @@ test.describe('Set of checks for edit book page', () => {
                         await expect(optTitleInpEl).toHaveValue(
                                 expectedData.title
                         );
-                        expect(isCorrectCheckboxEl.isChecked()).toBe(
+                        expect(await isCorrectCheckboxEl.isChecked()).toBe(
                                 expectedData.isCorrect
                         );
                 }
         });
 
+        test('Short card term input should be resilient to page reload', async ({
+                page
+        }) => {
+                await addNewShortCardStep(page);
+                const termInpEl = getShortCardTermInp(page);
+                await expectInpToBeResilientToReloads({
+                        page,
+                        input: termInpEl
+                });
+        });
+
+        test('Short card definition input should be resilient to page reload', async ({
+                page
+        }) => {
+                await addNewShortCardStep(page);
+                const definitionInpEl = getShortCardDefinitionInp(page);
+                await expectInpToBeResilientToReloads({
+                        page,
+                        input: definitionInpEl
+                });
+        });
+
+        test('It should be possible to delete short card. Changes should be resilient to page reloads', async ({
+                page
+        }) => {
+                const SHORT_CARDS_TO_ADD = 10;
+                const SHORT_CARDS_TO_DELETE = 5;
+
+                await test.step(`Add ${SHORT_CARDS_TO_ADD} short cards`, async () => {
+                        for (let i = 0; i < SHORT_CARDS_TO_ADD; i++) {
+                                await addNewShortCardStep(page);
+                        }
+                });
+
+                await expect(getShortCardContent(page)).toHaveCount(
+                        SHORT_CARDS_TO_ADD
+                );
+
+                await test.step(`Delete ${SHORT_CARDS_TO_DELETE} short cards`, async () => {
+                        for (let i = 0; i < SHORT_CARDS_TO_DELETE; i++) {
+                                await deleteCardStep(page, i);
+                        }
+                });
+
+                await multiPageReloadStep(page);
+
+                await expect(getShortCardContent(page)).toHaveCount(
+                        SHORT_CARDS_TO_ADD - SHORT_CARDS_TO_DELETE
+                );
+        });
+
+        test('It should be possible to delete explicit card. Changes should be resilient to page reloads', async ({
+                page
+        }) => {
+                const EXPLICIT_CARDS_TO_ADD = 10;
+                const EXPLICIT_CARDS_TO_DELETE = 5;
+
+                await test.step(`Add ${EXPLICIT_CARDS_TO_ADD} explicit cards`, async () => {
+                        for (let i = 0; i < EXPLICIT_CARDS_TO_ADD; i++) {
+                                await addNewExpCardStep(page);
+                        }
+                });
+
+                await expect(getExpCardContent(page)).toHaveCount(
+                        EXPLICIT_CARDS_TO_ADD
+                );
+
+                await test.step(`Delete ${EXPLICIT_CARDS_TO_DELETE} explicit cards`, async () => {
+                        for (let i = 0; i < EXPLICIT_CARDS_TO_DELETE; i++) {
+                                await deleteCardStep(page, i);
+                        }
+                });
+
+                await multiPageReloadStep(page);
+
+                await expect(getExpCardContent(page)).toHaveCount(
+                        EXPLICIT_CARDS_TO_ADD - EXPLICIT_CARDS_TO_DELETE
+                );
+        });
+
         /* create exp card
 
-        *   resilience update option
-        -update
-        - check option content
+
         *   resilience change option is correct
         - update
         - check option correctness

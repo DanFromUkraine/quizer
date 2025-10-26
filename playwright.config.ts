@@ -1,5 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
+
+
 export default defineConfig({
         testDir: 'tests/end-to-end',
         fullyParallel: true,
@@ -14,5 +16,4 @@ export default defineConfig({
                 stdout: 'pipe',
                 stderr: 'pipe'
         },
-        timeout: 30_000
 });

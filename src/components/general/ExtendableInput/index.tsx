@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { RefObject, TextareaHTMLAttributes } from 'react';
 
 export default function ExtendableTextArea({
+        testId,
         ...props
 }: TextareaHTMLAttributes<HTMLTextAreaElement> & {
         ref?: RefObject<HTMLTextAreaElement | null>;
@@ -13,7 +14,7 @@ export default function ExtendableTextArea({
                 <textarea
                         {...props}
                         ref={props?.ref}
-                        data-testId={props.testId}
+                        data-testid={testId}
                         className={clsx(
                                 'resize-none field-sizing-content focus-within:outline-none whitespace-pre-wrap break-normal [overflow-wrap:anywhere]',
                                 props.className

@@ -3,6 +3,7 @@ import { EXAMPLE_STR } from '@/tests/end-to-end/EditBookPage/constants';
 
 export function getSelector(testId: string) {
         return (locator: Page | Locator) => {
+                if (typeof locator === "undefined") throw new Error(`Locator ${locator} for testid ${testId} is undefined.`);
                 return locator.getByTestId(testId);
         };
 }
@@ -14,6 +15,7 @@ export async function multiPageReloadStep(page: Page) {
                 await page.reload();
                 await page.reload();
                 await page.reload();
+                await page.waitForFunction(() => 'indexedDB' in window);
         });
 }
 
@@ -50,6 +52,7 @@ export function getAddElementInListWithSuccessExpectations({
                                 await getItemLocator(scope).count();
                         const actionButton = getAddButton(scope);
                         await actionButton.click();
+
                         await expect(getItemLocator(scope)).toHaveCount(
                                 initialCount + 1
                         );
@@ -71,6 +74,8 @@ export function getRemoveElFromTheListWithSuccessExpectations({
                                 await getItemLocator(scope).all();
                         const targetEl = initialElsInScope[elIndexToDelete];
                         const deleteBtnEl = getDeleteBtnEl(targetEl);
+
+
 
                         await deleteBtnEl.click();
                         await expect(getItemLocator(scope)).toHaveCount(

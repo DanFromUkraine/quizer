@@ -1,6 +1,6 @@
 import { getSelector } from '@/tests/end-to-end/helpers';
 import { BP_TEST_IDS } from '@/src/constants/testIds';
-import { Page } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 
 export const getNewBookBtn = getSelector(BP_TEST_IDS.addNewBookBtn);
 export const getAllBookCards = (page: Page) =>
@@ -43,6 +43,7 @@ export const getNewStoryDialogSubmitBtn = getSelector(
 
 export async function addNewBook(page: Page) {
         const newBookBtn = getNewBookBtn(page);
+        await expect(newBookBtn).toBeVisible();
         await newBookBtn.click();
 }
 

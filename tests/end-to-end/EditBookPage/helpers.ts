@@ -112,11 +112,11 @@ export const deleteCardStep = getRemoveElFromTheListWithSuccessExpectations({
 export const deleteOptionStep = getRemoveElFromTheListWithSuccessExpectations({
         testStepTitle: "Delete explicit card's option",
         getDeleteBtnEl: getOptDeleteBtn,
-        getItemLocator: getCard
+        getItemLocator: getOption
 });
 
 export const addNewOptionStep = getAddElementInListWithSuccessExpectations({
         testStepTitle: 'Add new option in explicit card',
         getAddButton: getExpCardNewOptBtn,
-        getItemLocator: getCard
+        getItemLocator: getOption
 });
