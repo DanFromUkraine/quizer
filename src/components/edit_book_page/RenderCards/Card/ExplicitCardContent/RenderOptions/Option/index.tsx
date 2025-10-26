@@ -164,7 +164,11 @@ export default function Option({ optionId, optionIndex }: OptionProps) {
                                                         : 'incorrect'
                                         }
                                         ref={optionRef}
-                                        data-testid='container-option'
+                                        data-testid={
+                                                EP_TEST_IDS.card
+                                                        .explicitCardContent
+                                                        .option.mainOptBody.me
+                                        }
                                         className='option group '>
                                         <CorrectnessMarketButton />
                                         <OptionTitle />

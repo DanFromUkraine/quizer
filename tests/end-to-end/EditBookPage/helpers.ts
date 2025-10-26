@@ -5,6 +5,7 @@ import {
         getRemoveElFromTheListWithSuccessExpectations,
         getSelector
 } from '@/tests/end-to-end/helpers';
+import { addNewBook, editBook } from '@/tests/end-to-end/BooksPage/helpers';
 
 export const getBookTitleInp = getSelector(EP_TEST_IDS.bookTitleInp);
 export const getBookDescInp = getSelector(EP_TEST_IDS.bookDescInp);
@@ -51,17 +52,25 @@ export const getAllOptions = (page: Locator) =>
 export const getExpCardNewOptBtn = getSelector(
         EP_TEST_IDS.card.explicitCardContent.newOptionBtn
 );
-export const getOption = getSelector(
+export const getOptionContainer = getSelector(
         EP_TEST_IDS.card.explicitCardContent.option.me
 );
+export const getMainOptionBody = getSelector(
+        EP_TEST_IDS.card.explicitCardContent.option.mainOptBody.me
+);
 export const getOptChangeIsCorrectCheckbox = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.option.changeIsCorrectCheckbox
+        EP_TEST_IDS.card.explicitCardContent.option.mainOptBody
+                .changeIsCorrectCheckbox
+);
+export const getOptCheckIsCorrectCheckbox_MobileOnly = getSelector(
+        EP_TEST_IDS.card.explicitCardContent.option
+                .changeIsCorrectCheckbox_MobileOnly
 );
 export const getOptTitle = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.option.title
+        EP_TEST_IDS.card.explicitCardContent.option.mainOptBody.titleInp
 );
 export const getOptDeleteBtn = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.option.deleteBtn
+        EP_TEST_IDS.card.explicitCardContent.option.mainOptBody.deleteBtn
 );
 export const getShortCardTermInp = getSelector(
         EP_TEST_IDS.card.shortCardContent.termInp
@@ -112,11 +121,21 @@ export const deleteCardStep = getRemoveElFromTheListWithSuccessExpectations({
 export const deleteOptionStep = getRemoveElFromTheListWithSuccessExpectations({
         testStepTitle: "Delete explicit card's option",
         getDeleteBtnEl: getOptDeleteBtn,
-        getItemLocator: getOption
+        getItemLocator: getOptionContainer
 });
 
 export const addNewOptionStep = getAddElementInListWithSuccessExpectations({
         testStepTitle: 'Add new option in explicit card',
         getAddButton: getExpCardNewOptBtn,
-        getItemLocator: getOption
+        getItemLocator: getOptionContainer
 });
+
+export async function goToEditPage({ page }: { page: Page }) {
+        await page.goto('/');
+        await Promise.all([
+                page.waitForFunction(() => 'indexedDB' in window),
+                page.waitForLoadState('domcontentloaded')
+        ]);
+        await addNewBook(page);
+        await editBook({ page, bookInd: 0 });
+}

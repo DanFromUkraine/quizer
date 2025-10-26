@@ -9,7 +9,7 @@ export default function DeleteOptionButtonUI({
                 <div
                         data-testid={
                                 EP_TEST_IDS.card.explicitCardContent.option
-                                        .deleteBtn
+                                        .mainOptBody.deleteBtn
                         }
                         className='pointer-events-auto bg-questTextColor h-12 min-w-8 flex justify-center items-center hover:bg-red-500 duration-150 max-[540px]:hidden'
                         onClick={onClick}>

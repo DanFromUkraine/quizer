@@ -1,5 +1,4 @@
 import test, { expect } from '@playwright/test';
-import { addNewBook, editBook } from '@/tests/end-to-end/BooksPage/helpers';
 import {
         addNewExpCardStep,
         addNewOptionStep,
@@ -12,16 +11,19 @@ import {
         getExpCardExplanationInp,
         getExpCardSubtitleInp,
         getExpCardTitleInp,
+        getMainOptionBody,
         getOptChangeIsCorrectCheckbox,
-        getOption,
+        getOptionContainer,
         getOptTitle,
         getShortCardContent,
         getShortCardDefinitionInp,
-        getShortCardTermInp
+        getShortCardTermInp,
+        goToEditPage
 } from '@/tests/end-to-end/EditBookPage/helpers';
 import {
         expectInpToBeResilientToReloads,
         multiPageReloadStep,
+        swipeOption,
         typeInTextAndExpectSuccess
 } from '@/tests/end-to-end/helpers';
 import { UPDATE_OPTION_DATA } from '@/tests/end-to-end/EditBookPage/constants';
@@ -29,12 +31,7 @@ import { UPDATE_OPTION_DATA } from '@/tests/end-to-end/EditBookPage/constants';
 test.describe('Set of checks for edit book page', () => {
         test.beforeEach(
                 'Create empty book and go to edit page of it',
-                async ({ page }) => {
-                        await page.goto('/');
-                        await page.waitForFunction(() => 'indexedDB' in window);
-                        await addNewBook(page);
-                        await editBook({ page, bookInd: 0 });
-                }
+                goToEditPage
         );
 
         test('Book title should be resilient to reloads', async ({ page }) => {
@@ -98,11 +95,11 @@ test.describe('Set of checks for edit book page', () => {
                 for (let i = 0; i < NUM_OF_OPTS_TO_CREATE; i++) {
                         await addNewOptionStep(getExpCardContent(page));
                 }
-                await multiPageReloadStep(page);
+                await multiPageReloadStep({ page, timesNum: 3 });
 
-                await expect(getOption(getExpCardContent(page))).toHaveCount(
-                        NUM_OF_OPTS_TO_CREATE
-                );
+                await expect(
+                        getOptionContainer(getExpCardContent(page))
+                ).toHaveCount(NUM_OF_OPTS_TO_CREATE);
         });
 
         test('Inserting new options and deleting some of them should be resilient to updates', async ({
@@ -112,19 +109,37 @@ test.describe('Set of checks for edit book page', () => {
                 const NUM_OF_OPTS_TO_DELETE = 5;
 
                 await addNewExpCardStep(page);
-                for (let i = 0; i < NUM_OF_OPTS_TO_CREATE; i++) {
-                        await addNewOptionStep(getExpCardContent(page));
-                }
-                await multiPageReloadStep(page);
 
-                for (let i = 0; i < NUM_OF_OPTS_TO_DELETE; i++) {
-                        await deleteOptionStep(getExpCardContent(page), i);
-                }
-                await multiPageReloadStep(page);
+                await test.step(`Add ${NUM_OF_OPTS_TO_CREATE} options to explicit card and reload page`, async () => {
+                        for (let i = 0; i < NUM_OF_OPTS_TO_CREATE; i++) {
+                                await addNewOptionStep(getExpCardContent(page));
+                        }
+                        await multiPageReloadStep({ page, timesNum: 3 });
+                });
 
-                await expect(getOption(getExpCardContent(page))).toHaveCount(
-                        NUM_OF_OPTS_TO_CREATE - NUM_OF_OPTS_TO_DELETE
-                );
+                await test.step(`Remove ${NUM_OF_OPTS_TO_DELETE} options from explicit card`, async () => {
+                        for (let i = 0; i < NUM_OF_OPTS_TO_DELETE; i++) {
+                                const expCardContent = getExpCardContent(page);
+                                await expect(expCardContent).toBeVisible();
+                                const optsCount =
+                                        await getOptionContainer(
+                                                expCardContent
+                                        ).count();
+                                expect(optsCount).toBeGreaterThan(0);
+
+                                await deleteOptionStep(expCardContent, 0);
+                        }
+                });
+
+                await test.step(`After reload changes should have been saved, and after such manipulations only ${NUM_OF_OPTS_TO_CREATE - NUM_OF_OPTS_TO_DELETE} should have left`, async () => {
+                        await multiPageReloadStep({ page, timesNum: 3 });
+
+                        await expect(
+                                getOptionContainer(getExpCardContent(page))
+                        ).toHaveCount(
+                                NUM_OF_OPTS_TO_CREATE - NUM_OF_OPTS_TO_DELETE
+                        );
+                });
         });
 
         test('Option update should be resilient to page reload', async ({
@@ -137,7 +152,7 @@ test.describe('Set of checks for edit book page', () => {
 
                         const { optTitleInpEl, optIsCorrectCheckboxEl } =
                                 await test.step('extract fields from option', () => {
-                                        const currOption = getOption(
+                                        const currOption = getOptionContainer(
                                                 getExpCardContent(page)
                                         ).last();
                                         const optTitleInpEl =
@@ -161,16 +176,16 @@ test.describe('Set of checks for edit book page', () => {
                                         await optIsCorrectCheckboxEl.click();
                         });
                 }
-                await multiPageReloadStep(page);
+                await multiPageReloadStep({ page, timesNum: 3 });
 
-                await expect(getOption(getExpCardContent(page))).toHaveCount(
-                        UPDATE_OPTION_DATA.length
-                );
+                await expect(
+                        getOptionContainer(getExpCardContent(page))
+                ).toHaveCount(UPDATE_OPTION_DATA.length);
 
                 for (let i = 0; i < UPDATE_OPTION_DATA.length; i++) {
                         console.log(getExpCardContent(page));
                         const expectedData = UPDATE_OPTION_DATA[i];
-                        const currOptionEl = getOption(
+                        const currOptionEl = getOptionContainer(
                                 getExpCardContent(page)
                         ).nth(i);
                         const optTitleInpEl = getOptTitle(currOptionEl);
@@ -230,7 +245,7 @@ test.describe('Set of checks for edit book page', () => {
                         }
                 });
 
-                await multiPageReloadStep(page);
+                await multiPageReloadStep({ page, timesNum: 3 });
 
                 await expect(getShortCardContent(page)).toHaveCount(
                         SHORT_CARDS_TO_ADD - SHORT_CARDS_TO_DELETE
@@ -259,27 +274,60 @@ test.describe('Set of checks for edit book page', () => {
                         }
                 });
 
-                await multiPageReloadStep(page);
+                await multiPageReloadStep({ page, timesNum: 3 });
 
                 await expect(getExpCardContent(page)).toHaveCount(
                         EXPLICIT_CARDS_TO_ADD - EXPLICIT_CARDS_TO_DELETE
                 );
         });
 
-        /* create exp card
+        test('Checkmark option with swipe', async ({ page }) => {
+                await page.setViewportSize({ width: 390, height: 844 });
 
+                const TIMES_TO_CHECK = 6;
 
-        *   resilience change option is correct
-        - update
-        - check option correctness
-        *   option --> change state mobile
-        -update
-        - check option correctness
-        * option --> delete option mobile
-        -update
-        - check num of options
-        *  */
+                await addNewExpCardStep(page);
+                await addNewOptionStep(getExpCardContent(page));
+                const option = getOptionContainer(getExpCardContent(page));
 
-        /* delete exp card
-         *  */
+                const swipeLeft = async () =>
+                        await swipeOption({
+                                page,
+                                optionEl: option,
+                                direction: 'left'
+                        });
+
+                let prevIsChecked = false;
+
+                for (let i = 0; i < TIMES_TO_CHECK; i++) {
+                        await test.step('Swipe option left', async () => {
+                                await swipeLeft();
+                                prevIsChecked = !prevIsChecked;
+                        });
+
+                        await test.step('Expect changes to be applied', async () => {
+                                await expect(
+                                        getMainOptionBody(page)
+                                ).toHaveAttribute(
+                                        'data-status',
+                                        prevIsChecked ? 'correct' : 'incorrect'
+                                );
+                        });
+
+                        await test.step('Expect changes to be resilient to page reloads', async () => {
+                                await multiPageReloadStep({
+                                        page,
+                                        timesNum: 2
+                                });
+
+                                await expect(
+                                        getMainOptionBody(page)
+                                ).toHaveAttribute(
+                                        'data-status',
+                                        prevIsChecked ? 'correct' : 'incorrect'
+                                );
+                        });
+                }
+        });
 });
+

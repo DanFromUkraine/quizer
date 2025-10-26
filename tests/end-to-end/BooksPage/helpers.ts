@@ -3,6 +3,7 @@ import { BP_TEST_IDS } from '@/src/constants/testIds';
 import { expect, Page } from '@playwright/test';
 
 export const getNewBookBtn = getSelector(BP_TEST_IDS.addNewBookBtn);
+export const getBookCard = getSelector(BP_TEST_IDS.bookCard.me);
 export const getAllBookCards = (page: Page) =>
         getSelector(BP_TEST_IDS.bookCard.me)(page).all();
 export const getBookEditBtn = getSelector(BP_TEST_IDS.bookCard.editBookBtn);
@@ -42,9 +43,12 @@ export const getNewStoryDialogSubmitBtn = getSelector(
 );
 
 export async function addNewBook(page: Page) {
+        await getNewBookBtn(page).waitFor({ state: 'visible' });
         const newBookBtn = getNewBookBtn(page);
+        console.log({ newBookBtn });
         await expect(newBookBtn).toBeVisible();
         await newBookBtn.click();
+        console.log('clicked -- should have added new book');
 }
 
 export async function editBook({
@@ -54,7 +58,8 @@ export async function editBook({
         page: Page;
         bookInd: number;
 }) {
-        const allBooks = await getAllBookCards(page);
+        await getBookCard(page).waitFor({ state: 'visible' });
+        const allBooks = await getBookCard(page).all();
         const book = allBooks[bookInd];
         const editBookBtn = getBookEditBtn(book);
         await editBookBtn.click();
