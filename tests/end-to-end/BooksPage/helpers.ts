@@ -43,7 +43,7 @@ export const getNewStoryDialogSubmitBtn = getSelector(
 );
 
 export async function addNewBook(page: Page) {
-        await getNewBookBtn(page).waitFor({ state: 'visible' });
+        await expect(getNewBookBtn(page)).toBeVisible({ timeout: 10_000 });
         const newBookBtn = getNewBookBtn(page);
         console.log({ newBookBtn });
         await expect(newBookBtn).toBeVisible();
@@ -58,7 +58,7 @@ export async function editBook({
         page: Page;
         bookInd: number;
 }) {
-        await getBookCard(page).waitFor({ state: 'visible' });
+        await expect(getBookCard(page)).toBeVisible({ timeout: 10_000 });
         const allBooks = await getBookCard(page).all();
         const book = allBooks[bookInd];
         const editBookBtn = getBookEditBtn(book);

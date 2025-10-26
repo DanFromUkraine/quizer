@@ -1,4 +1,4 @@
-import test, { expect } from '@playwright/test';
+import test, { expect, Locator } from '@playwright/test';
 import {
         addNewExpCardStep,
         addNewOptionStep,
@@ -119,8 +119,10 @@ test.describe('Set of checks for edit book page', () => {
 
                 await test.step(`Remove ${NUM_OF_OPTS_TO_DELETE} options from explicit card`, async () => {
                         for (let i = 0; i < NUM_OF_OPTS_TO_DELETE; i++) {
+                                await getExpCardContent(page).waitFor({
+                                        state: 'visible'
+                                });
                                 const expCardContent = getExpCardContent(page);
-                                await expect(expCardContent).toBeVisible();
                                 const optsCount =
                                         await getOptionContainer(
                                                 expCardContent
@@ -138,6 +140,102 @@ test.describe('Set of checks for edit book page', () => {
                                 getOptionContainer(getExpCardContent(page))
                         ).toHaveCount(
                                 NUM_OF_OPTS_TO_CREATE - NUM_OF_OPTS_TO_DELETE
+                        );
+                });
+        });
+
+        test('Checkmark option with swipe', async ({ page }) => {
+                await page.setViewportSize({ width: 390, height: 844 });
+
+                const TIMES_TO_CHECK = 3;
+
+                await addNewExpCardStep(page);
+                await addNewOptionStep(getExpCardContent(page));
+                const option = getOptionContainer(getExpCardContent(page));
+
+                const swipeLeft = async () =>
+                        await swipeOption({
+                                page,
+                                optionEl: option,
+                                direction: 'left'
+                        });
+
+                let prevIsChecked = false;
+
+                for (let i = 0; i < TIMES_TO_CHECK; i++) {
+                        await test.step('Swipe option left', async () => {
+                                await swipeLeft();
+                                prevIsChecked = !prevIsChecked;
+                        });
+
+                        await test.step('Expect changes to be applied', async () => {
+                                await expect(
+                                        getMainOptionBody(page)
+                                ).toHaveAttribute(
+                                        'data-status',
+                                        prevIsChecked ? 'correct' : 'incorrect'
+                                );
+                        });
+
+                        await test.step('Expect changes to be resilient to page reloads', async () => {
+                                await multiPageReloadStep({
+                                        page,
+                                        timesNum: 2
+                                });
+
+                                await expect(
+                                        getMainOptionBody(page)
+                                ).toHaveAttribute(
+                                        'data-status',
+                                        prevIsChecked ? 'correct' : 'incorrect'
+                                );
+                        });
+                }
+        });
+
+        test('Delete option with swipe', async ({ page }) => {
+                await page.setViewportSize({ width: 390, height: 844 });
+                const NUM_OF_OPTIONS_TO_ADD = 10;
+                const NUM_OF_OPTIONS_TO_DELETE = 5;
+
+                const swipeOptRight = async (optionEl: Locator) =>
+                        swipeOption({ optionEl, page, direction: 'right' });
+
+                await test.step('Add new explicit card', async () => {
+                        await addNewExpCardStep(page);
+                });
+                await test.step(`Add ${NUM_OF_OPTIONS_TO_ADD} new options to explicit card and reload page`, async () => {
+                        for (let i = 0; i < NUM_OF_OPTIONS_TO_ADD; i++) {
+                                await addNewOptionStep(getExpCardContent(page));
+                        }
+                        await multiPageReloadStep({ page, timesNum: 3 });
+                });
+
+                await test.step(`Remove ${NUM_OF_OPTIONS_TO_DELETE} options from explicit card`, async () => {
+                        for (let i = 0; i < NUM_OF_OPTIONS_TO_DELETE; i++) {
+                                await getMainOptionBody(page).last().waitFor();
+                                expect(
+                                        await getMainOptionBody(page).count()
+                                ).toBeGreaterThan(0);
+
+                                const firstOption =
+                                        getMainOptionBody(page).first();
+                                await swipeOptRight(firstOption);
+                        }
+                });
+
+                await test.step('Expect changes to be saved after page reload', async () => {
+                        await multiPageReloadStep({ page, timesNum: 3 });
+                        await getExpCardContent(page).waitFor({
+                                state: 'visible'
+                        });
+                        const expCardContentEl = getExpCardContent(page);
+                        expect(
+                                await getMainOptionBody(
+                                        expCardContentEl
+                                ).count()
+                        ).toBe(
+                                NUM_OF_OPTIONS_TO_ADD - NUM_OF_OPTIONS_TO_DELETE
                         );
                 });
         });
@@ -281,53 +379,5 @@ test.describe('Set of checks for edit book page', () => {
                 );
         });
 
-        test('Checkmark option with swipe', async ({ page }) => {
-                await page.setViewportSize({ width: 390, height: 844 });
 
-                const TIMES_TO_CHECK = 6;
-
-                await addNewExpCardStep(page);
-                await addNewOptionStep(getExpCardContent(page));
-                const option = getOptionContainer(getExpCardContent(page));
-
-                const swipeLeft = async () =>
-                        await swipeOption({
-                                page,
-                                optionEl: option,
-                                direction: 'left'
-                        });
-
-                let prevIsChecked = false;
-
-                for (let i = 0; i < TIMES_TO_CHECK; i++) {
-                        await test.step('Swipe option left', async () => {
-                                await swipeLeft();
-                                prevIsChecked = !prevIsChecked;
-                        });
-
-                        await test.step('Expect changes to be applied', async () => {
-                                await expect(
-                                        getMainOptionBody(page)
-                                ).toHaveAttribute(
-                                        'data-status',
-                                        prevIsChecked ? 'correct' : 'incorrect'
-                                );
-                        });
-
-                        await test.step('Expect changes to be resilient to page reloads', async () => {
-                                await multiPageReloadStep({
-                                        page,
-                                        timesNum: 2
-                                });
-
-                                await expect(
-                                        getMainOptionBody(page)
-                                ).toHaveAttribute(
-                                        'data-status',
-                                        prevIsChecked ? 'correct' : 'incorrect'
-                                );
-                        });
-                }
-        });
 });
-
