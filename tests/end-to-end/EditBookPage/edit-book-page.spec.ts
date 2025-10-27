@@ -11,6 +11,7 @@ import {
         getExpCardExplanationInp,
         getExpCardSubtitleInp,
         getExpCardTitleInp,
+        getMainInpCardsAsTextDialog,
         getMainOptionBody,
         getOptChangeIsCorrectCheckbox,
         getOptionContainer,
@@ -18,7 +19,8 @@ import {
         getShortCardContent,
         getShortCardDefinitionInp,
         getShortCardTermInp,
-        goToEditPage
+        goToEditPage,
+        openEditCardsAsTextDialog
 } from '@/tests/end-to-end/EditBookPage/helpers';
 import {
         expectInpToBeResilientToReloads,
@@ -26,7 +28,11 @@ import {
         swipeOption,
         typeInTextAndExpectSuccess
 } from '@/tests/end-to-end/helpers';
-import { UPDATE_OPTION_DATA } from '@/tests/end-to-end/EditBookPage/constants';
+import {
+        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
+        UPDATE_OPTION_DATA
+} from '@/tests/end-to-end/EditBookPage/constants';
+import { getAnyCardsAsTextAtomHelper } from '@/src/utils/cardsAsText';
 
 test.describe('Set of checks for edit book page', () => {
         test.beforeEach(
@@ -380,4 +386,34 @@ test.describe('Set of checks for edit book page', () => {
         });
 
 
+        test.skip('User should be able to create explicit card via text with all data', async({page}) => {
+                await openEditCardsAsTextDialog(page);
+                const mainTitleInpEl = getMainInpCardsAsTextDialog(page);
+                const TEST_TEXT__MIXED_MODE = getAnyCardsAsTextAtomHelper(EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE)
+                typeInTextAndExpectSuccess(mainTitleInpEl, )
+        })
+
+        test.skip('User should be able to create explicit card via text with title only', async({page}) => {
+
+        })
+
+        test.skip('User should be able to create short card via text with all data', async({page}) => {
+
+        })
+
+        test.skip('User should not see an error message, if short card created via text is invalid', async({page}) => {
+
+        })
+
+        test.skip('User should be able to edit explicit card via text', async() => {
+
+        })
+
+        test.skip('User should be able to edit short card via text', async() => {
+
+        })
+
+        test.skip('User should be able to delete both explicit and short cards via text', async() => {
+
+        })
 });
