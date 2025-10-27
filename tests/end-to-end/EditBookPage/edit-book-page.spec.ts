@@ -3,15 +3,17 @@ import {
         addNewExpCardStep,
         addNewOptionStep,
         addNewShortCardStep,
+        checkStepIfAllCardMatchesExpectations,
         deleteCardStep,
         deleteOptionStep,
         getBookDescInp,
         getBookTitleInp,
+        getCardsAsText_TEST_ONLY__MIX_MODE,
+        getCardsAsText_TEST_ONLY__SHORT_MODE,
         getExpCardContent,
         getExpCardExplanationInp,
         getExpCardSubtitleInp,
         getExpCardTitleInp,
-        getMainInpCardsAsTextDialog,
         getMainOptionBody,
         getOptChangeIsCorrectCheckbox,
         getOptionContainer,
@@ -19,8 +21,9 @@ import {
         getShortCardContent,
         getShortCardDefinitionInp,
         getShortCardTermInp,
+        getStepToOpenCardsAsTextDialogAndEdit,
         goToEditPage,
-        openEditCardsAsTextDialog
+        pickCardsOfShortType
 } from '@/tests/end-to-end/EditBookPage/helpers';
 import {
         expectInpToBeResilientToReloads,
@@ -30,9 +33,9 @@ import {
 } from '@/tests/end-to-end/helpers';
 import {
         EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
+        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__SHORT_CARDS_ONLY,
         UPDATE_OPTION_DATA
 } from '@/tests/end-to-end/EditBookPage/constants';
-import { getAnyCardsAsTextAtomHelper } from '@/src/utils/cardsAsText';
 
 test.describe('Set of checks for edit book page', () => {
         test.beforeEach(
@@ -385,35 +388,66 @@ test.describe('Set of checks for edit book page', () => {
                 );
         });
 
+        test.only('User should be able to create explicit card via text with all data', async ({
+                page
+        }) => {
+                await test.step(
+                        'Open Edit cards as text modal and type in example text',
+                        getStepToOpenCardsAsTextDialogAndEdit({
+                                page,
+                                inputText: getCardsAsText_TEST_ONLY__MIX_MODE(
+                                        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                                ),
+                                mode: 'mixed'
+                        })
+                );
 
-        test.skip('User should be able to create explicit card via text with all data', async({page}) => {
-                await openEditCardsAsTextDialog(page);
-                const mainTitleInpEl = getMainInpCardsAsTextDialog(page);
-                const TEST_TEXT__MIXED_MODE = getAnyCardsAsTextAtomHelper(EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE)
-                typeInTextAndExpectSuccess(mainTitleInpEl, )
-        })
+                await checkStepIfAllCardMatchesExpectations({
+                        page,
+                        expectedData:
+                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                });
 
-        test.skip('User should be able to create explicit card via text with title only', async({page}) => {
+                await test.step(
+                        'Create more cards in "short cards only" mode',
+                        getStepToOpenCardsAsTextDialogAndEdit({
+                                page,
+                                inputText: getCardsAsText_TEST_ONLY__SHORT_MODE(
+                                        [
+                                                ...pickCardsOfShortType(
+                                                        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                                                ),
+                                                ...EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__SHORT_CARDS_ONLY
+                                        ]
+                                ),
+                                mode: 'short-cards-only'
+                        })
+                );
 
-        })
+                await checkStepIfAllCardMatchesExpectations({
+                        page,
+                        expectedData: [
+                                ...EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
+                                ...EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__SHORT_CARDS_ONLY
+                        ]
+                });
+        });
 
-        test.skip('User should be able to create short card via text with all data', async({page}) => {
+        test.skip('User should be able to create explicit card via text with title only', async ({
+                page
+        }) => {});
 
-        })
+        test.skip('User should be able to create short card via text with all data', async ({
+                page
+        }) => {});
 
-        test.skip('User should not see an error message, if short card created via text is invalid', async({page}) => {
+        test.skip('User should not see an error message, if short card created via text is invalid', async ({
+                page
+        }) => {});
 
-        })
+        test.skip('User should be able to edit explicit card via text', async () => {});
 
-        test.skip('User should be able to edit explicit card via text', async() => {
+        test.skip('User should be able to edit short card via text', async () => {});
 
-        })
-
-        test.skip('User should be able to edit short card via text', async() => {
-
-        })
-
-        test.skip('User should be able to delete both explicit and short cards via text', async() => {
-
-        })
+        test.skip('User should be able to delete both explicit and short cards via text', async () => {});
 });

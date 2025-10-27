@@ -41,8 +41,9 @@ export const EP_TEST_IDS = {
         openDialogBtnCardsAsText: 'open dialog BUTTON to edit cards as text',
         cardsAsTextDialog: {
                 me: 'EDIT CARDS AS TEXT DIALOG CONTAINER',
-                mixedModeBtn: 'Choose mixed mode button',
-                shortCardsOnlyModeBtn: 'Choose short cards only mode button',
+                saveAndExitBtn: 'Save and exit BUTTON',
+                mixedModeBtn: 'Choose mixed mode BUTTON',
+                shortCardsOnlyModeBtn: 'Choose short cards only mode BUTTON',
                 mainInp: 'Edit cards as text dialog --> main INPUT'
         },
         card: {
