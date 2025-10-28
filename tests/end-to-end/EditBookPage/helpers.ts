@@ -144,6 +144,7 @@ export const addNewOptionStep = getAddElementInListWithSuccessExpectations({
 });
 
 export async function goToEditPage({ page }: { page: Page }) {
+
         await page.goto('/');
         await Promise.all([
                 page.waitForFunction(() => 'indexedDB' in window),
@@ -374,6 +375,7 @@ export function pickCardsOfShortType(
 }
 
 export async function expectTrimmedValue(locator: Locator, expected: string) {
+        await expect(locator).toBeVisible();
         const v = await locator.inputValue();
         expect(v.trim()).toBe(expected);
 }

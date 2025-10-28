@@ -43,12 +43,33 @@ export const getNewStoryDialogSubmitBtn = getSelector(
 );
 
 export async function addNewBook(page: Page) {
-        await expect(getNewBookBtn(page)).toBeVisible({ timeout: 10_000 });
-        const newBookBtn = getNewBookBtn(page);
-        console.log({ newBookBtn });
-        await expect(newBookBtn).toBeVisible();
-        await newBookBtn.click();
-        console.log('clicked -- should have added new book');
+        try {
+                const bookCardsStartCount = await getBookCard(page).count();
+                await expect(getNewBookBtn(page)).toBeVisible({
+                        timeout: 10_000
+                });
+                const newBookBtn = getNewBookBtn(page);
+                await expect(newBookBtn).toBeVisible();
+                await newBookBtn.click();
+                await expect(getBookCard(page)).toHaveCount(
+                        bookCardsStartCount + 1,
+                        {
+                                timeout: 20_000
+                        }
+                );
+        } catch (e) {
+                await page.screenshot({ path: 'problem1.png' });
+
+
+                const nextJsProblemBtn = page.locator('.nextjs-toast');
+                await nextJsProblemBtn.click();
+
+                await page.screenshot({ path: 'problem2.png' });
+
+
+
+                throw e;
+        }
 }
 
 export async function editBook({

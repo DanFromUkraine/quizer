@@ -19,7 +19,7 @@
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "playwright-test": "playwright test --workers=8",
+    "playwright-test": "playwright test",
     "playwright-ui": "playwright test --ui"
   },
   "dependencies": {

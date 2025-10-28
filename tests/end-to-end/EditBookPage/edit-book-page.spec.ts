@@ -34,6 +34,7 @@ import {
 import {
         EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
         EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__SHORT_CARDS_ONLY,
+        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT_WITH_INVALID__MIX_MODE,
         EXP_CARDS_TEXT_TITLE_ONLY,
         UPDATE_OPTION_DATA
 } from '@/tests/end-to-end/EditBookPage/constants';
@@ -389,7 +390,7 @@ test.describe('Set of checks for edit book page', () => {
                 );
         });
 
-        test('User should be able to create explicit card via text with all data', async ({
+        test('User should be able to create explicit and short cards via text with all data (In mixed mode)', async ({
                 page
         }) => {
                 await test.step(
@@ -409,8 +410,20 @@ test.describe('Set of checks for edit book page', () => {
                                 EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
                 });
 
+                await multiPageReloadStep({ page, timesNum: 2 });
+
+                await checkStepIfAllCardMatchesExpectations({
+                        page,
+                        expectedData:
+                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                });
+        });
+
+        test('User should be able to create short cards via text (In short cards only mode)', async ({
+                page
+        }) => {
                 await test.step(
-                        'Create more cards in "short cards only" mode',
+                        'Create some cards in short cards only mode',
                         getStepToOpenCardsAsTextDialogAndEdit({
                                 page,
                                 inputText: getCardsAsText_TEST_ONLY__SHORT_MODE(
@@ -428,7 +441,21 @@ test.describe('Set of checks for edit book page', () => {
                 await checkStepIfAllCardMatchesExpectations({
                         page,
                         expectedData: [
-                                ...EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
+                                ...pickCardsOfShortType(
+                                        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                                ),
+                                ...EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__SHORT_CARDS_ONLY
+                        ]
+                });
+
+                await multiPageReloadStep({ page, timesNum: 2 });
+
+                await checkStepIfAllCardMatchesExpectations({
+                        page,
+                        expectedData: [
+                                ...pickCardsOfShortType(
+                                        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                                ),
                                 ...EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__SHORT_CARDS_ONLY
                         ]
                 });
@@ -450,15 +477,43 @@ test.describe('Set of checks for edit book page', () => {
                         page,
                         expectedData: EXP_CARDS_TEXT_TITLE_ONLY.expectedData
                 });
+
+                await multiPageReloadStep({ page, timesNum: 2 });
+
+                await checkStepIfAllCardMatchesExpectations({
+                        page,
+                        expectedData: EXP_CARDS_TEXT_TITLE_ONLY.expectedData
+                });
         });
 
-        test.only('User should not see an error message, if short card created via text is invalid', async ({
+        test('User should not see an error message, if short card created via text is invalid (In mixed mode)', async ({
                 page
         }) => {
-                // await test.step('Open Edit cards text modal and type in example text', getStepToOpenCardsAsTextDialogAndEdit())
+                await test.step(
+                        'Open Edit cards text modal and type in example text',
+                        getStepToOpenCardsAsTextDialogAndEdit({
+                                page,
+                                inputText: EXAMPLE_DATA_FOR_CARDS_FROM_TEXT_WITH_INVALID__MIX_MODE.inputText,
+                                mode: 'mixed'
+                        })
+                );
+
+                await checkStepIfAllCardMatchesExpectations({
+                        page,
+                        expectedData:
+                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT_WITH_INVALID__MIX_MODE.expectedData
+                });
+
+                await multiPageReloadStep({ page, timesNum: 2 });
+
+                await checkStepIfAllCardMatchesExpectations({
+                        page,
+                        expectedData:
+                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT_WITH_INVALID__MIX_MODE.expectedData
+                });
         });
 
-        test.skip('User should be able to edit explicit card via text', async () => {});
+        test('User should be able to edit explicit and short cards via text (Mixed mode)', async () => {});
 
         test.skip('User should be able to edit short card via text', async () => {});
 
