@@ -58,7 +58,7 @@ export async function editBook({
         page: Page;
         bookInd: number;
 }) {
-        await expect(getBookCard(page)).toBeVisible({ timeout: 10_000 });
+        await expect(getBookCard(page)).toBeVisible();
         const allBooks = await getBookCard(page).all();
         const book = allBooks[bookInd];
         const editBookBtn = getBookEditBtn(book);

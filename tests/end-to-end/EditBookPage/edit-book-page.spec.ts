@@ -34,6 +34,7 @@ import {
 import {
         EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
         EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__SHORT_CARDS_ONLY,
+        EXP_CARDS_TEXT_TITLE_ONLY,
         UPDATE_OPTION_DATA
 } from '@/tests/end-to-end/EditBookPage/constants';
 
@@ -388,11 +389,11 @@ test.describe('Set of checks for edit book page', () => {
                 );
         });
 
-        test.only('User should be able to create explicit card via text with all data', async ({
+        test('User should be able to create explicit card via text with all data', async ({
                 page
         }) => {
                 await test.step(
-                        'Open Edit cards as text modal and type in example text',
+                        'Open Edit cards text modal and type in example text',
                         getStepToOpenCardsAsTextDialogAndEdit({
                                 page,
                                 inputText: getCardsAsText_TEST_ONLY__MIX_MODE(
@@ -433,17 +434,29 @@ test.describe('Set of checks for edit book page', () => {
                 });
         });
 
-        test.skip('User should be able to create explicit card via text with title only', async ({
+        test('User should be able to create explicit card via text with title only', async ({
                 page
-        }) => {});
+        }) => {
+                await test.step(
+                        'Open Edit cards text modal and type in example text',
+                        getStepToOpenCardsAsTextDialogAndEdit({
+                                page,
+                                inputText: EXP_CARDS_TEXT_TITLE_ONLY.inputText,
+                                mode: 'mixed'
+                        })
+                );
 
-        test.skip('User should be able to create short card via text with all data', async ({
-                page
-        }) => {});
+                await checkStepIfAllCardMatchesExpectations({
+                        page,
+                        expectedData: EXP_CARDS_TEXT_TITLE_ONLY.expectedData
+                });
+        });
 
-        test.skip('User should not see an error message, if short card created via text is invalid', async ({
+        test.only('User should not see an error message, if short card created via text is invalid', async ({
                 page
-        }) => {});
+        }) => {
+                // await test.step('Open Edit cards text modal and type in example text', getStepToOpenCardsAsTextDialogAndEdit())
+        });
 
         test.skip('User should be able to edit explicit card via text', async () => {});
 

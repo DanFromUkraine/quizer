@@ -137,3 +137,58 @@ export const EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__SHORT_CARDS_ONLY: TestShortCardVi
                         definition: '(6) Definition for such card'
                 }
         ];
+
+export const EXP_CARDS_TEXT_TITLE_ONLY: {
+        inputText: string;
+        expectedData: TestExplicitCardViaText[];
+} = {
+        inputText: '&& Card 1 && card 2 && card 3',
+        expectedData: [
+                {
+                        type: 'explicit',
+                        title: 'Card 1',
+                        subtitle: '',
+                        explanation: '',
+                        options: []
+                },
+                {
+                        type: 'explicit',
+                        title: 'card 2',
+                        subtitle: '',
+                        explanation: '',
+                        options: []
+                },
+                {
+                        type: 'explicit',
+                        title: 'card 3',
+                        subtitle: '',
+                        explanation: '',
+                        options: []
+                }
+        ]
+};
+
+export const EXAMPLE_DATA_FOR_CARDS_FROM_TEXT_WITH_INVALID__MIX_MODE: {
+        inputText: string;
+        expectedData: TestShortCardViaText[];
+} = {
+        inputText: `
+        @@ - definition for invalid term
+        @@ invalid term, where no definition
+        @@ correct term - correct definition -*&#@
+        @@ - incorrect definition one more time
+        @@ correct term 22 - correct definition 2222!)
+        `,
+        expectedData: [
+                {
+                        type: 'short',
+                        term: 'correct term',
+                        definition: 'correct definition -*&#@'
+                },
+                {
+                        type: 'short',
+                        term: 'correct term 22',
+                        definition: 'correct definition 2222!)'
+                }
+        ]
+};
