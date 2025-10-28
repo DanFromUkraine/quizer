@@ -24,6 +24,7 @@ import {
         getOptTitle,
         getShortCardContent,
         getShortCardDefinitionInp,
+        getShortCardsOnlyModeCardsAsText,
         getShortCardTermInp,
         getStepToOpenCardsAsTextDialogAndEdit,
         goToEditPage,
@@ -560,7 +561,7 @@ test.describe('Set of checks for edit book page', () => {
                 });
         });
 
-        test.only('If user creates new cards with regular UI, text in Cards as text modal should be updated (Mix mode)', async ({
+        test('If user creates new cards with regular UI, text in Cards as text modal should be updated (Mix mode)', async ({
                 page
         }) => {
                 const exampleData =
@@ -588,6 +589,50 @@ test.describe('Set of checks for edit book page', () => {
                                         normalizeForCompare(
                                                 getCardsAsText_TEST_ONLY__MIX_MODE(
                                                         EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                                                )
+                                        )
+                                )
+                        );
+
+                        expect(clearInpVal).toBe(clearExpVal);
+                });
+        });
+
+        test.only('If user creates new cards with regular UI, text in Cards as text modal should be updated (short cards only mode)', async ({
+                page
+        }) => {
+                const exampleData =
+                        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE;
+                await createEmptyCards({ page, exampleData });
+                await checkIfNumOfCardsIsEnough({
+                        page,
+                        expectedCount: exampleData.length
+                });
+                await fillDataInCardsStep({ page, exampleData });
+                await openEditCardsAsTextDialogStep(page);
+
+                await test.step('Expect text in Edit cards as text modal to be an equivalent to what user created with regular UI', async () => {
+                        const switchModeBtn =
+                                getShortCardsOnlyModeCardsAsText(page);
+                        await switchModeBtn.click();
+
+                        const mainCardsAsTextInpEl =
+                                getMainInpCardsAsTextDialog(page);
+
+                        const actualValue =
+                                await mainCardsAsTextInpEl.inputValue();
+                        const clearInpVal = deleteSpaces(
+                                getValCleanFromSpecSigns(
+                                        normalizeForCompare(actualValue)
+                                )
+                        );
+                        const clearExpVal = deleteSpaces(
+                                getValCleanFromSpecSigns(
+                                        normalizeForCompare(
+                                                getCardsAsText_TEST_ONLY__SHORT_MODE(
+                                                        pickCardsOfShortType(
+                                                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                                                        )
                                                 )
                                         )
                                 )
