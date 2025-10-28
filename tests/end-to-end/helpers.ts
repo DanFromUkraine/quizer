@@ -204,3 +204,7 @@ async function cdpSwipe({
                 throw err;
         }
 }
+
+export function deleteSpaces(targetStr: string) {
+        return targetStr.replace(' ', '');
+}

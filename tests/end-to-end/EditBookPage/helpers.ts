@@ -95,7 +95,7 @@ export const getDeleteCardBtn = getSelector(EP_TEST_IDS.card.deleteBtn);
 export const getAddNewExpCardBtn = getSelector(EP_TEST_IDS.newExpCardBtn);
 export const getAddNewShortCardBtn = getSelector(EP_TEST_IDS.newShortCardBtn);
 
-export async function openEditCardsAsTextDialog(page: Page) {
+export async function openEditCardsAsTextDialogStep(page: Page) {
         await test.step('open edit cards as text dialog', async () => {
                 const openDialogBtn = getBtnOpenDialogCardsAsText(page);
                 await openDialogBtn.click();
@@ -144,7 +144,6 @@ export const addNewOptionStep = getAddElementInListWithSuccessExpectations({
 });
 
 export async function goToEditPage({ page }: { page: Page }) {
-
         await page.goto('/');
         await Promise.all([
                 page.waitForFunction(() => 'indexedDB' in window),
@@ -208,7 +207,7 @@ export function getStepToOpenCardsAsTextDialogAndEdit({
         page: Page;
 }) {
         return async () => {
-                await openEditCardsAsTextDialog(page);
+                await openEditCardsAsTextDialogStep(page);
                 const mainTitleInpEl = getMainInpCardsAsTextDialog(page);
                 const saveAndCloseBtn =
                         getSaveAndExitBtnDialogCardsAsText(page);
@@ -303,7 +302,7 @@ export async function checkStepExpCardToHaveSuchVals({
         });
 }
 
-export async function checkMatchOfCardTypes({
+export async function checkMatchOfCardTypesStep({
         cardEl,
         expectedData
 }: {
@@ -327,7 +326,7 @@ export async function checkIfCardFromTextMatchesWhatWeExpect({
         expectedData: TestExplicitCardViaText | TestShortCardViaText;
 }) {
         await test.step('Check if card created from text matches the data we actually typed in', async () => {
-                await checkMatchOfCardTypes({
+                await checkMatchOfCardTypesStep({
                         cardEl,
                         expectedData
                 });
@@ -378,4 +377,223 @@ export async function expectTrimmedValue(locator: Locator, expected: string) {
         await expect(locator).toBeVisible();
         const v = await locator.inputValue();
         expect(v.trim()).toBe(expected);
+}
+
+export async function markOptionAsCorrectIfSo({
+        optionEl,
+        isCorrect
+}: {
+        optionEl: Locator;
+        isCorrect: boolean;
+}) {
+        if (isCorrect) {
+                await test.step('Mark option as correct', async () => {
+                        const optionCorrectnessCheckbox =
+                                getOptChangeIsCorrectCheckbox(optionEl);
+                        await optionCorrectnessCheckbox.click();
+                });
+        }
+}
+
+export async function fillDataInOptionStep({
+        optionBodyEl,
+        optionTitle,
+        isCorrect
+}: {
+        optionBodyEl: Locator;
+        optionTitle: string;
+        isCorrect: boolean;
+}) {
+        await typeInTextAndExpectSuccess(
+                getOptTitle(optionBodyEl),
+                optionTitle
+        );
+
+        await markOptionAsCorrectIfSo({
+                isCorrect: isCorrect,
+                optionEl: optionBodyEl
+        });
+}
+
+async function createEmptyOptionsStep({
+        numOfOptsToCreate,
+        cardEl
+}: {
+        numOfOptsToCreate: number;
+        cardEl: Locator;
+}) {
+        await test.step('create empty options', async () => {
+                for (let i = 0; i < numOfOptsToCreate; i++) {
+                        const addOptButton = getExpCardNewOptBtn(cardEl);
+                        await addOptButton.click();
+                }
+        });
+}
+
+async function checkIfTheresEnoughOfOps({
+        cardEl,
+        expectedCount
+}: {
+        cardEl: Locator;
+        expectedCount: number;
+}) {
+        await test.step('Expect num of options to correspond to example options list length', async () => {
+                await expect(getOptionContainer(cardEl)).toHaveCount(
+                        expectedCount
+                );
+        });
+}
+
+export async function createAndFillDataInManyOptionsStep({
+        cardEl,
+        options
+}: {
+        cardEl: Locator;
+        options: TestOptionViaText[];
+}) {
+        await test.step('Fill data in options from example', async () => {
+                const exampleOptions = options;
+
+                await createEmptyOptionsStep({
+                        cardEl,
+                        numOfOptsToCreate: exampleOptions.length
+                });
+
+                await checkIfTheresEnoughOfOps({
+                        cardEl,
+                        expectedCount: exampleOptions.length
+                });
+
+                await test.step('Fill data in option inputs', async () => {
+                        for (let i = 0; i < exampleOptions.length; i++) {
+                                await fillDataInOptionStep({
+                                        optionBodyEl:
+                                                getMainOptionBody(cardEl).nth(
+                                                        i
+                                                ),
+                                        ...exampleOptions[i]
+                                });
+                        }
+                });
+        });
+}
+
+export async function fillDataInExpCardStep({
+        cardEl,
+        expCardExpectedData
+}: {
+        cardEl: Locator;
+        expCardExpectedData: TestExplicitCardViaText;
+}) {
+        await test.step('Fill data in explicit card', async () => {
+                await typeInTextAndExpectSuccess(
+                        getExpCardTitleInp(cardEl),
+                        expCardExpectedData.title
+                );
+                await typeInTextAndExpectSuccess(
+                        getExpCardSubtitleInp(cardEl),
+                        expCardExpectedData.subtitle
+                );
+                await typeInTextAndExpectSuccess(
+                        getExpCardExplanationInp(cardEl),
+                        expCardExpectedData.explanation
+                );
+
+                await createAndFillDataInManyOptionsStep({
+                        cardEl: cardEl,
+                        options: expCardExpectedData.options
+                });
+        });
+}
+
+export async function fillDataInShortCardStep({
+        cardEl,
+        shortCardExpectedData
+}: {
+        cardEl: Locator;
+        shortCardExpectedData: TestShortCardViaText;
+}) {
+        await test.step('Fill data in short card', async () => {
+                await typeInTextAndExpectSuccess(
+                        getShortCardTermInp(cardEl),
+                        shortCardExpectedData.term
+                );
+                await typeInTextAndExpectSuccess(
+                        getShortCardDefinitionInp(cardEl),
+                        shortCardExpectedData.definition
+                );
+        });
+}
+
+export async function fillDataInCardsStep({
+        page,
+        exampleData
+}: {
+        exampleData: (TestExplicitCardViaText | TestShortCardViaText)[];
+        page: Page;
+}) {
+        await test.step('Fill data in cards', async () => {
+                for (let i = 0; i < exampleData.length; i++) {
+                        const currCardEl = getCard(page).nth(i);
+                        const currExData = exampleData[i];
+
+                        await checkMatchOfCardTypesStep({
+                                cardEl: currCardEl,
+                                expectedData: currExData
+                        });
+
+                        if (currExData.type === 'explicit') {
+                                await fillDataInExpCardStep({
+                                        cardEl: currCardEl,
+                                        expCardExpectedData: currExData
+                                });
+                        } else {
+                                await fillDataInShortCardStep({
+                                        cardEl: currCardEl,
+                                        shortCardExpectedData: currExData
+                                });
+                        }
+                }
+        });
+}
+
+export async function createEmptyCards({
+        page,
+        exampleData
+}: {
+        exampleData: (TestExplicitCardViaText | TestShortCardViaText)[];
+        page: Page;
+}) {
+        await test.step('Create empty cards', async () => {
+                for (const exData of exampleData) {
+                        if (exData.type === 'explicit') {
+                                await addNewExpCardStep(page);
+                        } else {
+                                await addNewShortCardStep(page);
+                        }
+                }
+        });
+}
+
+export async function checkIfNumOfCardsIsEnough({
+        page,
+        expectedCount
+}: {
+        page: Page;
+        expectedCount: number;
+}) {
+        await test.step('Num of empty cards should correspond to the length of example array', async () => {
+                await expect(getCard(page)).toHaveCount(expectedCount);
+        });
+}
+
+export function normalizeForCompare(s: string) {
+        return s
+                // замінити non-breaking space та інші Unicode пробіли на звичайний пробіл
+                .replace(/[\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]/g, ' ')
+                // видалити zero-width символи
+                .replace(/[\u200B\u200C\u200D\uFEFF]/g, '')
+                // звести будь-які послідовності whitespace (нові рядки, таби, пробіли) до одного пробілу
+                .replace(/\s+/g, ' ')
+                .trim();
 }

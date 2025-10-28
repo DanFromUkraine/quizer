@@ -132,7 +132,7 @@ export function getProcessedExplicitCard(
         };
 }
 
-function getValCleanFromSpecSigns(val: string) {
+export function getValCleanFromSpecSigns(val: string) {
         return val.replaceAll(/(@@)|(&&)|(\n)|(\t)/g, '').trim();
 }
 

@@ -3,9 +3,12 @@ import {
         addNewExpCardStep,
         addNewOptionStep,
         addNewShortCardStep,
+        checkIfNumOfCardsIsEnough,
         checkStepIfAllCardsMatchExpectations,
+        createEmptyCards,
         deleteCardStep,
         deleteOptionStep,
+        fillDataInCardsStep,
         getBookDescInp,
         getBookTitleInp,
         getCardsAsText_TEST_ONLY__MIX_MODE,
@@ -14,6 +17,7 @@ import {
         getExpCardExplanationInp,
         getExpCardSubtitleInp,
         getExpCardTitleInp,
+        getMainInpCardsAsTextDialog,
         getMainOptionBody,
         getOptChangeIsCorrectCheckbox,
         getOptionContainer,
@@ -23,9 +27,12 @@ import {
         getShortCardTermInp,
         getStepToOpenCardsAsTextDialogAndEdit,
         goToEditPage,
+        normalizeForCompare,
+        openEditCardsAsTextDialogStep,
         pickCardsOfShortType
 } from '@/tests/end-to-end/EditBookPage/helpers';
 import {
+        deleteSpaces,
         expectInpToBeResilientToReloads,
         multiPageReloadStep,
         swipeOption,
@@ -39,6 +46,7 @@ import {
         EXP_CARDS_TEXT_TITLE_ONLY,
         UPDATE_OPTION_DATA
 } from '@/tests/end-to-end/EditBookPage/constants';
+import { getValCleanFromSpecSigns } from '@/src/utils/cardsAsText/helpers';
 
 test.describe('Set of checks for edit book page', () => {
         test.beforeEach(
@@ -514,7 +522,7 @@ test.describe('Set of checks for edit book page', () => {
                 });
         });
 
-        test.only('User should be able to edit explicit and short cards via text (Mixed mode)', async ({
+        test('User should be able to edit explicit and short cards via text (Mixed mode)', async ({
                 page
         }) => {
                 await test.step(
@@ -552,7 +560,42 @@ test.describe('Set of checks for edit book page', () => {
                 });
         });
 
-        test.skip('If user creates new cards with regular UI, text in Cards as text modal should be updated', async () => {});
+        test.only('If user creates new cards with regular UI, text in Cards as text modal should be updated (Mix mode)', async ({
+                page
+        }) => {
+                const exampleData =
+                        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE;
+                await createEmptyCards({ page, exampleData });
+                await checkIfNumOfCardsIsEnough({
+                        page,
+                        expectedCount: exampleData.length
+                });
+                await fillDataInCardsStep({ page, exampleData });
+                await openEditCardsAsTextDialogStep(page);
+                await test.step('Expect text in Edit cards as text modal to be an equivalent to what user created with regular UI', async () => {
+                        const mainCardsAsTextInpEl =
+                                getMainInpCardsAsTextDialog(page);
+
+                        const actualValue =
+                                await mainCardsAsTextInpEl.inputValue();
+                        const clearInpVal = deleteSpaces(
+                                getValCleanFromSpecSigns(
+                                        normalizeForCompare(actualValue)
+                                )
+                        );
+                        const clearExpVal = deleteSpaces(
+                                getValCleanFromSpecSigns(
+                                        normalizeForCompare(
+                                                getCardsAsText_TEST_ONLY__MIX_MODE(
+                                                        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                                                )
+                                        )
+                                )
+                        );
+
+                        expect(clearInpVal).toBe(clearExpVal);
+                });
+        });
 
         test.skip('User should be able to edit short card via text', async () => {});
 
