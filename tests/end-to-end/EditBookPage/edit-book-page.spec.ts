@@ -3,7 +3,7 @@ import {
         addNewExpCardStep,
         addNewOptionStep,
         addNewShortCardStep,
-        checkStepIfAllCardMatchesExpectations,
+        checkStepIfAllCardsMatchExpectations,
         deleteCardStep,
         deleteOptionStep,
         getBookDescInp,
@@ -35,6 +35,7 @@ import {
         EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
         EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__SHORT_CARDS_ONLY,
         EXAMPLE_DATA_FOR_CARDS_FROM_TEXT_WITH_INVALID__MIX_MODE,
+        EXAMPLE_DATA_FOR_UPDATE_CARDS_FROM_TEXT__MIXED_MODE,
         EXP_CARDS_TEXT_TITLE_ONLY,
         UPDATE_OPTION_DATA
 } from '@/tests/end-to-end/EditBookPage/constants';
@@ -404,7 +405,7 @@ test.describe('Set of checks for edit book page', () => {
                         })
                 );
 
-                await checkStepIfAllCardMatchesExpectations({
+                await checkStepIfAllCardsMatchExpectations({
                         page,
                         expectedData:
                                 EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
@@ -412,7 +413,7 @@ test.describe('Set of checks for edit book page', () => {
 
                 await multiPageReloadStep({ page, timesNum: 2 });
 
-                await checkStepIfAllCardMatchesExpectations({
+                await checkStepIfAllCardsMatchExpectations({
                         page,
                         expectedData:
                                 EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
@@ -438,7 +439,7 @@ test.describe('Set of checks for edit book page', () => {
                         })
                 );
 
-                await checkStepIfAllCardMatchesExpectations({
+                await checkStepIfAllCardsMatchExpectations({
                         page,
                         expectedData: [
                                 ...pickCardsOfShortType(
@@ -450,7 +451,7 @@ test.describe('Set of checks for edit book page', () => {
 
                 await multiPageReloadStep({ page, timesNum: 2 });
 
-                await checkStepIfAllCardMatchesExpectations({
+                await checkStepIfAllCardsMatchExpectations({
                         page,
                         expectedData: [
                                 ...pickCardsOfShortType(
@@ -473,14 +474,14 @@ test.describe('Set of checks for edit book page', () => {
                         })
                 );
 
-                await checkStepIfAllCardMatchesExpectations({
+                await checkStepIfAllCardsMatchExpectations({
                         page,
                         expectedData: EXP_CARDS_TEXT_TITLE_ONLY.expectedData
                 });
 
                 await multiPageReloadStep({ page, timesNum: 2 });
 
-                await checkStepIfAllCardMatchesExpectations({
+                await checkStepIfAllCardsMatchExpectations({
                         page,
                         expectedData: EXP_CARDS_TEXT_TITLE_ONLY.expectedData
                 });
@@ -498,7 +499,7 @@ test.describe('Set of checks for edit book page', () => {
                         })
                 );
 
-                await checkStepIfAllCardMatchesExpectations({
+                await checkStepIfAllCardsMatchExpectations({
                         page,
                         expectedData:
                                 EXAMPLE_DATA_FOR_CARDS_FROM_TEXT_WITH_INVALID__MIX_MODE.expectedData
@@ -506,14 +507,52 @@ test.describe('Set of checks for edit book page', () => {
 
                 await multiPageReloadStep({ page, timesNum: 2 });
 
-                await checkStepIfAllCardMatchesExpectations({
+                await checkStepIfAllCardsMatchExpectations({
                         page,
                         expectedData:
                                 EXAMPLE_DATA_FOR_CARDS_FROM_TEXT_WITH_INVALID__MIX_MODE.expectedData
                 });
         });
 
-        test('User should be able to edit explicit and short cards via text (Mixed mode)', async () => {});
+        test.only('User should be able to edit explicit and short cards via text (Mixed mode)', async ({
+                page
+        }) => {
+                await test.step(
+                        'Open Edit cards text modal and type in example text',
+                        getStepToOpenCardsAsTextDialogAndEdit({
+                                page,
+                                inputText: getCardsAsText_TEST_ONLY__MIX_MODE(
+                                        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                                ),
+                                mode: 'mixed'
+                        })
+                );
+
+                await checkStepIfAllCardsMatchExpectations({
+                        page,
+                        expectedData:
+                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                });
+
+                await test.step(
+                        'Open Edit cards text modal and type in example text',
+                        getStepToOpenCardsAsTextDialogAndEdit({
+                                page,
+                                inputText: getCardsAsText_TEST_ONLY__MIX_MODE(
+                                        EXAMPLE_DATA_FOR_UPDATE_CARDS_FROM_TEXT__MIXED_MODE
+                                ),
+                                mode: 'mixed'
+                        })
+                );
+
+                await checkStepIfAllCardsMatchExpectations({
+                        page,
+                        expectedData:
+                                EXAMPLE_DATA_FOR_UPDATE_CARDS_FROM_TEXT__MIXED_MODE
+                });
+        });
+
+        test.skip('If user creates new cards with regular UI, text in Cards as text modal should be updated', async () => {});
 
         test.skip('User should be able to edit short card via text', async () => {});
 

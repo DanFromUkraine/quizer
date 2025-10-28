@@ -346,7 +346,7 @@ export async function checkIfCardFromTextMatchesWhatWeExpect({
         });
 }
 
-export async function checkStepIfAllCardMatchesExpectations({
+export async function checkStepIfAllCardsMatchExpectations({
         page,
         expectedData
 }: {

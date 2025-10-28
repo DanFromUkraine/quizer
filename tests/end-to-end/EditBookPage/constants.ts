@@ -104,6 +104,72 @@ export const EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE: (
         { type: 'short', term: 'Term 3', definition: 'Definition for term 3' }
 ];
 
+export const EXAMPLE_DATA_FOR_UPDATE_CARDS_FROM_TEXT__MIXED_MODE: (
+        | TestShortCardViaText
+        | TestExplicitCardViaText
+)[] = [
+        {
+                type: 'short',
+                term: 'Term 3 (Changed)',
+                definition: 'Definition for term 3 (Changed)'
+        },
+        {
+                type: 'explicit',
+                title: 'Explicit card 3 (Changed)',
+                subtitle: 'Subtitle for explicit card 3 (Changed)',
+                options: [
+                        {
+                                optionTitle: 'Option 1 (Changed)',
+                                isCorrect: true /* Also changed isCorrect */
+                        },
+                        { optionTitle: 'Option 2 (Changed)', isCorrect: false },
+                        { optionTitle: 'Option 3 (Changed)', isCorrect: false },
+                        { optionTitle: 'Option 4 (Changed)', isCorrect: false }
+                ],
+                explanation: 'Explanation for explicit card 3 (Changed)'
+        },
+        {
+                type: 'short',
+                term: 'Term 2 (Changed)',
+                definition: 'Definition for term 2 (Changed)'
+        },
+        {
+                type: 'explicit',
+                title: 'Explicit card 2 (Changed)',
+                subtitle: 'Subtitle for explicit card 2 (Changed)',
+                options: [
+                        {
+                                optionTitle: 'Option 1 (Changed)',
+                                isCorrect: false /* Also changed isCorrect */
+                        },
+                        { optionTitle: 'Option 2 (Changed)', isCorrect: true },
+                        { optionTitle: 'Option 3 (Changed)', isCorrect: false },
+                        { optionTitle: 'Option 4 (Changed)', isCorrect: false }
+                ],
+                explanation: 'Explanation for explicit card 2 (Changed)'
+        },
+        {
+                type: 'short',
+                term: 'Term 1 (Changed)',
+                definition: 'Definition for term 1 (Changed)'
+        },
+        {
+                type: 'explicit',
+                title: 'Explicit card 1 (Changed)',
+                subtitle: 'Subtitle for explicit card 1 (Changed)',
+                options: [
+                        {
+                                optionTitle: 'Option 1 (Changed)',
+                                isCorrect: false /* Also changed isCorrect */
+                        },
+                        { optionTitle: 'Option 2 (Changed)', isCorrect: false },
+                        { optionTitle: 'Option 3 (Changed)', isCorrect: true },
+                        { optionTitle: 'Option 4 (Changed)', isCorrect: false }
+                ],
+                explanation: 'Explanation for explicit card 1 (Changed)'
+        }
+];
+
 export const EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__SHORT_CARDS_ONLY: TestShortCardViaText[] =
         [
                 {
