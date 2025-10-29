@@ -17,6 +17,7 @@ export default function WarningDialogWithAction() {
 
         return (
                 <Dialog
+                        testId='actionNeeded' // 'todo' - move this to a constant
                         dialogName='actionNeeded'
                         className='bg-white p-6 max-w-xl'>
                         <section className='flex flex-col items-center gap-6'>
