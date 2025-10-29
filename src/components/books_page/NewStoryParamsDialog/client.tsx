@@ -27,7 +27,7 @@ export function IsSmartModeToggle() {
                         {...{
                                 currState,
                                 setCurrState,
-                                titleInp: 'Smart mode',
+                                title: 'Smart mode',
                                 testId: BP_TEST_IDS.newStoryDialog
                                         .isSmartModeInp
                         }}
@@ -44,7 +44,7 @@ export function ShowAnswersImmediatelyToggle() {
                         {...{
                                 currState,
                                 setCurrState,
-                                titleInp: 'Show answers immediately',
+                                title: 'Show answers immediately',
                                 testId: BP_TEST_IDS.newStoryDialog
                                         .areAnswersShownImmediatelyInp
                         }}
