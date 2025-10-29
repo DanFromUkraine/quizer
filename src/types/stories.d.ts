@@ -27,7 +27,7 @@ export interface ExplicitCardStory {
         subtitle: string;
         explanation: string;
         options: OptionStory[];
-        currentValue: null | number;
+        currentValue: number[];
 }
 
 export interface TypeInCardStory {

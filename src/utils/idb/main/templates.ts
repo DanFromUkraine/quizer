@@ -79,7 +79,7 @@ function getEmptyExplicitCardStory(id: string): ExplicitCardStory {
                 explanation: '',
                 subtitle: '',
                 options: [],
-                currentValue: null
+                currentValue: []
         };
 }
 

@@ -43,12 +43,12 @@ function getOptionStatus({
         isCompleted
 }: {
         optionIndex: number;
-        currCardChoice: number | null;
+        currCardChoice: number[];
         isCorrect: boolean;
         showAnswersImmediately: boolean;
         isCompleted: boolean;
 }) {
-        const isSelected = optionIndex === currCardChoice;
+        const isSelected = currCardChoice.includes(optionIndex);
         let color: OptionColorSchema = 'unchosen';
 
         if (isCorrect && (showAnswersImmediately || isCompleted))
@@ -78,7 +78,14 @@ export function Option({
         const onOptionClick = () => {
                 if ((showAnswersImmediately && currCardChoice) || isCompleted)
                         return;
-                setCurrCardChoice(optionIndex);
+
+                if (currCardChoice.includes(optionIndex)) {
+                        setCurrCardChoice(
+                                currCardChoice.filter((i) => i !== optionIndex)
+                        );
+                } else {
+                        setCurrCardChoice([...currCardChoice, optionIndex]);
+                }
         };
 
         const { isSelected, color } = getOptionStatus({
@@ -92,7 +99,7 @@ export function Option({
         return (
                 <LikeOptionUI
                         {...{
-                                titleInp: title,
+                                title,
                                 onClick: onOptionClick,
                                 color,
                                 isSelected,

@@ -33,7 +33,7 @@ export function getExplicitCardStory({
 
         return {
                 id: getUniqueID(),
-                currentValue: null,
+                currentValue: [],
                 type: 'story-explicitCard',
                 title: cardTitle,
                 subtitle,
