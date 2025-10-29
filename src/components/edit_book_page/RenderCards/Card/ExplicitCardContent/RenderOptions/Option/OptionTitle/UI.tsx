@@ -1,7 +1,8 @@
 import { ChangeEventHandler } from 'react';
+import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function OptionTitleUI({
-                                              value,
+        value,
         onChange,
         optionId
 }: {
@@ -15,7 +16,10 @@ export default function OptionTitleUI({
                         type='text'
                         value={value}
                         onChange={onChange}
-                        data-testid='optionTextField'
+                        data-testid={
+                                EP_TEST_IDS.card.explicitCardContent.option
+                                        .mainOptBody.titleInp
+                        }
                         className='w-full pointer-events-auto p-3 bg-gray-200 group-data-[status=correct]:!bg-green-200 group-hover:bg-gray-300 duration-100'
                 />
         );

@@ -7,6 +7,7 @@ import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import { useAtom } from 'jotai';
 import LikeExplanationUI from '@/src/components/general/interfacesUI/explanation';
 import ExtendableTextArea from '@/src/components/general/ExtendableInput';
+import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function Explanation() {
         const { cardId } = useCardProps();
@@ -36,9 +37,9 @@ export default function Explanation() {
         const onChange = getInputChangeCallback(setValue);
 
         const onTextareaBlur = useCallback(() => {
-                // if (value.length === 0) {
-                //         setIsVisible(false);
-                // }
+                if (value.length === 0) {
+                        setIsVisible(false);
+                }
         }, [value]);
 
         useEffect(() => {
@@ -49,11 +50,13 @@ export default function Explanation() {
                 }
         }, [value]);
 
-        console.debug({isVisible, value})
-
         return (
                 <LikeExplanationUI onContainerClick={onContainerClick}>
                         <ExtendableTextArea
+                                testId={
+                                        EP_TEST_IDS.card.explicitCardContent
+                                                .explanationInp
+                                }
                                 onBlur={onTextareaBlur}
                                 title='explicit-card-explanation'
                                 placeholder=''

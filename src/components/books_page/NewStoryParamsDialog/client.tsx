@@ -7,9 +7,7 @@ import {
 } from '@/src/utils/jotai/atomAdapters';
 import { Hr } from '@/src/components/general/Hr';
 import { NewStoryParam } from '@/src/constants/newCardParams';
-import {
-        closeNewStorySettingsDialogAtom,
-} from '@/src/jotai/newStoryParamsModal';
+import { closeNewStorySettingsDialogAtom } from '@/src/jotai/newStoryParamsModal';
 import { useAtomCallback } from 'jotai/utils';
 import { useRouter } from 'next/navigation';
 import getDefaultPathToPlayPage from '@/src/utils/getDefPathToPlayPage';
@@ -18,6 +16,7 @@ import {
         addNewStoryAtom,
         newStorySettingsAtom
 } from '@/src/jotai/historyAtoms';
+import { BP_TEST_IDS } from '@/src/constants/testIds';
 
 export function IsSmartModeToggle() {
         const [currState, setCurrState] = useAtom(
@@ -25,12 +24,18 @@ export function IsSmartModeToggle() {
         );
         return (
                 <ParamWithToggleUI
-                        {...{ currState, setCurrState, title: 'Smart mode' }}
+                        {...{
+                                currState,
+                                setCurrState,
+                                titleInp: 'Smart mode',
+                                testId: BP_TEST_IDS.newStoryDialog
+                                        .isSmartModeInp
+                        }}
                 />
         );
 }
 
-export function ShowAnswersImmediately() {
+export function ShowAnswersImmediatelyToggle() {
         const [currState, setCurrState] = useAtom(
                 getNewStoryShowAnswersImmediatelyParamAdapterAtom
         );
@@ -39,13 +44,19 @@ export function ShowAnswersImmediately() {
                         {...{
                                 currState,
                                 setCurrState,
-                                title: 'Show answers immediately'
+                                titleInp: 'Show answers immediately',
+                                testId: BP_TEST_IDS.newStoryDialog
+                                        .areAnswersShownImmediatelyInp
                         }}
                 />
         );
 }
-
-export function CustomParam({ adapterAtom, title, maxNumAtom }: NewStoryParam) {
+export function CustomParam({
+        adapterAtom,
+        title,
+        maxNumAtom,
+        testId
+}: NewStoryParam) {
         const [value, setValue] = useAtom(adapterAtom);
         const maxNum = useAtomValue(maxNumAtom);
         const isSmartMode = useAtomValue(
@@ -69,6 +80,7 @@ export function CustomParam({ adapterAtom, title, maxNumAtom }: NewStoryParam) {
                                         <span className='span'>{`max. num. of cards: ${maxNum}`}</span>
                                 </div>
                                 <input
+                                        data-testid={testId}
                                         data-editable={!isSmartMode}
                                         type='number'
                                         name='newStoryParam'
@@ -100,6 +112,7 @@ export function SubmitButton() {
 
         return (
                 <button
+                        data-testid={BP_TEST_IDS.newStoryDialog.submitBtn}
                         onClick={submit}
                         className='bg-blue-400 border border-blue-700 hover:bg-blue-300 rounded-xl py-2 px-5 heading-4 duration-100 block my-6 !text-white ml-auto'>
                         Submit

@@ -1,10 +1,5 @@
-// 'todo' - need to add support for other formats.
-// 'todo' - rewrite in AssemblyScript, to optimize it
 // 'todo' - add change flag, to show renderer, if a component actually needs render.
 
-// 'todo' - need to add support for other formats.
-// 'todo' - rewrite in AssemblyScript, to optimize it
-// 'todo' - add change flag, to show renderer, if a component actually needs render.
 import { FullCardFromText, FullTermDefinitionCardFromText } from '@/src/types/updateCardsFromText';
 import {
         getCardSeparator,

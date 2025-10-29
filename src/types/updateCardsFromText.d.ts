@@ -73,6 +73,7 @@ export type MarkupModes = 'mixed' | 'short-only';
 export type MarkupModesUiList = {
         modeId: MarkupModes;
         title: string;
+        testId: string
 }[];
 
 export type ShortCardOnlyInsertReducer = (

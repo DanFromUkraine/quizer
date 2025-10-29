@@ -13,7 +13,7 @@ export default function RenderBooks() {
                 <div className='grid grid-cols-3 w-full h-fit gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1'>
                         {booksIds.map((id) => (
                                 <Suspense
-                                        key={id}
+                                        // key={id}
                                         fallback={<div>loading...</div>}>
                                         <BookItem id={id} />
                                 </Suspense>

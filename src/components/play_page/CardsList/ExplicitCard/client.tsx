@@ -92,7 +92,7 @@ export function Option({
         return (
                 <LikeOptionUI
                         {...{
-                                title,
+                                titleInp: title,
                                 onClick: onOptionClick,
                                 color,
                                 isSelected,

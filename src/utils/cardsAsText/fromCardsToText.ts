@@ -5,7 +5,11 @@ import {
 } from '@/src/jotai/mainAtoms';
 import { CARD_TYPE_UNKNOWN } from '@/src/constants/errors';
 import { Getter } from 'jotai';
-import { getOptionsAsText } from '@/src/utils/cardsAsText/helpers';
+import {
+        getExpCardsAsText,
+        getShortCardAsText__MIX_MODE,
+        getShortCardAsText__SHORT_MODE
+} from '@/src/utils/cardsAsText/helpers';
 
 export function getAnyCardsAsTextAtomHelper({
         cardIdsOrder,
@@ -26,19 +30,21 @@ export function getAnyCardsAsTextAtomHelper({
                                 shortCardIds
                         });
                         if (cardType === 'short') {
-                                const { term, definition } = get(
+                                const shortCardData = get(
                                         shortCardsAtomFamily(cardId)
                                 );
-                                return `\n @@ ${term} - ${definition}`;
+                                return getShortCardAsText__MIX_MODE({
+                                        ...shortCardData
+                                });
                         } else if (cardType === 'explicit') {
-                                const {
-                                        cardTitle,
-                                        childrenIds,
-                                        subtitle,
-                                        explanation
-                                } = get(explicitCardsAtomFamily(cardId));
+                                const expCardData = get(
+                                        explicitCardsAtomFamily(cardId)
+                                );
 
-                                return `\n&& ${cardTitle} \n${subtitle.length > 0 ? `&s ${subtitle}` : ''}\t${getOptionsAsText(childrenIds, get).join('')}\n${explanation.length > 0 ? `\n&e ${explanation}` : ''}\n`;
+                                return getExpCardsAsText({
+                                        ...expCardData,
+                                        get
+                                });
                         } else {
                                 throw CARD_TYPE_UNKNOWN;
                         }
@@ -55,10 +61,10 @@ export function getShortCardsOnlyAsTextAtomHelper({
 }) {
         return shortCardIds
                 .map((cardId) => {
-                        const { term, definition } = get(
-                                shortCardsAtomFamily(cardId)
-                        );
-                        return `\n ${term} - ${definition}`;
+                        const shortCardData = get(shortCardsAtomFamily(cardId));
+                        return getShortCardAsText__SHORT_MODE({
+                                ...shortCardData
+                        });
                 })
                 .join('');
 }

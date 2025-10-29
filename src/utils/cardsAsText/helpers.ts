@@ -7,6 +7,15 @@ import { CARD_TYPE_UNKNOWN } from '@/src/constants/errors';
 import { optionsAtomFamily } from '@/src/jotai/mainAtoms';
 import { Getter } from 'jotai';
 
+const RULES = {
+        FULL_CARD_MARKER: '&&',
+        SUBTITLE_MARKER: '&s',
+        DEFAULT_OPTION_MARKER: '%%',
+        EXPLANATION_MARKER: '&e',
+        SHORT_CARD_MARKER: '@@',
+        OPTION_CORRECT_MARKER: '%correct%'
+};
+
 export function getProcessedShortCardOnly(
         cardText: string
 ): FullTermDefinitionCardFromText | undefined {
@@ -26,15 +35,6 @@ export function getProcessedShortCardOnly(
                 definition
         };
 }
-
-const RULES = {
-        FULL_CARD_MARKER: '&&',
-        SUBTITLE_MARKER: '&s',
-        DEFAULT_OPTION_MARKER: '%%',
-        EXPLANATION_MARKER: '&e',
-        SHORT_CARD_MARKER: '@@',
-        OPTION_CORRECT_MARKER: '%correct%'
-};
 
 export function getCardSeparator() {
         return /(&&|@@)/g;
@@ -132,7 +132,7 @@ export function getProcessedExplicitCard(
         };
 }
 
-function getValCleanFromSpecSigns(val: string) {
+export function getValCleanFromSpecSigns(val: string) {
         return val.replaceAll(/(@@)|(&&)|(\n)|(\t)/g, '').trim();
 }
 
@@ -186,7 +186,7 @@ export function getFilterRuleToDeleteCardsWithEmptyTitle(): DeleteCardsWithEmpty
                 } else if (anyCard.type === 'short') {
                         if (
                                 typeof anyCard.term === 'undefined' ||
-                                anyCard.definition === 'undefined'
+                                typeof anyCard.definition === 'undefined'
                         )
                                 return false;
                         return (
@@ -199,11 +199,69 @@ export function getFilterRuleToDeleteCardsWithEmptyTitle(): DeleteCardsWithEmpty
         };
 }
 
+export function getShortCardAsText__SHORT_MODE({
+        term,
+        definition
+}: {
+        term: string;
+        definition: string;
+}) {
+        return `\n ${term} - ${definition}`;
+}
+
+export function getShortCardAsText__MIX_MODE({
+        term,
+        definition
+}: {
+        term: string;
+        definition: string;
+}) {
+        return `\n @@ ${term} - ${definition}`;
+}
+
+function getOptionAsText({
+        isCorrect,
+        optionTitle
+}: {
+        isCorrect: boolean;
+        optionTitle: string;
+}) {
+        return `\n \t %% ${isCorrect ? '%correct%' : ''} ${optionTitle}`;
+}
+
+export function getExpCardsAsText({
+        cardTitle,
+        subtitle,
+        childrenIds,
+        get,
+        explanation
+}: {
+        cardTitle: string;
+        subtitle: string;
+        childrenIds: string[];
+        get: Getter;
+        explanation: string;
+}) {
+        return `
+        \n&& ${cardTitle} 
+        \n${subtitle.length > 0 ? `&s ${subtitle}` : ''}
+        \t${getOptionsAsText(childrenIds, get)}
+        \n${
+                explanation.length > 0
+                        ? `
+        \n&e ${explanation}`
+                        : ''
+        }
+        \n`;
+}
+
 export function getOptionsAsText(optionsIds: string[], get: Getter) {
-        return optionsIds.map((optionId) => {
-                const { optionTitle, isCorrect } = get(
-                        optionsAtomFamily(optionId)
-                );
-                return `\n \t %% ${isCorrect ? '%correct%' : ''} ${optionTitle}`;
-        });
+        return optionsIds
+                .map((optionId) => {
+                        const { optionTitle, isCorrect } = get(
+                                optionsAtomFamily(optionId)
+                        );
+                        return getOptionAsText({ optionTitle, isCorrect });
+                })
+                .join('');
 }

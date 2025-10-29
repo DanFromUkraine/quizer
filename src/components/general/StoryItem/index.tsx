@@ -10,6 +10,7 @@ import {
         DeleteStoryButton,
         StoryCreationDate
 } from '@/src/components/general/StoryItem/client';
+import { BP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function StoryItem({ storyId }: { storyId: string }) {
         const router = useRouter();
@@ -19,6 +20,7 @@ export default function StoryItem({ storyId }: { storyId: string }) {
         });
         return (
                 <div
+                        data-testid={BP_TEST_IDS.bookStoriesDialog.storyCard}
                         onClick={onClick}
                         className='flex flex-col p-6 w-full rounded-md glass hover:shadow-xl relative duration-100'>
                         <CompletionRateLikeBread storyId={storyId} />

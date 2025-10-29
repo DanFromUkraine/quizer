@@ -5,6 +5,7 @@ import { useAtomValue } from 'jotai';
 import StoryItem from '@/src/components/general/StoryItem';
 import { storiesForBookDialogInfoAtom } from '@/src/jotai/storiesForBookDialogInfoAtoms';
 import CreateNewStoryButton from '@/src/components/books_page/BookStoryDialog/CreateNewStoryButton';
+import { BP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function BookStoryDialog() {
         const { bookTitle, storyIds } = useAtomValue(
@@ -13,6 +14,7 @@ export default function BookStoryDialog() {
 
         return (
                 <Dialog
+                        testId={BP_TEST_IDS.bookStoriesDialog.me}
                         dialogName='storiesForBook'
                         className='bg-white p-6'>
                         <h2 className='heading-2'>

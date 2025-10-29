@@ -14,6 +14,7 @@ import { MARKUP_MODES } from '@/src/constants/cardsAsText';
 import { ModeButton } from '@/src/components/edit_book_page/EditCardsAsText/UI';
 import { MarkupModes } from '@/src/types/updateCardsFromText';
 import { useAtomCallback } from 'jotai/utils';
+import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 export function MainTextArea() {
         const [cardsTextValue, setCardsText] = useAtom(cardsTextAtom);
@@ -22,9 +23,12 @@ export function MainTextArea() {
         }) as unknown as ChangeEventHandler<HTMLTextAreaElement>;
 
         return (
-                <Quoted variant="heading" className='h-full max-h-[80vh] overflow-y-scroll'>
+                <Quoted
+                        variant='heading'
+                        className='h-full max-h-[80vh] overflow-y-scroll'>
                         <ExtendableTextArea
                                 name='cards text input'
+                                testId={EP_TEST_IDS.cardsAsTextDialog.mainInp}
                                 className='w-full h-full '
                                 value={cardsTextValue}
                                 onChange={onChange}
@@ -43,13 +47,15 @@ export function ModeTools() {
         );
 
         return (
-                <section className="flex gap-2">
-                        {MARKUP_MODES.map(({ title, modeId }) => (
+                <section className='flex gap-2'>
+                        {MARKUP_MODES.map(({ title, modeId, testId }) => (
                                 <ModeButton
                                         key={title}
                                         {...{
                                                 title,
-                                                hoverable: currentMode !== modeId,
+                                                testId,
+                                                hoverable:
+                                                        currentMode !== modeId,
                                                 onClick: getOnClick(modeId)
                                         }}
                                 />
@@ -57,3 +63,5 @@ export function ModeTools() {
                 </section>
         );
 }
+
+

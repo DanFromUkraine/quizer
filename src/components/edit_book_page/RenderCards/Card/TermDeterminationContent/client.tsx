@@ -7,10 +7,12 @@ import { useMemo } from 'react';
 
 export default function TermOrDeterminationInput({
         underText,
-        atomAdapterUnstable
+        atomAdapterUnstable,
+        testId
 }: {
         underText: string;
         atomAdapterUnstable: WritableAtom<string, [newVal: string], void>;
+        testId: string;
 }) {
         const stableAdapterAtom = useMemo(() => atomAdapterUnstable, []);
         const [value, updateValue] = useAtom(stableAdapterAtom);
@@ -19,8 +21,11 @@ export default function TermOrDeterminationInput({
 
         return (
                 <section className='flex flex-col gap-2'>
-                        <Quoted variant='heading' className='has-[:invalid]:bg-red-300'>
+                        <Quoted
+                                variant='heading'
+                                className='has-[:invalid]:bg-red-300'>
                                 <input
+                                        data-testid={testId}
                                         required
                                         value={value}
                                         onChange={onChange}

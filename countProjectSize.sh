@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Директорії, які треба перевірити
-DIRS=("app" "src")
+DIRS=("app" "src" "tests/end-to-end")
 
 for dir in "${DIRS[@]}"; do
   if [ -d "$dir" ]; then
