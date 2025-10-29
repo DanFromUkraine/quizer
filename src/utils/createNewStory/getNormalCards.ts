@@ -42,7 +42,7 @@ export function getNormalCards({
                 return {
                         id: getUniqueID(),
                         type: 'story-explicitCard',
-                        currentValue: null,
+                        currentValue: [],
                         title: term,
                         options,
                         explanation: '',

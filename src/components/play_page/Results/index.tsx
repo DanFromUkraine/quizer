@@ -18,8 +18,6 @@ export default function Results() {
         const {
                 successPercentage,
                 markIn12PointsSystem,
-                countAllPoints,
-                countGainedPoints
         } = useAtomValue(stableResAtom);
 
         return (

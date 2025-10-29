@@ -233,7 +233,14 @@ export const getExpStoryCardCorrectOptionIndexAtom = (cardId: string) =>
         atom((get) => {
                 /* 'todo' - need to make it suitable for multichoice cards */
                 const { options } = get(explicitCardStoriesAtomFamily(cardId));
-                return options.findIndex((opt) => opt.isCorrect);
+                const correctIndexes: number[] = [];
+
+                for (let i = 0; i < options.length; i++) {
+                        const currOption = options[i];
+                        if (currOption.isCorrect) correctIndexes.push(i);
+                }
+
+                return correctIndexes;
         });
 
 export const getIfExpStoryCardCorrectAtom = (cardId: string) =>
@@ -241,11 +248,15 @@ export const getIfExpStoryCardCorrectAtom = (cardId: string) =>
                 const { currentValue } = get(
                         explicitCardStoriesAtomFamily(cardId)
                 );
-                const correctIndex = get(
+                const correctIndexes = get(
                         getExpStoryCardCorrectOptionIndexAtom(cardId)
                 );
 
-                return currentValue === correctIndex;
+
+
+                return correctIndexes.every(x => {
+                        return currentValue.includes(x);
+                });
         });
 
 export const getIfTypeInCardCorrectAtom = (cardId: string) =>
