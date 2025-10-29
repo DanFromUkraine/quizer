@@ -28,6 +28,7 @@ import {
         getShortCardTermInp,
         getStepToOpenCardsAsTextDialogAndEdit,
         goToEditPage,
+        mixEqualListsToSeeOnlyShortCardChanges,
         normalizeForCompare,
         openEditCardsAsTextDialogStep,
         pickCardsOfShortType
@@ -561,6 +562,47 @@ test.describe('Set of checks for edit book page', () => {
                 });
         });
 
+        test.only('User should be able to edit short cards via text (Short cards only mode)', async ({
+                page
+        }) => {
+                await createEmptyCards({
+                        page,
+                        exampleData:
+                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                });
+                await checkIfNumOfCardsIsEnough({
+                        page,
+                        expectedCount:
+                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE.length
+                });
+                await fillDataInCardsStep({
+                        page,
+                        exampleData:
+                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                });
+
+                await test.step(
+                        'Open Edit cards text modal and type in example text',
+                        getStepToOpenCardsAsTextDialogAndEdit({
+                                page,
+                                inputText: getCardsAsText_TEST_ONLY__SHORT_MODE(
+                                        pickCardsOfShortType(
+                                                EXAMPLE_DATA_FOR_UPDATE_CARDS_FROM_TEXT__MIXED_MODE
+                                        )
+                                ),
+                                mode: 'short-cards-only'
+                        })
+                );
+
+                await checkStepIfAllCardsMatchExpectations({
+                        page,
+                        expectedData: mixEqualListsToSeeOnlyShortCardChanges(
+                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
+                                EXAMPLE_DATA_FOR_UPDATE_CARDS_FROM_TEXT__MIXED_MODE
+                        )
+                });
+        });
+
         test('If user creates new cards with regular UI, text in Cards as text modal should be updated (Mix mode)', async ({
                 page
         }) => {
@@ -598,7 +640,7 @@ test.describe('Set of checks for edit book page', () => {
                 });
         });
 
-        test.only('If user creates new cards with regular UI, text in Cards as text modal should be updated (short cards only mode)', async ({
+        test('If user creates new cards with regular UI, text in Cards as text modal should be updated (short cards only mode)', async ({
                 page
         }) => {
                 const exampleData =

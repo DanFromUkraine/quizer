@@ -588,12 +588,50 @@ export async function checkIfNumOfCardsIsEnough({
 }
 
 export function normalizeForCompare(s: string) {
-        return s
-                // замінити non-breaking space та інші Unicode пробіли на звичайний пробіл
-                .replace(/[\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]/g, ' ')
-                // видалити zero-width символи
-                .replace(/[\u200B\u200C\u200D\uFEFF]/g, '')
-                // звести будь-які послідовності whitespace (нові рядки, таби, пробіли) до одного пробілу
-                .replace(/\s+/g, ' ')
-                .trim();
+        return (
+                s
+                        // замінити non-breaking space та інші Unicode пробіли на звичайний пробіл
+                        .replace(
+                                /[\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]/g,
+                                ' '
+                        )
+                        // видалити zero-width символи
+                        .replace(/[\u200B\u200C\u200D\uFEFF]/g, '')
+                        // звести будь-які послідовності whitespace (нові рядки, таби, пробіли) до одного пробілу
+                        .replace(/\s+/g, ' ')
+                        .trim()
+        );
+}
+
+export function mixEqualListsToSeeOnlyShortCardChanges(
+        initialList: (TestExplicitCardViaText | TestShortCardViaText)[],
+        resultList: (TestExplicitCardViaText | TestShortCardViaText)[]
+) {
+        const resultFixture: (
+                | TestExplicitCardViaText
+                | TestShortCardViaText
+        )[] = [];
+
+        const shortCardsFromResultList = pickCardsOfShortType(resultList);
+
+        if (initialList.length !== resultList.length)
+                throw new Error(
+                        'Tried to mix lists with an example cards, but failed: lists must have an equal length, to prevent bugs'
+                );
+
+        let shortCardsIndex = 0;
+        for (let i = 0; i < initialList.length; i++) {
+                const initListItem = initialList[i];
+
+                if (initListItem.type === 'explicit') {
+                        resultFixture.push(initListItem);
+                } else {
+                        resultFixture.push(
+                                shortCardsFromResultList[shortCardsIndex]
+                        );
+                        shortCardsIndex++;
+                }
+        }
+
+        return resultFixture;
 }
