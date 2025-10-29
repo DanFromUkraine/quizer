@@ -8,6 +8,7 @@ import {
 } from '@/tests/end-to-end/helpers';
 import { addNewBook, editBook } from '@/tests/end-to-end/BooksPage/helpers';
 import {
+        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
         TestExplicitCardViaText,
         TestOptionViaText,
         TestShortCardViaText
@@ -634,4 +635,14 @@ export function mixEqualListsToSeeOnlyShortCardChanges(
         }
 
         return resultFixture;
+}
+
+
+export async function createCards({page, exampleData}: {page: Page, exampleData: (TestExplicitCardViaText | TestShortCardViaText)[]}) {
+        await createEmptyCards({ page, exampleData });
+        await checkIfNumOfCardsIsEnough({
+                page,
+                expectedCount: exampleData.length
+        });
+        await fillDataInCardsStep({ page, exampleData });
 }

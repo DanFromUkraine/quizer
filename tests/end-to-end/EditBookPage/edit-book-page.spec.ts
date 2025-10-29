@@ -3,12 +3,10 @@ import {
         addNewExpCardStep,
         addNewOptionStep,
         addNewShortCardStep,
-        checkIfNumOfCardsIsEnough,
         checkStepIfAllCardsMatchExpectations,
-        createEmptyCards,
+        createCards,
         deleteCardStep,
         deleteOptionStep,
-        fillDataInCardsStep,
         getBookDescInp,
         getBookTitleInp,
         getCardsAsText_TEST_ONLY__MIX_MODE,
@@ -167,6 +165,9 @@ test.describe('Set of checks for edit book page', () => {
         });
 
         test('Checkmark option with swipe', async ({ page }) => {
+                // 'todo' in the future I need to move common code into helper functions
+
+
                 await page.setViewportSize({ width: 390, height: 844 });
 
                 const TIMES_TO_CHECK = 3;
@@ -216,6 +217,9 @@ test.describe('Set of checks for edit book page', () => {
         });
 
         test('Delete option with swipe', async ({ page }) => {
+                // 'todo' in the future I need to move common code into helper functions
+
+
                 await page.setViewportSize({ width: 390, height: 844 });
                 const NUM_OF_OPTIONS_TO_ADD = 10;
                 const NUM_OF_OPTIONS_TO_DELETE = 5;
@@ -324,6 +328,9 @@ test.describe('Set of checks for edit book page', () => {
         test('Short card term input should be resilient to page reload', async ({
                 page
         }) => {
+                // 'todo' in the future I need to move common code into helper functions
+
+
                 await addNewShortCardStep(page);
                 const termInpEl = getShortCardTermInp(page);
                 await expectInpToBeResilientToReloads({
@@ -335,6 +342,9 @@ test.describe('Set of checks for edit book page', () => {
         test('Short card definition input should be resilient to page reload', async ({
                 page
         }) => {
+                // 'todo' in the future I need to move common code into helper functions
+
+
                 await addNewShortCardStep(page);
                 const definitionInpEl = getShortCardDefinitionInp(page);
                 await expectInpToBeResilientToReloads({
@@ -346,6 +356,9 @@ test.describe('Set of checks for edit book page', () => {
         test('It should be possible to delete short card. Changes should be resilient to page reloads', async ({
                 page
         }) => {
+                // 'todo' in the future I need to move common code into helper functions
+
+
                 const SHORT_CARDS_TO_ADD = 10;
                 const SHORT_CARDS_TO_DELETE = 5;
 
@@ -375,6 +388,9 @@ test.describe('Set of checks for edit book page', () => {
         test('It should be possible to delete explicit card. Changes should be resilient to page reloads', async ({
                 page
         }) => {
+                // 'todo' in the future I need to move common code into helper functions
+
+
                 const EXPLICIT_CARDS_TO_ADD = 10;
                 const EXPLICIT_CARDS_TO_DELETE = 5;
 
@@ -404,6 +420,8 @@ test.describe('Set of checks for edit book page', () => {
         test('User should be able to create explicit and short cards via text with all data (In mixed mode)', async ({
                 page
         }) => {
+                // 'todo' in the future I need to move common code into helper functions
+
                 await test.step(
                         'Open Edit cards text modal and type in example text',
                         getStepToOpenCardsAsTextDialogAndEdit({
@@ -433,6 +451,9 @@ test.describe('Set of checks for edit book page', () => {
         test('User should be able to create short cards via text (In short cards only mode)', async ({
                 page
         }) => {
+                // 'todo' in the future I need to move common code into helper functions
+
+
                 await test.step(
                         'Create some cards in short cards only mode',
                         getStepToOpenCardsAsTextDialogAndEdit({
@@ -475,6 +496,9 @@ test.describe('Set of checks for edit book page', () => {
         test('User should be able to create explicit card via text with title only', async ({
                 page
         }) => {
+                // 'todo' in the future I need to move common code into helper functions
+
+
                 await test.step(
                         'Open Edit cards text modal and type in example text',
                         getStepToOpenCardsAsTextDialogAndEdit({
@@ -500,6 +524,9 @@ test.describe('Set of checks for edit book page', () => {
         test('User should not see an error message, if short card created via text is invalid (In mixed mode)', async ({
                 page
         }) => {
+                // 'todo' in the future I need to move common code into helper functions
+
+
                 await test.step(
                         'Open Edit cards text modal and type in example text',
                         getStepToOpenCardsAsTextDialogAndEdit({
@@ -527,6 +554,8 @@ test.describe('Set of checks for edit book page', () => {
         test('User should be able to edit explicit and short cards via text (Mixed mode)', async ({
                 page
         }) => {
+                // 'todo' in the future I need to move common code into helper functions
+
                 await test.step(
                         'Open Edit cards text modal and type in example text',
                         getStepToOpenCardsAsTextDialogAndEdit({
@@ -538,11 +567,6 @@ test.describe('Set of checks for edit book page', () => {
                         })
                 );
 
-                await checkStepIfAllCardsMatchExpectations({
-                        page,
-                        expectedData:
-                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
-                });
 
                 await test.step(
                         'Open Edit cards text modal and type in example text',
@@ -562,20 +586,10 @@ test.describe('Set of checks for edit book page', () => {
                 });
         });
 
-        test.only('User should be able to edit short cards via text (Short cards only mode)', async ({
+        test('User should be able to edit short cards via text (Short cards only mode)', async ({
                 page
         }) => {
-                await createEmptyCards({
-                        page,
-                        exampleData:
-                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
-                });
-                await checkIfNumOfCardsIsEnough({
-                        page,
-                        expectedCount:
-                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE.length
-                });
-                await fillDataInCardsStep({
+                await createCards({
                         page,
                         exampleData:
                                 EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
@@ -606,14 +620,13 @@ test.describe('Set of checks for edit book page', () => {
         test('If user creates new cards with regular UI, text in Cards as text modal should be updated (Mix mode)', async ({
                 page
         }) => {
-                const exampleData =
-                        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE;
-                await createEmptyCards({ page, exampleData });
-                await checkIfNumOfCardsIsEnough({
+                // 'todo' in the future I need to move common code into helper functions
+
+                await createCards({
                         page,
-                        expectedCount: exampleData.length
+                        exampleData:
+                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
                 });
-                await fillDataInCardsStep({ page, exampleData });
                 await openEditCardsAsTextDialogStep(page);
                 await test.step('Expect text in Edit cards as text modal to be an equivalent to what user created with regular UI', async () => {
                         const mainCardsAsTextInpEl =
@@ -643,14 +656,13 @@ test.describe('Set of checks for edit book page', () => {
         test('If user creates new cards with regular UI, text in Cards as text modal should be updated (short cards only mode)', async ({
                 page
         }) => {
-                const exampleData =
-                        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE;
-                await createEmptyCards({ page, exampleData });
-                await checkIfNumOfCardsIsEnough({
+                // 'todo' in the future I need to move common code into helper functions
+
+                await createCards({
                         page,
-                        expectedCount: exampleData.length
+                        exampleData:
+                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
                 });
-                await fillDataInCardsStep({ page, exampleData });
                 await openEditCardsAsTextDialogStep(page);
 
                 await test.step('Expect text in Edit cards as text modal to be an equivalent to what user created with regular UI', async () => {
@@ -684,7 +696,54 @@ test.describe('Set of checks for edit book page', () => {
                 });
         });
 
-        test.skip('User should be able to edit short card via text', async () => {});
+        test('User should be able to delete both explicit and short cards via text (Mixed mode)', async ({
+                page
+        }) => {
+                // 'todo' in the future I need to move common code into helper functions
 
-        test.skip('User should be able to delete both explicit and short cards via text', async () => {});
+                await createCards({
+                        page,
+                        exampleData:
+                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                });
+
+                await test.step(
+                        'Open Edit cards text modal and type in example text',
+                        getStepToOpenCardsAsTextDialogAndEdit({
+                                page,
+                                inputText: '',
+                                mode: 'mixed'
+                        })
+                );
+
+                await checkStepIfAllCardsMatchExpectations({
+                        page,
+                        expectedData: []
+                });
+        });
+
+        test('User should be able to delete both short cards via text (Short cards only)', async ({
+                page
+        }) => {
+                // 'todo' in the future I need to move common code into helper functions
+                await createCards({
+                        page,
+                        exampleData:
+                                EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__SHORT_CARDS_ONLY
+                });
+
+                await test.step(
+                        'Open Edit cards text modal and type in example text',
+                        getStepToOpenCardsAsTextDialogAndEdit({
+                                page,
+                                inputText: '',
+                                mode: 'short-cards-only'
+                        })
+                );
+
+                await checkStepIfAllCardsMatchExpectations({
+                        page,
+                        expectedData: []
+                });
+        });
 });
