@@ -8,7 +8,6 @@ import {
 } from '@/tests/end-to-end/helpers';
 import { addNewBook, editBook } from '@/tests/end-to-end/BooksPage/helpers';
 import {
-        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
         TestExplicitCardViaText,
         TestOptionViaText,
         TestShortCardViaText
@@ -17,6 +16,9 @@ import {
         getShortCardAsText__MIX_MODE,
         getShortCardAsText__SHORT_MODE
 } from '@/src/utils/cardsAsText/helpers';
+
+type CardsAsTextModes = 'mixed' | 'short-cards-only';
+type MixedCard = TestExplicitCardViaText | TestShortCardViaText;
 
 export const getBookTitleInp = getSelector(EP_TEST_IDS.bookTitleInp);
 export const getBookDescInp = getSelector(EP_TEST_IDS.bookDescInp);
@@ -203,7 +205,7 @@ export function getStepToOpenCardsAsTextDialogAndEdit({
         inputText,
         page
 }: {
-        mode: 'mixed' | 'short-cards-only';
+        mode: CardsAsTextModes;
         inputText: string;
         page: Page;
 }) {
@@ -591,58 +593,189 @@ export async function checkIfNumOfCardsIsEnough({
 export function normalizeForCompare(s: string) {
         return (
                 s
-                        // замінити non-breaking space та інші Unicode пробіли на звичайний пробіл
+                        // Delete all non-breaking spaces and other Unicode spaces
                         .replace(
                                 /[\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]/g,
-                                ' '
+                                ''
                         )
-                        // видалити zero-width символи
+                        // Delete zero-width symbols
                         .replace(/[\u200B\u200C\u200D\uFEFF]/g, '')
-                        // звести будь-які послідовності whitespace (нові рядки, таби, пробіли) до одного пробілу
-                        .replace(/\s+/g, ' ')
+                        // Delete any special symbols (New rows, tabs, spaces, etc.)
+                        .replace(/\s+/g, '')
                         .trim()
         );
 }
 
+//mixEqualListsToSeeOnlyShortCardChanges
+
 export function mixEqualListsToSeeOnlyShortCardChanges(
-        initialList: (TestExplicitCardViaText | TestShortCardViaText)[],
-        resultList: (TestExplicitCardViaText | TestShortCardViaText)[]
-) {
-        const resultFixture: (
-                | TestExplicitCardViaText
-                | TestShortCardViaText
-        )[] = [];
+        initialList: MixedCard[],
+        resultList: MixedCard[]
+): MixedCard[] {
+        if (initialList.length !== resultList.length) {
+                throw new Error('lists must have equal length');
+        }
 
-        const shortCardsFromResultList = pickCardsOfShortType(resultList);
+        const shortCardsFromResultList = resultList.filter(
+                (c): c is TestShortCardViaText => c.type === 'short'
+        );
 
-        if (initialList.length !== resultList.length)
-                throw new Error(
-                        'Tried to mix lists with an example cards, but failed: lists must have an equal length, to prevent bugs'
-                );
+        let shortIndex = 0;
+        const fixture: MixedCard[] = [];
 
-        let shortCardsIndex = 0;
-        for (let i = 0; i < initialList.length; i++) {
-                const initListItem = initialList[i];
-
-                if (initListItem.type === 'explicit') {
-                        resultFixture.push(initListItem);
+        for (const item of initialList) {
+                if (item.type === 'explicit') {
+                        fixture.push(item);
                 } else {
-                        resultFixture.push(
-                                shortCardsFromResultList[shortCardsIndex]
-                        );
-                        shortCardsIndex++;
+                        if (shortIndex >= shortCardsFromResultList.length) {
+                                throw new Error(
+                                        'not enough short cards in resultList to replace initialList shorts'
+                                );
+                        }
+                        fixture.push(shortCardsFromResultList[shortIndex++]);
                 }
         }
 
-        return resultFixture;
+        if (shortIndex !== shortCardsFromResultList.length) {
+                throw new Error(
+                        'extra short cards in resultList that were not consumed'
+                );
+        }
+
+        return fixture;
 }
 
-
-export async function createCards({page, exampleData}: {page: Page, exampleData: (TestExplicitCardViaText | TestShortCardViaText)[]}) {
+export async function createCards({
+        page,
+        exampleData
+}: {
+        page: Page;
+        exampleData: (TestExplicitCardViaText | TestShortCardViaText)[];
+}) {
         await createEmptyCards({ page, exampleData });
         await checkIfNumOfCardsIsEnough({
                 page,
                 expectedCount: exampleData.length
         });
         await fillDataInCardsStep({ page, exampleData });
+}
+
+export async function testOnDeleteCardViaText({
+        page,
+        startExampleData,
+        mode
+}: {
+        page: Page;
+        startExampleData: (TestExplicitCardViaText | TestShortCardViaText)[];
+        mode: CardsAsTextModes;
+}) {
+        await createCards({
+                page,
+                exampleData: startExampleData
+        });
+
+        await test.step(
+                'Open Edit cards text modal and type in example text',
+                getStepToOpenCardsAsTextDialogAndEdit({
+                        page,
+                        inputText: '',
+                        mode
+                })
+        );
+
+        await checkStepIfAllCardsMatchExpectations({
+                page,
+                expectedData: []
+        });
+}
+
+export async function testActionsIfTextInModalUpdatesAfterUpdatesInRegularUI({
+        page,
+        mode,
+        exampleData
+}: {
+        page: Page;
+        mode: CardsAsTextModes;
+        exampleData: (TestExplicitCardViaText | TestShortCardViaText)[];
+}) {
+        /* Imagine we create some cards with some buttons, inputs on the page, and then we expect an equivalent text to appear in Cards as text modal. */
+
+        await createCards({
+                page,
+                exampleData
+        });
+        await openEditCardsAsTextDialogStep(page);
+
+        await test.step('Expect text in Edit cards as text modal to be an equivalent to what user created with regular UI', async () => {
+                if (mode === 'short-cards-only') {
+                        const switchModeBtn =
+                                getShortCardsOnlyModeCardsAsText(page);
+                        await switchModeBtn.click();
+                }
+
+                const mainCardsAsTextInpEl = getMainInpCardsAsTextDialog(page);
+
+                const actualValue = await mainCardsAsTextInpEl.inputValue();
+                const clearInpVal = normalizeForCompare(actualValue);
+
+                const expectedValForShortCardsOnlyMode =
+                        getCardsAsText_TEST_ONLY__SHORT_MODE(
+                                pickCardsOfShortType(exampleData)
+                        );
+                const expectedValForMixedMode =
+                        getCardsAsText_TEST_ONLY__MIX_MODE(exampleData);
+
+                const clearExpectedValue = normalizeForCompare(
+                        mode === 'mixed'
+                                ? expectedValForMixedMode
+                                : expectedValForShortCardsOnlyMode
+                );
+
+                expect(clearInpVal).toBe(clearExpectedValue);
+        });
+}
+
+export async function testActionsEditCardsAsText({
+        page,
+        exampleData,
+        expectedData,
+        mode,
+        inputText
+}: {
+        page: Page;
+        exampleData: MixedCard[];
+        mode: CardsAsTextModes;
+        expectedData: MixedCard[];
+        inputText: string;
+}) {
+        /*
+ mixEqualListsToSeeOnlyShortCardChanges(
+                        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
+                        EXAMPLE_DATA_FOR_UPDATE_CARDS_FROM_TEXT__MIXED_MODE
+                )
+ *
+
+ getCardsAsText_TEST_ONLY__SHORT_MODE(
+                                pickCardsOfShortType(exampleData)
+                        )
+ *  */
+
+        await createCards({
+                page,
+                exampleData
+        });
+
+        await test.step(
+                'Open Edit cards text modal and type in example text',
+                getStepToOpenCardsAsTextDialogAndEdit({
+                        page,
+                        inputText,
+                        mode
+                })
+        );
+
+        await checkStepIfAllCardsMatchExpectations({
+                page,
+                expectedData
+        });
 }
