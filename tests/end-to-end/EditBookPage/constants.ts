@@ -234,27 +234,55 @@ export const EXP_CARDS_TEXT_TITLE_ONLY: {
         ]
 };
 
-export const EXAMPLE_DATA_FOR_CARDS_FROM_TEXT_WITH_INVALID__MIX_MODE: {
+type WithInvalidData = {
         inputText: string;
         expectedData: TestShortCardViaText[];
-} = {
-        inputText: `
+};
+
+export const EXAMPLE_DATA_FOR_CARDS_FROM_TEXT_WITH_INVALID__MIX_MODE: WithInvalidData =
+        {
+                inputText: `
         @@ - definition for invalid term
         @@ invalid term, where no definition
         @@ correct term - correct definition -*&#@
         @@ - incorrect definition one more time
         @@ correct term 22 - correct definition 2222!)
         `,
-        expectedData: [
-                {
-                        type: 'short',
-                        term: 'correct term',
-                        definition: 'correct definition -*&#@'
-                },
-                {
-                        type: 'short',
-                        term: 'correct term 22',
-                        definition: 'correct definition 2222!)'
-                }
-        ]
-};
+                expectedData: [
+                        {
+                                type: 'short',
+                                term: 'correct term',
+                                definition: 'correct definition -*&#@'
+                        },
+                        {
+                                type: 'short',
+                                term: 'correct term 22',
+                                definition: 'correct definition 2222!)'
+                        }
+                ]
+        };
+
+export const EXAMPLE_DATA_FOR_CARDS_FROM_TEXT_WITH_INVALID__SHORT_ONLY_MODE: WithInvalidData =
+        {
+                inputText: `
+- definition for invalid term
+invalid term, where no definition
+correct term - correct definition -*&#@
+- incorrect definition one more time
+correct term 22 - correct definition 2222!)
+        `,
+                expectedData: [
+
+                        {
+                                type: 'short',
+                                term: 'correct term',
+                                definition: 'correct definition -*&#@'
+                        },
+
+                        {
+                                type: 'short',
+                                term: 'correct term 22',
+                                definition: 'correct definition 2222!)'
+                        }
+                ]
+        };

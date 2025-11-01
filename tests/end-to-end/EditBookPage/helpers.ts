@@ -4,6 +4,7 @@ import {
         getAddElementInListWithSuccessExpectations,
         getRemoveElFromTheListWithSuccessExpectations,
         getSelector,
+        multiPageReloadStep,
         typeInTextAndExpectSuccess
 } from '@/tests/end-to-end/helpers';
 import { addNewBook, editBook } from '@/tests/end-to-end/BooksPage/helpers';
@@ -748,18 +749,6 @@ export async function testActionsEditCardsAsText({
         expectedData: MixedCard[];
         inputText: string;
 }) {
-        /*
- mixEqualListsToSeeOnlyShortCardChanges(
-                        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
-                        EXAMPLE_DATA_FOR_UPDATE_CARDS_FROM_TEXT__MIXED_MODE
-                )
- *
-
- getCardsAsText_TEST_ONLY__SHORT_MODE(
-                                pickCardsOfShortType(exampleData)
-                        )
- *  */
-
         await createCards({
                 page,
                 exampleData
@@ -778,4 +767,98 @@ export async function testActionsEditCardsAsText({
                 page,
                 expectedData
         });
+}
+
+export async function testActionsIfEditCardsAsTextModalIsResilientToMisspells({
+        page,
+        mode,
+        inputText,
+        expectedData
+}: {
+        page: Page;
+        mode: CardsAsTextModes;
+        inputText: string;
+        expectedData: MixedCard[];
+}) {
+        await test.step(
+                'Open Edit cards text modal and type in example text',
+                getStepToOpenCardsAsTextDialogAndEdit({
+                        page,
+                        inputText,
+                        mode
+                })
+        );
+
+        await checkStepIfAllCardsMatchExpectations({
+                page,
+                expectedData
+        });
+}
+
+export async function testActionsIfUserCanCreateCardsViaText({
+        page,
+        mode,
+        inputText,
+        expectedData
+}: {
+        page: Page;
+        inputText: string;
+        mode: CardsAsTextModes;
+        expectedData: MixedCard[];
+}) {
+        await test.step(
+                'Create some cards in short cards only mode',
+                getStepToOpenCardsAsTextDialogAndEdit({
+                        page,
+                        inputText,
+                        mode
+                })
+        );
+
+        await checkStepIfAllCardsMatchExpectations({
+                page,
+                expectedData
+        });
+
+        await multiPageReloadStep({ page, timesNum: 2 });
+
+        await checkStepIfAllCardsMatchExpectations({
+                page,
+                expectedData
+        });
+}
+
+export async function testActionIfUserCanDeleteCards({
+        page,
+        addCardAction,
+        getCard
+}: {
+        page: Page;
+        addCardAction: (scope: Page | Locator) => Promise<void>;
+        getCard: (locator: Page | Locator) => Locator;
+}) {
+        const EXPLICIT_CARDS_TO_ADD = 10;
+        const EXPLICIT_CARDS_TO_DELETE = 5;
+
+        await test.step(`Add ${EXPLICIT_CARDS_TO_ADD} explicit cards`, async () => {
+                for (let i = 0; i < EXPLICIT_CARDS_TO_ADD; i++) {
+                        await addCardAction(page);
+                }
+        });
+
+        await expect(getCard(page)).toHaveCount(
+                EXPLICIT_CARDS_TO_ADD
+        );
+
+        await test.step(`Delete ${EXPLICIT_CARDS_TO_DELETE} cards`, async () => {
+                for (let i = 0; i < EXPLICIT_CARDS_TO_DELETE; i++) {
+                        await deleteCardStep(page, i);
+                }
+        });
+
+        await multiPageReloadStep({ page, timesNum: 3 });
+
+        await expect(getCard(page)).toHaveCount(
+                EXPLICIT_CARDS_TO_ADD - EXPLICIT_CARDS_TO_DELETE
+        );
 }
