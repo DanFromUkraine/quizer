@@ -78,13 +78,14 @@ export function getRemoveElFromTheListWithSuccessExpectations({
 }) {
         return async (scope: Page | Locator, elIndexToDelete: number) => {
                 await test.step(testStepTitle, async () => {
-                        const initialElsInScope =
-                                await getItemLocator(scope).all();
-                        const targetEl = initialElsInScope[elIndexToDelete];
+                        const initElsCount =
+                                await getItemLocator(scope).count();
+                        const targetEl =
+                                getItemLocator(scope).nth(elIndexToDelete);
                         const deleteBtnEl = getDeleteBtnEl(targetEl);
                         await deleteBtnEl.click();
                         await expect(getItemLocator(scope)).toHaveCount(
-                                initialElsInScope.length - 1
+                                initElsCount - 1
                         );
                 });
         };
@@ -205,6 +206,16 @@ async function cdpSwipe({
         }
 }
 
-export function deleteSpaces(targetStr: string) {
-        return targetStr.replace(' ', '');
+export async function forEachLocator(
+        loc: Locator,
+        fn: (el: Locator, i: number) => Promise<void>,
+        options?: { expectNum: number }
+) {
+        const n = await loc.count();
+        if (options?.expectNum) {
+                expect(n).toBe(options.expectNum);
+        }
+        for (let i = 0; i < n; i++) {
+                await fn(loc.nth(i), i);
+        }
 }
