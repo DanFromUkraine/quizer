@@ -1,10 +1,3 @@
-import test, { expect } from '@playwright/test';
-import {
-        expectInpToBeResilientToReloads,
-        forEachLocator,
-        multiPageReloadStep,
-        typeInTextAndExpectSuccess
-} from '@/tests/end-to-end/helpers';
 import {
         EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
         EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__SHORT_CARDS_ONLY,
@@ -52,6 +45,12 @@ import {
         mixEqualListsToSeeOnlyShortCardChanges,
         pickCardsOfShortType
 } from '@/tests/end-to-end/EditBookPage/utils';
+import {
+        expectInpToBeResilientToReloads,
+        multiPageReloadStep,
+        typeInTextAndExpectSuccess
+} from '@/tests/end-to-end/helpers';
+import test, { expect } from '@playwright/test';
 
 test.describe('Set of checks for edit book page', () => {
         test.beforeEach(

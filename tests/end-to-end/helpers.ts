@@ -5,7 +5,7 @@ export function getSelector(testId: string) {
         return (locator: Page | Locator) => {
                 if (typeof locator === 'undefined')
                         throw new Error(
-                                `Locator ${locator} for testid ${testId} is undefined.`
+                                `Locator for testid ${testId} is undefined.`
                         );
                 return locator.getByTestId(testId);
         };
@@ -50,7 +50,6 @@ export function getAddElementInListWithSuccessExpectations({
         testStepTitle
 }: {
         testStepTitle: string;
-
         getAddButton: (arg1: Page | Locator) => Locator;
         getItemLocator: (arg1: Page | Locator) => Locator;
 }) {
@@ -89,33 +88,6 @@ export function getRemoveElFromTheListWithSuccessExpectations({
                         );
                 });
         };
-}
-
-function getTouchEvent({
-        x,
-        y,
-        eventName,
-        target
-}: {
-        target: EventTarget;
-        x: number;
-        y: number;
-        eventName: 'touchstart' | 'touchend' | 'touchmove';
-}) {
-        const touch = new Touch({
-                clientX: x,
-                clientY: y,
-                target,
-                identifier: Date.now() - Math.random()
-        });
-
-        return new TouchEvent(eventName, {
-                bubbles: true,
-                cancelable: true,
-                touches: eventName !== 'touchend' ? [touch] : [],
-                targetTouches: eventName !== 'touchend' ? [touch] : [],
-                changedTouches: [touch]
-        });
 }
 
 export async function swipeOption({

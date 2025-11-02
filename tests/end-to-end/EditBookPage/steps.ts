@@ -32,7 +32,6 @@ import {
         getShortCardsOnlyModeCardsAsText,
         getShortCardTermInp
 } from '@/tests/end-to-end/EditBookPage/selectors';
-import { addNewBook, editBook } from '@/tests/end-to-end/BooksPage/helpers';
 import test, { expect, Locator, Page } from '@playwright/test';
 import {
         CardsAsTextModes,
@@ -49,6 +48,7 @@ import {
         normalizeForCompare,
         pickCardsOfShortType
 } from '@/tests/end-to-end/EditBookPage/utils';
+import { addNewBookStep, editBook, goToBooksPage } from '../BooksPage/steps';
 
 export async function openEditCardsAsTextDialogStep(page: Page) {
         await test.step('open edit cards as text dialog', async () => {
@@ -95,12 +95,8 @@ export const addNewOptionStep = getAddElementInListWithSuccessExpectations({
 });
 
 export async function goToEditPage({ page }: { page: Page }) {
-        await page.goto('/');
-        await Promise.all([
-                page.waitForFunction(() => 'indexedDB' in window),
-                page.waitForLoadState('domcontentloaded')
-        ]);
-        await addNewBook(page);
+        await goToBooksPage({ page });
+        await addNewBookStep(page);
         await editBook({ page, bookInd: 0 });
 }
 
