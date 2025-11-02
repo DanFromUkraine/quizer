@@ -1,38 +1,8 @@
-import test, { expect, Locator } from '@playwright/test';
-import {
-        addNewExpCardStep,
-        addNewOptionStep,
-        addNewShortCardStep,
-        deleteCardStep,
-        deleteOptionStep,
-        getBookDescInp,
-        getBookTitleInp,
-        getCardsAsText_TEST_ONLY__MIX_MODE,
-        getCardsAsText_TEST_ONLY__SHORT_MODE,
-        getExpCardContent,
-        getExpCardExplanationInp,
-        getExpCardSubtitleInp,
-        getExpCardTitleInp,
-        getMainOptionBody,
-        getOptChangeIsCorrectCheckbox,
-        getOptionContainer,
-        getOptTitle,
-        getShortCardContent,
-        getShortCardDefinitionInp,
-        getShortCardTermInp,
-        goToEditPage,
-        mixEqualListsToSeeOnlyShortCardChanges,
-        pickCardsOfShortType,
-        testActionsEditCardsAsText,
-        testActionsIfEditCardsAsTextModalIsResilientToMisspells,
-        testActionsIfTextInModalUpdatesAfterUpdatesInRegularUI,
-        testActionsIfUserCanCreateCardsViaText,
-        testOnDeleteCardViaText
-} from '@/tests/end-to-end/EditBookPage/helpers';
+import test, { expect } from '@playwright/test';
 import {
         expectInpToBeResilientToReloads,
+        forEachLocator,
         multiPageReloadStep,
-        swipeOption,
         typeInTextAndExpectSuccess
 } from '@/tests/end-to-end/helpers';
 import {
@@ -44,6 +14,44 @@ import {
         EXP_CARDS_TEXT_TITLE_ONLY,
         UPDATE_OPTION_DATA
 } from '@/tests/end-to-end/EditBookPage/constants';
+import {
+        getBookDescInp,
+        getBookTitleInp,
+        getExpCardContent,
+        getExpCardExplanationInp,
+        getExpCardSubtitleInp,
+        getExpCardTitleInp,
+        getMainOptionBody,
+        getOptChangeIsCorrectCheckbox,
+        getOptionContainer,
+        getOptTitle,
+        getShortCardContent,
+        getShortCardDefinitionInp,
+        getShortCardTermInp
+} from '@/tests/end-to-end/EditBookPage/selectors';
+import {
+        addNewExpCardStep,
+        addNewOptionStep,
+        addNewShortCardStep,
+        createEmptyOptionsStep,
+        deleteOptionStep,
+        deleteOptionWithSwipe,
+        goToEditPage,
+        swipeOptionLeftActions,
+        testActionIfUserCanDeleteCards,
+        testActionsEditCardsAsText,
+        testActionsIfEditCardsAsTextModalIsResilientToMisspells,
+        testActionsIfTextInModalUpdatesAfterUpdatesInRegularUI,
+        testActionsIfUserCanCreateCardsViaText,
+        testCardFieldForReloadResilience,
+        testOnDeleteCardViaText
+} from '@/tests/end-to-end/EditBookPage/steps';
+import {
+        getCardsAsText_TEST_ONLY__MIX_MODE,
+        getCardsAsText_TEST_ONLY__SHORT_MODE,
+        mixEqualListsToSeeOnlyShortCardChanges,
+        pickCardsOfShortType
+} from '@/tests/end-to-end/EditBookPage/utils';
 
 test.describe('Set of checks for edit book page', () => {
         test.beforeEach(
@@ -72,33 +80,50 @@ test.describe('Set of checks for edit book page', () => {
         test('Explicit card title should be resilient to reloads', async ({
                 page
         }) => {
-                await addNewExpCardStep(page);
-                const expCardTitleInp = getExpCardTitleInp(page);
-                await expectInpToBeResilientToReloads({
+                await testCardFieldForReloadResilience({
                         page,
-                        input: expCardTitleInp
+                        addCard: addNewExpCardStep,
+                        getField: getExpCardTitleInp
                 });
         });
 
         test('Explicit card subtitle should be resilient to reloads', async ({
                 page
         }) => {
-                await addNewExpCardStep(page);
-                const expCardSubtitle = getExpCardSubtitleInp(page);
-                await expectInpToBeResilientToReloads({
+                await testCardFieldForReloadResilience({
                         page,
-                        input: expCardSubtitle
+                        addCard: addNewExpCardStep,
+                        getField: getExpCardSubtitleInp
                 });
         });
 
         test('Explicit card explanation should be resilient to reloads', async ({
                 page
         }) => {
-                await addNewExpCardStep(page);
-                const expCardExplanation = getExpCardExplanationInp(page);
-                await expectInpToBeResilientToReloads({
+                await testCardFieldForReloadResilience({
                         page,
-                        input: expCardExplanation
+                        addCard: addNewExpCardStep,
+                        getField: getExpCardExplanationInp
+                });
+        });
+
+        test('Short card term input should be resilient to page reload', async ({
+                page
+        }) => {
+                await testCardFieldForReloadResilience({
+                        page,
+                        addCard: addNewShortCardStep,
+                        getField: getShortCardTermInp
+                });
+        });
+
+        test('Short card definition input should be resilient to page reload', async ({
+                page
+        }) => {
+                await testCardFieldForReloadResilience({
+                        page,
+                        addCard: addNewShortCardStep,
+                        getField: getShortCardDefinitionInp
                 });
         });
 
@@ -106,12 +131,13 @@ test.describe('Set of checks for edit book page', () => {
                 page
         }) => {
                 const NUM_OF_OPTS_TO_CREATE = 10;
-
                 await addNewExpCardStep(page);
 
-                for (let i = 0; i < NUM_OF_OPTS_TO_CREATE; i++) {
-                        await addNewOptionStep(getExpCardContent(page));
-                }
+                await createEmptyOptionsStep({
+                        numOfOptsToCreate: NUM_OF_OPTS_TO_CREATE,
+                        cardEl: getExpCardContent(page)
+                });
+
                 await multiPageReloadStep({ page, timesNum: 3 });
 
                 await expect(
@@ -127,25 +153,19 @@ test.describe('Set of checks for edit book page', () => {
 
                 await addNewExpCardStep(page);
 
-                await test.step(`Add ${NUM_OF_OPTS_TO_CREATE} options to explicit card and reload page`, async () => {
-                        for (let i = 0; i < NUM_OF_OPTS_TO_CREATE; i++) {
-                                await addNewOptionStep(getExpCardContent(page));
-                        }
-                        await multiPageReloadStep({ page, timesNum: 3 });
+                await createEmptyOptionsStep({
+                        numOfOptsToCreate: NUM_OF_OPTS_TO_CREATE,
+                        cardEl: getExpCardContent(page)
                 });
 
                 await test.step(`Remove ${NUM_OF_OPTS_TO_DELETE} options from explicit card`, async () => {
                         for (let i = 0; i < NUM_OF_OPTS_TO_DELETE; i++) {
-                                await getExpCardContent(page).waitFor({
-                                        state: 'visible'
-                                });
                                 const expCardContent = getExpCardContent(page);
                                 const optsCount =
                                         await getOptionContainer(
                                                 expCardContent
                                         ).count();
                                 expect(optsCount).toBeGreaterThan(0);
-
                                 await deleteOptionStep(expCardContent, 0);
                         }
                 });
@@ -162,87 +182,35 @@ test.describe('Set of checks for edit book page', () => {
         });
 
         test('Checkmark option with swipe', async ({ page }) => {
-                // 'todo' in the future I need to move common code into helper functions
-
                 await page.setViewportSize({ width: 390, height: 844 });
-
-                const TIMES_TO_CHECK = 3;
 
                 await addNewExpCardStep(page);
                 await addNewOptionStep(getExpCardContent(page));
-                const option = getOptionContainer(getExpCardContent(page));
+                await swipeOptionLeftActions({ page });
 
-                const swipeLeft = async () =>
-                        await swipeOption({
+                await test.step('Expect changes to be resilient to page reloads', async () => {
+                        await multiPageReloadStep({
                                 page,
-                                optionEl: option,
-                                direction: 'left'
+                                timesNum: 2
                         });
 
-                let prevIsChecked = false;
-
-                for (let i = 0; i < TIMES_TO_CHECK; i++) {
-                        await test.step('Swipe option left', async () => {
-                                await swipeLeft();
-                                prevIsChecked = !prevIsChecked;
-                        });
-
-                        await test.step('Expect changes to be applied', async () => {
-                                await expect(
-                                        getMainOptionBody(page)
-                                ).toHaveAttribute(
-                                        'data-status',
-                                        prevIsChecked ? 'correct' : 'incorrect'
-                                );
-                        });
-
-                        await test.step('Expect changes to be resilient to page reloads', async () => {
-                                await multiPageReloadStep({
-                                        page,
-                                        timesNum: 2
-                                });
-
-                                await expect(
-                                        getMainOptionBody(page)
-                                ).toHaveAttribute(
-                                        'data-status',
-                                        prevIsChecked ? 'correct' : 'incorrect'
-                                );
-                        });
-                }
+                        await expect(getMainOptionBody(page)).toHaveAttribute(
+                                'data-status',
+                                'correct'
+                        );
+                });
         });
 
         test('Delete option with swipe', async ({ page }) => {
-                // 'todo' in the future I need to move common code into helper functions
-
-                await page.setViewportSize({ width: 390, height: 844 });
                 const NUM_OF_OPTIONS_TO_ADD = 10;
                 const NUM_OF_OPTIONS_TO_DELETE = 5;
 
-                const swipeOptRight = async (optionEl: Locator) =>
-                        swipeOption({ optionEl, page, direction: 'right' });
-
-                await test.step('Add new explicit card', async () => {
-                        await addNewExpCardStep(page);
-                });
-                await test.step(`Add ${NUM_OF_OPTIONS_TO_ADD} new options to explicit card and reload page`, async () => {
-                        for (let i = 0; i < NUM_OF_OPTIONS_TO_ADD; i++) {
-                                await addNewOptionStep(getExpCardContent(page));
-                        }
-                        await multiPageReloadStep({ page, timesNum: 3 });
-                });
-
-                await test.step(`Remove ${NUM_OF_OPTIONS_TO_DELETE} options from explicit card`, async () => {
-                        for (let i = 0; i < NUM_OF_OPTIONS_TO_DELETE; i++) {
-                                await getMainOptionBody(page).last().waitFor();
-                                expect(
-                                        await getMainOptionBody(page).count()
-                                ).toBeGreaterThan(0);
-
-                                const firstOption =
-                                        getMainOptionBody(page).first();
-                                await swipeOptRight(firstOption);
-                        }
+                await page.setViewportSize({ width: 390, height: 844 });
+                await addNewExpCardStep(page);
+                await deleteOptionWithSwipe({
+                        page,
+                        numOfOptsToAdd: NUM_OF_OPTIONS_TO_ADD,
+                        numOfOptsToDelete: NUM_OF_OPTIONS_TO_DELETE
                 });
 
                 await test.step('Expect changes to be saved after page reload', async () => {
@@ -264,35 +232,30 @@ test.describe('Set of checks for edit book page', () => {
         test('Option update should be resilient to page reload', async ({
                 page
         }) => {
+                const numOfOptsToCreate = UPDATE_OPTION_DATA.length;
                 await addNewExpCardStep(page);
 
-                for (const { isCorrect, title } of UPDATE_OPTION_DATA) {
-                        await addNewOptionStep(getExpCardContent(page));
+                await test.step(`Create ${numOfOptsToCreate} options`, async () => {
+                        for (let i = 0; i < numOfOptsToCreate; i++) {
+                                await addNewOptionStep(getExpCardContent(page));
+                        }
+                });
 
-                        const { optTitleInpEl, optIsCorrectCheckboxEl } =
-                                await test.step('extract fields from option', () => {
-                                        const currOption = getOptionContainer(
-                                                getExpCardContent(page)
-                                        ).last();
-                                        const optTitleInpEl =
-                                                getOptTitle(currOption);
-                                        const optIsCorrectCheckboxEl =
-                                                getOptChangeIsCorrectCheckbox(
-                                                        currOption
-                                                );
-                                        return {
-                                                optTitleInpEl,
-                                                optIsCorrectCheckboxEl
-                                        };
-                                });
+                for (let i = 0; i < numOfOptsToCreate; i++) {
+                        const { title, isCorrect } = UPDATE_OPTION_DATA[i];
+                        const optionBody = getOptionContainer(
+                                getExpCardContent(page)
+                        ).nth(i);
 
                         await test.step(`Update option to have title with value ${title} and correctness checkbox ${isCorrect ? 'ticked' : 'unticked'}`, async () => {
                                 await typeInTextAndExpectSuccess(
-                                        optTitleInpEl,
+                                        getOptTitle(optionBody),
                                         title
                                 );
                                 if (isCorrect)
-                                        await optIsCorrectCheckboxEl.click();
+                                        await getOptChangeIsCorrectCheckbox(
+                                                optionBody
+                                        ).click();
                         });
                 }
                 await multiPageReloadStep({ page, timesNum: 3 });
@@ -302,7 +265,6 @@ test.describe('Set of checks for edit book page', () => {
                 ).toHaveCount(UPDATE_OPTION_DATA.length);
 
                 for (let i = 0; i < UPDATE_OPTION_DATA.length; i++) {
-                        console.log(getExpCardContent(page));
                         const expectedData = UPDATE_OPTION_DATA[i];
                         const currOptionEl = getOptionContainer(
                                 getExpCardContent(page)
@@ -320,92 +282,24 @@ test.describe('Set of checks for edit book page', () => {
                 }
         });
 
-        test('Short card term input should be resilient to page reload', async ({
-                page
-        }) => {
-                // 'todo' in the future I need to move common code into helper functions
-
-                await addNewShortCardStep(page);
-                const termInpEl = getShortCardTermInp(page);
-                await expectInpToBeResilientToReloads({
-                        page,
-                        input: termInpEl
-                });
-        });
-
-        test('Short card definition input should be resilient to page reload', async ({
-                page
-        }) => {
-                // 'todo' in the future I need to move common code into helper functions
-
-                await addNewShortCardStep(page);
-                const definitionInpEl = getShortCardDefinitionInp(page);
-                await expectInpToBeResilientToReloads({
-                        page,
-                        input: definitionInpEl
-                });
-        });
-
         test('It should be possible to delete short card. Changes should be resilient to page reloads', async ({
                 page
         }) => {
-                // 'todo' in the future I need to move common code into helper functions
-
-                const SHORT_CARDS_TO_ADD = 10;
-                const SHORT_CARDS_TO_DELETE = 5;
-
-                await test.step(`Add ${SHORT_CARDS_TO_ADD} short cards`, async () => {
-                        for (let i = 0; i < SHORT_CARDS_TO_ADD; i++) {
-                                await addNewShortCardStep(page);
-                        }
+                await testActionIfUserCanDeleteCards({
+                        page,
+                        addCardAction: addNewShortCardStep,
+                        getCard: getShortCardContent
                 });
-
-                await expect(getShortCardContent(page)).toHaveCount(
-                        SHORT_CARDS_TO_ADD
-                );
-
-                await test.step(`Delete ${SHORT_CARDS_TO_DELETE} short cards`, async () => {
-                        for (let i = 0; i < SHORT_CARDS_TO_DELETE; i++) {
-                                await deleteCardStep(page, i);
-                        }
-                });
-
-                await multiPageReloadStep({ page, timesNum: 3 });
-
-                await expect(getShortCardContent(page)).toHaveCount(
-                        SHORT_CARDS_TO_ADD - SHORT_CARDS_TO_DELETE
-                );
         });
 
         test('It should be possible to delete explicit card. Changes should be resilient to page reloads', async ({
                 page
         }) => {
-                // 'todo' in the future I need to move common code into helper functions
-
-                const EXPLICIT_CARDS_TO_ADD = 10;
-                const EXPLICIT_CARDS_TO_DELETE = 5;
-
-                await test.step(`Add ${EXPLICIT_CARDS_TO_ADD} explicit cards`, async () => {
-                        for (let i = 0; i < EXPLICIT_CARDS_TO_ADD; i++) {
-                                await addNewExpCardStep(page);
-                        }
+                await testActionIfUserCanDeleteCards({
+                        page,
+                        addCardAction: addNewExpCardStep,
+                        getCard: getExpCardContent
                 });
-
-                await expect(getExpCardContent(page)).toHaveCount(
-                        EXPLICIT_CARDS_TO_ADD
-                );
-
-                await test.step(`Delete ${EXPLICIT_CARDS_TO_DELETE} explicit cards`, async () => {
-                        for (let i = 0; i < EXPLICIT_CARDS_TO_DELETE; i++) {
-                                await deleteCardStep(page, i);
-                        }
-                });
-
-                await multiPageReloadStep({ page, timesNum: 3 });
-
-                await expect(getExpCardContent(page)).toHaveCount(
-                        EXPLICIT_CARDS_TO_ADD - EXPLICIT_CARDS_TO_DELETE
-                );
         });
 
         test('User should be able to create explicit and short cards via text with all data (In mixed mode)', async ({

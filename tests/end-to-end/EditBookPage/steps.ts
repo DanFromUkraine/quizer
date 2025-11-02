@@ -1,103 +1,54 @@
-import { BASE_DIALOG_TEST_IDS, EP_TEST_IDS } from '@/src/constants/testIds';
-import test, { expect, Locator, Page } from '@playwright/test';
 import {
+        expectInpToBeResilientToReloads,
+        forEachLocator,
         getAddElementInListWithSuccessExpectations,
         getRemoveElFromTheListWithSuccessExpectations,
-        getSelector,
         multiPageReloadStep,
+        swipeOption,
         typeInTextAndExpectSuccess
 } from '@/tests/end-to-end/helpers';
-import { addNewBook, editBook } from '@/tests/end-to-end/BooksPage/helpers';
 import {
+        getAddNewExpCardBtn,
+        getAddNewShortCardBtn,
+        getBtnCloseDialog,
+        getBtnOpenDialogCardsAsText,
+        getCard,
+        getDeleteCardBtn,
+        getDialogCardsAsText,
+        getExpCardContent,
+        getExpCardExplanationInp,
+        getExpCardNewOptBtn,
+        getExpCardSubtitleInp,
+        getExpCardTitleInp,
+        getMainInpCardsAsTextDialog,
+        getMainOptionBody,
+        getOptChangeIsCorrectCheckbox,
+        getOptDeleteBtn,
+        getOptionContainer,
+        getOptTitle,
+        getSaveAndExitBtnDialogCardsAsText,
+        getShortCardContent,
+        getShortCardDefinitionInp,
+        getShortCardsOnlyModeCardsAsText,
+        getShortCardTermInp
+} from '@/tests/end-to-end/EditBookPage/selectors';
+import { addNewBook, editBook } from '@/tests/end-to-end/BooksPage/helpers';
+import test, { expect, Locator, Page } from '@playwright/test';
+import {
+        CardsAsTextModes,
+        MixedCard,
         TestExplicitCardViaText,
         TestOptionViaText,
         TestShortCardViaText
-} from '@/tests/end-to-end/EditBookPage/constants';
+} from '@/tests/end-to-end/EditBookPage/types';
 import {
-        getShortCardAsText__MIX_MODE,
-        getShortCardAsText__SHORT_MODE
-} from '@/src/utils/cardsAsText/helpers';
-
-type CardsAsTextModes = 'mixed' | 'short-cards-only';
-type MixedCard = TestExplicitCardViaText | TestShortCardViaText;
-
-export const getBookTitleInp = getSelector(EP_TEST_IDS.bookTitleInp);
-export const getBookDescInp = getSelector(EP_TEST_IDS.bookDescInp);
-export const getBtnOpenDialogCardsAsText = getSelector(
-        EP_TEST_IDS.openDialogBtnCardsAsText
-);
-export const getBtnCloseDialog = getSelector(BASE_DIALOG_TEST_IDS.defCloseBtn);
-export const getDialogCardsAsText = getSelector(
-        EP_TEST_IDS.cardsAsTextDialog.me
-);
-export const getSaveAndExitBtnDialogCardsAsText = getSelector(
-        EP_TEST_IDS.cardsAsTextDialog.saveAndExitBtn
-);
-export const getMixedModeButtonCardsAsText = getSelector(
-        EP_TEST_IDS.cardsAsTextDialog.mixedModeBtn
-);
-export const getShortCardsOnlyModeCardsAsText = getSelector(
-        EP_TEST_IDS.cardsAsTextDialog.shortCardsOnlyModeBtn
-);
-export const getMainInpCardsAsTextDialog = getSelector(
-        EP_TEST_IDS.cardsAsTextDialog.mainInp
-);
-export const getAllCards = (page: Page) =>
-        getSelector(EP_TEST_IDS.card.me)(page).all();
-export const getCard = getSelector(EP_TEST_IDS.card.me);
-export const getExpCardContent = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.me
-);
-export const getShortCardContent = getSelector(
-        EP_TEST_IDS.card.shortCardContent.me
-);
-export const getAllExpCardContentEls = (page: Page) =>
-        getSelector(EP_TEST_IDS.card.explicitCardContent.me)(page).all();
-export const getAllShortCardContentEls = (page: Page) =>
-        getSelector(EP_TEST_IDS.card.shortCardContent.me)(page).all();
-export const getExpCardTitleInp = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.titleInp
-);
-export const getExpCardSubtitleInp = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.subtitleInp
-);
-export const getExpCardExplanationInp = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.explanationInp
-);
-export const getAllOptions = (page: Locator) =>
-        getSelector(EP_TEST_IDS.card.explicitCardContent.option.me)(page).all();
-export const getExpCardNewOptBtn = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.newOptionBtn
-);
-export const getOptionContainer = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.option.me
-);
-export const getMainOptionBody = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.option.mainOptBody.me
-);
-export const getOptChangeIsCorrectCheckbox = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.option.mainOptBody
-                .changeIsCorrectCheckbox
-);
-export const getOptCheckIsCorrectCheckbox_MobileOnly = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.option
-                .changeIsCorrectCheckbox_MobileOnly
-);
-export const getOptTitle = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.option.mainOptBody.titleInp
-);
-export const getOptDeleteBtn = getSelector(
-        EP_TEST_IDS.card.explicitCardContent.option.mainOptBody.deleteBtn
-);
-export const getShortCardTermInp = getSelector(
-        EP_TEST_IDS.card.shortCardContent.termInp
-);
-export const getShortCardDefinitionInp = getSelector(
-        EP_TEST_IDS.card.shortCardContent.definitionInp
-);
-export const getDeleteCardBtn = getSelector(EP_TEST_IDS.card.deleteBtn);
-export const getAddNewExpCardBtn = getSelector(EP_TEST_IDS.newExpCardBtn);
-export const getAddNewShortCardBtn = getSelector(EP_TEST_IDS.newShortCardBtn);
+        checkIfTheresEnoughOfOpts,
+        expectTrimmedValue,
+        getCardsAsText_TEST_ONLY__MIX_MODE,
+        getCardsAsText_TEST_ONLY__SHORT_MODE,
+        normalizeForCompare,
+        pickCardsOfShortType
+} from '@/tests/end-to-end/EditBookPage/utils';
 
 export async function openEditCardsAsTextDialogStep(page: Page) {
         await test.step('open edit cards as text dialog', async () => {
@@ -122,25 +73,21 @@ export const addNewExpCardStep = getAddElementInListWithSuccessExpectations({
         getAddButton: getAddNewExpCardBtn,
         getItemLocator: getCard
 });
-
 export const addNewShortCardStep = getAddElementInListWithSuccessExpectations({
         testStepTitle: 'Add new empty short card',
         getAddButton: getAddNewShortCardBtn,
         getItemLocator: getCard
 });
-
 export const deleteCardStep = getRemoveElFromTheListWithSuccessExpectations({
         testStepTitle: 'Delete card (explicit | short)',
         getDeleteBtnEl: getDeleteCardBtn,
         getItemLocator: getCard
 });
-
 export const deleteOptionStep = getRemoveElFromTheListWithSuccessExpectations({
         testStepTitle: "Delete explicit card's option",
         getDeleteBtnEl: getOptDeleteBtn,
         getItemLocator: getOptionContainer
 });
-
 export const addNewOptionStep = getAddElementInListWithSuccessExpectations({
         testStepTitle: 'Add new option in explicit card',
         getAddButton: getExpCardNewOptBtn,
@@ -155,50 +102,6 @@ export async function goToEditPage({ page }: { page: Page }) {
         ]);
         await addNewBook(page);
         await editBook({ page, bookInd: 0 });
-}
-
-function getOneExpCardAsText_forTest({
-        title,
-        subtitle,
-        explanation,
-        options
-}: Omit<TestExplicitCardViaText, 'type'>) {
-        return `
-        \n&& ${title}
-        \n &s ${subtitle}
-         ${options
-                 .map(
-                         ({ optionTitle, isCorrect }) =>
-                                 `\n \t %% ${isCorrect ? '%correct%' : ''} ${optionTitle}`
-                 )
-                 .join('')}
-        \n &e ${explanation}
-        `;
-}
-
-export function getCardsAsText_TEST_ONLY__MIX_MODE(
-        cardsList: (TestExplicitCardViaText | TestShortCardViaText)[]
-) {
-        return cardsList
-                .map((card) =>
-                        card.type === 'explicit'
-                                ? getOneExpCardAsText_forTest(card)
-                                : getShortCardAsText__MIX_MODE({
-                                          term: card.term,
-                                          definition: card.definition
-                                  })
-                )
-                .join('');
-}
-
-export function getCardsAsText_TEST_ONLY__SHORT_MODE(
-        cardsList: TestShortCardViaText[]
-) {
-        return cardsList
-                .map(({ type: _type, ...card }) =>
-                        getShortCardAsText__SHORT_MODE({ ...card })
-                )
-                .join('');
 }
 
 export function getStepToOpenCardsAsTextDialogAndEdit({
@@ -290,19 +193,19 @@ export async function checkStepExpCardToHaveSuchVals({
                         expectedData.explanation
                 );
 
-                const optionEls = await getMainOptionBody(cardEl).all();
-
-                await expect(getMainOptionBody(cardEl)).toHaveCount(
-                        expectedData.options.length,
-                        { timeout: 10_000 }
+                await forEachLocator(
+                        getMainOptionBody(cardEl),
+                        async (optionEl, i) => {
+                                await checkStepOptionCardToHaveSuchVals({
+                                        optionEl,
+                                        expectedOptionData:
+                                                expectedData.options[i]
+                                });
+                        },
+                        {
+                                expectNum: expectedData.options.length
+                        }
                 );
-
-                for (let i = 0; i < optionEls.length; i++) {
-                        await checkStepOptionCardToHaveSuchVals({
-                                optionEl: optionEls[i],
-                                expectedOptionData: expectedData.options[i]
-                        });
-                }
         });
 }
 
@@ -361,26 +264,13 @@ export async function checkStepIfAllCardsMatchExpectations({
                         timeout: 10_000
                 });
 
-                const allCardEls = await getCard(page).all();
-                for (let i = 0; i < allCardEls.length; i++) {
+                await forEachLocator(getCard(page), async (cardEl, i) => {
                         await checkIfCardFromTextMatchesWhatWeExpect({
-                                cardEl: allCardEls[i],
+                                cardEl,
                                 expectedData: expectedData[i]
                         });
-                }
+                });
         });
-}
-
-export function pickCardsOfShortType(
-        list: (TestExplicitCardViaText | TestShortCardViaText)[]
-) {
-        return list.filter((card) => card.type === 'short');
-}
-
-export async function expectTrimmedValue(locator: Locator, expected: string) {
-        await expect(locator).toBeVisible();
-        const v = await locator.inputValue();
-        expect(v.trim()).toBe(expected);
 }
 
 export async function markOptionAsCorrectIfSo({
@@ -419,32 +309,18 @@ export async function fillDataInOptionStep({
         });
 }
 
-async function createEmptyOptionsStep({
+export async function createEmptyOptionsStep({
         numOfOptsToCreate,
         cardEl
 }: {
         numOfOptsToCreate: number;
         cardEl: Locator;
 }) {
-        await test.step('create empty options', async () => {
+        await test.step(`create ${numOfOptsToCreate} empty options`, async () => {
                 for (let i = 0; i < numOfOptsToCreate; i++) {
                         const addOptButton = getExpCardNewOptBtn(cardEl);
                         await addOptButton.click();
                 }
-        });
-}
-
-async function checkIfTheresEnoughOfOps({
-        cardEl,
-        expectedCount
-}: {
-        cardEl: Locator;
-        expectedCount: number;
-}) {
-        await test.step('Expect num of options to correspond to example options list length', async () => {
-                await expect(getOptionContainer(cardEl)).toHaveCount(
-                        expectedCount
-                );
         });
 }
 
@@ -463,7 +339,7 @@ export async function createAndFillDataInManyOptionsStep({
                         numOfOptsToCreate: exampleOptions.length
                 });
 
-                await checkIfTheresEnoughOfOps({
+                await checkIfTheresEnoughOfOpts({
                         cardEl,
                         expectedCount: exampleOptions.length
                 });
@@ -589,61 +465,6 @@ export async function checkIfNumOfCardsIsEnough({
         await test.step('Num of empty cards should correspond to the length of example array', async () => {
                 await expect(getCard(page)).toHaveCount(expectedCount);
         });
-}
-
-export function normalizeForCompare(s: string) {
-        return (
-                s
-                        // Delete all non-breaking spaces and other Unicode spaces
-                        .replace(
-                                /[\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]/g,
-                                ''
-                        )
-                        // Delete zero-width symbols
-                        .replace(/[\u200B\u200C\u200D\uFEFF]/g, '')
-                        // Delete any special symbols (New rows, tabs, spaces, etc.)
-                        .replace(/\s+/g, '')
-                        .trim()
-        );
-}
-
-//mixEqualListsToSeeOnlyShortCardChanges
-
-export function mixEqualListsToSeeOnlyShortCardChanges(
-        initialList: MixedCard[],
-        resultList: MixedCard[]
-): MixedCard[] {
-        if (initialList.length !== resultList.length) {
-                throw new Error('lists must have equal length');
-        }
-
-        const shortCardsFromResultList = resultList.filter(
-                (c): c is TestShortCardViaText => c.type === 'short'
-        );
-
-        let shortIndex = 0;
-        const fixture: MixedCard[] = [];
-
-        for (const item of initialList) {
-                if (item.type === 'explicit') {
-                        fixture.push(item);
-                } else {
-                        if (shortIndex >= shortCardsFromResultList.length) {
-                                throw new Error(
-                                        'not enough short cards in resultList to replace initialList shorts'
-                                );
-                        }
-                        fixture.push(shortCardsFromResultList[shortIndex++]);
-                }
-        }
-
-        if (shortIndex !== shortCardsFromResultList.length) {
-                throw new Error(
-                        'extra short cards in resultList that were not consumed'
-                );
-        }
-
-        return fixture;
 }
 
 export async function createCards({
@@ -837,28 +658,105 @@ export async function testActionIfUserCanDeleteCards({
         addCardAction: (scope: Page | Locator) => Promise<void>;
         getCard: (locator: Page | Locator) => Locator;
 }) {
-        const EXPLICIT_CARDS_TO_ADD = 10;
-        const EXPLICIT_CARDS_TO_DELETE = 5;
+        const CARDS_TO_ADD = 10;
+        const CARDS_TO_DELETE = 5;
 
-        await test.step(`Add ${EXPLICIT_CARDS_TO_ADD} explicit cards`, async () => {
-                for (let i = 0; i < EXPLICIT_CARDS_TO_ADD; i++) {
+        await test.step(`Add ${CARDS_TO_ADD} cards`, async () => {
+                for (let i = 0; i < CARDS_TO_ADD; i++) {
                         await addCardAction(page);
                 }
         });
 
-        await expect(getCard(page)).toHaveCount(
-                EXPLICIT_CARDS_TO_ADD
-        );
+        await expect(getCard(page)).toHaveCount(CARDS_TO_ADD);
 
-        await test.step(`Delete ${EXPLICIT_CARDS_TO_DELETE} cards`, async () => {
-                for (let i = 0; i < EXPLICIT_CARDS_TO_DELETE; i++) {
+        await test.step(`Delete ${CARDS_TO_DELETE} cards`, async () => {
+                for (let i = 0; i < CARDS_TO_DELETE; i++) {
                         await deleteCardStep(page, i);
                 }
         });
 
         await multiPageReloadStep({ page, timesNum: 3 });
 
-        await expect(getCard(page)).toHaveCount(
-                EXPLICIT_CARDS_TO_ADD - EXPLICIT_CARDS_TO_DELETE
-        );
+        await expect(getCard(page)).toHaveCount(CARDS_TO_ADD - CARDS_TO_DELETE);
+}
+
+export async function swipeOptionLeftActions({ page }: { page: Page }) {
+        await page.setViewportSize({ width: 390, height: 844 });
+        const TIMES_TO_CHECK = 3;
+        const option = getOptionContainer(getExpCardContent(page));
+
+        if (TIMES_TO_CHECK % 2 === 0)
+                throw new Error(
+                        `Use should not check cards ${TIMES_TO_CHECK} times, as the number is even --> we should check opposite on the exit of this function`
+                );
+
+        const swipeLeft = async () =>
+                await swipeOption({
+                        page,
+                        optionEl: option,
+                        direction: 'left'
+                });
+
+        let prevIsChecked = false;
+
+        for (let i = 0; i < TIMES_TO_CHECK; i++) {
+                await test.step('Swipe option left', async () => {
+                        await swipeLeft();
+                        prevIsChecked = !prevIsChecked;
+                });
+
+                await test.step('Expect changes to be applied', async () => {
+                        await expect(getMainOptionBody(page)).toHaveAttribute(
+                                'data-status',
+                                prevIsChecked ? 'correct' : 'incorrect'
+                        );
+                });
+        }
+}
+
+export async function deleteOptionWithSwipe({
+        page,
+        numOfOptsToAdd,
+        numOfOptsToDelete
+}: {
+        page: Page;
+        numOfOptsToAdd: number;
+        numOfOptsToDelete: number;
+}) {
+        const swipeOptRight = async (optionEl: Locator) =>
+                swipeOption({ optionEl, page, direction: 'right' });
+
+        await test.step(`Add ${numOfOptsToAdd} new options to explicit card`, async () => {
+                for (let i = 0; i < numOfOptsToAdd; i++) {
+                        await addNewOptionStep(getExpCardContent(page));
+                }
+        });
+
+        await test.step(`Remove ${numOfOptsToDelete} options from explicit card`, async () => {
+                for (let i = 0; i < numOfOptsToDelete; i++) {
+                        expect(
+                                await getMainOptionBody(page).count()
+                        ).toBeGreaterThan(0);
+
+                        const firstOption = getMainOptionBody(page).first();
+                        await swipeOptRight(firstOption);
+                }
+        });
+}
+
+export async function testCardFieldForReloadResilience({
+        page,
+        addCard,
+        getField
+}: {
+        page: Page;
+        addCard: (arg1: Page | Locator) => Promise<void>;
+        getField: (arg1: Page | Locator) => Locator;
+}) {
+        await addCard(page);
+        const inputEl = getField(page);
+        await expectInpToBeResilientToReloads({
+                page,
+                input: inputEl
+        });
 }

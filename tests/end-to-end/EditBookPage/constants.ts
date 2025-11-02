@@ -1,9 +1,11 @@
-export const EXAMPLE_STR = 'This is an example string';
+import {
+        TestExplicitCardViaText,
+        TestOption,
+        TestShortCardViaText,
+        WithInvalidData
+} from '@/tests/end-to-end/EditBookPage/types';
 
-type TestOption = {
-        isCorrect: boolean;
-        title: string;
-};
+export const EXAMPLE_STR = 'This is an example string';
 
 export const UPDATE_OPTION_DATA: TestOption[] = [
         {
@@ -35,25 +37,6 @@ export const UPDATE_OPTION_DATA: TestOption[] = [
                 title: 'This is option n7777777'
         }
 ];
-
-export type TestShortCardViaText = {
-        type: 'short';
-        term: string;
-        definition: string;
-};
-
-export type TestOptionViaText = {
-        optionTitle: string;
-        isCorrect: boolean;
-};
-
-export type TestExplicitCardViaText = {
-        type: 'explicit';
-        title: string;
-        subtitle: string;
-        explanation: string;
-        options: TestOptionViaText[];
-};
 
 export const EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE: (
         | TestShortCardViaText
@@ -234,11 +217,6 @@ export const EXP_CARDS_TEXT_TITLE_ONLY: {
         ]
 };
 
-type WithInvalidData = {
-        inputText: string;
-        expectedData: TestShortCardViaText[];
-};
-
 export const EXAMPLE_DATA_FOR_CARDS_FROM_TEXT_WITH_INVALID__MIX_MODE: WithInvalidData =
         {
                 inputText: `
@@ -272,7 +250,6 @@ correct term - correct definition -*&#@
 correct term 22 - correct definition 2222!)
         `,
                 expectedData: [
-
                         {
                                 type: 'short',
                                 term: 'correct term',
