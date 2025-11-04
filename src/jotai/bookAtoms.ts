@@ -31,10 +31,10 @@ async function deleteCardsOnBookDeleteAtomHelper(
         bookId: string
 ) {
         const { explicitCardIds, shortCardIds } = get(booksAtomFamily(bookId));
-        for await (const cardId of explicitCardIds) {
+        for (const cardId of explicitCardIds) {
                 await set(deleteExplicitCardAtom, cardId);
         }
-        for await (const cardId of shortCardIds) {
+        for (const cardId of shortCardIds) {
                 await set(deleteShortCardAtom, cardId);
         }
 }

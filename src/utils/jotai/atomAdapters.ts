@@ -24,7 +24,7 @@ import { updateExplicitCardStoryAtom } from '@/src/jotai/explicitCardStoryAtoms'
 import { updateTypeInCardStoryAtom } from '@/src/jotai/typeInCardStoryAtoms';
 import { updateIsCorrectCardStoryAtom } from '@/src/jotai/isCorrectCardStoryAtoms';
 
-function getAtomFamilyAdapter<Item extends {}, K extends keyof Item>({
+function getAtomFamilyAdapter<Item extends object, K extends keyof Item>({
         targetAtomFamily,
         targetProperty,
         targetUpdateAtom
@@ -38,11 +38,11 @@ function getAtomFamilyAdapter<Item extends {}, K extends keyof Item>({
 }) {
         return (
                 targetId: string
-        ): WritableAtom<Item[K], [newVal: Item[K]], void> =>
+        ): WritableAtom<Item[K], [newVal: Item[K]], Promise<void>> =>
                 atom(
                         (get) =>
                                 get(targetAtomFamily(targetId))[targetProperty],
-                        (get, set, newVal: Item[K]) => {
+                        async (get, set, newVal: Item[K]) => {
                                 const prevAtomValue = get(
                                         targetAtomFamily(targetId)
                                 );
@@ -50,12 +50,12 @@ function getAtomFamilyAdapter<Item extends {}, K extends keyof Item>({
                                         ...prevAtomValue,
                                         [targetProperty]: newVal
                                 };
-                                set(targetUpdateAtom, newAtomValue);
+                                await set(targetUpdateAtom, newAtomValue);
                         }
                 );
 }
 
-function getAtomAdapter<Item extends {}, K extends keyof Item>({
+function getAtomAdapter<Item extends object, K extends keyof Item>({
         targetAtom,
         targetProperty
 }: {
@@ -146,11 +146,12 @@ export const getTypeInCardStoryCurrValFamilyAdapterAtom = getAtomFamilyAdapter({
         targetUpdateAtom: updateTypeInCardStoryAtom
 });
 
-export const getTypeInCardStoryAnswerRevealedFamilyAdapterAtom = getAtomFamilyAdapter({
-        targetAtomFamily: typeInCardStoriesAtomFamily,
-        targetProperty: "answerRevealed",
-        targetUpdateAtom: updateTypeInCardStoryAtom
-})
+export const getTypeInCardStoryAnswerRevealedFamilyAdapterAtom =
+        getAtomFamilyAdapter({
+                targetAtomFamily: typeInCardStoriesAtomFamily,
+                targetProperty: 'answerRevealed',
+                targetUpdateAtom: updateTypeInCardStoryAtom
+        });
 
 export const getIsCorrectCardStoryCurrValFamilyAdapterAtom =
         getAtomFamilyAdapter({
@@ -158,8 +159,6 @@ export const getIsCorrectCardStoryCurrValFamilyAdapterAtom =
                 targetProperty: 'currentValue',
                 targetUpdateAtom: updateIsCorrectCardStoryAtom
         });
-
-
 
 export const getNewStoryIsSmartModeParamAdapterAtom = getAtomAdapter({
         targetAtom: newStorySettingsAtom,

@@ -5,24 +5,27 @@ import OptionTitleUI from '@/src/components/edit_book_page/RenderCards/Card/Expl
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import { getCardOptionTitleFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 import { useMemo } from 'react';
-import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
-import { useAtom } from 'jotai';
+import useJotaiDeferredUpdateAdapter from '@/src/hooks/jotaiRelated/jotaiDeferedInput';
+import { useCardProps } from '../../../..';
 
 export default function OptionTitle() {
         const { optionId } = useOptionProps();
+        const { cardId } = useCardProps();
         const stableAdapterAtom = useMemo(
                 () => getCardOptionTitleFamilyAdapterAtom(optionId),
                 []
         );
-        const [value, setValue] =
-                useAtom(
-                        stableAdapterAtom
-                ); /* 'todo' change it with updateAdapter, when you have time*/
+        const { inputValue, setInputValue, isDisabled } =
+                useJotaiDeferredUpdateAdapter({
+                        adapterAtom: stableAdapterAtom,
+                        cardId
+                }); /* 'todo' change it with updateAdapter, when you have time*/
 
         return (
                 <OptionTitleUI
-                        value={value}
-                        onChange={getInputChangeCallback(setValue)}
+                        disabled={isDisabled}
+                        value={inputValue}
+                        onChange={getInputChangeCallback(setInputValue)}
                         optionId={optionId}
                 />
         );

@@ -15,10 +15,8 @@ export function scoreToColor(score: number): string {
 export default function Results() {
         const { isCompleted, storyId } = usePlayModeProps();
         const stableResAtom = useMemo(() => getStoryResultsAtom(storyId), []);
-        const {
-                successPercentage,
-                markIn12PointsSystem,
-        } = useAtomValue(stableResAtom);
+        const { successPercentage, markIn12PointsSystem } =
+                useAtomValue(stableResAtom);
 
         return (
                 isCompleted && (

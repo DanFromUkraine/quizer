@@ -9,14 +9,12 @@ import { getBookTitleFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 
 export default function BookTitleInput() {
         const { bookId } = useEditBookProps();
-        const stableAtom = useMemo(() => getBookTitleFamilyAdapterAtom(bookId), []);
+        const stableAtom = useMemo(
+                () => getBookTitleFamilyAdapterAtom(bookId),
+                []
+        );
         const [value, setValue] = useAtom(stableAtom);
         const onChange = getInputChangeCallback(setValue);
 
-        return (
-                <HeaderUI
-                        value={value}
-                        onChange={onChange}
-                />
-        );
+        return <HeaderUI value={value} onChange={onChange} />;
 }

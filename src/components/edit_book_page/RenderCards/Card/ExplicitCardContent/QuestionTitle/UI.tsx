@@ -6,11 +6,13 @@ import { EP_TEST_IDS } from '@/src/constants/testIds';
 export default function MainQuestionTitleUI({
         value,
         onChange,
-        cardId
+        cardId,
+        disabled
 }: {
         value: string;
         onChange: ChangeEventHandler;
         cardId: string;
+        disabled?: boolean;
 }) {
         return (
                 <Quoted
@@ -27,6 +29,7 @@ export default function MainQuestionTitleUI({
                                 onChange={onChange}
                                 className={'w-full'}
                                 required
+                                disabled={disabled}
                         />
                 </Quoted>
         );

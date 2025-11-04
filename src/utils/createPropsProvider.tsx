@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from 'react';
 
-export function createPropsProvider<P extends Record<string, any>>(
+export function createPropsProvider<P extends object>(
         displayName?: string
 ) {
         const Context = createContext<P | undefined>(undefined);
@@ -10,7 +10,7 @@ export function createPropsProvider<P extends Record<string, any>>(
         type ProviderProps = P & { children?: React.ReactNode };
 
         const Provider = (props: ProviderProps) => {
-                const { children, ...rest } = props as any; // "rest" — це наш P
+                const { children, ...rest } = props; // "rest" — це наш P
                 const value = rest as P;
                 return (
                         <Context.Provider value={value}>
@@ -28,7 +28,7 @@ export function createPropsProvider<P extends Record<string, any>>(
                                 `${Provider.displayName} must be used within its Provider`
                         );
                 }
-                return ctx as P;
+                return ctx;
         }
 
         return { Provider, usePropsContext, Context } as const;

@@ -37,13 +37,13 @@ function getNumOfAllExplicitCardOptionsInBook({
 
 export const openNewStorySettingsDialogAtom = atom(
         null,
-        (get, set, bookId: string) => {
+        (_get, set, bookId: string) => {
                 set(setNewStorySettingsAtomToDefaultAtom, bookId);
                 set(openDialogAtom, 'newStoryParams');
         }
 );
 
-export const closeNewStorySettingsDialogAtom = atom(null, (get, set) => {
+export const closeNewStorySettingsDialogAtom = atom(null, (_get, set) => {
         set(newStorySettingsAtom, EMPTY_STORY_SETTINGS_ATOM);
         set(hideDialogAtom, 'newStoryParams');
 });

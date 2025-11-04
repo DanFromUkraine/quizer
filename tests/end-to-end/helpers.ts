@@ -28,6 +28,8 @@ export async function multiPageReloadStep({
 }
 
 export async function typeInTextAndExpectSuccess(input: Locator, text: string) {
+        await expect(input).toBeVisible();
+        await expect(input).toBeEditable();
         await input.fill(text);
         await test.expect(input).toHaveValue(text);
 }
@@ -190,4 +192,9 @@ export async function forEachLocator(
         for (let i = 0; i < n; i++) {
                 await fn(loc.nth(i), i);
         }
+}
+
+export function trimmedValueRegex(expected: string): RegExp {
+  const escaped = expected.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`^\\s*${escaped}\\s*$`);
 }

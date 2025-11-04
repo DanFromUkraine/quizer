@@ -1,7 +1,5 @@
 import { defineConfig } from '@playwright/test';
 
-
-
 export default defineConfig({
         testDir: 'tests/end-to-end',
         fullyParallel: true,

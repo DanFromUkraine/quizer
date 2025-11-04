@@ -5,16 +5,19 @@ import {
         TestShortCardViaText
 } from '@/tests/end-to-end/EditBookPage/types';
 import test, { expect, Locator } from '@playwright/test';
-import { getShortCardAsText__MIX_MODE, getShortCardAsText__SHORT_MODE } from '@/src/utils/cardsAsText/helpers';
+import {
+        getShortCardAsText__MIX_MODE,
+        getShortCardAsText__SHORT_MODE
+} from '@/src/utils/cardsAsText/helpers';
+import { trimmedValueRegex } from '../helpers';
 
 export function pickCardsOfShortType(list: MixedCard[]) {
         return list.filter((card) => card.type === 'short');
 }
 
 export async function expectTrimmedValue(locator: Locator, expected: string) {
-        await expect(locator).toBeVisible();
-        const v = await locator.inputValue();
-        expect(v.trim()).toBe(expected);
+        await expect(locator).toBeEditable({ timeout: 10_000, editable: true });
+        await expect(locator).toHaveValue(trimmedValueRegex(expected));
 }
 
 export async function checkIfTheresEnoughOfOpts({
@@ -83,7 +86,7 @@ export function mixEqualListsToSeeOnlyShortCardChanges(
 
         return fixture;
 }
- function getOneExpCardAsText_forTest({
+function getOneExpCardAsText_forTest({
         title,
         subtitle,
         explanation,
@@ -102,9 +105,7 @@ export function mixEqualListsToSeeOnlyShortCardChanges(
         `;
 }
 
-export function getCardsAsText_TEST_ONLY__MIX_MODE(
-        cardsList: MixedCard[]
-) {
+export function getCardsAsText_TEST_ONLY__MIX_MODE(cardsList: MixedCard[]) {
         return cardsList
                 .map((card) =>
                         card.type === 'explicit'

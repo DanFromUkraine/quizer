@@ -4,14 +4,17 @@ import { EP_TEST_IDS } from '@/src/constants/testIds';
 export default function OptionTitleUI({
         value,
         onChange,
-        optionId
+        optionId,
+        disabled
 }: {
         value: string;
         onChange: ChangeEventHandler;
         optionId: string;
+        disabled: boolean;
 }) {
         return (
                 <input
+                        disabled={disabled}
                         name={`option-${optionId}`}
                         type='text'
                         value={value}

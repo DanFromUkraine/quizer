@@ -37,7 +37,7 @@ export const deleteStoryAtom = getDerivedAtomWithIdb(
                         ...typeInCardStoryIds.map((id) =>
                                 set(deleteTypeInCardStoryAtom, id)
                         ),
-                        isCorrectCardStoryIds.map((id) =>
+                        ...isCorrectCardStoryIds.map((id) =>
                                 set(deleteIsCorrectCardStoryAtom, id)
                         )
                 ]);
@@ -129,9 +129,7 @@ export const addNewStoryAtom = getDerivedAtomWithIdb(
         }
 );
 
-export function getNumOfChoicesCalculator<
-        T extends { currentValue: unknown | null }
->(
+export function getNumOfChoicesCalculator<T extends { currentValue: unknown }>(
         /* 'todo' - move this function somewhere else, where it should be  */
         targetAtomFamily: AtomFamily<
                 string,
@@ -252,9 +250,7 @@ export const getIfExpStoryCardCorrectAtom = (cardId: string) =>
                         getExpStoryCardCorrectOptionIndexAtom(cardId)
                 );
 
-
-
-                return correctIndexes.every(x => {
+                return correctIndexes.every((x) => {
                         return currentValue.includes(x);
                 });
         });

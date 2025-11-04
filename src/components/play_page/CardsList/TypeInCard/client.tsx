@@ -41,7 +41,7 @@ export function useGetIsCorrect(cardId: string) {
                                         currentValue.toLowerCase().trim()
                         );
                 }
-        }, [answerRevealed, expectedInput, currentValue]);
+        }, [answerRevealed, expectedInput, currentValue, isCompleted]);
 
         return isCorrect;
 }
@@ -61,11 +61,13 @@ export function useCurrVal(cardId: string) {
                 currentValueStableAdapterAtom
         );
 
-
-        const setCurrVal = useCallback((newVal: string) => {
-                if (answerRevealed || isCompleted) return;
-                setCurrVal_localOnly(newVal);
-        }, []);
+        const setCurrVal = useCallback(
+                (newVal: string) => {
+                        if (answerRevealed || isCompleted) return;
+                        setCurrVal_localOnly(newVal);
+                },
+                [answerRevealed, isCompleted]
+        );
 
         return [currVal, setCurrVal] as const;
 }

@@ -3,8 +3,15 @@
 
 import { getDerivedAtomWithIdb } from '@/src/utils/jotai/getDerivedAtomWithIdb';
 import getUniqueID from '@/src/utils/getUniqueID';
-import { getBookWithNewId, getNewBookWithDeletedCardId } from '@/src/utils/jotai/mainDbUtils';
-import { booksAtomFamily, explicitCardsAtomFamily, shortCardsAtomFamily } from '@/src/jotai/mainAtoms';
+import {
+        getBookWithNewId,
+        getNewBookWithDeletedCardId
+} from '@/src/utils/jotai/mainDbUtils';
+import {
+        booksAtomFamily,
+        explicitCardsAtomFamily,
+        shortCardsAtomFamily
+} from '@/src/jotai/mainAtoms';
 import {
         addEmptyExplicitCardIdb,
         addEmptyShortCardIdb,
@@ -21,7 +28,11 @@ import {
 } from '@/src/utils/jotai/helpers';
 import { currentBookIdAtom } from '@/src/jotai/idManagers';
 import { atom, Getter, Setter } from 'jotai';
-import { getListForInsert, getListForUpdate, getListWithIdsForDelete } from '@/src/utils/lists';
+import {
+        getListForInsert,
+        getListForUpdate,
+        getListWithIdsForDelete
+} from '@/src/utils/lists';
 import {
         DeleteCardsReducerOutput,
         FullCardFromText,
@@ -43,7 +54,10 @@ import {
         updateCardAtomHelper,
         updateShortCardsOnlyAtomHelper
 } from '@/src/utils/jotai/updateCardsFromTextReducers';
-import { parseTextIntoAnyCardsArray, parseTextIntoOnlyShortCardsArray } from '@/src/utils/cardsAsText/fromTextToCards';
+import {
+        parseTextIntoAnyCardsArray,
+        parseTextIntoOnlyShortCardsArray
+} from '@/src/utils/cardsAsText/fromTextToCards';
 import { atomFamily } from 'jotai/utils';
 import { deleteOptionAtom } from '@/src/jotai/optionAtoms';
 
@@ -53,7 +67,7 @@ export const updateCardViaTextAtomFamily = atomFamily((_cardId: string) =>
 
 export const incrementUpdateCountAtom = atom(
         null,
-        (get, set, cardId: string) => {
+        (_get, set, cardId: string) => {
                 set(updateCardViaTextAtomFamily(cardId), (prev) => prev + 1);
         }
 );
@@ -168,7 +182,7 @@ export const updateExplicitCardViaText = atom(
                         await Promise.all([
                                 asyncOptionIdsToInsert,
                                 asyncOptionIdsToDelete,
-                                asyncVoidListToUpdate
+                                ...asyncVoidListToUpdate
                         ]);
 
                 await updateCardAtomHelper({
@@ -180,9 +194,6 @@ export const updateExplicitCardViaText = atom(
                 });
         }
 );
-
-
-
 
 export const updateAnyCardsFromTextAtom = atom(
         null,
@@ -271,7 +282,7 @@ export const updateOnlyShortCardsFromTextAtom = atom(
                 const [cardIdsToInsert, cardIdsToDelete] = await Promise.all([
                         asyncIdsToInsert,
                         asyncIdsToDelete,
-                        asyncVoidListToUpdate
+                        ...asyncVoidListToUpdate
                 ]);
 
                 await updateShortCardsOnlyAtomHelper({
@@ -290,7 +301,7 @@ async function deleteOptionsOnCardDeleteAtomHelper(
         cardId: string
 ) {
         const { childrenIds } = get(explicitCardsAtomFamily(cardId));
-        for await (const optionId of childrenIds) {
+        for (const optionId of childrenIds) {
                 await set(deleteOptionAtom, cardId, optionId);
         }
 }

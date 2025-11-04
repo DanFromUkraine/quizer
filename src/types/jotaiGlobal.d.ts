@@ -2,7 +2,7 @@ import type { WritableAtom, PrimitiveAtom } from 'jotai';
 
 
 
-export type StringAdapterAtom = WritableAtom<string, [newVal: string], unknown>;
+export type StringAdapterAtom = WritableAtom<string, [newVal: string], Promise<void>>;
 
 type WithInitialValue<Value> = {
         init: Value;

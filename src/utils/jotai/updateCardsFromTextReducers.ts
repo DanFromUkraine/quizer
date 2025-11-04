@@ -1,8 +1,6 @@
 import getUniqueID from '@/src/utils/getUniqueID';
 import {
-        deleteExplicitCardAtom,
         deleteExplicitCardViaTextAtom,
-        deleteShortCardAtom,
         deleteShortCardViaTextAtom,
         incrementUpdateCountAtom,
         updateExplicitCardAtom,
@@ -62,6 +60,7 @@ export function getInsertAnyCardsReducerCallbackAndInitValue(
                                 id: newCardId
                         });
                 }
+                set(incrementUpdateCountAtom, newCardId);
 
                 return {
                         explicitCardIdsToInsert,
@@ -107,10 +106,10 @@ export function getDeleteAnyCardsReducerCallbackAndInitValue({
 
                 if (cardType === 'explicit') {
                         explicitCardIdsToDelete.push(cardId);
-                        set(deleteExplicitCardViaTextAtom, cardId);
+                        await set(deleteExplicitCardViaTextAtom, cardId);
                 } else if (cardType === 'short') {
                         shortCardIdsToDelete.push(cardId);
-                        set(deleteShortCardViaTextAtom, cardId);
+                        await set(deleteShortCardViaTextAtom, cardId);
                 }
 
                 return {
@@ -159,15 +158,16 @@ export function getUpdateAnyCardsReducerCallbackAndInitValue({
                 const updateCard = async () => {
                         if (card.type === 'explicit') {
                                 await set(updateExplicitCardViaText, {
-                                        ...(card as FullCardFromText),
+                                        ...card,
                                         id: cardId
                                 });
                         } else {
                                 await set(updateShortCardAtom, {
-                                        ...(card as FullTermDefinitionCardFromText),
+                                        ...card,
                                         id: cardId
                                 });
                         }
+
                         set(incrementUpdateCountAtom, cardId);
                 };
 
@@ -177,14 +177,14 @@ export function getUpdateAnyCardsReducerCallbackAndInitValue({
                 }
 
                 if (card.type === 'explicit') {
-                        set(deleteShortCardViaTextAtom, cardId);
+                        await set(deleteShortCardViaTextAtom, cardId);
                         await updateCard();
                         result.shortCardIdsToDeleteAfterTypeChange.push(cardId);
                         result.explicitCardIdsToInsertAfterTypeChange.push(
                                 cardId
                         );
                 } else if (card.type === 'short') {
-                        set(deleteExplicitCardViaTextAtom, cardId);
+                        await set(deleteExplicitCardViaTextAtom, cardId);
                         await updateCard();
                         result.explicitCardIdsToDeleteAfterTypeChange.push(
                                 cardId
@@ -300,7 +300,6 @@ export async function updateBookAnyCardIdsAtomHelper({
                         shortCardIdsToInsertAfterTypeChange
                 );
         }
-
 
         await set(updateBookAtom, {
                 ...prevBook,

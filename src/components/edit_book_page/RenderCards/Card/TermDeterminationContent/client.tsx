@@ -1,9 +1,11 @@
 'use client';
 
-import { useAtom, WritableAtom } from 'jotai';
+import { WritableAtom } from 'jotai';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import Quoted from '@/src/components/general/Quoted';
 import { useMemo } from 'react';
+import useJotaiDeferredUpdateAdapter from '@/src/hooks/jotaiRelated/jotaiDeferedInput';
+import { useCardProps } from '..';
 
 export default function TermOrDeterminationInput({
         underText,
@@ -11,13 +13,22 @@ export default function TermOrDeterminationInput({
         testId
 }: {
         underText: string;
-        atomAdapterUnstable: WritableAtom<string, [newVal: string], void>;
+        atomAdapterUnstable: WritableAtom<
+                string,
+                [newVal: string],
+                Promise<void>
+        >;
         testId: string;
 }) {
+        const { cardId } = useCardProps();
         const stableAdapterAtom = useMemo(() => atomAdapterUnstable, []);
-        const [value, updateValue] = useAtom(stableAdapterAtom);
+        const { inputValue, setInputValue, isDisabled } =
+                useJotaiDeferredUpdateAdapter({
+                        adapterAtom: stableAdapterAtom,
+                        cardId
+                });
 
-        const onChange = getInputChangeCallback(updateValue);
+        const onChange = getInputChangeCallback(setInputValue);
 
         return (
                 <section className='flex flex-col gap-2'>
@@ -25,9 +36,10 @@ export default function TermOrDeterminationInput({
                                 variant='heading'
                                 className='has-[:invalid]:bg-red-300'>
                                 <input
+                                        disabled={isDisabled}
                                         data-testid={testId}
                                         required
-                                        value={value}
+                                        value={inputValue}
                                         onChange={onChange}
                                         className='w-full'
                                         type='text'

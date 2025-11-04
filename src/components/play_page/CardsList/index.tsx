@@ -20,7 +20,7 @@ export default  function PlayCardsList() {
 
         return (
                 <ul className='flex flex-col gap-4'>
-                        {cardIdsOrder.map((cardId, i) => {
+                        {cardIdsOrder.map((cardId) => {
                                 const cardType = getPlayCardType({
                                         targetId: cardId,
                                         explicitCardStoryIds,

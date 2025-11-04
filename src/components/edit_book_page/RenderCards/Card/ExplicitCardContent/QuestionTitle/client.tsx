@@ -10,6 +10,7 @@ import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
 import { useAtom } from 'jotai';
 import LikeSubtitleUI from '@/src/components/general/interfacesUI/subtitle';
 import { EP_TEST_IDS } from '@/src/constants/testIds';
+import useJotaiDeferredUpdateAdapter from '@/src/hooks/jotaiRelated/jotaiDeferedInput';
 
 export function MainQuestionTitle() {
         const { cardId } = useCardProps();
@@ -17,13 +18,23 @@ export function MainQuestionTitle() {
                 () => getExplicitCardTitleFamilyAdapterAtom(cardId),
                 []
         );
-        const [value, setValue] =
-                useAtom(
-                        stableAtom
-                ); /* 'todo' change it with updateAdapter, when you have time*/
-        const onChange = getInputChangeCallback(setValue);
+        const { inputValue, setInputValue, isDisabled } =
+                useJotaiDeferredUpdateAdapter({
+                        adapterAtom: stableAtom,
+                        cardId
+                }); /* 'todo' change it with updateAdapter, when you have time*/
+        const onChange = getInputChangeCallback(setInputValue);
 
-        return <MainQuestionTitleUI {...{ value, onChange, cardId }} />;
+        return (
+                <MainQuestionTitleUI
+                        {...{
+                                value: inputValue,
+                                onChange,
+                                cardId,
+                                disabled: isDisabled
+                        }}
+                />
+        );
 }
 
 export function SubQuestionTitle() {
