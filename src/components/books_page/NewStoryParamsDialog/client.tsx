@@ -99,7 +99,7 @@ export function SubmitButton() {
         const submit = useAtomCallback((get, set) => {
                 const newStorySettings = get(newStorySettingsAtom);
                 set(closeNewStorySettingsDialogAtom);
-                set(addNewStoryAtom, {
+                void set(addNewStoryAtom, {
                         settings: newStorySettings,
                         bookId: newStorySettings.bookId,
                         successCallback: (newStoryId) => {

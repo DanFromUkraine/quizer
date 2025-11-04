@@ -2,14 +2,12 @@ import { AtomFamily } from '@/src/types/jotaiGlobal';
 import { StoreMap } from '@/src/types/mainDbGlobal';
 import { type WritableAtom } from 'jotai';
 
-// AtomFamily<string, WritableAtom<Book, [Book], unknown>>
-//
 
 export type FatherFamilyAtom = AtomFamily<
         string,
         WritableAtom<
-                StoreMap['cards' | 'books'],
-                [StoreMap['cards' | 'books']],
+                StoreMap['explicitCards' | 'books'],
+                [StoreMap['explicitCards' | 'books']],
                 unknown
         >
 >;

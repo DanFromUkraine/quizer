@@ -12,7 +12,7 @@ export default function OptionTitleUI({
         optionId: string;
         disabled: boolean;
 }) {
-        return (
+        return ( 
                 <input
                         disabled={disabled}
                         name={`option-${optionId}`}

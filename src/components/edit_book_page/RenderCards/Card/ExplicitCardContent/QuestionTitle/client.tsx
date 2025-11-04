@@ -1,16 +1,15 @@
 'use client';
-import { useMemo } from 'react';
-import {
-        getExplicitCardSubtitleFamilyAdapterAtom,
-        getExplicitCardTitleFamilyAdapterAtom
-} from '@/src/utils/jotai/atomAdapters';
-import MainQuestionTitleUI from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/QuestionTitle/UI';
-import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
-import { useAtom } from 'jotai';
+import MainQuestionTitleUI from '@/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/QuestionTitle/UI';
 import LikeSubtitleUI from '@/src/components/general/interfacesUI/subtitle';
 import { EP_TEST_IDS } from '@/src/constants/testIds';
 import useJotaiDeferredUpdateAdapter from '@/src/hooks/jotaiRelated/jotaiDeferedInput';
+import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
+import {
+    getExplicitCardSubtitleFamilyAdapterAtom,
+    getExplicitCardTitleFamilyAdapterAtom
+} from '@/src/utils/jotai/atomAdapters';
+import { useMemo } from 'react';
 
 export function MainQuestionTitle() {
         const { cardId } = useCardProps();
@@ -44,11 +43,10 @@ export function SubQuestionTitle() {
                 () => getExplicitCardSubtitleFamilyAdapterAtom(cardId),
                 []
         );
-        const [value, setValue] =
-                useAtom(
-                        stableAtom
-                ); /* 'todo' change it with updateAdapter, when you have time*/
-        const onChange = getInputChangeCallback((newVal) => setValue(newVal));
+        const { inputValue, setInputValue } = useJotaiDeferredUpdateAdapter({
+                adapterAtom: stableAtom,
+                cardId
+        });
 
         return (
                 <LikeSubtitleUI>
@@ -57,11 +55,11 @@ export function SubQuestionTitle() {
                                         EP_TEST_IDS.card.explicitCardContent
                                                 .subtitleInp
                                 }
-                                value={value}
-                                onChange={onChange}
                                 id={`subtitle-${cardId}`}
                                 placeholder='subtitle'
-                                className='heading-4 max-[540px]:w-full max-[540px]:field-sizing-fixed field-sizing-content '
+                                className='heading-4 max-[540px]:w-full max-[540px]:field-sizing-fixed field-sizing-content'
+                                value={inputValue}
+                                onChange={getInputChangeCallback(setInputValue)}
                         />
                 </LikeSubtitleUI>
         );

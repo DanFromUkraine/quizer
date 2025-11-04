@@ -1,5 +1,5 @@
-import { DBSchema } from 'idb';
-import { DB } from '@/src/types/globals';
+import type { DBSchema } from 'idb';
+import type { DB } from '@/src/types/globals';
 import type {
         ExplicitCardStory,
         IsCorrectCardStory,
@@ -96,12 +96,12 @@ export type BooksAndStoriesAssociations = {
 export type AddEmptyAction<T> = (
         mainDb: MainDbGlobal,
         Item: T
-) => Promise<unknown>;
+) => Promise<string>;
 export type UpdateAction<T> = (
         mainDb: MainDbGlobal,
         Item: T
-) => Promise<unknown>;
+) => Promise<string>;
 export type DeleteAction = (
         mainDb: MainDbGlobal,
         deleteId: string
-) => Promise<unknown>;
+) => Promise<void>;

@@ -175,7 +175,7 @@ export const InitAllMainDbAtoms_DO_NOT_IMPORT = memo(
                         setMainDb(db);
                 });
 
-                Promise.all([
+                void Promise.all([
                         p1,
                         p2,
                         p3,

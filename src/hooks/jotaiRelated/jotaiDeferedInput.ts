@@ -48,7 +48,7 @@ export default function useJotaiDeferredUpdateAdapter({
                         deferredValue !== jotaiValue &&
                         updateCount === prevUpdateCountNum.current
                 ) {
-                        setJotaiValue(deferredValue);
+                        void setJotaiValue(deferredValue);
                 }
         }, [deferredValue, jotaiValue, updateCount]);
 

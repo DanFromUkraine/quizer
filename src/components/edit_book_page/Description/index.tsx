@@ -14,7 +14,9 @@ export default function BookDescriptionInput() {
         );
         const [value, setValue] = useAtom(stableAdapterAtom);
 
-        const onChange = getInputChangeCallback((newVal) => setValue(newVal));
+        const onChange = getInputChangeCallback(
+                setValue as (s: string) => void
+        );
 
         return <DescriptionInputUI onChange={onChange} value={value} />;
 }

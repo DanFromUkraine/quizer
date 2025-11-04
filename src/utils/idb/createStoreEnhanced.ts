@@ -1,10 +1,9 @@
-import { StoreNames } from 'idb';
 import { DB } from '@/src/types/globals';
+import { StoreNames } from 'idb';
 
-export function createObjectStoreEnhanced<DataType extends {}>({
+export function createObjectStoreEnhanced<DataType>({
         db,
         storeName,
-
         autoIncrement
 }: {
         db: DB<DataType>;

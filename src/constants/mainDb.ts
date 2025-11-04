@@ -1,4 +1,4 @@
-import { MainDbGlobal, MainDbSchema } from '@/src/types/mainDbGlobal';
+import type { MainDbGlobal, MainDbSchema } from '@/src/types/mainDbGlobal';
 import { createObjectStoreEnhanced } from '@/src/utils/idb/createStoreEnhanced';
 
 export const UPGRADE_MAIN_DB = (database: MainDbGlobal) => {

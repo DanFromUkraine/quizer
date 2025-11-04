@@ -21,7 +21,7 @@ export function useRevealAnswer(cardId: string) {
         );
 
         const onRevealButtonClick = useCallback(() => {
-                setAnswerRevealed(true);
+                void setAnswerRevealed(true);
         }, []);
 
         return { answerRevealed, onRevealButtonClick };
@@ -64,7 +64,7 @@ export function useCurrVal(cardId: string) {
         const setCurrVal = useCallback(
                 (newVal: string) => {
                         if (answerRevealed || isCompleted) return;
-                        setCurrVal_localOnly(newVal);
+                        void setCurrVal_localOnly(newVal);
                 },
                 [answerRevealed, isCompleted]
         );

@@ -1,12 +1,16 @@
 import type { WritableAtom, PrimitiveAtom } from 'jotai';
 
-
-
-export type StringAdapterAtom = WritableAtom<string, [newVal: string], Promise<void>>;
+export type StringAdapterAtom = WritableAtom<
+        string,
+        [newVal: string],
+        Promise<void>
+>;
 
 type WithInitialValue<Value> = {
         init: Value;
 };
+
+type ShouldRemove<Param> = (createdAt: CreatedAt, param: Param) => boolean;
 
 export interface AtomFamily<Param, AtomType> {
         (param: Param): AtomType;
@@ -22,4 +26,5 @@ export interface AtomFamily<Param, AtomType> {
 
 export type AddNewStorySuccessHandler = (storyId: string) => void;
 
-export type IdManagerAtom =  PrimitiveAtom<string[]> & WithInitialValue<string[]>;
+export type IdManagerAtom = PrimitiveAtom<string[]> &
+        WithInitialValue<string[]>;

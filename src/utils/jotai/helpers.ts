@@ -32,7 +32,7 @@ export function getAtomFamilyUpdateAtom<T extends ObjWithId>({
         atomFamily: AtomFamily<string, PrimitiveAtom<T> & WithInitialValue<T>>;
         updateIdb: UpdateAction<T>;
 }) {
-        return getDerivedAtomWithIdb(async (get, set, mainDb, newItem: T) => {
+        return getDerivedAtomWithIdb(async (_get, set, mainDb, newItem: T) => {
                 await updateIdb(mainDb, newItem);
                 set(atomFamily(newItem.id), newItem);
         });
@@ -46,7 +46,7 @@ export function getAtomFamilyDeleteAtom_NoFatherUpdate<T extends ObjWithId>({
         deleteIdb: DeleteAction;
 }) {
         return getDerivedAtomWithIdb(
-                async (get, set, mainDb, deleteId: string) => {
+                async (_get, _set, mainDb, deleteId: string) => {
                         await deleteIdb(mainDb, deleteId);
                         atomFamily.remove(deleteId);
                 }
