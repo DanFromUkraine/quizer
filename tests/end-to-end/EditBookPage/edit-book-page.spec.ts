@@ -182,7 +182,6 @@ test.describe('Set of checks for edit book page', () => {
 
         test('Checkmark option with swipe', async ({ page }) => {
                 await page.setViewportSize({ width: 390, height: 844 });
-
                 await addNewExpCardStep(page);
                 await addNewOptionStep(getExpCardContent(page));
                 await swipeOptionLeftActions({ page });

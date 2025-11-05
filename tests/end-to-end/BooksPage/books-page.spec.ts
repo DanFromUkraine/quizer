@@ -1,7 +1,11 @@
 import test, { expect } from '@playwright/test';
-import { addNewBookStep, deleteBook, goToBooksPage } from './steps';
 import { multiPageReloadStep } from '../helpers';
 import { getBookCard } from './selectors';
+import {
+    addNewBookStep,
+    deleteBook,
+    goToBooksPage
+} from './steps';
 
 test.describe('Set of checks for books page', () => {
         test.beforeEach(goToBooksPage);

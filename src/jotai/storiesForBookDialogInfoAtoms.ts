@@ -1,9 +1,5 @@
 import { atom } from 'jotai';
-import {
-        booksAndStoriesAssociationsAtom,
-        booksAtomFamily,
-        getAssociationsForBookAtomOnlyIncomplete
-} from '@/src/jotai/mainAtoms';
+import { booksAtomFamily } from '@/src/jotai/mainAtoms';
 import {
         hideDialogAtom,
         openDialogAtom
@@ -11,6 +7,10 @@ import {
 import { AddNewStorySuccessHandler } from '@/src/types/jotaiGlobal';
 import { currentBookIdForStoriesDialogAtom } from '@/src/jotai/idManagers';
 import { openNewStorySettingsDialogAtom } from '@/src/jotai/newStoryParamsModal';
+import {
+        booksAndStoriesAssociationsAtom,
+        getAssociationsForBookAtomOnlyIncomplete
+} from './historyAtoms';
 
 interface BookStoryDialogInfo {
         bookTitle: string;

@@ -10,10 +10,11 @@ import { explicitCardStoriesAtomFamily } from '@/src/jotai/mainAtoms';
 import { useMemo } from 'react';
 import { getIfExpStoryCardCorrectAtom } from '@/src/jotai/historyAtoms';
 import { usePlayModeProps } from '@/app/play/page';
+import { PP_TEST_IDS } from '@/src/constants/testIds';
 
 export type ExpCardStatus = 'correct' | 'incorrect' | 'unchosen';
 
-function useIfExpCardStoryCorrect(cardId: string):ExpCardStatus {
+function useIfExpCardStoryCorrect(cardId: string): ExpCardStatus {
         const stableAtom = useMemo(
                 () => getIfExpStoryCardCorrectAtom(cardId),
                 []
@@ -27,13 +28,15 @@ function useIfExpCardStoryCorrect(cardId: string):ExpCardStatus {
 }
 
 export default function ExplicitCard({ cardId }: { cardId: string }) {
-        const { title, options, explanation, subtitle } =
-                useAtomValue(explicitCardStoriesAtomFamily(cardId));
+        const { title, options, explanation, subtitle } = useAtomValue(
+                explicitCardStoriesAtomFamily(cardId)
+        );
 
         const expCardStatus = useIfExpCardStoryCorrect(cardId);
 
         return (
                 <li
+                        data-testid={PP_TEST_IDS.expCard.me}
                         data-status={expCardStatus}
                         className='questionCard items-center w-full data-[status=correct]:bg-green-100 data-[status=incorrect]:bg-red-100'>
                         <h3 className='heading-2'>{`'${title}'`}</h3>
@@ -48,7 +51,10 @@ export default function ExplicitCard({ cardId }: { cardId: string }) {
                                         />
                                 ))}
                         </ul>
-                        <Explanation explanation={explanation} cardStatus={expCardStatus}/>
+                        <Explanation
+                                explanation={explanation}
+                                cardStatus={expCardStatus}
+                        />
                 </li>
         );
 }

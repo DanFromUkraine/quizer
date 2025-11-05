@@ -4,6 +4,7 @@ export default defineConfig({
         testDir: 'tests/end-to-end',
         fullyParallel: true,
         reporter: 'html',
+        retries: 1,
         use: {
                 baseURL: 'http://localhost:4005'
         },

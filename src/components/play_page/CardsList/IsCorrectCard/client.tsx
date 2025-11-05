@@ -5,6 +5,7 @@ import { isCorrectCardStoriesAtomFamily } from '@/src/jotai/mainAtoms';
 import { useCallback, useMemo } from 'react';
 import { getIsCorrectCardStoryCurrValFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 import { usePlayModeProps } from '@/app/play/page';
+import { PP_TEST_IDS } from '@/src/constants/testIds';
 
 function useCurrVal(cardId: string) {
         const { showAnswersImmediately, isCompleted } = usePlayModeProps();
@@ -21,7 +22,7 @@ function useCurrVal(cardId: string) {
                                 isCompleted
                         )
                                 return;
-                        setCurrVal_localOnly(newVal);
+                        void setCurrVal_localOnly(newVal);
                 },
                 [currVal, showAnswersImmediately]
         );
@@ -49,8 +50,18 @@ export function TermDefinitionTitle({ cardId }: { cardId: string }) {
 
         return (
                 <div className='flex items-center gap-1 flex-wrap'>
-                        <h2 className='heading-2'>{term} - </h2>
-                        <h2 className='heading-2 !font-normal'>{definition}</h2>
+                        <h2
+                                className='heading-2'
+                                data-testid={PP_TEST_IDS.isCorrectCard.term}>
+                                {term} -{' '}
+                        </h2>
+                        <h2
+                                className='heading-2 !font-normal'
+                                data-testid={
+                                        PP_TEST_IDS.isCorrectCard.definition
+                                }>
+                                {definition}
+                        </h2>
                 </div>
         );
 }
@@ -59,13 +70,16 @@ export function OneBooleanButton({
         textContent,
         onClickAction,
         isSelected,
+        testId
 }: {
         textContent: string;
         onClickAction: () => void;
         isSelected: boolean;
+        testId: string;
 }) {
         return (
                 <button
+                        data-testid={testId}
                         type='button'
                         data-selected={isSelected}
                         onClick={onClickAction}
@@ -76,13 +90,9 @@ export function OneBooleanButton({
 }
 
 export function BooleanButtons({ cardId }: { cardId: string }) {
-        const cardStatus = useIsCorrectCardStatus(cardId);
         const [currVal, setCurrVal] = useCurrVal(cardId);
         const setTrue = () => setCurrVal(true);
         const setFalse = () => setCurrVal(false);
-        const { isCorrect } = useAtomValue(
-                isCorrectCardStoriesAtomFamily(cardId)
-        );
 
         return (
                 <div className='flex gap-2'>
@@ -90,14 +100,18 @@ export function BooleanButtons({ cardId }: { cardId: string }) {
                                 {...{
                                         textContent: 'True',
                                         onClickAction: setTrue,
-                                        isSelected: Boolean(currVal)
+                                        isSelected: Boolean(currVal),
+                                        testId: PP_TEST_IDS.isCorrectCard
+                                                .trueBtn
                                 }}
                         />
                         <OneBooleanButton
                                 {...{
                                         textContent: 'False',
                                         onClickAction: setFalse,
-                                        isSelected: currVal === false
+                                        isSelected: currVal === false,
+                                        testId: PP_TEST_IDS.isCorrectCard
+                                                .falseBtn
                                 }}
                         />
                 </div>

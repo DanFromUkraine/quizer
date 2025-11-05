@@ -9,6 +9,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import { typeInCardStoriesAtomFamily } from '@/src/jotai/mainAtoms';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import { usePlayModeProps } from '@/app/play/page';
+import { PP_TEST_IDS } from '@/src/constants/testIds';
 
 export function useRevealAnswer(cardId: string) {
         const answerRevealedAdapterAtom = useMemo(
@@ -95,6 +96,7 @@ export function TypeInCardStoryInput({ cardId }: { cardId: string }) {
                                 ref={inputRef}
                                 name='play-typeInCard'
                                 data-correct={isCorrect}
+                                data-testid={PP_TEST_IDS.typeInCard.termInput}
                                 placeholder='enter definition'
                                 className='data-[correct=false]:!line-through field-sizing-content'
                                 value={currVal}
@@ -102,7 +104,13 @@ export function TypeInCardStoryInput({ cardId }: { cardId: string }) {
                         />
                         {typeof expectedInput === 'string' &&
                                 isCorrect === false && (
-                                        <span>{expectedInput}</span>
+                                        <span
+                                                data-testid={
+                                                        PP_TEST_IDS.typeInCard
+                                                                .expectedValue
+                                                }>
+                                                {expectedInput}
+                                        </span>
                                 )}
                 </div>
         );
@@ -114,6 +122,10 @@ export function RevealAnswerButton({ cardId }: { cardId: string }) {
         return (
                 showAnswersImmediately && (
                         <button
+                                data-testid={
+                                        PP_TEST_IDS.typeInCard
+                                                .revealAnswerButton
+                                }
                                 onClick={onRevealButtonClick}
                                 className='bg-blue-500 rounded-md px-3 py-1.5 text-white hover:bg-blue-300 duration-100 ml-auto'>
                                 Show if correct
@@ -126,5 +138,9 @@ export function Definition({ cardId }: { cardId: string }) {
         const { definition } = useAtomValue(
                 typeInCardStoriesAtomFamily(cardId)
         );
-        return <h3 className='heading-2 mx-auto'>{`'${definition}'`}</h3>;
+        return (
+                <h3
+                        data-testid={PP_TEST_IDS.typeInCard.definition}
+                        className='heading-2 mx-auto'>{`'${definition}'`}</h3>
+        );
 }
