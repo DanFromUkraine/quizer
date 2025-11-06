@@ -1,4 +1,5 @@
-import test, { expect, Page } from '@playwright/test';
+import { PP_TEST_IDS } from '@/src/constants/testIds';
+import test, { expect, Locator, Page } from '@playwright/test';
 import {
         getNewStoryDialogAreAnswersShownImmediatelyParamInp,
         getNewStoryDialogContainer,
@@ -14,9 +15,27 @@ import {
         EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
         SERIOUS_BOOK_DESCRIPTION
 } from '../EditBookPage/constants';
-import { typeInTextAndExpectSuccess } from '../helpers';
+import { MixedCard } from '../EditBookPage/types';
+import { nullCheck, typeInTextAndExpectSuccess } from '../helpers';
 import { INPUTS_TO_CREATE_NEW_STORY } from './constants';
-import { NewStoryDialogNumParamName } from './types';
+import {
+        getAllCards,
+        getBookTitleHeading,
+        getExpCardExplanationPar,
+        getExpCardOptionTitlePP,
+        getExpCardSubtitleHeading,
+        getExpCardTitleHeading,
+        getIsCorrectCardDefinition,
+        getIsCorrectCardTerm,
+        getTypeInCardDefHeading
+} from './selectors';
+import {
+        AnyPlayTestCard,
+        NewStoryDialogNumParamName,
+        PlayTestExpCard,
+        PlayTestIsCorrectCard,
+        PlayTestTypeInCard
+} from './types';
 
 export async function expectToBeOnPlayPageStep(page: Page) {
         await test.step('Expect to be on the play page', async () => {
@@ -103,4 +122,186 @@ export async function goToPlayPageWithDefaultData(page: Page) {
                 showAnswersImmediately: false
         });
         await expectToBeOnPlayPageStep(page);
+}
+
+async function getDataFromExpCardUI(
+        expCardEl: Locator
+): Promise<PlayTestExpCard> {
+        const titleEl = getExpCardTitleHeading(expCardEl);
+        const titleText = await titleEl.textContent();
+        nullCheck(titleText, 'exp card title text');
+
+        const subtitleEl = getExpCardSubtitleHeading(expCardEl);
+        const subtitleText = await subtitleEl.textContent();
+        nullCheck(subtitleText, 'exp card subtitle text');
+
+        const explanation = getExpCardExplanationPar(expCardEl);
+        const isExplanationVisible = await explanation.isVisible();
+        const explanationText = isExplanationVisible
+                ? await explanation.textContent()
+                : null;
+
+        const optionEls = getExpCardOptionTitlePP(expCardEl);
+        const optsCount = await optionEls.count();
+        const resultOptions: string[] = [];
+
+        for (let i = 0; i < optsCount; i++) {
+                const optTitleEl = optionEls.nth(i);
+                const optText = await optTitleEl.textContent();
+                nullCheck(optText, 'exp card option text');
+                resultOptions.push(optText);
+        }
+
+        return {
+                type: 'explicit',
+                title: titleText,
+                subtitle: subtitleText,
+                options: resultOptions,
+                explanation: explanationText
+        };
+}
+
+async function getDataFromTypeInCardUI(
+        typeInCardEl: Locator
+): Promise<PlayTestTypeInCard> {
+        const definitionHeadingEl = getTypeInCardDefHeading(typeInCardEl);
+        const definitionText = await definitionHeadingEl.textContent();
+        nullCheck(definitionText, 'typein card definition text');
+
+        return {
+                type: 'typein',
+                definition: definitionText
+        };
+}
+
+async function getDataFromIsCorrectCardUI(
+        isCorrectCardEl: Locator
+): Promise<PlayTestIsCorrectCard> {
+        const termEl = getIsCorrectCardTerm(isCorrectCardEl);
+        const termText = await termEl.textContent();
+        nullCheck(termText, 'iscorrect card term text');
+
+        const definitionEl = getIsCorrectCardDefinition(isCorrectCardEl);
+        const definitionText = await definitionEl.textContent();
+        nullCheck(definitionText, 'iscorrect card definition text');
+
+        return {
+                type: 'iscorrect',
+                term: termText,
+                definition: definitionText
+        };
+}
+
+export async function getCardsFromUI(page: Page): Promise<AnyPlayTestCard[]> {
+        const cardEls = getAllCards(page);
+        const cardsCount = await cardEls.count();
+        const result: AnyPlayTestCard[] = [];
+        for (let i = 0; i < cardsCount; i++) {
+                const unknownCard = cardEls.nth(i);
+                const cardType = await unknownCard.getAttribute('data-testid');
+
+                if (cardType === PP_TEST_IDS.expCard.me) {
+                        result.push(await getDataFromExpCardUI(unknownCard));
+                        continue;
+                } else if (cardType === PP_TEST_IDS.typeInCard.me) {
+                        result.push(await getDataFromTypeInCardUI(unknownCard));
+                        continue;
+                } else if (cardType === PP_TEST_IDS.isCorrectCard.me) {
+                        result.push(
+                                await getDataFromIsCorrectCardUI(unknownCard)
+                        );
+                        continue;
+                } else {
+                        throw new Error(
+                                'Current card is of unknown type. You should check it'
+                        );
+                }
+        }
+
+        return result;
+}
+
+function comparePlayExpCardWithOrig({
+        startList,
+        newExpCard
+}: {
+        startList: MixedCard[];
+        newExpCard: PlayTestExpCard;
+}) {
+        const cardsWhereSuchName = startList.filter((c) => {
+                if (c.type === 'explicit') {
+                        return newExpCard.title === c.title;
+                } else {
+                        return newExpCard.title === c.term;
+                }
+        });
+
+        // There should be no duplication as I know the data in the constants. In real life it can be, but in tests - no
+        expect(cardsWhereSuchName).toHaveLength(1);
+}
+
+function comparePlayTypeInCardWithOrig({
+        startList,
+        newTypeInCard
+}: {
+        startList: MixedCard[];
+        newTypeInCard: PlayTestTypeInCard;
+}) {
+        const cardsWhereSuchName = startList.filter((card) => {
+                if (card.type === 'explicit') {
+                        return card.options.some(
+                                (opt) =>
+                                        opt.optionTitle ===
+                                        newTypeInCard.definition
+                        );
+                } else {
+                        return newTypeInCard.definition === card.definition;
+                }
+        });
+
+        // There should be no duplication as I know the data in the constants. In real life it can be, but in tests - no
+        expect(cardsWhereSuchName).toHaveLength(1);
+}
+
+function comparePlayIsCorrectCardWithOrig({
+        startList,
+        newIsCorrectCard
+}: {
+        startList: MixedCard[];
+        newIsCorrectCard: PlayTestIsCorrectCard;
+}) {
+        const cardsWhereSuchName = startList.filter((card) => {
+                // As I remember from the code that generates these isCorrect cards it all goes around term field. And definition in this case is just taken from all options heap
+                if (card.type === 'explicit') {
+                        return card.title === newIsCorrectCard.term;
+                } else {
+                        return card.term === newIsCorrectCard.term;
+                }
+        });
+
+        // There should be no duplication as I know the data in the constants. In real life it can be, but in tests - no
+        expect(cardsWhereSuchName).toHaveLength(1);
+}
+
+export async function checkPlayPageToHaveRequiredData({
+        page,
+        requiredBookTitleText,
+        startBookCards
+}: {
+        page: Page;
+        requiredBookTitleText: string;
+        startBookCards: MixedCard[];
+}) {
+        await test.step('Check title', async () => {
+                const bookTitleEl = getBookTitleHeading(page);
+                await expect(bookTitleEl).toHaveText(requiredBookTitleText);
+        });
+
+        await test.step('Check cards', async () => {
+                const cards = await getCardsFromUI(page);
+                for (const card of cards) {
+                        if (card.type === 'explicit') {
+                        }
+                }
+        });
 }
