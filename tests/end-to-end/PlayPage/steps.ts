@@ -1,40 +1,36 @@
 import { PP_TEST_IDS } from '@/src/constants/testIds';
 import test, { expect, Locator, Page } from '@playwright/test';
 import {
-        getNewStoryDialogAreAnswersShownImmediatelyParamInp,
-        getNewStoryDialogContainer,
-        getNewStoryDialogIsSmartModeParamInp,
-        getNewStoryDialogSubmitBtn
+    getNewStoryDialogAreAnswersShownImmediatelyParamInp,
+    getNewStoryDialogContainer,
+    getNewStoryDialogIsSmartModeParamInp,
+    getNewStoryDialogSubmitBtn
 } from '../BooksPage/selectors';
 import {
-        addNewBookStep,
-        studyBook,
-        updateBookWithDataStep
+    addNewBookStep,
+    studyBook,
+    updateBookWithDataStep
 } from '../BooksPage/steps';
-import {
-        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
-        SERIOUS_BOOK_DESCRIPTION
-} from '../EditBookPage/constants';
 import { MixedCard } from '../EditBookPage/types';
 import { nullCheck, typeInTextAndExpectSuccess } from '../helpers';
 import { INPUTS_TO_CREATE_NEW_STORY } from './constants';
 import {
-        getAllCards,
-        getBookTitleHeading,
-        getExpCardExplanationPar,
-        getExpCardOptionTitlePP,
-        getExpCardSubtitleHeading,
-        getExpCardTitleHeading,
-        getIsCorrectCardDefinition,
-        getIsCorrectCardTerm,
-        getTypeInCardDefHeading
+    getAllCards,
+    getBookTitleHeading,
+    getExpCardExplanationPar,
+    getExpCardOptionTitlePP,
+    getExpCardSubtitleHeading,
+    getExpCardTitleHeading,
+    getIsCorrectCardDefinition,
+    getIsCorrectCardTerm,
+    getTypeInCardDefHeading
 } from './selectors';
 import {
-        AnyPlayTestCard,
-        NewStoryDialogNumParamName,
-        PlayTestExpCard,
-        PlayTestIsCorrectCard,
-        PlayTestTypeInCard
+    AnyPlayTestCard,
+    NewStoryDialogNumParamName,
+    PlayTestExpCard,
+    PlayTestIsCorrectCard,
+    PlayTestTypeInCard
 } from './types';
 
 export async function expectToBeOnPlayPageStep(page: Page) {
@@ -106,14 +102,24 @@ export async function createStoryForBookWithSuchData({
         await submitBtnEl.click();
 }
 
-export async function goToPlayPageWithDefaultData(page: Page) {
+export async function goToPlayPage({
+        page,
+        bookTitle,
+        bookDescription,
+        exampleCards
+}: {
+        page: Page;
+        bookTitle: string;
+        bookDescription: string;
+        exampleCards: MixedCard[];
+}) {
         await addNewBookStep(page);
         await updateBookWithDataStep({
                 page,
-                bookTitle: 'Королівство котиків',
-                bookDescription: SERIOUS_BOOK_DESCRIPTION,
+                bookTitle,
+                bookDescription,
                 bookInd: 0,
-                exampleCards: EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE
+                exampleCards
         });
         await studyBook({ page, bookInd: 0 });
         await createStoryForBookWithSuchData({
@@ -301,6 +307,20 @@ export async function checkPlayPageToHaveRequiredData({
                 const cards = await getCardsFromUI(page);
                 for (const card of cards) {
                         if (card.type === 'explicit') {
+                                comparePlayExpCardWithOrig({
+                                        startList: startBookCards,
+                                        newExpCard: card
+                                });
+                        } else if (card.type === 'typein') {
+                                comparePlayTypeInCardWithOrig({
+                                        startList: startBookCards,
+                                        newTypeInCard: card
+                                });
+                        } else if (card.type === 'iscorrect') {
+                                comparePlayIsCorrectCardWithOrig({
+                                        startList: startBookCards,
+                                        newIsCorrectCard: card
+                                });
                         }
                 }
         });
