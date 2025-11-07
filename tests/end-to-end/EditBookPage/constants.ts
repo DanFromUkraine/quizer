@@ -263,3 +263,6 @@ correct term 22 - correct definition 2222!)
                         }
                 ]
         };
+
+export const SERIOUS_BOOK_DESCRIPTION =
+        'The kingdom of cats is a wonderful place where fluffy creations rule the world. Their main currency is desiccated fish, and they have no working days! However, only humans work in this kingdom as slaves supplying them with food, castles, and caresses';

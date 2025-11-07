@@ -10,11 +10,14 @@ import { getExplicitCardStoryCurrValFamilyAdapterAtom } from '@/src/utils/jotai/
 import { useMemo } from 'react';
 import { usePlayModeProps } from '@/app/play/page';
 import { ExpCardStatus } from '@/src/components/play_page/CardsList/ExplicitCard/index';
+import { PP_TEST_IDS } from '@/src/constants/testIds';
 
 export function Subtitle({ subtitle }: { subtitle: string }) {
         return subtitle.length > 0 ? (
                 <LikeSubtitleUI>
-                        <h4>{subtitle}</h4>
+                        <h4 data-testid={PP_TEST_IDS.expCard.subtitle}>
+                                {subtitle}
+                        </h4>
                 </LikeSubtitleUI>
         ) : (
                 <></>
@@ -29,7 +32,11 @@ export function Explanation({
         cardStatus: ExpCardStatus;
 }) {
         return explanation.length > 0 && cardStatus !== 'unchosen' ? (
-                <LikeExplanationUI>{explanation}</LikeExplanationUI>
+                <LikeExplanationUI>
+                        <p data-testid={PP_TEST_IDS.expCard.explanation}>
+                                {explanation}
+                        </p>
+                </LikeExplanationUI>
         ) : (
                 <></>
         );
@@ -80,11 +87,14 @@ export function Option({
                         return;
 
                 if (currCardChoice.includes(optionIndex)) {
-                        setCurrCardChoice(
+                        void setCurrCardChoice(
                                 currCardChoice.filter((i) => i !== optionIndex)
                         );
                 } else {
-                        setCurrCardChoice([...currCardChoice, optionIndex]);
+                        void setCurrCardChoice([
+                                ...currCardChoice,
+                                optionIndex
+                        ]);
                 }
         };
 

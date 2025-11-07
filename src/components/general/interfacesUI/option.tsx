@@ -1,4 +1,5 @@
 import IndexMarker from '@/src/components/general/IndexMarker';
+import { PP_TEST_IDS } from '@/src/constants/testIds';
 import clsx from 'clsx';
 
 export type OptionColorSchema = 'correct' | 'incorrect' | 'unchosen';
@@ -18,6 +19,7 @@ export default function LikeOptionUI({
 }) {
         return (
                 <div
+                        data-testid={PP_TEST_IDS.expCard.option.me}
                         onClick={onClick}
                         data-selected={isSelected}
                         className={clsx(
@@ -32,7 +34,11 @@ export default function LikeOptionUI({
                                 }
                         )}>
                         <IndexMarker index={optionIndex} />
-                        <span className='flex-1'>{title}</span>
+                        <span
+                                data-testid={PP_TEST_IDS.expCard.option.title}
+                                className='flex-1'>
+                                {title}
+                        </span>
                 </div>
         );
 }

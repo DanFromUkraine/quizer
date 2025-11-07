@@ -1,6 +1,5 @@
 import { atom, Atom, PrimitiveAtom } from 'jotai';
 import {
-        booksAndStoriesAssociationsAtom,
         booksAtomFamily,
         explicitCardStoriesAtomFamily,
         isCorrectCardStoriesAtomFamily,
@@ -20,6 +19,8 @@ import { AtomFamily, WithInitialValue } from '@/src/types/jotaiGlobal';
 import { deleteExplicitCardStoryAtom } from '@/src/jotai/explicitCardStoryAtoms';
 import { deleteTypeInCardStoryAtom } from '@/src/jotai/typeInCardStoryAtoms';
 import { deleteIsCorrectCardStoryAtom } from '@/src/jotai/isCorrectCardStoryAtoms';
+import { BooksAndStoriesAssociations } from '../types/mainDbGlobal';
+import computeBooksAndStoriesAssociations from '../utils/jotai/computeBooksAndStoriesAssociations';
 
 export const deleteStoryAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb, storyId: string) => {
@@ -394,4 +395,24 @@ export const getStoryResultsAtom = (storyId: string) =>
                         successPercentage,
                         markIn12PointsSystem
                 };
+        });
+
+export const booksAndStoriesAssociationsAtom =
+        atom<BooksAndStoriesAssociations>((get) => {
+                const storyIds = get(storyIdsAtom);
+                const allStories = storyIds.map((storyId) =>
+                        get(storiesAtomFamily(storyId))
+                );
+
+                return computeBooksAndStoriesAssociations(allStories);
+        });
+export const getAssociationsForBookAtomOnlyIncomplete = (bookId: string) =>
+        atom((get) => {
+                const allAssociations = get(booksAndStoriesAssociationsAtom);
+                const associationsForBook: string[] =
+                        allAssociations[bookId] || [];
+                return associationsForBook.filter((storyId) => {
+                        const fullStory = get(storiesAtomFamily(storyId));
+                        return !fullStory.isCompleted;
+                });
         });

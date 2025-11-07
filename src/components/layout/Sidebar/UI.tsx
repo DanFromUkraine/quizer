@@ -6,10 +6,12 @@ export function NavLinkUI({
         href,
         Icon,
         pathname,
-        text
+        text,
+        testId
 }: LinkType & { pathname: string }) {
         return (
                 <Link
+                        data-testid={testId}
                         href={href}
                         className={clsx('navLink', {
                                 'bg-gray-200': pathname === href

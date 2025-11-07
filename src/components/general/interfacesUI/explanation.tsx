@@ -1,4 +1,3 @@
-import ExtendableTextArea from '@/src/components/general/ExtendableInput';
 import { MouseEventHandler, ReactNode } from 'react';
 
 export default function LikeExplanationUI({

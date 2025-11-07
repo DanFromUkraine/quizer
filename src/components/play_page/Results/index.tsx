@@ -5,6 +5,7 @@ import { useAtomValue } from 'jotai';
 import { getStoryResultsAtom } from '@/src/jotai/historyAtoms';
 import Link from 'next/link';
 import { useMemo } from 'react';
+import { PP_TEST_IDS } from '@/src/constants/testIds';
 
 export function scoreToColor(score: number): string {
         const clamped = Math.max(0, Math.min(100, score)); // обмежуємо 0–100
@@ -23,6 +24,9 @@ export default function Results() {
                         <section className='w-full flex flex-col items-center'>
                                 <div className='flex gap-8 items-center'>
                                         <h2
+                                                data-testid={
+                                                        PP_TEST_IDS.successPercentage
+                                                }
                                                 className='heading-1'
                                                 style={{
                                                         color: scoreToColor(
@@ -32,6 +36,7 @@ export default function Results() {
                                                 {`${successPercentage}%`}
                                         </h2>
                                         <h2
+                                                
                                                 className='heading-1'
                                                 style={{
                                                         color: scoreToColor(

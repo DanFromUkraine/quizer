@@ -195,6 +195,15 @@ export async function forEachLocator(
 }
 
 export function trimmedValueRegex(expected: string): RegExp {
-  const escaped = expected.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp(`^\\s*${escaped}\\s*$`);
+        const escaped = expected.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return new RegExp(`^\\s*${escaped}\\s*$`);
+}
+
+// declare function nullCheck<T>(val: T, tName: string) asserts val is NonNullable;
+
+export function nullCheck<T>(
+        val: T,
+        tName: string
+): asserts val is NonNullable<T> {
+        if (val === null) throw new Error(`${tName} is null here :(`);
 }

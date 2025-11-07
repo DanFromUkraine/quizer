@@ -48,7 +48,7 @@ import {
         normalizeForCompare,
         pickCardsOfShortType
 } from '@/tests/end-to-end/EditBookPage/utils';
-import { addNewBookStep, editBook, goToBooksPage } from '../BooksPage/steps';
+import { addNewBookStep, editBookStep, goToBooksPage } from '../BooksPage/steps';
 
 export async function openEditCardsAsTextDialogStep(page: Page) {
         await test.step('open edit cards as text dialog', async () => {
@@ -97,7 +97,7 @@ export const addNewOptionStep = getAddElementInListWithSuccessExpectations({
 export async function goToEditPage({ page }: { page: Page }) {
         await goToBooksPage({ page });
         await addNewBookStep(page);
-        await editBook({ page, bookInd: 0 });
+        await editBookStep({ page, bookInd: 0 });
 }
 
 export function getStepToOpenCardsAsTextDialogAndEdit({

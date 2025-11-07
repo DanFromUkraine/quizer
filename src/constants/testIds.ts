@@ -1,3 +1,8 @@
+export const LAYOUT_TEST_IDS = {
+        booksPageLinkBtn: 'Books page LINK BUTTON',
+        storiesPageLinkBtn: 'Stories page LINK BUTTON'
+};
+
 export const BASE_DIALOG_TEST_IDS = {
         defCloseBtn: 'Close dialog BUTTON'
 };
@@ -83,6 +88,37 @@ export const EP_TEST_IDS = {
 
 export const PP_TEST_IDS = {
         // Play page test ids
+        bookTitle: 'Book title HEADING',
+        successPercentage:
+                'Results --> success percentage (from 0 to 100) HEADING',
+        markIn12PointsSys:
+                'Results --> mark in 12 points system (from 0 to 100) HEADING',
+
+        expCard: {
+                me: 'explicit card CONTAINER',
+                title: 'explicit card --> main title INPUT',
+                subtitle: 'explicit card --> subtitle INPUT',
+                option: {
+                        me: 'EXP CARD --> OPTION CONTAINER',
+                        title: 'exp card --> option --> title HEADING'
+                },
+                explanation: 'explicit card --> explanation INPUT'
+        },
+        typeInCard: {
+                me: 'typeIn card CONTAINER',
+                definition: 'typeIn card --> definition HEADING',
+                termInput: 'typeIn card --> term input',
+                expectedValue: 'typeIn card --> expected value HEADING',
+                revealAnswerButton: 'typeIn card --> reveal answer BUTTON'
+        },
+        isCorrectCard: {
+                me: 'isCorrect card CONTAINER',
+                term: 'isCorrect card --> term HEADING',
+                definition: 'isCorrect card --> definition HEADING',
+                trueBtn: 'isCorrect card --> Mark as true BUTTON',
+                falseBtn: 'isCorrect card --> Mark as false BUTTON'
+        },
+        submitBtb: 'story submit BUTTON'
 };
 
 export const SP_TEST_IDS = {
