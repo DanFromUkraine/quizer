@@ -1,0 +1,145 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - generic [ref=e7]: Beta
+    - generic [ref=e8]:
+      - link "Home" [ref=e9] [cursor=pointer]:
+        - /url: /
+        - img [ref=e10]
+        - paragraph [ref=e12]: Home
+      - link "History" [ref=e13] [cursor=pointer]:
+        - /url: /history
+        - img [ref=e14]
+        - paragraph [ref=e16]: History
+  - button "Open Next.js Dev Tools" [ref=e22] [cursor=pointer]:
+    - img [ref=e23]
+  - alert [ref=e26]
+  - main [ref=e27]:
+    - heading "Try out your knowledge with book ''!" [level=1] [ref=e28]
+    - list [ref=e29]:
+      - listitem [ref=e30]:
+        - heading "'Explicit card 1'" [level=3] [ref=e31]
+        - generic [ref=e33]:
+          - generic [ref=e34]: «
+          - heading "Subtitle for explicit card 1" [level=4] [ref=e35]
+          - generic [ref=e36]: »
+        - list [ref=e37]:
+          - generic [ref=e38]:
+            - generic [ref=e40]: A
+            - generic [ref=e41]: Option 1
+          - generic [ref=e42]:
+            - generic [ref=e44]: B
+            - generic [ref=e45]: Option 2
+          - generic [ref=e46]:
+            - generic [ref=e48]: C
+            - generic [ref=e49]: Option 3
+          - generic [ref=e50]:
+            - generic [ref=e52]: D
+            - generic [ref=e53]: Option 4
+      - listitem [ref=e54]:
+        - heading "'Term 2'" [level=3] [ref=e55]
+        - list [ref=e56]:
+          - generic [ref=e57]:
+            - generic [ref=e59]: A
+            - generic [ref=e60]: Option 3
+          - generic [ref=e61]:
+            - generic [ref=e63]: B
+            - generic [ref=e64]: Option 3
+          - generic [ref=e65]:
+            - generic [ref=e67]: C
+            - generic [ref=e68]: Option 2
+          - generic [ref=e69]:
+            - generic [ref=e71]: D
+            - generic [ref=e72]: Definition for term 2
+      - listitem [ref=e73]:
+        - heading "'Explicit card 3'" [level=3] [ref=e74]
+        - generic [ref=e76]:
+          - generic [ref=e77]: «
+          - heading "Subtitle for explicit card 3" [level=4] [ref=e78]
+          - generic [ref=e79]: »
+        - list [ref=e80]:
+          - generic [ref=e81]:
+            - generic [ref=e83]: A
+            - generic [ref=e84]: Option 1
+          - generic [ref=e85]:
+            - generic [ref=e87]: B
+            - generic [ref=e88]: Option 2
+          - generic [ref=e89]:
+            - generic [ref=e91]: C
+            - generic [ref=e92]: Option 3
+          - generic [ref=e93]:
+            - generic [ref=e95]: D
+            - generic [ref=e96]: Option 4
+      - listitem [ref=e97]:
+        - heading "'Definition for term 3'" [level=3] [ref=e98]
+        - textbox "enter definition" [ref=e100]
+      - generic [ref=e101]:
+        - generic [ref=e102]:
+          - heading "Term 1 -" [level=2] [ref=e103]
+          - heading "Option 1" [level=2] [ref=e104]
+        - generic [ref=e105]:
+          - button "True" [ref=e106]
+          - button "False" [ref=e107]
+      - listitem [ref=e108]:
+        - heading "'Explicit card 2'" [level=3] [ref=e109]
+        - generic [ref=e111]:
+          - generic [ref=e112]: «
+          - heading "Subtitle for explicit card 2" [level=4] [ref=e113]
+          - generic [ref=e114]: »
+        - list [ref=e115]:
+          - generic [ref=e116]:
+            - generic [ref=e118]: A
+            - generic [ref=e119]: Option 1
+          - generic [ref=e120]:
+            - generic [ref=e122]: B
+            - generic [ref=e123]: Option 2
+          - generic [ref=e124]:
+            - generic [ref=e126]: C
+            - generic [ref=e127]: Option 3
+          - generic [ref=e128]:
+            - generic [ref=e130]: D
+            - generic [ref=e131]: Option 4
+      - listitem [ref=e132]:
+        - heading "'Term 3'" [level=3] [ref=e133]
+        - list [ref=e134]:
+          - generic [ref=e135]:
+            - generic [ref=e137]: A
+            - generic [ref=e138]: Option 3
+          - generic [ref=e139]:
+            - generic [ref=e141]: B
+            - generic [ref=e142]: Definition for term 3
+          - generic [ref=e143]:
+            - generic [ref=e145]: C
+            - generic [ref=e146]: Option 1
+          - generic [ref=e147]:
+            - generic [ref=e149]: D
+            - generic [ref=e150]: Option 2
+      - listitem [ref=e151]:
+        - heading "'Term 1'" [level=3] [ref=e152]
+        - list [ref=e153]:
+          - generic [ref=e154]:
+            - generic [ref=e156]: A
+            - generic [ref=e157]: Option 3
+          - generic [ref=e158]:
+            - generic [ref=e160]: B
+            - generic [ref=e161]: Definition for term 1
+          - generic [ref=e162]:
+            - generic [ref=e164]: C
+            - generic [ref=e165]: Option 1
+          - generic [ref=e166]:
+            - generic [ref=e168]: D
+            - generic [ref=e169]: Option 3
+      - generic [ref=e170]:
+        - generic [ref=e171]:
+          - heading "Term 3 -" [level=2] [ref=e172]
+          - heading "Option 2" [level=2] [ref=e173]
+        - generic [ref=e174]:
+          - button "True" [ref=e175]
+          - button "False" [ref=e176]
+      - listitem [ref=e177]:
+        - heading "'Definition for term 1'" [level=3] [ref=e178]
+        - textbox "enter definition" [ref=e180]
+    - button "Finish test" [ref=e181]
+```
