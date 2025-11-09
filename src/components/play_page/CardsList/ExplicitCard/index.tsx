@@ -2,6 +2,7 @@
 
 import {
         Explanation,
+        NumOfCorrectAnswers,
         Option,
         Subtitle
 } from '@/src/components/play_page/CardsList/ExplicitCard/client';
@@ -41,6 +42,7 @@ export default function ExplicitCard({ cardId }: { cardId: string }) {
                         className='questionCard items-center w-full data-[status=correct]:bg-green-100 data-[status=incorrect]:bg-red-100'>
                         <h3 className='heading-2'>{`'${title}'`}</h3>
                         <Subtitle subtitle={subtitle} />
+                        <NumOfCorrectAnswers cardId={cardId} />
                         <ul className='w-full flex flex-col gap-2'>
                                 {options.map((option, i) => (
                                         <Option

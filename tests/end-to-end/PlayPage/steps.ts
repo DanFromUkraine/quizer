@@ -12,18 +12,29 @@ import {
         updateBookWithDataStep
 } from '../BooksPage/steps';
 import { MixedCard } from '../EditBookPage/types';
-import { nullCheck, typeInTextAndExpectSuccess } from '../helpers';
+import {
+        expectInpToBeResilientToReloads,
+        multiPageReloadStep,
+        nullCheck,
+        typeInTextAndExpectSuccess
+} from '../helpers';
 import { INPUTS_TO_CREATE_NEW_STORY } from './constants';
 import {
         getAllCards,
         getBookTitleHeading,
+        getExpCardCont,
         getExpCardExplanationPar,
+        getExpCardOptionContPP,
         getExpCardOptionTitlePP,
         getExpCardSubtitleHeading,
         getExpCardTitleHeading,
+        getIsCorrectCardCont,
         getIsCorrectCardDefinition,
         getIsCorrectCardTerm,
-        getTypeInCardDefHeading
+        getIsCorrectCardTrueBtn,
+        getTypeInCardCont,
+        getTypeInCardDefHeading,
+        getTypeInCardTermInp
 } from './selectors';
 import {
         AnyPlayTestCard,
@@ -324,5 +335,65 @@ export async function checkPlayPageToHaveRequiredData({
                                 });
                         }
                 }
+        });
+}
+
+export async function checkIsCorrectCardResilient(
+        page: Page,
+        opts: { cardIndex?: number; reloads?: number } = {}
+) {
+        const { cardIndex = 0, reloads = 2 } = opts;
+        const isCorrectCardContEl: Locator =
+                getIsCorrectCardCont(page).nth(cardIndex);
+        const trueBtnEl: Locator = getIsCorrectCardTrueBtn(isCorrectCardContEl);
+
+        await test.step('Select IsCorrect -> true', async () => {
+                await trueBtnEl.click();
+        });
+
+        await multiPageReloadStep({ page, timesNum: reloads });
+
+        await test.step('Assert IsCorrect selection persisted', async () => {
+                await expect(trueBtnEl).toHaveAttribute(
+                        'data-selected',
+                        'true'
+                );
+        });
+}
+
+export async function checkTypeInCardResilient(
+        page: Page,
+        opts: { cardIndex?: number; reloads?: number } = {}
+) {
+        const { cardIndex = 0 } = opts;
+        const typeInCardContEl: Locator =
+                getTypeInCardCont(page).nth(cardIndex);
+        const inputEl: Locator = getTypeInCardTermInp(typeInCardContEl);
+
+        // reuse existing logic if present in project
+        await expectInpToBeResilientToReloads({ page, input: inputEl });
+}
+
+export async function checkExplicitCardResilient(
+        page: Page,
+        opts: {
+                cardIndex?: number;
+                optionIndex?: number;
+                reloads?: number;
+        } = {}
+) {
+        const { cardIndex = 0, optionIndex = 0, reloads = 2 } = opts;
+        const expCardContEl: Locator = getExpCardCont(page).nth(cardIndex);
+        const optionEl: Locator =
+                getExpCardOptionContPP(expCardContEl).nth(optionIndex);
+
+        await test.step('Select explicit option', async () => {
+                await optionEl.click();
+        });
+
+        await multiPageReloadStep({ page, timesNum: reloads });
+
+        await test.step('Assert explicit option persisted', async () => {
+                await expect(optionEl).toHaveAttribute('data-selected', 'true');
         });
 }

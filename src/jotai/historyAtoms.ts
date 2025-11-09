@@ -107,8 +107,6 @@ export const addNewStoryAtom = getDerivedAtomWithIdb(
                         get,
                         set
                 });
-                
-              
 
                 const newStoryId = getUniqueID();
                 const newStory: Story = {
@@ -417,4 +415,13 @@ export const getAssociationsForBookAtomOnlyIncomplete = (bookId: string) =>
                         const fullStory = get(storiesAtomFamily(storyId));
                         return !fullStory.isCompleted;
                 });
+        });
+
+export const getNumOfCorrectOptions = (storyCardId: string) =>
+        atom((get) => {
+                const { options } = get(
+                        explicitCardStoriesAtomFamily(storyCardId)
+                );
+                const correctOptions = options.filter((o) => o.isCorrect);
+                return correctOptions.length;
         });
