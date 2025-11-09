@@ -27,7 +27,7 @@ export default function StableInput({
         const [localValue, updateLocalValue] = useState('');
 
         useEffect(() => {
-                if (initiated.current && inputValue.length === 0) return;
+                if (initiated.current || inputValue.length === 0) return;
                 updateLocalValue(inputValue);
                 initiated.current = true;
         }, [inputValue]);

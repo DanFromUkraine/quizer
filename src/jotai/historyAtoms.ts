@@ -107,6 +107,8 @@ export const addNewStoryAtom = getDerivedAtomWithIdb(
                         get,
                         set
                 });
+                
+              
 
                 const newStoryId = getUniqueID();
                 const newStory: Story = {

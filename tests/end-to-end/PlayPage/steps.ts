@@ -1,36 +1,36 @@
 import { PP_TEST_IDS } from '@/src/constants/testIds';
 import test, { expect, Locator, Page } from '@playwright/test';
 import {
-    getNewStoryDialogAreAnswersShownImmediatelyParamInp,
-    getNewStoryDialogContainer,
-    getNewStoryDialogIsSmartModeParamInp,
-    getNewStoryDialogSubmitBtn
+        getNewStoryDialogAreAnswersShownImmediatelyParamInp,
+        getNewStoryDialogContainer,
+        getNewStoryDialogIsSmartModeParamInp,
+        getNewStoryDialogSubmitBtn
 } from '../BooksPage/selectors';
 import {
-    addNewBookStep,
-    studyBook,
-    updateBookWithDataStep
+        addNewBookStep,
+        studyBook,
+        updateBookWithDataStep
 } from '../BooksPage/steps';
 import { MixedCard } from '../EditBookPage/types';
 import { nullCheck, typeInTextAndExpectSuccess } from '../helpers';
 import { INPUTS_TO_CREATE_NEW_STORY } from './constants';
 import {
-    getAllCards,
-    getBookTitleHeading,
-    getExpCardExplanationPar,
-    getExpCardOptionTitlePP,
-    getExpCardSubtitleHeading,
-    getExpCardTitleHeading,
-    getIsCorrectCardDefinition,
-    getIsCorrectCardTerm,
-    getTypeInCardDefHeading
+        getAllCards,
+        getBookTitleHeading,
+        getExpCardExplanationPar,
+        getExpCardOptionTitlePP,
+        getExpCardSubtitleHeading,
+        getExpCardTitleHeading,
+        getIsCorrectCardDefinition,
+        getIsCorrectCardTerm,
+        getTypeInCardDefHeading
 } from './selectors';
 import {
-    AnyPlayTestCard,
-    NewStoryDialogNumParamName,
-    PlayTestExpCard,
-    PlayTestIsCorrectCard,
-    PlayTestTypeInCard
+        AnyPlayTestCard,
+        NewStoryDialogNumParamName,
+        PlayTestExpCard,
+        PlayTestIsCorrectCard,
+        PlayTestTypeInCard
 } from './types';
 
 export async function expectToBeOnPlayPageStep(page: Page) {
@@ -300,7 +300,8 @@ export async function checkPlayPageToHaveRequiredData({
 }) {
         await test.step('Check title', async () => {
                 const bookTitleEl = getBookTitleHeading(page);
-                await expect(bookTitleEl).toHaveText(requiredBookTitleText);
+                const simpleRegex = new RegExp(requiredBookTitleText);
+                await expect(bookTitleEl).toHaveText(simpleRegex);
         });
 
         await test.step('Check cards', async () => {

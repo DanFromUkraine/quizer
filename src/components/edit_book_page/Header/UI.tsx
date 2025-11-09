@@ -20,7 +20,7 @@ export default function HeaderUI({
                                                 testId: EP_TEST_IDS.bookTitleInp,
                                                 type: 'text',
                                                 name: 'book-title',
-                                                className: 'field-sizing-content heading-1 !text-gray-700 !mb-0 max-[412px]:w-full max-[412px]:field-sizing-fixed',
+                                                className: 'field-sizing-content min-w-[50px]  heading-1 !text-gray-700 !mb-0 max-[412px]:w-full max-[412px]:field-sizing-fixed',
                                                 inputValue: value,
                                                 setInputValue: setValue
                                         }}
