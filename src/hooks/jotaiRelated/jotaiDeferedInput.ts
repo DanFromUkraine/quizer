@@ -28,7 +28,6 @@ export default function useJotaiDeferredUpdateAdapter({
         );
 
         useEffect(() => {
-                console.debug(1, { initPerformed, isIdbInitiated, jotaiValue });
                 if (initPerformed || !isIdbInitiated) return;
                 if (jotaiValue.length > 0) {
                         setInputValue(jotaiValue);
@@ -37,12 +36,6 @@ export default function useJotaiDeferredUpdateAdapter({
         }, [isIdbInitiated, jotaiValue]);
 
         useEffect(() => {
-                console.debug(2, {
-                        initPerformed,
-                        deferredValue,
-                        jotaiValue,
-                        updateCount
-                });
                 if (
                         initPerformed &&
                         deferredValue !== jotaiValue &&
@@ -53,20 +46,11 @@ export default function useJotaiDeferredUpdateAdapter({
         }, [deferredValue, jotaiValue, updateCount]);
 
         useEffect(() => {
-                console.debug(3, {
-                        updateCount,
-                        prevUpdateCountNum,
-                        jotaiValue
-                });
                 if (updateCount > prevUpdateCountNum.current && jotaiValue) {
                         setInputValue(jotaiValue);
                         prevUpdateCountNum.current = updateCount;
                 }
         }, [updateCount, jotaiValue]);
-
-        console.debug(`
-
-          `);
 
         return {
                 inputValue,

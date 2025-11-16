@@ -7,8 +7,9 @@ import TypeInCard from '@/src/components/play_page/CardsList/TypeInCard';
 import IsCorrectCard from '@/src/components/play_page/CardsList/IsCorrectCard';
 import { getPlayCardType } from '@/src/utils/lists';
 import { usePlayModeProps } from '@/app/play/page';
+import { PP_TEST_IDS } from '@/src/constants/testIds';
 
-export default  function PlayCardsList() {
+export default function PlayCardsList() {
         const { storyId } = usePlayModeProps();
         const {
                 cardIdsOrder,
@@ -17,9 +18,10 @@ export default  function PlayCardsList() {
                 isCorrectCardStoryIds
         } = useAtomValue(storiesAtomFamily(storyId));
 
-
         return (
-                <ul className='flex flex-col gap-4'>
+                <ul
+                        data-testid={PP_TEST_IDS.cardsCont}
+                        className='flex flex-col gap-4'>
                         {cardIdsOrder.map((cardId) => {
                                 const cardType = getPlayCardType({
                                         targetId: cardId,

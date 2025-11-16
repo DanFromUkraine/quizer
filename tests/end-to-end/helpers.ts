@@ -207,3 +207,15 @@ export function nullCheck<T>(
 ): asserts val is NonNullable<T> {
         if (val === null) throw new Error(`${tName} is null here :(`);
 }
+
+export function undefinedCheck<T>(
+        val: T,
+        tName: string
+): asserts val is Exclude<T, undefined> {
+        if (typeof val === 'undefined')
+                throw new Error(`${tName} is undefined here :(`);
+}
+
+export function clearFromOddSymbols(targetStr: string) {
+        return targetStr.replaceAll(/'|"|-/g, '').trim();
+}

@@ -2,11 +2,11 @@
 
 import { useAtomValue } from 'jotai';
 import { storiesAtomFamily } from '@/src/jotai/mainAtoms';
-import { currentStoryIdAtom } from '@/src/jotai/idManagers';
 import { PP_TEST_IDS } from '@/src/constants/testIds';
+import { usePlayModeProps } from '@/app/play/page';
 
 export default function PageTitle() {
-        const storyId = useAtomValue(currentStoryIdAtom);
+        const { storyId } = usePlayModeProps();
         const { bookData } = useAtomValue(storiesAtomFamily(storyId));
 
         return (

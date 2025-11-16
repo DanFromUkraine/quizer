@@ -93,16 +93,16 @@ export const PP_TEST_IDS = {
                 'Results --> success percentage (from 0 to 100) HEADING',
         markIn12PointsSys:
                 'Results --> mark in 12 points system (from 0 to 100) HEADING',
-
+        cardsCont: 'CARDS CONTAINER',
         expCard: {
                 me: 'explicit card CONTAINER',
-                title: 'explicit card --> main title INPUT',
-                subtitle: 'explicit card --> subtitle INPUT',
+                title: 'explicit card --> main title HEADING',
+                subtitle: 'explicit card --> subtitle HEADING',
                 option: {
                         me: 'EXP CARD --> OPTION CONTAINER',
                         title: 'exp card --> option --> title HEADING'
                 },
-                explanation: 'explicit card --> explanation INPUT'
+                explanation: 'explicit card --> explanation HEADING'
         },
         typeInCard: {
                 me: 'typeIn card CONTAINER',

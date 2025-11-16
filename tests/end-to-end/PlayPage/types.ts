@@ -12,7 +12,7 @@ export type NewStoryDialogNumParam = {
 export type PlayTestExpCard = {
         type: 'explicit';
         title: string;
-        subtitle: string;
+        subtitle: string | null;
         options: string[];
         explanation: string | null;
 };

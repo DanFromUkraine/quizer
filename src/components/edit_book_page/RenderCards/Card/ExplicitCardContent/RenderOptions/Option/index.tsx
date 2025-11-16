@@ -65,7 +65,6 @@ function useSwipe({
 
                         if (currentX.current === 0) return;
 
-                        console.debug({ diff });
                         if (
                                 diff >
                                 MAX_DRAG_WIDTH_PX -

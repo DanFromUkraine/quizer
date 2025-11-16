@@ -13,9 +13,7 @@ export default function BookTitleInput() {
                 []
         );
         const [value, setValue] = useAtom(stableAtom);
-        // const onChange = getInputChangeCallback(
-        //         setValue as (s: string) => void
-        // );
+        
 
         return (
                 <HeaderUI
