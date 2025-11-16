@@ -1,15 +1,17 @@
-import test from '@playwright/test';
+import test, { expect } from '@playwright/test';
 import { goToBooksPage } from '../BooksPage/steps';
 import {
-    EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
-    SERIOUS_BOOK_DESCRIPTION
+        EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE,
+        SERIOUS_BOOK_DESCRIPTION
 } from '../EditBookPage/constants';
+import { getPlayPageSubmitBtn, getSuccessPercentage } from './selectors';
 import {
-    checkExplicitCardResilient,
-    checkIsCorrectCardResilient,
-    checkPlayPageToHaveRequiredData,
-    checkTypeInCardResilient,
-    goToPlayPage
+        answerAllCards,
+        checkExplicitCardResilient,
+        checkIsCorrectCardResilient,
+        checkPlayPageToHaveRequiredData,
+        checkTypeInCardResilient,
+        goToPlayPage
 } from './steps';
 
 test.describe('Set of checks for play page', () => {
@@ -64,5 +66,51 @@ test.describe('Set of checks for play page', () => {
                                 reloads: 2
                         });
                 });
+        });
+
+        test('If user enters everything correctly, the result should be 100%', async ({
+                page
+        }) => {
+                const bookTitle = 'The kingdom of cats';
+                const bookCards = EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE;
+
+                await goToPlayPage({
+                        page,
+                        bookTitle,
+                        bookDescription: SERIOUS_BOOK_DESCRIPTION,
+                        exampleCards: bookCards
+                });
+
+                await answerAllCards(page, bookCards, true);
+
+                const submitBtn = getPlayPageSubmitBtn(page);
+                await submitBtn.click();
+
+                const percentResultEl = getSuccessPercentage(page);
+                await expect(percentResultEl).toBeVisible();
+                await expect(percentResultEl).toHaveText('100%');
+        });
+
+        test('If user enters everything INCORRECTLY, the result should be 0%', async ({
+                page
+        }) => {
+                const bookTitle = 'The kingdom of cats';
+                const bookCards = EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE;
+
+                await goToPlayPage({
+                        page,
+                        bookTitle,
+                        bookDescription: SERIOUS_BOOK_DESCRIPTION,
+                        exampleCards: bookCards
+                });
+
+                await answerAllCards(page, bookCards, false);
+
+                const submitBtn = getPlayPageSubmitBtn(page);
+                await submitBtn.click();
+
+                const percentResultEl = getSuccessPercentage(page);
+                await expect(percentResultEl).toBeVisible();
+                await expect(percentResultEl).toHaveText('0%');
         });
 });

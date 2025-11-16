@@ -174,25 +174,34 @@ export function getCardIds(resultArray: AnyCardStory[]) {
         };
 }
 
-export function initiateCardsInIdb({
+export async function initiateCardsInIdb({
         set,
         resultArray
 }: {
         set: Setter;
         resultArray: AnyCardStory[];
 }) {
-        resultArray.forEach((card) => {
+        for (const card of resultArray) {
                 if (card.type === 'story-explicitCard') {
-                        set(updateExplicitCardStoryAtom, card);
+                        await set(updateExplicitCardStoryAtom, card);
                 } else if (card.type === 'story-typeInCard') {
-                        set(updateTypeInCardStoryAtom, card);
+                        await set(updateTypeInCardStoryAtom, card);
                 } else if (card.type === 'story-isCorrectCard') {
-                        set(updateIsCorrectCardStoryAtom, card);
+                        await set(updateIsCorrectCardStoryAtom, card);
                 }
-        });
+        }
+        // resultArray.forEach((card) => {
+        //         if (card.type === 'story-explicitCard') {
+        //                 await set(updateExplicitCardStoryAtom, card);
+        //         } else if (card.type === 'story-typeInCard') {
+        //                 await set(updateTypeInCardStoryAtom, card);
+        //         } else if (card.type === 'story-isCorrectCard') {
+        //                 set(updateIsCorrectCardStoryAtom, card);
+        //         }
+        // });
 }
 
-export function initPlayCardsAndGetTheirIds({
+export async function initPlayCardsAndGetTheirIds({
         isSmartMode,
         numOfExplicitCards,
         numOfNormalCards,
@@ -223,7 +232,7 @@ export function initPlayCardsAndGetTheirIds({
                 allShortCards
         });
 
-        initiateCardsInIdb({ set, resultArray }); // potentially dangerous - unhandled async code. But it has to be tried
+        await initiateCardsInIdb({ set, resultArray }); // potentially dangerous - unhandled async code. But it has to be tried
 
         return getCardIds(resultArray);
 }

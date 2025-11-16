@@ -18,3 +18,6 @@ export const INPUTS_TO_CREATE_NEW_STORY = [
                 getLocator: getNewStoryDialogNumOfIsCorrectCardsParamInp
         }
 ] as const;
+
+
+

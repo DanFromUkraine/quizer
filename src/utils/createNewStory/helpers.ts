@@ -16,7 +16,7 @@ export function getOption({
         get: Getter;
         optionId: string;
 }): OptionStory {
-        const { optionTitle, isCorrect, id } = get(optionsAtomFamily(optionId));
+        const { optionTitle, isCorrect } = get(optionsAtomFamily(optionId));
         return { title: optionTitle, isCorrect };
 }
 
@@ -140,9 +140,11 @@ function getRandomItem<T>(array: T[]) {
         return array[randomIndex];
 }
 
-
-export function getCorrectOptionFromOptions(options: OptionStory[]) {
+export function getCorrectOptionFromOptions<T extends { isCorrect: boolean }>(
+        options: T[]
+) {
         const correctOption = options.find((option) => option.isCorrect);
+        // todo - need to improve this logic, because cards now can have two correct options and more
         if (!correctOption)
                 throw new Error('No correct option in an explicit card');
         return correctOption;

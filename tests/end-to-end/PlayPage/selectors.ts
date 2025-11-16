@@ -1,5 +1,6 @@
 import { PP_TEST_IDS } from '@/src/constants/testIds';
 import { getSelector } from '../helpers';
+import { Page } from '@playwright/test';
 
 export const getBookTitleHeading = getSelector(PP_TEST_IDS.bookTitle);
 export const getSuccessPercentage = getSelector(PP_TEST_IDS.successPercentage);
@@ -42,8 +43,13 @@ export const getIsCorrectCardTrueBtn = getSelector(
 export const getIsCorrectCardFalseBtn = getSelector(
         PP_TEST_IDS.isCorrectCard.falseBtn
 );
+export const getCardsCont = getSelector(PP_TEST_IDS.cardsCont);
 export const getPlayPageSubmitBtn = getSelector(PP_TEST_IDS.submitBtb);
 
-export const getAllCards = getSelector(
-        `:is([data-testid="${PP_TEST_IDS.expCard.me}"], [data-testid="${PP_TEST_IDS.typeInCard.me}"], [data-testid="${PP_TEST_IDS.isCorrectCard.me}"])`
-);
+// export const getAllCards = (page: Page) =>
+//         page.locator(
+//                 `:is([data-testid="${PP_TEST_IDS.expCard.me}"], [data-testid="${PP_TEST_IDS.typeInCard.me}"], [data-testid="${PP_TEST_IDS.isCorrectCard.me}"])`
+//         );
+
+export const getAllCards = (page: Page) =>
+        getCardsCont(page).getByRole('listitem');

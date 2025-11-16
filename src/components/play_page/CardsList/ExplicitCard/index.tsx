@@ -40,7 +40,9 @@ export default function ExplicitCard({ cardId }: { cardId: string }) {
                         data-testid={PP_TEST_IDS.expCard.me}
                         data-status={expCardStatus}
                         className='questionCard items-center w-full data-[status=correct]:bg-green-100 data-[status=incorrect]:bg-red-100'>
-                        <h3 className='heading-2'>{`'${title}'`}</h3>
+                        <h3
+                                data-testid={PP_TEST_IDS.expCard.title}
+                                className='heading-2'>{`'${title}'`}</h3>
                         <Subtitle subtitle={subtitle} />
                         <NumOfCorrectAnswers cardId={cardId} />
                         <ul className='w-full flex flex-col gap-2'>

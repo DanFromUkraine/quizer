@@ -101,7 +101,7 @@ export const addNewStoryAtom = getDerivedAtomWithIdb(
                         playExplicitCardIds,
                         typeInCardIds,
                         isCorrectCardIds
-                } = initPlayCardsAndGetTheirIds({
+                } = await initPlayCardsAndGetTheirIds({
                         ...settings,
                         bookId,
                         get,
@@ -314,21 +314,21 @@ export const getOverAllCountOfCorrectAnswersAtom = (storyId: string) =>
                         countCorrectChoicesAtom({
                                 cardIds: explicitCardStoryIds,
                                 counter: getIfExpStoryCardCorrectAtom,
-                                step: 1
+                                step: EXPLICIT_CARD_STEP
                         })
                 );
                 const countOfAllCorrChoicesTypeInCardStories = get(
                         countCorrectChoicesAtom({
                                 cardIds: typeInCardStoryIds,
                                 counter: getIfTypeInCardCorrectAtom,
-                                step: 1
+                                step: TYPE_IN_CARD_STEP
                         })
                 );
                 const countOfAllCorrChoicesIsCorrectCardStories = get(
                         countCorrectChoicesAtom({
                                 cardIds: isCorrectCardStoryIds,
                                 counter: getIsCorrectCardCorrectAtom,
-                                step: 1
+                                step: IS_CORRECT_CARD_STEP
                         })
                 );
 
