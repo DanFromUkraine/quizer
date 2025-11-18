@@ -122,10 +122,10 @@ function useSwipeOption(optionId: string) {
 
         const optionRef = useSwipe({
                 onLeft: () => {
-                        deleteOption(cardId, optionId);
+                        void deleteOption(cardId, optionId);
                 },
                 onRight: () => {
-                        setIsOptionCorrect(!isOptionCorrect);
+                        void setIsOptionCorrect(!isOptionCorrect);
                 },
                 dependencies: [isOptionCorrect]
         });
@@ -151,9 +151,9 @@ export default function Option({ optionId, optionIndex }: OptionProps) {
                                         data-iscorrect={!isOptionCorrect}
                                         className='beforeOptionMobile'>
                                         {!isOptionCorrect ? (
-                                                <IoCheckmarkCircleOutline className='flex text-3xl text-semibold text-white ml-5 my-auto' />
+                                                <IoCheckmarkCircleOutline className='text-semibold my-auto ml-5 flex text-3xl text-white' />
                                         ) : (
-                                                <FaXmark className='flex text-2xl text-semibold text-white ml-5 my-auto' />
+                                                <FaXmark className='text-semibold my-auto ml-5 flex text-2xl text-white' />
                                         )}
                                 </div>
                                 <div
@@ -168,13 +168,13 @@ export default function Option({ optionId, optionIndex }: OptionProps) {
                                                         .explicitCardContent
                                                         .option.mainOptBody.me
                                         }
-                                        className='option group '>
+                                        className='option group'>
                                         <CorrectnessMarketButton />
                                         <OptionTitle />
                                         <DeleteOptionButton />
                                 </div>
                                 <div className='afterOptionMobile'>
-                                        <MdDeleteOutline className='text-white text-2xl mr-5' />
+                                        <MdDeleteOutline className='mr-5 text-2xl text-white' />
                                 </div>
                         </div>
                 </OptionPropsProvider>

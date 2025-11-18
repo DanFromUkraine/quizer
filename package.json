@@ -11,7 +11,10 @@
                 "bracketSpacing": true,
                 "bracketSameLine": true,
                 "parser": "babel-ts",
-                "tabWidth": 8
+                "tabWidth": 8,
+                "plugins": [
+                        "prettier-plugin-tailwindcss"
+                ]
         },
         "scripts": {
                 "dev": "next dev --turbopack",
@@ -35,10 +38,13 @@
                 "jotai": "^2.15.0",
                 "jotai-immer": "^0.4.1",
                 "next": "15.4.7",
+                "prettier-plugin-tailwindcss": "^0.7.1",
                 "react": "^19.2.0",
                 "react-dom": "^19.2.0",
                 "react-hook-form": "^7.64.0",
-                "react-icons": "^5.5.0"
+                "react-icons": "^5.5.0",
+                "tailwindcss-language-server": "^0.0.1",
+                "typescript-language-server": "^5.1.1"
         },
         "devDependencies": {
                 "@chromatic-com/storybook": "^4.1.1",
@@ -63,7 +69,6 @@
                 "tailwindcss": "^4.1.14",
                 "typescript": "^5.9.3",
                 "typescript-eslint": "^8.46.2",
-                "typescript-language-server": "^5.1.0",
                 "vitest": "^3.2.4"
         }
 }

@@ -14,7 +14,7 @@ export default function IsCorrectCard({ cardId }: { cardId: string }) {
                 <li
                         data-testid={PP_TEST_IDS.isCorrectCard.me}
                         data-status={cardStatus}
-                        className='questionCard !w-full data-[status=correct]:bg-green-100 data-[status=incorrect]:bg-red-100'>
+                        className='questionCard w-full data-[status=correct]:bg-green-100 data-[status=incorrect]:bg-red-100'>
                         <TermDefinitionTitle cardId={cardId} />
                         <BooleanButtons cardId={cardId} />
                 </li>

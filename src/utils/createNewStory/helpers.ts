@@ -122,6 +122,19 @@ export function getCardsForAlgorithm({
         return [shortCardsForAlgo, explicitCardsForAlgo];
 }
 
+export function getRandomAvoidingMany<T>({
+        list,
+        toAvoid
+}: {
+        list: T[];
+        toAvoid: T[];
+}) {
+        const anArrayWithoutCurrentDefinition = list.filter(
+                (currOpt) => !toAvoid.includes(currOpt)
+        );
+        return getRandomItem(anArrayWithoutCurrentDefinition);
+}
+
 export function getRandomOptAvoidingCurr({
         allOptions,
         targetOpt
@@ -129,10 +142,10 @@ export function getRandomOptAvoidingCurr({
         allOptions: string[];
         targetOpt: string;
 }) {
-        const anArrayWithoutCurrentDefinition = allOptions.filter(
-                (currOpt) => currOpt !== targetOpt
-        );
-        return getRandomItem(anArrayWithoutCurrentDefinition);
+        return getRandomAvoidingMany({
+                list: allOptions,
+                toAvoid: [targetOpt]
+        });
 }
 
 function getRandomItem<T>(array: T[]) {

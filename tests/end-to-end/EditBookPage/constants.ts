@@ -47,10 +47,10 @@ export const EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE: (
                 title: 'Explicit card 1',
                 subtitle: 'Subtitle for explicit card 1',
                 options: [
-                        { optionTitle: 'Option 1', isCorrect: true },
-                        { optionTitle: 'Option 2', isCorrect: false },
-                        { optionTitle: 'Option 3', isCorrect: false },
-                        { optionTitle: 'Option 4', isCorrect: false }
+                        { optionTitle: 'Option 1-1', isCorrect: true },
+                        { optionTitle: 'Option 2-1', isCorrect: false },
+                        { optionTitle: 'Option 3-1', isCorrect: false },
+                        { optionTitle: 'Option 4-1', isCorrect: false }
                 ],
                 explanation: 'Explanation for explicit card 1'
         },
@@ -64,10 +64,10 @@ export const EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE: (
                 title: 'Explicit card 2',
                 subtitle: 'Subtitle for explicit card 2',
                 options: [
-                        { optionTitle: 'Option 1', isCorrect: false },
-                        { optionTitle: 'Option 2', isCorrect: true },
-                        { optionTitle: 'Option 3', isCorrect: false },
-                        { optionTitle: 'Option 4', isCorrect: false }
+                        { optionTitle: 'Option 1-3', isCorrect: false },
+                        { optionTitle: 'Option 2-3', isCorrect: true },
+                        { optionTitle: 'Option 3-3', isCorrect: false },
+                        { optionTitle: 'Option 4-3', isCorrect: false }
                 ],
                 explanation: 'Explanation for explicit card 2'
         },
@@ -77,10 +77,10 @@ export const EXAMPLE_DATA_FOR_CARDS_FROM_TEXT__MIXED_MODE: (
                 title: 'Explicit card 3',
                 subtitle: 'Subtitle for explicit card 3',
                 options: [
-                        { optionTitle: 'Option 1', isCorrect: false },
-                        { optionTitle: 'Option 2', isCorrect: false },
-                        { optionTitle: 'Option 3', isCorrect: true },
-                        { optionTitle: 'Option 4', isCorrect: false }
+                        { optionTitle: 'Option 1-2', isCorrect: false },
+                        { optionTitle: 'Option 2-2', isCorrect: false },
+                        { optionTitle: 'Option 3-2', isCorrect: true },
+                        { optionTitle: 'Option 4-2', isCorrect: false }
                 ],
                 explanation: 'Explanation for explicit card 3'
         },

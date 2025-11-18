@@ -21,9 +21,15 @@ import { deleteTypeInCardStoryAtom } from '@/src/jotai/typeInCardStoryAtoms';
 import { deleteIsCorrectCardStoryAtom } from '@/src/jotai/isCorrectCardStoryAtoms';
 import { BooksAndStoriesAssociations } from '../types/mainDbGlobal';
 import computeBooksAndStoriesAssociations from '../utils/jotai/computeBooksAndStoriesAssociations';
+import { updateBookStoriesDataAtom } from './storiesForBookDialogInfoAtoms';
 
 export const deleteStoryAtom = getDerivedAtomWithIdb(
-        async (get, set, mainDb, storyId: string) => {
+        async (
+                get,
+                set,
+                mainDb,
+                { storyId, bookId }: { storyId: string; bookId: string }
+        ) => {
                 await deleteStoryIdb(mainDb, storyId);
                 const {
                         explicitCardStoryIds,
@@ -48,6 +54,7 @@ export const deleteStoryAtom = getDerivedAtomWithIdb(
                         idManager: storyIdsAtom,
                         deleteId: storyId
                 });
+                set(updateBookStoriesDataAtom, bookId);
         }
 );
 

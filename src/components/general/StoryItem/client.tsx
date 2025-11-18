@@ -8,7 +8,6 @@ import {
         deleteStoryAtom,
         getStoryCompletionDataAtom
 } from '@/src/jotai/historyAtoms';
-import { updateBookStoriesDataAtom } from '@/src/jotai/storiesForBookDialogInfoAtoms';
 import { currentBookIdForStoriesDialogAtom } from '@/src/jotai/idManagers';
 import DateBread from '@/src/components/general/DateBread';
 import { useAtomValue } from 'jotai';
@@ -26,18 +25,17 @@ export function CompletionRateLikeBread({ storyId }: { storyId: string }) {
 
 export function DeleteStoryButton({ storyId }: { storyId: string }) {
         const onDeleteButtonClick: MouseEventHandler<HTMLDivElement> =
-                useAtomCallback(async (get, set, e) => {
+                useAtomCallback((get, set, e) => {
                         e.stopPropagation();
                         const bookId = get(currentBookIdForStoriesDialogAtom);
-                        await set(deleteStoryAtom, storyId);
-                        set(updateBookStoriesDataAtom, bookId);
+                        void set(deleteStoryAtom, { storyId, bookId });
                 });
 
         return (
                 <div
-                        className='absolute top-0 right-0 bg-red-200 hover:bg-red-500 duration-100 rounded-bl-2xl rounded-tr-md group'
+                        className='group absolute top-0 right-0 rounded-tr-md rounded-bl-2xl bg-red-200 duration-100 hover:bg-red-500'
                         onClick={onDeleteButtonClick}>
-                        <MdDeleteOutline className='text-red-400 group-hover:text-white  text-2xl m-2' />
+                        <MdDeleteOutline className='m-2 text-2xl text-red-400 group-hover:text-white' />
                 </div>
         );
 }
@@ -53,7 +51,7 @@ export function CompletionRate({ storyId }: { storyId: string }) {
         return (
                 <h2
                         data-isgreen={isPercentageGreen}
-                        className='mx-auto heading-1 !text-red-400  data-[isgreen=true]:!text-green-400 !my-0'>
+                        className='heading-1 mx-auto !my-0 !text-red-400 data-[isgreen=true]:!text-green-400'>
                         {`${completionPercentage}%`}
                 </h2>
         );
@@ -61,5 +59,5 @@ export function CompletionRate({ storyId }: { storyId: string }) {
 
 export function StoryCreationDate({ storyId }: { storyId: string }) {
         const { playStartDate } = useAtomValue(storiesAtomFamily(storyId));
-        return <DateBread timeMs={playStartDate} className='ml-auto mt-3' />;
+        return <DateBread timeMs={playStartDate} className='mt-3 ml-auto' />;
 }
