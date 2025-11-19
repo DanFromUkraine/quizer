@@ -8,7 +8,6 @@ import {
         deleteStoryAtom,
         getStoryCompletionDataAtom
 } from '@/src/jotai/historyAtoms';
-import { currentBookIdForStoriesDialogAtom } from '@/src/jotai/idManagers';
 import DateBread from '@/src/components/general/DateBread';
 import { useAtomValue } from 'jotai';
 import { storiesAtomFamily } from '@/src/jotai/mainAtoms';
@@ -25,10 +24,9 @@ export function CompletionRateLikeBread({ storyId }: { storyId: string }) {
 
 export function DeleteStoryButton({ storyId }: { storyId: string }) {
         const onDeleteButtonClick: MouseEventHandler<HTMLDivElement> =
-                useAtomCallback((get, set, e) => {
+                useAtomCallback((_get, set, e) => {
                         e.stopPropagation();
-                        const bookId = get(currentBookIdForStoriesDialogAtom);
-                        void set(deleteStoryAtom, { storyId, bookId });
+                        void set(deleteStoryAtom, storyId);
                 });
 
         return (
@@ -51,7 +49,7 @@ export function CompletionRate({ storyId }: { storyId: string }) {
         return (
                 <h2
                         data-isgreen={isPercentageGreen}
-                        className='heading-1 mx-auto !my-0 !text-red-400 data-[isgreen=true]:!text-green-400'>
+                        className='heading-1 mx-auto my-0 text-red-400 data-[isgreen=true]:text-green-400'>
                         {`${completionPercentage}%`}
                 </h2>
         );

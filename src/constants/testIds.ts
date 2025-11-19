@@ -51,6 +51,9 @@ export const EP_TEST_IDS = {
                 shortCardsOnlyModeBtn: 'Choose short cards only mode BUTTON',
                 mainInp: 'Edit cards as text dialog --> main INPUT'
         },
+        actionNeededDialog: {
+                me: 'CHANGE CARDS AS TEXT WARNING DIALOG'
+        },
         card: {
                 me: 'CARD CONTAINER',
                 deleteBtn: 'delete card BUTTON',

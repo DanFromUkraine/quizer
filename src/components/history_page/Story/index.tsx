@@ -20,13 +20,15 @@ export default function Story({ storyId }: { storyId: string }) {
 
         const onDeleteStoryClick = useAtomCallback(
                 useCallback((_get, set) => {
-                        void set(deleteStoryAtom, { storyId, bookId: '' });
+                        void set(deleteStoryAtom, storyId);
                 }, [])
         );
+        
+      
 
         return (
                 <div className='glass relative flex w-full flex-col rounded-md p-6 duration-100 hover:shadow-xl'>
-                        <section className='flex justify-between'>
+                        <section className='flex text- justify-between'>
                                 <div className='flex flex-col text-gray-400'>
                                         <span className='span'>
                                                 {isCompleted
@@ -41,7 +43,7 @@ export default function Story({ storyId }: { storyId: string }) {
                         </section>
                         <Link
                                 href={getDefaultPathToPlayPage(storyId)}
-                                className='duration-100 hover:bg-gray-300 p-2 rounded-xl my-1'>
+                                className='my-1 rounded-xl p-2 duration-100 hover:bg-gray-300'>
                                 <h2 className='heading-1'>{`${successPercentage}%`}</h2>
                                 <span className='span'>{`cards number - ${cardIdsOrder.length}`}</span>
                         </Link>

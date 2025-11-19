@@ -42,9 +42,7 @@
                 "react": "^19.2.0",
                 "react-dom": "^19.2.0",
                 "react-hook-form": "^7.64.0",
-                "react-icons": "^5.5.0",
-                "tailwindcss-language-server": "^0.0.1",
-                "typescript-language-server": "^5.1.1"
+                "react-icons": "^5.5.0"
         },
         "devDependencies": {
                 "@chromatic-com/storybook": "^4.1.1",

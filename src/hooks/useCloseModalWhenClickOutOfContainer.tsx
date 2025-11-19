@@ -8,7 +8,9 @@ export default function useCloseModalWhenClickOutOfContainer(
 ) {
         useEffect(() => {
                 if (!containerRef.current)
-                        throw 'Container ref for modal (edit cards as text) is not of truthy value. Cannot add click listener to it';
+                        throw new Error(
+                                'Container ref for modal (edit cards as text) is not of truthy value. Cannot add click listener to it'
+                        );
                 const clickListener = (e: PointerEvent) => {
                         if (e.target === containerRef.current) {
                                 callback();

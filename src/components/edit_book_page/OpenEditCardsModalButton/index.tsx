@@ -1,13 +1,14 @@
 'use client';
 
-import { useSetAtom } from 'jotai';
 import { FaRegEdit } from 'react-icons/fa';
 import { openDialogAtom } from '@/src/jotai/dialogVisibilityFamily';
 import { EP_TEST_IDS } from '@/src/constants/testIds';
+import { useAtomCallback } from 'jotai/utils';
 
 export default function OpenEditCardsModalButton() {
-        const openDialog = useSetAtom(openDialogAtom);
-        const onClick = () => openDialog('editCardsAsText');
+        const openDialog = useAtomCallback((_get, set) =>
+                set(openDialogAtom, 'editCardsAsText')
+        );
 
         return (
                 <section className='container'>
@@ -15,9 +16,9 @@ export default function OpenEditCardsModalButton() {
                                 data-testid={
                                         EP_TEST_IDS.openDialogBtnCardsAsText
                                 }
-                                onClick={onClick}
+                                onClick={openDialog}
                                 className='buttonV1'>
-                                <span className='heading-3 !text-white'>
+                                <span className='heading-3 text-white!'>
                                         Edit cards as a text
                                 </span>
                                 <FaRegEdit className='text-2xl' />
