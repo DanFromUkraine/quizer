@@ -1,10 +1,10 @@
 import { TermDefinitionCard } from '@/src/types/mainDbGlobal';
-import getUniqueID from '@/src/utils/getUniqueID';
-import {
-        getRandomItemsFromList,
-        getRandomOptAvoidingCurr
-} from '@/src/utils/createNewStory/helpers';
 import { ExplicitCardStory, OptionStory } from '@/src/types/stories';
+import {
+    getRandomAvoidingMany,
+    getRandomItemsFromList
+} from '@/src/utils/createNewStory/helpers';
+import getUniqueID from '@/src/utils/getUniqueID';
 
 export function getNormalCards({
         requiredNum,
@@ -20,18 +20,22 @@ export function getNormalCards({
                 requiredNum
         );
 
-        return shortCardsForAlgo.map(({ term, definition, id }) => {
-                const options: OptionStory[] = Array(4);
+        return shortCardsForAlgo.map(({ term, definition }) => {
+                const NUM_OF_OPTS_TO_CREATE = 4;
+                const options: OptionStory[] = [];
                 const corrOptInd = Math.floor(Math.random() * 4);
                 options[corrOptInd] = {
                         isCorrect: true,
                         title: definition
                 };
-                for (let i = 0; i < options.length; i++) {
+                for (let i = 0; i < NUM_OF_OPTS_TO_CREATE; i++) {
                         if (i === corrOptInd) continue;
-                        const randomOption = getRandomOptAvoidingCurr({
-                                allOptions,
-                                targetOpt: definition
+                        const randomOption = getRandomAvoidingMany({
+                                list: allOptions,
+                                toAvoid: [
+                                        definition,
+                                        ...options.map((o) => o.title)
+                                ]
                         });
                         options[i] = {
                                 isCorrect: false,

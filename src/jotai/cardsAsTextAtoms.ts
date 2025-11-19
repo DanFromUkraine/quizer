@@ -8,8 +8,6 @@ import {
 } from '@/src/utils/cardsAsText/fromCardsToText';
 import { openActionNeededDialogAtom } from '@/src/jotai/dialogVisibilityFamily';
 
-
-
 export const markupModeAtom = atom<MarkupModes>('mixed');
 export const textInModalHasBeenChangedAtom = atom(false);
 
@@ -60,7 +58,7 @@ export const cardsTextAtom = atom(
                                 get
                         });
                 }
-                return ""
+                return '';
         },
         (_get, set, newVal: string) => {
                 set(textInModalHasBeenChangedAtom, true);

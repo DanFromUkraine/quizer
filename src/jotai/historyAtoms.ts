@@ -21,6 +21,7 @@ import { deleteTypeInCardStoryAtom } from '@/src/jotai/typeInCardStoryAtoms';
 import { deleteIsCorrectCardStoryAtom } from '@/src/jotai/isCorrectCardStoryAtoms';
 import { BooksAndStoriesAssociations } from '../types/mainDbGlobal';
 import computeBooksAndStoriesAssociations from '../utils/jotai/computeBooksAndStoriesAssociations';
+import { updateBookStoriesDataAtom } from './storiesForBookDialogInfoAtoms';
 
 export const deleteStoryAtom = getDerivedAtomWithIdb(
         async (get, set, mainDb, storyId: string) => {
@@ -30,6 +31,7 @@ export const deleteStoryAtom = getDerivedAtomWithIdb(
                         typeInCardStoryIds,
                         isCorrectCardStoryIds
                 } = get(storiesAtomFamily(storyId));
+                const associations = get(booksAndStoriesAssociationsAtom);
 
                 await Promise.all([
                         ...explicitCardStoryIds.map((id) =>
@@ -48,6 +50,13 @@ export const deleteStoryAtom = getDerivedAtomWithIdb(
                         idManager: storyIdsAtom,
                         deleteId: storyId
                 });
+                let bookIdToUpdate = '';
+
+                for (const [bookId, storyIds] of Object.entries(associations)) {
+                        if (storyIds.includes(storyId)) bookIdToUpdate = bookId;
+                }
+
+                set(updateBookStoriesDataAtom, bookIdToUpdate);
         }
 );
 

@@ -31,12 +31,11 @@ export default function useUpdateCardsFromTextOnDialogClose() {
         );
 
         useEffect(() => {
-                if (modalVisible || !areAnyChanges)
-                        return;
+                if (modalVisible || !areAnyChanges) return;
                 if (markupMode === 'mixed') {
-                        updateAnyCards(cardsText);
+                        void updateAnyCards(cardsText);
                 } else if (markupMode === 'short-only') {
-                        updateOnlyShortCards(cardsText);
+                        void updateOnlyShortCards(cardsText);
                 }
                 setChangesFlagState(false);
         }, [cardsText, modalVisible, markupMode]);

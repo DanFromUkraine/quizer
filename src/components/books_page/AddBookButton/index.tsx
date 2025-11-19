@@ -6,7 +6,7 @@ import { BP_TEST_IDS } from '@/src/constants/testIds';
 import { isInitializationFromIdbCompletedAtom } from '@/src/jotai/mainAtoms';
 
 export default function AddBookButton() {
-        const add = useSetAtom(addEmptyBookAtom);
+        const add = useSetAtom(addEmptyBookAtom) as () => void;
         const isDbReady = useAtomValue(isInitializationFromIdbCompletedAtom);
 
         return (
@@ -14,8 +14,8 @@ export default function AddBookButton() {
                         <button
                                 data-testid={BP_TEST_IDS.addNewBookBtn}
                                 onClick={add}
-                                className='fixed bottom-[25px] right-5'>
-                                <IoAddCircle className='text-6xl hover:rotate-45 duration-200 bg-white rounded-full shadow-xl' />
+                                className='fixed right-5 bottom-[25px]'>
+                                <IoAddCircle className='rounded-full bg-white text-6xl shadow-xl duration-200 hover:rotate-45' />
                         </button>
                 )
         );
