@@ -1,6 +1,6 @@
-import '@/src/styles/index.css';
+import '@/app/styles/index.css';
 import { Metadata } from 'next';
-import { RootLayout } from '@/src/app/root-layout';
+import { RootLayout } from '@/app/root-layout';
 
 export const metadata: Metadata = {
     title: 'Kava Quizer',

@@ -1,0 +1,45 @@
+@import '../../node_modules/.pnpm/tailwindcss@4.1.17/node_modules/tailwindcss/dist/lib.d.mts';
+@import '__variables.css';
+@import '__animations.css';
+
+@layer {
+    input:focus {
+        @apply outline-none;
+    }
+}
+
+@layer components {
+    .questionCard {
+        @apply mx-auto flex w-full max-w-[960px] flex-col gap-3 rounded-[14px] border border-[#d9dde5] bg-white p-4 max-[540px]:w-11/12;
+    }
+}
+
+@layer utilities {
+    .mainContainer {
+        @apply mb-20 flex min-w-0 flex-1 flex-col gap-5 p-8 max-sm:p-5;
+    }
+
+    .heading-1 {
+        @apply mb-5 text-5xl font-bold text-gray-950 max-lg:text-4xl max-md:text-3xl;
+    }
+
+    .heading-2 {
+        @apply mb-3 text-3xl font-semibold text-gray-800;
+    }
+
+    .heading-3 {
+        @apply text-lg text-gray-900;
+    }
+
+    .heading-4 {
+        @apply text-base font-semibold text-gray-800;
+    }
+
+    .span {
+        @apply text-sm text-gray-500;
+    }
+
+    .glass {
+        @apply border border-gray-400/40 bg-gray-400/30 backdrop-blur-lg;
+    }
+}

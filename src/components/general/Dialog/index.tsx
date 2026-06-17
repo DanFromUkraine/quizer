@@ -18,14 +18,14 @@ export default function Dialog({
     className,
     containerClassName,
     testId,
-    CloseDialogComponent
+    closeButton
 }: {
     children: ReactNode;
     dialogName: DialogNames;
     className?: string;
     containerClassName?: string;
     testId: string;
-    CloseDialogComponent?: React.FC; // Otherwise it pushes me to include word 'action' in name, which may mislead other developer
+    closeButton?: ReactNode;
 }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [dialogVisible, setDialogVisible] = useAtom(
@@ -58,10 +58,8 @@ export default function Dialog({
                         onClick={closeDialog}
                         data-testid={BASE_DIALOG_TEST_IDS.defCloseBtn}
                     />
-                    {typeof CloseDialogComponent === 'function' && (
-                        <div onClick={closeDialog}>
-                            <CloseDialogComponent />
-                        </div>
+                    {closeButton && (
+                        <div onClick={closeDialog}>{closeButton}</div>
                     )}
                 </section>
 
