@@ -1,5 +1,5 @@
 import { STORIES_SORT_TOOLS } from '@/src/constants/storiesSortTools';
-import SortTool from '@/src/components/history_page/SortTools/client';
+import SortTool from './SortTool';
 
 export default function SortTools() {
     const sortRuleSelected = 'by_collection';

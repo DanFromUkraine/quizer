@@ -2,7 +2,7 @@
 
 import { useAtomValue } from 'jotai';
 import { storiesSortedByBookAtom } from '@/src/jotai/historyAtoms';
-import BookAndItsStories from '@/src/components/history_page/ByBookStoriesList/client';
+import BookAndItsStories from './BookAndItsStories';
 import NothingYetMessage from '@/src/components/general/NothingYet';
 
 export default function ByBookStoriesList() {

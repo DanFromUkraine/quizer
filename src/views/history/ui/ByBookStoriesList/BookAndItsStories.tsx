@@ -1,7 +1,6 @@
 import { StoriesByBook } from '@/src/types/historyPage';
-import StoryItem from '@/src/components/general/StoryItem';
 import NothingYetMessage from '@/src/components/general/NothingYet';
-import Story from '@/src/components/history_page/Story';
+import Story from '../Story';
 
 export default function BookAndItsStories({
     bookTitle,
