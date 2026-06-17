@@ -2,7 +2,7 @@
 
 import { finishStoryAtom } from '@/src/jotai/historyAtoms';
 import { useAtomCallback } from 'jotai/utils';
-import { usePlayModeProps } from '@/src/pages/play/model/play-mode-props';
+import { usePlayModeProps } from '@/src/views/play/model/play-mode-props';
 import { PP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function FinishButton() {

@@ -6,7 +6,7 @@ import ExplicitCard from '@/src/components/play_page/CardsList/ExplicitCard';
 import TypeInCard from '@/src/components/play_page/CardsList/TypeInCard';
 import IsCorrectCard from '@/src/components/play_page/CardsList/IsCorrectCard';
 import { getPlayCardType } from '@/src/utils/lists';
-import { usePlayModeProps } from '@/src/pages/play/model/play-mode-props';
+import { usePlayModeProps } from '@/src/views/play/model/play-mode-props';
 import { PP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function PlayCardsList() {

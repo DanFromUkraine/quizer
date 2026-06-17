@@ -1,6 +1,6 @@
 'use client';
 
-import { usePlayModeProps } from '@/src/pages/play/model/play-mode-props';
+import { usePlayModeProps } from '@/src/views/play/model/play-mode-props';
 import { useAtomValue } from 'jotai';
 import { getStoryResultsAtom } from '@/src/jotai/historyAtoms';
 import Link from 'next/link';

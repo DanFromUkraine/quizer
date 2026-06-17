@@ -8,7 +8,7 @@ import {
 import { useAtom, useAtomValue } from 'jotai';
 import { typeInCardStoriesAtomFamily } from '@/src/jotai/mainAtoms';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
-import { usePlayModeProps } from '@/src/pages/play/model/play-mode-props';
+import { usePlayModeProps } from '@/src/views/play/model/play-mode-props';
 import { PP_TEST_IDS } from '@/src/constants/testIds';
 
 export function useRevealAnswer(cardId: string) {

@@ -5,51 +5,93 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="412a1176-ee35-4bfb-ae04-b6574c4f8b35" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/AGENTS.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pnpm-workspace.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/edit/ui/EditCardsAsText/main-text-area.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/edit/ui/EditCardsAsText/mode-tools.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pages/edit/ui/EditCardsAsText/save-btn.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/(books)/loading.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/edit/error.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/edit/loading.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/history/view/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/play/error.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/play/loading.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/books/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/books/ui/NewStoryParamsDialog/CustomParam.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/books/ui/NewStoryParamsDialog/CustomParamsList.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/books/ui/NewStoryParamsDialog/IsSmartModeToggle.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/books/ui/NewStoryParamsDialog/ShowAnswersImmediatelyToggle.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/books/ui/NewStoryParamsDialog/SubmitButton.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/books/ui/RenderBooks/BookToolbar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/books/ui/RenderBooks/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/root-layout/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/app/root-layout/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/root-layout/ui/RootLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/root-layout/ui/RootLayout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/AddCardButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/edit/ui/add-card-btn.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/Description/UI.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/edit/ui/description.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/Description/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/EditCardsAsText/UI.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/EditCardsAsText/client.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/EditCardsAsText/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/edit/ui/EditCardsAsText/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/Header/UI.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/Header/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/edit/ui/header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/OpenEditCardsModalButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/edit/ui/open-edit-modal.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/CardHeader/client.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/CardHeader/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/Explanation/UI.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/Explanation/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/QuestionTitle/UI.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/QuestionTitle/client.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/QuestionTitle/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/AddEmtpyOptionButton/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/CorrectnessMarkerButton/UI.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/CorrectnessMarkerButton/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/DeleteOptionBtn/UI.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/DeleteOptionBtn/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/OptionTitle/UI.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/OptionTitle/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/UI.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/TermDeterminationContent/client.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/TermDeterminationContent/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/edit/ui/RenderCards/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/general/Dialog/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/Dialog/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/EditBookPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/edit/ui/EditBookPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/__animations.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/styles/__animations.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/__variables.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/styles/__variables.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/styles/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(books)/loading.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(books)/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(books)/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/edit/error.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/edit/loading.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/edit/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/edit/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/history/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/history/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/history/view/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/play/error.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/play/loading.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/play/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/play/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/root-layout/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/root-layout/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/root-layout/ui/RootLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/root-layout/ui/RootLayout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/styles/__animations.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/__animations.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/styles/__variables.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/__variables.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/styles/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/AddBookButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/books/ui/AddBookButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/BookStoryDialog/CreateNewStoryButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/books/ui/BookStoryDialog/CreateNewStoryButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/BookStoryDialog/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/books/ui/BookStoryDialog/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/Header/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/books/ui/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/NewStoryParamsDialog/UI.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/books/ui/NewStoryParamsDialog/ParamWithToggle.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/NewStoryParamsDialog/client.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/NewStoryParamsDialog/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/books/ui/NewStoryParamsDialog/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/BookTitle/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/books/ui/RenderBooks/BookTitle.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/BookToolbar/DeleteButton/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/BookToolbar/EditButton/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/BookToolbar/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/Description/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/books/ui/RenderBooks/BookDescription.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/OtherInfo/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/books/ui/RenderBooks/OtherInfo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/StudyButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/books/ui/RenderBooks/StudyButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/CardsList/ExplicitCard/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/CardsList/ExplicitCard/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/CardsList/ExplicitCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/CardsList/ExplicitCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/CardsList/IsCorrectCard/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/CardsList/IsCorrectCard/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/CardsList/TypeInCard/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/CardsList/TypeInCard/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/CardsList/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/CardsList/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/FinishButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/FinishButton/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/Results/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/Results/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/Title/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/Title/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/books/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/books/ui/BooksPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/books/ui/Books.page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/books/ui/BooksPageFallback.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/books/ui/BooksFallback.page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/model/edit-book-props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/model/edit-book-props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/AddCardButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/AddCardButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/Description.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/Description.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/EditBook.page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/EditBook.page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/EditBookError.page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/EditBookError.page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/EditBookFallback.page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/EditBookFallback.page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/EditCardsAsText/MainTextArea.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/EditCardsAsText/MainTextArea.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/EditCardsAsText/ModeTools.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/EditCardsAsText/ModeTools.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/EditCardsAsText/SaveButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/EditCardsAsText/SaveButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/EditCardsAsText/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/EditCardsAsText/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/OpenEditModalButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/OpenEditModalButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/RenderCards/Card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/RenderCards/Card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/RenderCards/CardHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/RenderCards/CardHeader.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/RenderCards/ExplicitCardContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/RenderCards/ExplicitCardContent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/RenderCards/Option.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/RenderCards/Option.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/RenderCards/RenderOptions.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/RenderCards/RenderOptions.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/RenderCards/TermDeterminationContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/RenderCards/TermDeterminationContent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/edit/ui/RenderCards/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/edit/ui/RenderCards/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/history-view/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/history-view/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/history-view/ui/HistoryViewPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/history-view/ui/HistoryViewPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/history/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/history/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/history/ui/HistoryPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/history/ui/HistoryPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/play/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/play/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/play/model/play-mode-props.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/play/model/play-mode-props.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/play/ui/PlayPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/play/ui/PlayPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/play/ui/PlayPageError.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/play/ui/PlayPageError.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/play/ui/PlayPageFallback.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/play/ui/PlayPageFallback.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +99,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="274" />
+    <option name="cachedIndexableFilesCount" value="260" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -69,61 +111,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0" />
-      <entry key="MS500" value="1.0000457458374559" />
-      <entry key="S2" value="1.0822409078143131" />
-      <entry key="S5" value="1.3681587766799344" />
-      <entry key="S10" value="1.6067608892315608" />
-      <entry key="S30" value="1.8472469708007393" />
-      <entry key="S60" value="1.9820868411087889" />
-      <entry key="M2" value="2.6438494368196706" />
-      <entry key="M5" value="5.4281372161032335" />
-      <entry key="M10" value="9.422862105965592" />
-      <entry key="M15" value="12.423698105231995" />
-      <entry key="M30" value="17.870655570544155" />
-      <entry key="H1" value="23.3248820685675" />
-      <entry key="H2" value="29.767641829637178" />
-      <entry key="H4" value="68.28948447318079" />
-      <entry key="D1" value="1691.2637481024042" />
-      <entry key="W1" value="3289.5433034987063" />
+      <entry key="MS100" value="1.0025327101373893" />
+      <entry key="MS500" value="1.3992802757426972" />
+      <entry key="S2" value="2.2995534789410743" />
+      <entry key="S5" value="2.679147665077178" />
+      <entry key="S10" value="2.831826050266267" />
+      <entry key="S30" value="2.9439869818025786" />
+      <entry key="S60" value="3.1130968586230856" />
+      <entry key="M2" value="4.319058101449143" />
+      <entry key="M5" value="8.715209152857085" />
+      <entry key="M10" value="18.159182067416012" />
+      <entry key="M15" value="29.431995858844292" />
+      <entry key="M30" value="56.28324178121625" />
+      <entry key="H1" value="83.56013814754853" />
+      <entry key="H2" value="105.90562867334694" />
+      <entry key="H4" value="150.81061896369874" />
+      <entry key="D1" value="1754.7119227121605" />
+      <entry key="W1" value="3378.7833928714845" />
     </decayedCancelled>
     <decayedSelected>
-      <entry key="MS100" value="2.223415556084137E-17" />
-      <entry key="MS500" value="4.6709382719329804E-4" />
-      <entry key="S2" value="0.1470114062863706" />
-      <entry key="S5" value="0.4644515459601995" />
-      <entry key="S10" value="0.6815068201861719" />
-      <entry key="S30" value="0.8800517648576781" />
-      <entry key="S60" value="0.9441555698888024" />
-      <entry key="M2" value="1.0465598676719852" />
-      <entry key="M5" value="1.3757906951631087" />
-      <entry key="M10" value="1.7619705774928294" />
-      <entry key="M15" value="2.011931992971977" />
-      <entry key="M30" value="2.3933523515858988" />
-      <entry key="H1" value="2.6603099192189945" />
-      <entry key="H2" value="2.82090382176978" />
-      <entry key="H4" value="3.041428345175694" />
-      <entry key="D1" value="10.189041343022453" />
-      <entry key="W1" value="17.27380281847616" />
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="1.0894488913469033E-153" />
+      <entry key="S10" value="3.300680068329943E-77" />
+      <entry key="S30" value="3.207888709144951E-26" />
+      <entry key="S60" value="1.8025988800362255E-13" />
+      <entry key="M2" value="4.5729014868898983E-7" />
+      <entry key="M5" value="0.003932995734048147" />
+      <entry key="M10" value="0.09420722380499741" />
+      <entry key="M15" value="0.2855422205271835" />
+      <entry key="M30" value="0.9016441275951496" />
+      <entry key="H1" value="1.6328507600068456" />
+      <entry key="H2" value="2.2100159531993477" />
+      <entry key="H4" value="2.6920378009621464" />
+      <entry key="D1" value="9.983908340657218" />
+      <entry key="W1" value="17.2236875273916" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.8526348917679567" />
-      <entry key="MS500" value="0.9687090339335556" />
-      <entry key="S2" value="1.1440409163808642" />
-      <entry key="S5" value="1.7049900442145345" />
-      <entry key="S10" value="2.1870338952884048" />
-      <entry key="S30" value="2.6812169767378036" />
-      <entry key="S60" value="2.9012491189087637" />
-      <entry key="M2" value="3.6769585325294303" />
-      <entry key="M5" value="6.796877772239152" />
-      <entry key="M10" value="11.178529568459068" />
-      <entry key="M15" value="14.429538619052378" />
-      <entry key="M30" value="20.259069700288535" />
-      <entry key="H1" value="25.98186999358304" />
-      <entry key="H2" value="32.586573031491966" />
-      <entry key="H4" value="71.32974876541923" />
-      <entry key="D1" value="1701.4518638631557" />
-      <entry key="W1" value="3306.816871135561" />
+      <entry key="MS100" value="0.9751007754767759" />
+      <entry key="MS500" value="1.3895347288553948" />
+      <entry key="S2" value="2.293798358195125" />
+      <entry key="S5" value="2.6762239688664295" />
+      <entry key="S10" value="2.8302360631939325" />
+      <entry key="S30" value="2.9434245904451917" />
+      <entry key="S60" value="3.1127607049835913" />
+      <entry key="M2" value="4.318667552951903" />
+      <entry key="M5" value="8.71864506699215" />
+      <entry key="M10" value="18.252528130602258" />
+      <entry key="M15" value="29.716123630260732" />
+      <entry key="M30" value="57.18253624839149" />
+      <entry key="H1" value="85.19060984878591" />
+      <entry key="H2" value="108.11389696485327" />
+      <entry key="H4" value="153.5015159510684" />
+      <entry key="D1" value="1764.694904261382" />
+      <entry key="W1" value="3396.0068430279507" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -165,6 +207,8 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src/pages/edit/ui" />
       <recent name="$PROJECT_DIR$/src/pages/edit" />
       <recent name="$PROJECT_DIR$/app" />
@@ -210,6 +254,7 @@
       <workItem from="1781544366540" duration="3128000" />
       <workItem from="1781547504482" duration="15410000" />
       <workItem from="1781700828960" duration="5355000" />
+      <workItem from="1781713645608" duration="2588000" />
     </task>
     <servers />
   </component>

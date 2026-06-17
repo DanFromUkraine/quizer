@@ -9,7 +9,7 @@ import { useAtomValue } from 'jotai';
 import { explicitCardStoriesAtomFamily } from '@/src/jotai/mainAtoms';
 import { useMemo } from 'react';
 import { getIfExpStoryCardCorrectAtom } from '@/src/jotai/historyAtoms';
-import { usePlayModeProps } from '@/src/pages/play/model/play-mode-props';
+import { usePlayModeProps } from '@/src/views/play/model/play-mode-props';
 import { PP_TEST_IDS } from '@/src/constants/testIds';
 
 export type ExpCardStatus = 'correct' | 'incorrect' | 'unchosen';

@@ -7,7 +7,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import LikeExplanationUI from '@/src/components/general/interfacesUI/explanation';
 import { getExplicitCardStoryCurrValFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 import { useMemo } from 'react';
-import { usePlayModeProps } from '@/src/pages/play/model/play-mode-props';
+import { usePlayModeProps } from '@/src/views/play/model/play-mode-props';
 import { ExpCardStatus } from '@/src/components/play_page/CardsList/ExplicitCard/index';
 import { PP_TEST_IDS } from '@/src/constants/testIds';
 import { getNumOfCorrectOptions } from '@/src/jotai/historyAtoms';

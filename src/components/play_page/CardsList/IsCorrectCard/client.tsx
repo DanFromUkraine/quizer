@@ -4,7 +4,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import { isCorrectCardStoriesAtomFamily } from '@/src/jotai/mainAtoms';
 import { useCallback, useMemo } from 'react';
 import { getIsCorrectCardStoryCurrValFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
-import { usePlayModeProps } from '@/src/pages/play/model/play-mode-props';
+import { usePlayModeProps } from '@/src/views/play/model/play-mode-props';
 import { PP_TEST_IDS } from '@/src/constants/testIds';
 
 function useCurrVal(cardId: string) {
