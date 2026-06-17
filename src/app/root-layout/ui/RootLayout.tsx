@@ -1,6 +1,6 @@
-import { Provider } from 'jotai';
+import { Provider } from 'jotai/react/Provider';
+import Sidebar from '@/src/app/root-layout/ui/Sidebar';
 import { ReactNode } from 'react';
-import Sidebar from '@/src/components/layout/Sidebar';
 
 export function RootLayout({ children }: { children: ReactNode }) {
     return (

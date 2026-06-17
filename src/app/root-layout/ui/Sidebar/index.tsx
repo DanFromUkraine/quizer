@@ -1,6 +1,6 @@
 'use client';
 
-import { RenderNavLinks } from './client';
+import { RenderNavLinks } from './RenderNavLinks';
 import { ColorStatusBar } from './ColorStatusBar';
 
 export default function Sidebar() {
