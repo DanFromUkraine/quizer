@@ -6,14 +6,14 @@ import Link from 'next/link';
 import { BP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function EditButton() {
-        const { id } = useBookProps();
-        return (
-                <Link
-                        data-testid={BP_TEST_IDS.bookCard.editBookBtn}
-                        href={`/edit?bookId=${id}`}
-                        className='flex gap-1 items-center bg-amber-500 rounded-md p-1 hover:bg-amber-300 text-xs tracking-widest font-semibold duration-100 text-white'>
-                        <span>EDIT</span>
-                        <MdEdit className='text-white' />
-                </Link>
-        );
+    const { id } = useBookProps();
+    return (
+        <Link
+            data-testid={BP_TEST_IDS.bookCard.editBookBtn}
+            href={`/edit?bookId=${id}`}
+            className='flex items-center gap-1 rounded-md bg-amber-500 p-1 text-xs font-semibold tracking-widest text-white duration-100 hover:bg-amber-300'>
+            <span>EDIT</span>
+            <MdEdit className='text-white' />
+        </Link>
+    );
 }

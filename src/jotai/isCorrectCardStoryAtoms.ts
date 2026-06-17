@@ -4,17 +4,23 @@
 
 *  */
 
-import { deleteIsCorrectCardStoryIdb, updateIsCorrectCardStoryIdb } from '@/src/utils/idb/main/actions';
+import {
+    deleteIsCorrectCardStoryIdb,
+    updateIsCorrectCardStoryIdb
+} from '@/src/utils/idb/main/actions';
 import { isCorrectCardStoriesAtomFamily } from '@/src/jotai/mainAtoms';
-import { getAtomFamilyDeleteAtom_NoFatherUpdate, getAtomFamilyUpdateAtom } from '@/src/utils/jotai/helpers';
+import {
+    getAtomFamilyDeleteAtom_NoFatherUpdate,
+    getAtomFamilyUpdateAtom
+} from '@/src/utils/jotai/helpers';
 
 export const updateIsCorrectCardStoryAtom = getAtomFamilyUpdateAtom({
-        atomFamily: isCorrectCardStoriesAtomFamily,
-        updateIdb: updateIsCorrectCardStoryIdb
+    atomFamily: isCorrectCardStoriesAtomFamily,
+    updateIdb: updateIsCorrectCardStoryIdb
 });
 
 export const deleteIsCorrectCardStoryAtom =
-        getAtomFamilyDeleteAtom_NoFatherUpdate({
-                atomFamily: isCorrectCardStoriesAtomFamily,
-                deleteIdb: deleteIsCorrectCardStoryIdb
-        });
+    getAtomFamilyDeleteAtom_NoFatherUpdate({
+        atomFamily: isCorrectCardStoriesAtomFamily,
+        deleteIdb: deleteIsCorrectCardStoryIdb
+    });

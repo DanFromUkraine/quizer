@@ -1,16 +1,16 @@
 import { Fragment } from 'react';
 
 export default function RenderShortcutKeys({
-        shortcutKeys
+    shortcutKeys
 }: {
-        shortcutKeys: string[];
+    shortcutKeys: string[];
 }) {
-        return shortcutKeys.map((shortKey, i) => (
-                <Fragment key={i}>
-                        {i !== 0 && '+'}
-                        <p className='border text-xs text-lightGray border-gray-500 rounded-normal p-1'>
-                                {shortKey}
-                        </p>
-                </Fragment>
-        ));
+    return shortcutKeys.map((shortKey, i) => (
+        <Fragment key={i}>
+            {i !== 0 && '+'}
+            <p className='text-lightGray rounded-normal border border-gray-500 p-1 text-xs'>
+                {shortKey}
+            </p>
+        </Fragment>
+    ));
 }

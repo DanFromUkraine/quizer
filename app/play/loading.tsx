@@ -1,3 +1,1 @@
-export default function PlayPageFallback() {
-        return <div>loading...</div>;
-}
+export { PlayPageFallback as default } from '@/src/pages/play';

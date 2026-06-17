@@ -1,41 +1,34 @@
-import { IoMdCheckmarkCircleOutline } from 'react-icons/io';
-import { IoCloseCircleOutline } from 'react-icons/io5';
 import IndexMarker from '@/src/components/general/IndexMarker';
 import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function CorrectnessMarketButtonUI({
-        optionId,
-        onCheckboxClick,
-        index,
-        defaultChecked
+    optionId,
+    onCheckboxClick,
+    index,
+    defaultChecked
 }: {
-        optionId: string;
-        index: number;
-        onCheckboxClick: () => void;
-        defaultChecked: boolean;
+    optionId: string;
+    index: number;
+    onCheckboxClick: () => void;
+    defaultChecked: boolean;
 }) {
-        return (
-                <label className='pointer-events-auto flex has-checked:bg-green-400 relative p-2 gap-2 justify-center items-center bg-gray-400  duration-150 max-[540px]:hidden'>
-                        <IndexMarker index={index} />
-                        <input
-                                data-testid={
-                                        EP_TEST_IDS.card.explicitCardContent
-                                                .option.mainOptBody
-                                                .changeIsCorrectCheckbox
-                                }
-                                type='checkbox'
-                                name={`option-checkbox-${optionId}`}
-                                className='absolute inset-0 opacity-0 z-20 w-full'
-                                onChange={onCheckboxClick}
-                                checked={defaultChecked}
-                        />
-                        <div>
-                                {defaultChecked ? (
-                                        <IoMdCheckmarkCircleOutline className='text-4xl text-white' />
-                                ) : (
-                                        <IoCloseCircleOutline className='text-4xl text-white' />
-                                )}
-                        </div>
-                </label>
-        );
+    return (
+        <label className='bg-primary pointer-events-auto relative flex h-full w-fit min-w-9 shrink-0 cursor-pointer items-center justify-center rounded-l-[10px] rounded-r-none px-2 text-white duration-150 has-checked:bg-green-600'>
+            <IndexMarker
+                index={index}
+                className='h-full min-w-5 bg-transparent p-0 text-sm text-white'
+            />
+            <input
+                data-testid={
+                    EP_TEST_IDS.card.explicitCardContent.option.mainOptBody
+                        .changeIsCorrectCheckbox
+                }
+                type='checkbox'
+                name={`option-checkbox-${optionId}`}
+                className='absolute inset-0 z-20 size-full cursor-pointer opacity-0'
+                onChange={onCheckboxClick}
+                checked={defaultChecked}
+            />
+        </label>
+    );
 }

@@ -1,49 +1,92 @@
 'use client';
 
 import {
-        ChangeEvent,
-        useCallback,
-        useState,
-        InputHTMLAttributes,
-        useRef,
-        useEffect
+    ChangeEvent,
+    forwardRef,
+    useCallback,
+    useState,
+    InputHTMLAttributes,
+    useRef,
+    useEffect
 } from 'react';
+import clsx from 'clsx';
 
-/*
-  You might not understand why we need such wrapper, but the explanation is - otherwise the input caret goes to the end on every change event.
-*/
+type StableInputProps = InputHTMLAttributes<HTMLInputElement> & {
+    containerClassName?: string;
+    inputClassName?: string;
+    sizerClassName?: string;
+    testId: string;
+    inputValue: string;
+    setInputValue: (s: string) => void | Promise<void>;
+};
 
-export default function StableInput({
-        testId,
-        setInputValue,
-        inputValue,
-        ...props
-}: InputHTMLAttributes<HTMLInputElement> & {
-        testId: string;
-        inputValue: string;
-        setInputValue: (s: string) => void | Promise<void>;
-}) {
+const StableInput = forwardRef<HTMLInputElement, StableInputProps>(
+    function StableInput(
+        {
+            id,
+            className,
+            containerClassName,
+            inputClassName,
+            sizerClassName,
+            testId,
+            setInputValue,
+            inputValue,
+            ...props
+        },
+        ref
+    ) {
         const initiated = useRef(false);
         const [localValue, updateLocalValue] = useState('');
 
         useEffect(() => {
-                if (initiated.current || inputValue.length === 0) return;
-                updateLocalValue(inputValue);
-                initiated.current = true;
+            if (initiated.current || inputValue.length === 0) return;
+            updateLocalValue(inputValue);
+            initiated.current = true;
         }, [inputValue]);
 
-        const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const onChange = useCallback(
+            (e: ChangeEvent<HTMLInputElement>) => {
                 const v = e.target.value;
                 updateLocalValue(v);
                 void setInputValue(v);
-        }, []);
+            },
+            [setInputValue]
+        );
 
         return (
+            <label
+                htmlFor={id}
+                className={clsx(
+                    'relative inline-grid w-fit',
+                    containerClassName
+                )}>
+                <span
+                    aria-hidden='true'
+                    className={clsx(
+                        className,
+                        'invisible w-fit whitespace-pre',
+                        sizerClassName
+                    )}>
+                    {localValue || ' '}
+                </span>
                 <input
-                        {...props}
-                        data-testid={testId}
-                        value={localValue}
-                        onChange={onChange}
+                    {...props}
+                    ref={ref}
+                    id={id}
+                    data-testid={testId}
+                    value={localValue}
+                    onChange={onChange}
+                    className={clsx(
+                        className,
+                        'absolute inset-0 h-full w-full border-0 bg-transparent p-0 outline-none',
+                        inputClassName
+                    )}
                 />
+            </label>
         );
-}
+    }
+);
+
+StableInput.displayName = 'StableInput';
+
+export default StableInput;

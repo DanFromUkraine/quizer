@@ -1,5 +1,3 @@
-"use client"
+'use client';
 
-export default function Error() {
-        return <main>Some strange error occurred</main>;
-}
+export { EditBookPageError as default } from '@/src/pages/edit';

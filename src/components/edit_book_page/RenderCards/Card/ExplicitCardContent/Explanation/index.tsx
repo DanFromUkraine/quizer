@@ -1,68 +1,37 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo } from 'react';
 import { getExplicitCardExplanationFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 import { useCardProps } from '@/src/components/edit_book_page/RenderCards/Card';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
-import LikeExplanationUI from '@/src/components/general/interfacesUI/explanation';
 import ExtendableTextArea from '@/src/components/general/ExtendableInput';
 import { EP_TEST_IDS } from '@/src/constants/testIds';
 import useJotaiDeferredUpdateAdapter from '@/src/hooks/jotaiRelated/jotaiDeferedInput';
 
 export default function Explanation() {
-        const textAreaRef = useRef<HTMLTextAreaElement>(null);
-        const { cardId } = useCardProps();
-        const [isVisible, setIsVisible] = useState(true);
-        const stableAtom = useMemo(
-                () => getExplicitCardExplanationFamilyAdapterAtom(cardId),
-                [cardId]
-        );
-        const { inputValue, setInputValue, isDisabled } =
-                useJotaiDeferredUpdateAdapter({
-                        adapterAtom: stableAtom,
-                        cardId
-                });
+    const { cardId } = useCardProps();
+    const stableAtom = useMemo(
+        () => getExplicitCardExplanationFamilyAdapterAtom(cardId),
+        [cardId]
+    );
+    const { inputValue, setInputValue, isDisabled } =
+        useJotaiDeferredUpdateAdapter({
+            adapterAtom: stableAtom,
+            cardId
+        });
 
-        const onContainerClick = useCallback(() => {
-                if (textAreaRef.current) {
-                        setIsVisible(true);
-                        textAreaRef.current.focus();
-                }
-        }, []);
+    const onChange = getInputChangeCallback(setInputValue);
 
-        const onChange = getInputChangeCallback(setInputValue);
-
-        const onTextareaBlur = useCallback(() => {
-                if (inputValue.length === 0) {
-                        setIsVisible(false);
-                }
-        }, [inputValue]);
-
-        useEffect(() => {
-                if (inputValue.length === 0) {
-                        setIsVisible(false);
-                } else {
-                        setIsVisible(true);
-                }
-        }, [inputValue]);
-
-        return (
-                <LikeExplanationUI onContainerClick={onContainerClick}>
-                        <ExtendableTextArea
-                                disabled={isDisabled}
-                                testId={
-                                        EP_TEST_IDS.card.explicitCardContent
-                                                .explanationInp
-                                }
-                                ref={textAreaRef}
-                                onBlur={onTextareaBlur}
-                                title='explicit-card-explanation'
-                                placeholder=''
-                                data-visible={isVisible}
-                                value={inputValue}
-                                onChange={onChange}
-                                className='text-muted-foreground w-full duration-200'
-                                id={`explanation-${cardId}`}></ExtendableTextArea>
-                </LikeExplanationUI>
-        );
+    return (
+        <ExtendableTextArea
+            disabled={isDisabled}
+            testId={EP_TEST_IDS.card.explicitCardContent.explanationInp}
+            title='explicit-card-explanation'
+            placeholder='Explanation'
+            value={inputValue}
+            onChange={onChange}
+            className='min-h-[70px] w-full !rounded-[10px] !border-[#dfe3ea] !bg-[#fafbfc] !p-3.5 text-[#222] duration-200'
+            id={`explanation-${cardId}`}
+        />
+    );
 }

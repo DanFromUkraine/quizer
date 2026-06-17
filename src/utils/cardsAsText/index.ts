@@ -1,3 +1,2 @@
-
-export * from "./fromTextToCards";
-export * from "./fromCardsToText";
+export * from './fromTextToCards';
+export * from './fromCardsToText';

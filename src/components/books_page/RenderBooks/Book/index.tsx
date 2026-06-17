@@ -11,37 +11,39 @@ import { createPropsProvider } from '@/src/utils/createPropsProvider';
 import { BP_TEST_IDS } from '@/src/constants/testIds';
 
 type BookProps = {
-        bookTitle: string;
-        description: string;
-        cardsLength: number;
-        lastChangeDate: number;
-        id: string;
+    bookTitle: string;
+    description: string;
+    cardsLength: number;
+    lastChangeDate: number;
+    id: string;
 };
 
 export const { Provider: BookPropsProvider, usePropsContext: useBookProps } =
-        createPropsProvider<BookProps>('BookItemProps');
+    createPropsProvider<BookProps>('BookItemProps');
 
 export default function BookItem({ id }: { id: string }) {
-        const { bookTitle, lastChangeDate, cardIdsOrder, description } =
-                useAtomValue(booksAtomFamily(id));
+    const { bookTitle, lastChangeDate, cardIdsOrder, description } =
+        useAtomValue(booksAtomFamily(id));
 
-        return (
-                <BookPropsProvider
-                        {...{
-                                bookTitle,
-                                lastChangeDate,
-                                cardsLength: cardIdsOrder.length,
-                                description,
-                                id
-                        }}>
-                        <div data-testid={BP_TEST_IDS.bookCard.me} className='w-full flex flex-col h-fit rounded-normal overflow-hidden border p-6 border-lightGray'>
-                                <Toolbar />
-                                <BookTitle />
-                                <BookDescription />
-                                <OtherInfo />
+    return (
+        <BookPropsProvider
+            {...{
+                bookTitle,
+                lastChangeDate,
+                cardsLength: cardIdsOrder.length,
+                description,
+                id
+            }}>
+            <div
+                data-testid={BP_TEST_IDS.bookCard.me}
+                className='rounded-normal border-lightGray flex h-fit w-full flex-col overflow-hidden border p-6'>
+                <Toolbar />
+                <BookTitle />
+                <BookDescription />
+                <OtherInfo />
 
-                                <StudyButton />
-                        </div>
-                </BookPropsProvider>
-        );
+                <StudyButton />
+            </div>
+        </BookPropsProvider>
+    );
 }

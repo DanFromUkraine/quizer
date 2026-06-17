@@ -6,23 +6,20 @@ import { addEmptyOptionAtom } from '@/src/jotai/optionAtoms';
 import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function AddEmptyOptionButton() {
-        const { cardId } = useCardProps();
-        const addEmptyOption = useSetAtom(addEmptyOptionAtom);
+    const { cardId } = useCardProps();
+    const addEmptyOption = useSetAtom(addEmptyOptionAtom);
 
-        const onAddOptionClick = () => {
-                addEmptyOption(cardId);
-        };
+    const onAddOptionClick = () => {
+        addEmptyOption(cardId);
+    };
 
-        return (
-                <button
-                        type='button'
-                        data-testid={
-                                EP_TEST_IDS.card.explicitCardContent
-                                        .newOptionBtn
-                        }
-                        onClick={onAddOptionClick}
-                        className='bg-gray-400 hover:bg-gray-300 duration-100 w-fit rounded-lg px-1.5 py-0.5 mx-auto text-white'>
-                        Add option
-                </button>
-        );
+    return (
+        <button
+            type='button'
+            data-testid={EP_TEST_IDS.card.explicitCardContent.newOptionBtn}
+            onClick={onAddOptionClick}
+            className='my-0 w-full cursor-pointer rounded-xl border-[3px] border-dashed border-[#2563eb] bg-transparent p-3 font-bold text-[#2563eb] duration-100 hover:border-[#1d4ed8] hover:bg-[#eff6ff] hover:text-[#1d4ed8]'>
+            + Add option
+        </button>
+    );
 }

@@ -7,25 +7,25 @@ import { useMemo } from 'react';
 import { getOptionCorrectnessMarkerFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 
 export default function CorrectnessMarketButton() {
-        const { optionId, optionIndex } = useOptionProps();
-        const stableAdapterAtom = useMemo(
-                () => getOptionCorrectnessMarkerFamilyAdapterAtom(optionId),
-                []
-        );
+    const { optionId, optionIndex } = useOptionProps();
+    const stableAdapterAtom = useMemo(
+        () => getOptionCorrectnessMarkerFamilyAdapterAtom(optionId),
+        []
+    );
 
-        const [isCorrect, setIsCorrect] = useAtom(stableAdapterAtom);
-        const onChangeMarkerStateClick = () => {
-                setIsCorrect(!isCorrect);
-        };
+    const [isCorrect, setIsCorrect] = useAtom(stableAdapterAtom);
+    const onChangeMarkerStateClick = () => {
+        setIsCorrect(!isCorrect);
+    };
 
-        return (
-                <CorrectnessMarketButtonUI
-                        {...{
-                                defaultChecked: isCorrect,
-                                onCheckboxClick: onChangeMarkerStateClick,
-                                optionId,
-                                index: optionIndex
-                        }}
-                />
-        );
+    return (
+        <CorrectnessMarketButtonUI
+            {...{
+                defaultChecked: isCorrect,
+                onCheckboxClick: onChangeMarkerStateClick,
+                optionId,
+                index: optionIndex
+            }}
+        />
+    );
 }

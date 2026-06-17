@@ -1,6 +1,1 @@
-
-export default function ViewStory() {
-        return <main className="mainContainer">
-
-        </main>
-}
+export { HistoryViewPage as default } from '@/src/pages/history-view';

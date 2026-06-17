@@ -7,20 +7,20 @@ import getDefaultPathToPlayPage from '@/src/utils/getDefPathToPlayPage';
 import { FaPlus } from 'react-icons/fa';
 
 export default function CreateNewStoryButton() {
-        const router = useRouter();
-        const { createOnAddNewStoryClick } = useAtomValue(
-                storiesForBookDialogInfoAtom
-        );
-        const onClick = createOnAddNewStoryClick((storyId) =>
-                router.push(getDefaultPathToPlayPage(storyId))
-        );
+    const router = useRouter();
+    const { createOnAddNewStoryClick } = useAtomValue(
+        storiesForBookDialogInfoAtom
+    );
+    const onClick = createOnAddNewStoryClick((storyId) =>
+        router.push(getDefaultPathToPlayPage(storyId))
+    );
 
-        return (
-                <div
-                        role='button'
-                        onClick={onClick}
-                        className='w-full glass hover:shadow-xl duration-100  rounded-md p-6 h-full flex'>
-                        <FaPlus className='text-4xl text-white  mx-auto my-auto' />
-                </div>
-        );
+    return (
+        <div
+            role='button'
+            onClick={onClick}
+            className='glass flex h-full w-full rounded-md p-6 duration-100 hover:shadow-xl'>
+            <FaPlus className='mx-auto my-auto text-4xl text-white' />
+        </div>
+    );
 }

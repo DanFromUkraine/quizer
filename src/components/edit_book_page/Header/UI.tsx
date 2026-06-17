@@ -1,31 +1,46 @@
+'use client';
+
 import Quoted from '@/src/components/general/Quoted';
 import { EP_TEST_IDS } from '@/src/constants/testIds';
+import { useRef } from 'react';
 import StableInput from '../../general/StableInput';
 
 export default function HeaderUI({
-        value,
-        setValue
+    value,
+    setValueAction
 }: {
-        value: string;
-        setValue: (s: string) => void;
+    value: string;
+    setValueAction: (s: string) => void;
 }) {
-        return (
-                <header className='flex items-center justify-start gap-3 max-[412px]:flex-col max-[412px]:items-start'>
-                        <h3 className='heading-1'>Edit book</h3>
-                        <Quoted
-                                variant='large-heading'
-                                className='heading-1 w-fit p-1 px-3 text-gray-700 max-[412px]:max-w-[calc(100vw-30px)]'>
-                                <StableInput
-                                        {...{
-                                                testId: EP_TEST_IDS.bookTitleInp,
-                                                type: 'text',
-                                                name: 'book-title',
-                                                className: 'field-sizing-content min-w-[50px]  heading-1 !text-gray-700 !mb-0 max-[412px]:w-full max-[412px]:field-sizing-fixed',
-                                                inputValue: value,
-                                                setInputValue: setValue
-                                        }}
-                                />
-                        </Quoted>
-                </header>
-        );
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    return (
+        <header className='flex max-w-full min-w-0 items-center justify-start gap-6 max-[412px]:flex-col max-[412px]:items-start max-[412px]:gap-2'>
+            <h3 className='heading-1 shrink-0 whitespace-nowrap'>Edit book</h3>
+            <div className='max-w-full min-w-0 flex-1'>
+                <Quoted
+                    variant='large-heading'
+                    onClick={() => inputRef.current?.focus()}
+                    className='heading-1 w-fit max-w-full min-w-0 cursor-text !bg-[#f7f8fb] px-4 py-3 text-gray-700'>
+                    <StableInput
+                        ref={inputRef}
+                        {...{
+                            id: 'book-title',
+                            testId: EP_TEST_IDS.bookTitleInp,
+                            type: 'text',
+                            name: 'book-title',
+                            className: 'heading-1 !mb-0 !text-gray-700',
+                            containerClassName:
+                                'min-w-0 max-w-full overflow-hidden',
+                            inputClassName:
+                                'min-w-0 max-w-full overflow-x-auto',
+                            sizerClassName: 'max-w-full overflow-hidden',
+                            inputValue: value,
+                            setInputValue: setValueAction
+                        }}
+                    />
+                </Quoted>
+            </div>
+        </header>
+    );
 }

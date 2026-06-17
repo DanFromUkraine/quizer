@@ -10,51 +10,49 @@ import { updateCardViaTextAtomFamily } from '@/src/jotai/cardAtoms';
 import { isInitializationFromIdbCompletedAtom } from '@/src/jotai/mainAtoms';
 
 export default function useJotaiDeferredUpdateAdapter({
-        adapterAtom,
-        cardId
+    adapterAtom,
+    cardId
 }: {
-        adapterAtom: StringAdapterAtom;
-        cardId: string;
+    adapterAtom: StringAdapterAtom;
+    cardId: string;
 }) {
-        /* This hook should only be used in components, that can be updated via text */
-        const prevUpdateCountNum = useRef(0);
-        const [initPerformed, setInitPerformed] = useState(false);
-        const updateCount = useAtomValue(updateCardViaTextAtomFamily(cardId));
-        const [inputValue, setInputValue] = useState('');
-        const [jotaiValue, setJotaiValue] = useAtom(adapterAtom);
-        const deferredValue = useDeferredValue(inputValue);
-        const isIdbInitiated = useAtomValue(
-                isInitializationFromIdbCompletedAtom
-        );
+    /* This hook should only be used in components, that can be updated via text */
+    const prevUpdateCountNum = useRef(0);
+    const [initPerformed, setInitPerformed] = useState(false);
+    const updateCount = useAtomValue(updateCardViaTextAtomFamily(cardId));
+    const [inputValue, setInputValue] = useState('');
+    const [jotaiValue, setJotaiValue] = useAtom(adapterAtom);
+    const deferredValue = useDeferredValue(inputValue);
+    const isIdbInitiated = useAtomValue(isInitializationFromIdbCompletedAtom);
 
-        useEffect(() => {
-                if (initPerformed || !isIdbInitiated) return;
-                if (jotaiValue.length > 0) {
-                        setInputValue(jotaiValue);
-                }
-                setInitPerformed(true);
-        }, [isIdbInitiated, jotaiValue]);
+    useEffect(() => {
+        if (initPerformed || !isIdbInitiated) return;
+        if (jotaiValue.length > 0) {
+            setInputValue(jotaiValue);
+        }
+        setInitPerformed(true);
+    }, [isIdbInitiated, jotaiValue]);
 
-        useEffect(() => {
-                if (
-                        initPerformed &&
-                        deferredValue !== jotaiValue &&
-                        updateCount === prevUpdateCountNum.current
-                ) {
-                        void setJotaiValue(deferredValue);
-                }
-        }, [deferredValue, jotaiValue, updateCount]);
+    useEffect(() => {
+        if (
+            initPerformed &&
+            deferredValue !== jotaiValue &&
+            updateCount === prevUpdateCountNum.current
+        ) {
+            void setJotaiValue(deferredValue);
+        }
+    }, [deferredValue, jotaiValue, updateCount]);
 
-        useEffect(() => {
-                if (updateCount > prevUpdateCountNum.current && jotaiValue) {
-                        setInputValue(jotaiValue);
-                        prevUpdateCountNum.current = updateCount;
-                }
-        }, [updateCount, jotaiValue]);
+    useEffect(() => {
+        if (updateCount > prevUpdateCountNum.current && jotaiValue) {
+            setInputValue(jotaiValue);
+            prevUpdateCountNum.current = updateCount;
+        }
+    }, [updateCount, jotaiValue]);
 
-        return {
-                inputValue,
-                setInputValue,
-                isDisabled: !initPerformed
-        };
+    return {
+        inputValue,
+        setInputValue,
+        isDisabled: !initPerformed
+    };
 }

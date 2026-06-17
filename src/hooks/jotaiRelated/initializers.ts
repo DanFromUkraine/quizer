@@ -5,16 +5,16 @@ import { AtomFamily } from '@/src/types/jotaiGlobal';
 import { WritableAtom } from 'jotai';
 
 export type FamilyAtomForInit<Item extends ObjWithId> = AtomFamily<
-        string,
-        WritableAtom<Item, [Item], unknown>
+    string,
+    WritableAtom<Item, [Item], unknown>
 >;
 
 export function useInitAtomFamily<Item extends ObjWithId>(
-        familyAtom: FamilyAtomForInit<Item>
+    familyAtom: FamilyAtomForInit<Item>
 ) {
-        return useAtomCallback(
-                useCallback((_get, set, array: Item[]) => {
-                        array.forEach((item) => set(familyAtom(item.id), item));
-                }, [])
-        );
+    return useAtomCallback(
+        useCallback((_get, set, array: Item[]) => {
+            array.forEach((item) => set(familyAtom(item.id), item));
+        }, [])
+    );
 }

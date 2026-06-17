@@ -3,15 +3,15 @@
 import { useAtomValue } from 'jotai';
 import { storiesAtomFamily } from '@/src/jotai/mainAtoms';
 import { PP_TEST_IDS } from '@/src/constants/testIds';
-import { usePlayModeProps } from '@/app/play/page';
+import { usePlayModeProps } from '@/src/pages/play/model/play-mode-props';
 
 export default function PageTitle() {
-        const { storyId } = usePlayModeProps();
-        const { bookData } = useAtomValue(storiesAtomFamily(storyId));
+    const { storyId } = usePlayModeProps();
+    const { bookData } = useAtomValue(storiesAtomFamily(storyId));
 
-        return (
-                <h1 data-testid={PP_TEST_IDS.bookTitle} className='heading-1'>
-                        {`Try out your knowledge with book '${bookData.title}'!`}
-                </h1>
-        );
+    return (
+        <h1 data-testid={PP_TEST_IDS.bookTitle} className='heading-1'>
+            {`Try out your knowledge with book '${bookData.title}'!`}
+        </h1>
+    );
 }

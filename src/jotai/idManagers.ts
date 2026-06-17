@@ -9,25 +9,19 @@ export const currentBookIdForStoriesDialogAtom = atom('');
 export const currentStoryIdAtom = atom('');
 
 export const pushNewIdAtom = atom(
-        null,
-        (_get, set, idManager: IdManagerAtom, newId: string) => {
-                set(idManager, (prev) => [...prev, newId]);
-        }
+    null,
+    (_get, set, idManager: IdManagerAtom, newId: string) => {
+        set(idManager, (prev) => [...prev, newId]);
+    }
 );
 
 export const deleteIdAtom = atom(
-        null,
-        (
-                _get,
-                set,
-                {
-                        idManager,
-                        deleteId
-                }: { idManager: IdManagerAtom; deleteId: string }
-        ) => {
-                set(idManager, (prev) =>
-                        getListWhereNoSuchIds(prev, [deleteId])
-                );
-        }
+    null,
+    (
+        _get,
+        set,
+        { idManager, deleteId }: { idManager: IdManagerAtom; deleteId: string }
+    ) => {
+        set(idManager, (prev) => getListWhereNoSuchIds(prev, [deleteId]));
+    }
 );
-

@@ -4,13 +4,13 @@ import Explanation from '@/src/components/edit_book_page/RenderCards/Card/Explic
 import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function ExplicitCardContent() {
-        return (
-                <section
-                        data-testid={EP_TEST_IDS.card.explicitCardContent.me}
-                        className='flex flex-col gap-2 explicitCard '>
-                        <QuestionTitle />
-                        <RenderOptions />
-                        <Explanation />
-                </section>
-        );
+    return (
+        <section
+            data-testid={EP_TEST_IDS.card.explicitCardContent.me}
+            className='flex flex-col gap-2'>
+            <QuestionTitle />
+            <RenderOptions />
+            <Explanation />
+        </section>
+    );
 }

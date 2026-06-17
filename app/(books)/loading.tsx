@@ -1,3 +1,1 @@
-
-export default function loading() {
-        return <div>loading...</div>}
+export { BooksPageFallback as default } from '@/src/pages/books';

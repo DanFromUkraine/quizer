@@ -5,7 +5,7 @@ export type SetState<DataType> = Dispatch<SetStateAction<DataType>>;
 export type Config<T = object> = T;
 
 export type ObjWithId = {
-        id: string;
+    id: string;
 };
 
 export type DB<DataType> = IDBPDatabase<DataType>;

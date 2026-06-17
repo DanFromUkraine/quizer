@@ -12,47 +12,47 @@ import TermDeterminationContent from '@/src/components/edit_book_page/RenderCard
 import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 interface CardProps {
-        cardId: string;
-        cardType: AvailableCardTypes;
+    cardId: string;
+    cardType: AvailableCardTypes;
 }
 
 export const { Provider: CardPropsProvider, usePropsContext: useCardProps } =
-        createPropsProvider<CardProps>('card props context provider');
+    createPropsProvider<CardProps>('card props context provider');
 
 export default function Card({
-        cardId,
-        cardIndex,
+    cardId,
+    cardIndex,
+    explicitCardIds,
+    shortCardIds
+}: {
+    cardIndex: number;
+    explicitCardIds: string[];
+    shortCardIds: string[];
+    cardId: string;
+}) {
+    const cardType = getCardType({
+        targetId: cardId,
         explicitCardIds,
         shortCardIds
-}: {
-        cardIndex: number;
-        explicitCardIds: string[];
-        shortCardIds: string[];
-        cardId: string;
-}) {
-        const cardType = getCardType({
-                targetId: cardId,
-                explicitCardIds,
-                shortCardIds
-        });
+    });
 
-        const content =
-                cardType === 'explicit' ? (
-                        <ExplicitCardContent />
-                ) : (
-                        <TermDeterminationContent />
-                );
-
-        return (
-                <IndexContextProvider value={cardIndex}>
-                        <CardPropsProvider cardType={cardType} cardId={cardId}>
-                                <section
-                                        data-testid={EP_TEST_IDS.card.me}
-                                        className='questionCard has-[:invalid]:bg-red-100'>
-                                        <CardHeader />
-                                        {content}
-                                </section>
-                        </CardPropsProvider>
-                </IndexContextProvider>
+    const content =
+        cardType === 'explicit' ? (
+            <ExplicitCardContent />
+        ) : (
+            <TermDeterminationContent />
         );
+
+    return (
+        <IndexContextProvider value={cardIndex}>
+            <CardPropsProvider cardType={cardType} cardId={cardId}>
+                <section
+                    data-testid={EP_TEST_IDS.card.me}
+                    className='questionCard has-[:invalid]:bg-red-100'>
+                    <CardHeader />
+                    {content}
+                </section>
+            </CardPropsProvider>
+        </IndexContextProvider>
+    );
 }

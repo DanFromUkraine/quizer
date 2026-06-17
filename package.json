@@ -10,8 +10,7 @@
                 "jsxSingleQuote": true,
                 "bracketSpacing": true,
                 "bracketSameLine": true,
-                "parser": "babel-ts",
-                "tabWidth": 8,
+                "tabWidth": 4,
                 "plugins": [
                         "prettier-plugin-tailwindcss"
                 ]
@@ -27,7 +26,8 @@
                 "playwright-ui": "playwright test --ui",
                 "count-size": "bash ./countProjectSize.sh",
                 "es-lint": "eslint",
-                "es-fix": "esling --fix"
+                "es-fix": "esling --fix",
+                "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,scss,md,mdx,yml,yaml}\""
         },
         "dependencies": {
                 "@playwright/test": "^1.56.0",

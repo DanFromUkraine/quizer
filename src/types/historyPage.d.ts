@@ -1,11 +1,9 @@
-
 export interface SortTool {
-        title: string;
-        id: string;
+    title: string;
+    id: string;
 }
 
-
 export interface StoriesByBook {
-        bookTitle: string;
-        storyIds: string[]
+    bookTitle: string;
+    storyIds: string[];
 }

@@ -2,8 +2,8 @@
 
 import { useAtom, useAtomValue } from 'jotai';
 import {
-        getNewStoryIsSmartModeParamAdapterAtom,
-        getNewStoryShowAnswersImmediatelyParamAdapterAtom
+    getNewStoryIsSmartModeParamAdapterAtom,
+    getNewStoryShowAnswersImmediatelyParamAdapterAtom
 } from '@/src/utils/jotai/atomAdapters';
 import { Hr } from '@/src/components/general/Hr';
 import { NewStoryParam } from '@/src/constants/newCardParams';
@@ -13,109 +13,103 @@ import { useRouter } from 'next/navigation';
 import getDefaultPathToPlayPage from '@/src/utils/getDefPathToPlayPage';
 import { ParamWithToggleUI } from '@/src/components/books_page/NewStoryParamsDialog/UI';
 import {
-        addNewStoryAtom,
-        newStorySettingsAtom
+    addNewStoryAtom,
+    newStorySettingsAtom
 } from '@/src/jotai/historyAtoms';
 import { BP_TEST_IDS } from '@/src/constants/testIds';
 
 export function IsSmartModeToggle() {
-        const [currState, setCurrState] = useAtom(
-                getNewStoryIsSmartModeParamAdapterAtom
-        );
-        return (
-                <ParamWithToggleUI
-                        {...{
-                                currState,
-                                setCurrState,
-                                title: 'Smart mode',
-                                testId: BP_TEST_IDS.newStoryDialog
-                                        .isSmartModeInp
-                        }}
-                />
-        );
+    const [currState, setCurrState] = useAtom(
+        getNewStoryIsSmartModeParamAdapterAtom
+    );
+    return (
+        <ParamWithToggleUI
+            {...{
+                currState,
+                setCurrState,
+                title: 'Smart mode',
+                testId: BP_TEST_IDS.newStoryDialog.isSmartModeInp
+            }}
+        />
+    );
 }
 
 export function ShowAnswersImmediatelyToggle() {
-        const [currState, setCurrState] = useAtom(
-                getNewStoryShowAnswersImmediatelyParamAdapterAtom
-        );
-        return (
-                <ParamWithToggleUI
-                        {...{
-                                currState,
-                                setCurrState,
-                                title: 'Show answers immediately',
-                                testId: BP_TEST_IDS.newStoryDialog
-                                        .areAnswersShownImmediatelyInp
-                        }}
-                />
-        );
+    const [currState, setCurrState] = useAtom(
+        getNewStoryShowAnswersImmediatelyParamAdapterAtom
+    );
+    return (
+        <ParamWithToggleUI
+            {...{
+                currState,
+                setCurrState,
+                title: 'Show answers immediately',
+                testId: BP_TEST_IDS.newStoryDialog.areAnswersShownImmediatelyInp
+            }}
+        />
+    );
 }
 export function CustomParam({
-        adapterAtom,
-        title,
-        maxNumAtom,
-        testId
+    adapterAtom,
+    title,
+    maxNumAtom,
+    testId
 }: NewStoryParam) {
-        const [value, setValue] = useAtom(adapterAtom);
-        const maxNum = useAtomValue(maxNumAtom);
-        const isSmartMode = useAtomValue(
-                getNewStoryIsSmartModeParamAdapterAtom
-        );
+    const [value, setValue] = useAtom(adapterAtom);
+    const maxNum = useAtomValue(maxNumAtom);
+    const isSmartMode = useAtomValue(getNewStoryIsSmartModeParamAdapterAtom);
 
-        const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-                const newVal = e.target.value;
-                const num = Number(newVal);
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newVal = e.target.value;
+        const num = Number(newVal);
 
-                if (num > maxNum || num < 0 || isSmartMode) return;
+        if (num > maxNum || num < 0 || isSmartMode) return;
 
-                setValue(num);
-        };
+        setValue(num);
+    };
 
-        return (
-                <>
-                        <li className='flex justify-between'>
-                                <div className='flex flex-col gap-1'>
-                                        <h4 className='heading-4'>{title}</h4>
-                                        <span className='span'>{`max. num. of cards: ${maxNum}`}</span>
-                                </div>
-                                <input
-                                        data-testid={testId}
-                                        data-editable={!isSmartMode}
-                                        type='number'
-                                        name='newStoryParam'
-                                        value={String(value)}
-                                        onInput={onChange}
-                                        className='bg-gray-300 w-20 p-4 rounded-xl data-[editable=false]:bg-gray-200 data-[editable=false]:text-gray-400'
-                                />
-                        </li>
-                        <Hr />
-                </>
-        );
+    return (
+        <>
+            <li className='flex justify-between'>
+                <div className='flex flex-col gap-1'>
+                    <h4 className='heading-4'>{title}</h4>
+                    <span className='span'>{`max. num. of cards: ${maxNum}`}</span>
+                </div>
+                <input
+                    data-testid={testId}
+                    data-editable={!isSmartMode}
+                    type='number'
+                    name='newStoryParam'
+                    value={String(value)}
+                    onInput={onChange}
+                    className='w-20 rounded-xl bg-gray-300 p-4 data-[editable=false]:bg-gray-200 data-[editable=false]:text-gray-400'
+                />
+            </li>
+            <Hr />
+        </>
+    );
 }
 
 export function SubmitButton() {
-        const router = useRouter();
-        const submit = useAtomCallback((get, set) => {
-                const newStorySettings = get(newStorySettingsAtom);
-                set(closeNewStorySettingsDialogAtom);
-                void set(addNewStoryAtom, {
-                        settings: newStorySettings,
-                        bookId: newStorySettings.bookId,
-                        successCallback: (newStoryId) => {
-                                router.push(
-                                        getDefaultPathToPlayPage(newStoryId)
-                                );
-                        }
-                });
+    const router = useRouter();
+    const submit = useAtomCallback((get, set) => {
+        const newStorySettings = get(newStorySettingsAtom);
+        set(closeNewStorySettingsDialogAtom);
+        void set(addNewStoryAtom, {
+            settings: newStorySettings,
+            bookId: newStorySettings.bookId,
+            successCallback: (newStoryId) => {
+                router.push(getDefaultPathToPlayPage(newStoryId));
+            }
         });
+    });
 
-        return (
-                <button
-                        data-testid={BP_TEST_IDS.newStoryDialog.submitBtn}
-                        onClick={submit}
-                        className='bg-blue-400 border border-blue-700 hover:bg-blue-300 rounded-xl py-2 px-5 heading-4 duration-100 block my-6 !text-white ml-auto'>
-                        Submit
-                </button>
-        );
+    return (
+        <button
+            data-testid={BP_TEST_IDS.newStoryDialog.submitBtn}
+            onClick={submit}
+            className='heading-4 my-6 ml-auto block rounded-xl border border-blue-700 bg-blue-400 px-5 py-2 !text-white duration-100 hover:bg-blue-300'>
+            Submit
+        </button>
+    );
 }

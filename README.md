@@ -12,34 +12,34 @@ Designed for privacy and speed, kava-quizer works entirely in the browser, keeps
 
 ## Key features
 
-* **Offline-first** — All data stored in the browser via **IndexedDB**. No server or internet connection required to use the app.
-* **Plain-text card editing** — Author and edit flashcards as raw text. This textual format makes it straightforward to generate tests or prompts for AI-assisted workflows.
-* **Multiple study modes (Quizlet-like)**
+- **Offline-first** — All data stored in the browser via **IndexedDB**. No server or internet connection required to use the app.
+- **Plain-text card editing** — Author and edit flashcards as raw text. This textual format makes it straightforward to generate tests or prompts for AI-assisted workflows.
+- **Multiple study modes (Quizlet-like)**
+    - Term → definition flashcards
+    - Multiple-choice (4 options) generated from term-definition pairs
+    - True/False (correct/incorrect) questions
+    - Free-text input (type the term yourself)
 
-  * Term → definition flashcards
-  * Multiple-choice (4 options) generated from term-definition pairs
-  * True/False (correct/incorrect) questions
-  * Free-text input (type the term yourself)
-* **Smart story system** — From a single book (a collection of cards) generate an unlimited number of story variations to practice vocabulary and contextual recall.
-* **Playwright tests** — The project is already ~50% covered by Playwright end-to-end tests; test coverage is actively being expanded.
-* **Planned: Statistics page** — Upcoming feature to visualize user progress and show which cards the user is currently practicing.
+- **Smart story system** — From a single book (a collection of cards) generate an unlimited number of story variations to practice vocabulary and contextual recall.
+- **Playwright tests** — The project is already ~50% covered by Playwright end-to-end tests; test coverage is actively being expanded.
+- **Planned: Statistics page** — Upcoming feature to visualize user progress and show which cards the user is currently practicing.
 
 ---
 
 ## Why use kava-quizer?
 
-* You want full control over your study data — it never leaves your device.
-* You need a simple, fast flashcard app with powerful text-based editing for AI-assisted test generation.
-* You prefer a lightweight app that supports multiple study formats (multiple choice, T/F, fill-in).
+- You want full control over your study data — it never leaves your device.
+- You need a simple, fast flashcard app with powerful text-based editing for AI-assisted test generation.
+- You prefer a lightweight app that supports multiple study formats (multiple choice, T/F, fill-in).
 
 ---
 
 ## Tech stack
 
-* Frontend: Modern web stack (Next.js, TypeScript, Tailwindcss, Jotai)
-* Storage: **IndexedDB** (offline persistent storage)
-* Testing: **Playwright** for E2E tests
-* Build & tooling: pnpm, bundler - turbopack
+- Frontend: Modern web stack (Next.js, TypeScript, Tailwindcss, Jotai)
+- Storage: **IndexedDB** (offline persistent storage)
+- Testing: **Playwright** for E2E tests
+- Build & tooling: pnpm, bundler - turbopack
 
 ---
 
@@ -76,9 +76,9 @@ If your repository uses Yarn or pnpm, substitute the package manager commands ac
 
 ## Data model (high level)
 
-* **Book** — A collection of cards (e.g. a chapter, textbook, or topic).
-* **Card** — A single item with a *term* and one or more *definitions* or *contexts*.
-* **Story** — An AI‑assisted or procedurally generated narrative that uses card content to create practice scenarios.
+- **Book** — A collection of cards (e.g. a chapter, textbook, or topic).
+- **Card** — A single item with a _term_ and one or more _definitions_ or _contexts_.
+- **Story** — An AI‑assisted or procedurally generated narrative that uses card content to create practice scenarios.
 
 All of the above are stored in IndexedDB and can be exported/imported as JSON if you want backups or offline transfers.
 
@@ -88,8 +88,8 @@ All of the above are stored in IndexedDB and can be exported/imported as JSON if
 
 kava-quizer intentionally stores cards in a plain-text friendly format so you can:
 
-* Feed card content into AI prompts (locally or via API) to generate multiple-choice questions, distractors, or practice stories.
-* Use text-based editors or scripts to batch-edit cards, transform formats, or create automated test sets.
+- Feed card content into AI prompts (locally or via API) to generate multiple-choice questions, distractors, or practice stories.
+- Use text-based editors or scripts to batch-edit cards, transform formats, or create automated test sets.
 
 > Note: kava-quizer itself does not require an external AI service to function; any AI integration is optional and depends on how you choose to process the plain-text card data.
 
@@ -113,14 +113,14 @@ pnpm playwright-ui
 
 ## Roadmap
 
-* [x] Core offline flashcard CRUD
-* [x] Plain-text card editing
-* [x] Multiple study modes (MC / T/F / input)
-* [x] Smart story generation system
-* [x] Playwright test suite (partial)
-* [ ] **Statistics page** (visualize which cards a user is currently practicing)
-* [ ] Expand Playwright coverage to reach full E2E stability
-* [ ] Optional: import/export improvements, progressive web app (PWA) support, and improved accessibility
+- [x] Core offline flashcard CRUD
+- [x] Plain-text card editing
+- [x] Multiple study modes (MC / T/F / input)
+- [x] Smart story generation system
+- [x] Playwright test suite (partial)
+- [ ] **Statistics page** (visualize which cards a user is currently practicing)
+- [ ] Expand Playwright coverage to reach full E2E stability
+- [ ] Optional: import/export improvements, progressive web app (PWA) support, and improved accessibility
 
 ---
 
@@ -128,10 +128,10 @@ pnpm playwright-ui
 
 Contributions are very welcome! Please open issues for feature requests or bugs and submit PRs for fixes and features. A few ways to help:
 
-* Add or improve Playwright tests
-* Implement the statistics page and UX for progress analytics
-* Improve accessibility and keyboard navigation for study flows
-* Add export/import or backup options
+- Add or improve Playwright tests
+- Implement the statistics page and UX for progress analytics
+- Improve accessibility and keyboard navigation for study flows
+- Add export/import or backup options
 
 Please follow the repository's code style and add tests where appropriate.
 
@@ -149,4 +149,4 @@ If you have questions or want to collaborate, open an issue or reach out in the 
 
 ---
 
-*Happy studying!*
+_Happy studying!_

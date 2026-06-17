@@ -9,24 +9,24 @@ import useJotaiDeferredUpdateAdapter from '@/src/hooks/jotaiRelated/jotaiDefered
 import { useCardProps } from '../../../..';
 
 export default function OptionTitle() {
-        const { optionId } = useOptionProps();
-        const { cardId } = useCardProps();
-        const stableAdapterAtom = useMemo(
-                () => getCardOptionTitleFamilyAdapterAtom(optionId),
-                []
-        );
-        const { inputValue, setInputValue, isDisabled } =
-                useJotaiDeferredUpdateAdapter({
-                        adapterAtom: stableAdapterAtom,
-                        cardId
-                }); /* 'todo' change it with updateAdapter, when you have time*/
+    const { optionId } = useOptionProps();
+    const { cardId } = useCardProps();
+    const stableAdapterAtom = useMemo(
+        () => getCardOptionTitleFamilyAdapterAtom(optionId),
+        []
+    );
+    const { inputValue, setInputValue, isDisabled } =
+        useJotaiDeferredUpdateAdapter({
+            adapterAtom: stableAdapterAtom,
+            cardId
+        }); /* 'todo' change it with updateAdapter, when you have time*/
 
-        return (
-                <OptionTitleUI
-                        disabled={isDisabled}
-                        value={inputValue}
-                        onChange={getInputChangeCallback(setInputValue)}
-                        optionId={optionId}
-                />
-        );
+    return (
+        <OptionTitleUI
+            disabled={isDisabled}
+            value={inputValue}
+            onChange={getInputChangeCallback(setInputValue)}
+            optionId={optionId}
+        />
+    );
 }

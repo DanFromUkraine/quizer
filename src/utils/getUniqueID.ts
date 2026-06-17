@@ -1,5 +1,5 @@
 export default function getUniqueID() {
-        const currTime = Date.now();
+    const currTime = Date.now();
 
-        return `${currTime}-${crypto.randomUUID()}`;
+    return `${currTime}-${crypto.randomUUID()}`;
 }

@@ -1,4 +1,1 @@
-
-export default function loading() {
-        return <div>loading...</div>
-}
+export { EditBookPageFallback as default } from '@/src/pages/edit';

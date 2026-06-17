@@ -1,11 +1,22 @@
 import { ALPHABET } from '@/src/constants/indexation';
+import clsx from 'clsx';
 
-export default function IndexMarker({ index }: { index: number }) {
-        const displayedIndexMarker = ALPHABET[index];
+export default function IndexMarker({
+    index,
+    className
+}: {
+    index: number;
+    className?: string;
+}) {
+    const displayedIndexMarker = ALPHABET[index];
 
-        return (
-                <div className='size-7 flex justify-center font-semibold items-center p-2 rounded-full bg-white'>
-                        <span>{displayedIndexMarker}</span>
-                </div>
-        );
+    return (
+        <div
+            className={clsx(
+                'flex size-4km  ff items-center justify-center rounded-full p-2 font-semibold',
+                className
+            )}>
+            <span>{displayedIndexMarker}</span>
+        </div>
+    );
 }

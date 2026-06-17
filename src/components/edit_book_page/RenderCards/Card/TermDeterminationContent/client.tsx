@@ -8,44 +8,38 @@ import useJotaiDeferredUpdateAdapter from '@/src/hooks/jotaiRelated/jotaiDefered
 import { useCardProps } from '..';
 
 export default function TermOrDeterminationInput({
-        underText,
-        atomAdapterUnstable,
-        testId
+    underText,
+    atomAdapterUnstable,
+    testId
 }: {
-        underText: string;
-        atomAdapterUnstable: WritableAtom<
-                string,
-                [newVal: string],
-                Promise<void>
-        >;
-        testId: string;
+    underText: string;
+    atomAdapterUnstable: WritableAtom<string, [newVal: string], Promise<void>>;
+    testId: string;
 }) {
-        const { cardId } = useCardProps();
-        const stableAdapterAtom = useMemo(() => atomAdapterUnstable, []);
-        const { inputValue, setInputValue, isDisabled } =
-                useJotaiDeferredUpdateAdapter({
-                        adapterAtom: stableAdapterAtom,
-                        cardId
-                });
+    const { cardId } = useCardProps();
+    const stableAdapterAtom = useMemo(() => atomAdapterUnstable, []);
+    const { inputValue, setInputValue, isDisabled } =
+        useJotaiDeferredUpdateAdapter({
+            adapterAtom: stableAdapterAtom,
+            cardId
+        });
 
-        const onChange = getInputChangeCallback(setInputValue);
+    const onChange = getInputChangeCallback(setInputValue);
 
-        return (
-                <section className='flex flex-col gap-2'>
-                        <Quoted
-                                variant='heading'
-                                className='has-[:invalid]:bg-red-300'>
-                                <input
-                                        disabled={isDisabled}
-                                        data-testid={testId}
-                                        required
-                                        value={inputValue}
-                                        onChange={onChange}
-                                        className='w-full'
-                                        type='text'
-                                />
-                        </Quoted>
-                        <h3 className='heading-4 opacity-80'>{underText}</h3>
-                </section>
-        );
+    return (
+        <section className='flex flex-col gap-2'>
+            <Quoted variant='heading' className='has-[:invalid]:bg-red-300'>
+                <input
+                    disabled={isDisabled}
+                    data-testid={testId}
+                    required
+                    value={inputValue}
+                    onChange={onChange}
+                    className='w-full'
+                    type='text'
+                />
+            </Quoted>
+            <h3 className='heading-4 opacity-80'>{underText}</h3>
+        </section>
+    );
 }

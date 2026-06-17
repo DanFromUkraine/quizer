@@ -4,116 +4,109 @@ import { useAtom, useAtomValue } from 'jotai';
 import { isCorrectCardStoriesAtomFamily } from '@/src/jotai/mainAtoms';
 import { useCallback, useMemo } from 'react';
 import { getIsCorrectCardStoryCurrValFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
-import { usePlayModeProps } from '@/app/play/page';
+import { usePlayModeProps } from '@/src/pages/play/model/play-mode-props';
 import { PP_TEST_IDS } from '@/src/constants/testIds';
 
 function useCurrVal(cardId: string) {
-        const { showAnswersImmediately, isCompleted } = usePlayModeProps();
-        const currValAdapterAtom = useMemo(
-                () => getIsCorrectCardStoryCurrValFamilyAdapterAtom(cardId),
-                []
-        );
-        const [currVal, setCurrVal_localOnly] = useAtom(currValAdapterAtom);
+    const { showAnswersImmediately, isCompleted } = usePlayModeProps();
+    const currValAdapterAtom = useMemo(
+        () => getIsCorrectCardStoryCurrValFamilyAdapterAtom(cardId),
+        []
+    );
+    const [currVal, setCurrVal_localOnly] = useAtom(currValAdapterAtom);
 
-        const setCurrVal = useCallback(
-                (newVal: boolean) => {
-                        if (
-                                (showAnswersImmediately && currVal !== null) ||
-                                isCompleted
-                        )
-                                return;
-                        void setCurrVal_localOnly(newVal);
-                },
-                [currVal, showAnswersImmediately]
-        );
+    const setCurrVal = useCallback(
+        (newVal: boolean) => {
+            if ((showAnswersImmediately && currVal !== null) || isCompleted)
+                return;
+            void setCurrVal_localOnly(newVal);
+        },
+        [currVal, showAnswersImmediately]
+    );
 
-        return [currVal, setCurrVal] as const;
+    return [currVal, setCurrVal] as const;
 }
 
 type CardStatus = 'correct' | 'incorrect' | 'unchosen';
 
 export function useIsCorrectCardStatus(cardId: string): CardStatus {
-        const { showAnswersImmediately, isCompleted } = usePlayModeProps();
-        const { currentValue, isCorrect } = useAtomValue(
-                isCorrectCardStoriesAtomFamily(cardId)
-        );
+    const { showAnswersImmediately, isCompleted } = usePlayModeProps();
+    const { currentValue, isCorrect } = useAtomValue(
+        isCorrectCardStoriesAtomFamily(cardId)
+    );
 
-        if (!(showAnswersImmediately || isCompleted)) return 'unchosen';
-        if (currentValue === isCorrect) return 'correct';
-        else return 'incorrect';
+    if (!(showAnswersImmediately || isCompleted)) return 'unchosen';
+    if (currentValue === isCorrect) return 'correct';
+    else return 'incorrect';
 }
 
 export function TermDefinitionTitle({ cardId }: { cardId: string }) {
-        const { term, definition } = useAtomValue(
-                isCorrectCardStoriesAtomFamily(cardId)
-        );
+    const { term, definition } = useAtomValue(
+        isCorrectCardStoriesAtomFamily(cardId)
+    );
 
-        return (
-                <div className='flex items-center gap-1 flex-wrap'>
-                        <h2
-                                className='heading-2'
-                                data-testid={PP_TEST_IDS.isCorrectCard.term}>
-                                {term} -{' '}
-                        </h2>
-                        <h2
-                                className='heading-2 !font-normal'
-                                data-testid={
-                                        PP_TEST_IDS.isCorrectCard.definition
-                                }>
-                                {definition}
-                        </h2>
-                </div>
-        );
+    return (
+        <div className='flex flex-wrap items-center gap-1'>
+            <h2
+                className='heading-2'
+                data-testid={PP_TEST_IDS.isCorrectCard.term}>
+                {term} -{' '}
+            </h2>
+            <h2
+                className='heading-2 !font-normal'
+                data-testid={PP_TEST_IDS.isCorrectCard.definition}>
+                {definition}
+            </h2>
+        </div>
+    );
 }
 
 export function OneBooleanButton({
-        textContent,
-        onClickAction,
-        isSelected,
-        testId
+    textContent,
+    onClickAction,
+    isSelected,
+    testId
 }: {
-        textContent: string;
-        onClickAction: () => void;
-        isSelected: boolean;
-        testId: string;
+    textContent: string;
+    onClickAction: () => void;
+    isSelected: boolean;
+    testId: string;
 }) {
-        return (
-                <button
-                        data-testid={testId}
-                        type='button'
-                        data-selected={isSelected}
-                        onClick={onClickAction}
-                        className=' data-[selected=true]:bg-gray-200 py-4 px-8 border hover:bg-gray-200 duration-100 border-gray-400 rounded-md heading-3'>
-                        {textContent}
-                </button>
-        );
+    return (
+        <button
+            data-testid={testId}
+            type='button'
+            data-selected={isSelected}
+            onClick={onClickAction}
+            className='heading-3 rounded-md border border-gray-400 px-8 py-4 duration-100 hover:bg-gray-200 data-[selected=true]:bg-gray-200'>
+            {textContent}
+        </button>
+    );
 }
 
 export function BooleanButtons({ cardId }: { cardId: string }) {
-        const [currVal, setCurrVal] = useCurrVal(cardId);
-        const setTrue = () => setCurrVal(true);
-        const setFalse = () => setCurrVal(false);
+    const [currVal, setCurrVal] = useCurrVal(cardId);
+    const setTrue = () => setCurrVal(true);
+    const setFalse = () => setCurrVal(false);
 
-        return (
-                <div className='flex gap-2'>
-                        <OneBooleanButton
-                                {...{
-                                        textContent: 'True',
-                                        onClickAction: setTrue,
-                                        isSelected: Boolean(currVal),
-                                        testId: PP_TEST_IDS.isCorrectCard
-                                                .trueBtn
-                                }}
-                        />
-                        <OneBooleanButton
-                                {...{
-                                        textContent: 'False',
-                                        onClickAction: setFalse,
-                                        isSelected: currVal === false,
-                                        testId: PP_TEST_IDS.isCorrectCard
-                                                .falseBtn
-                                }}
-                        />
-                </div>
-        );
+    return (
+        <div className='flex gap-2'>
+            <OneBooleanButton
+                {...{
+                    textContent: 'True',
+                    onClickAction: setTrue,
+                    isSelected: Boolean(currVal),
+                    testId: PP_TEST_IDS.isCorrectCard.trueBtn
+                }}
+            />
+            <OneBooleanButton
+                {...{
+                    textContent: 'False',
+                    onClickAction: setFalse,
+                    isSelected: currVal === false,
+                    testId: PP_TEST_IDS.isCorrectCard.falseBtn
+                }}
+            />
+        </div>
+    );
 }

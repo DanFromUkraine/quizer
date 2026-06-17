@@ -1,86 +1,85 @@
 export interface FullOptionFromText {
-        optionTitle: string;
-        isCorrect: boolean;
+    optionTitle: string;
+    isCorrect: boolean;
 }
 
 export interface FullCardFromText {
-        type: 'explicit';
-        cardTitle: string;
-        subtitle: string;
-        options: FullOptionFromText[];
-        explanation: string;
+    type: 'explicit';
+    cardTitle: string;
+    options: FullOptionFromText[];
+    explanation: string;
 }
 
 export interface FullTermDefinitionCardFromText {
-        type: 'short';
-        term: string;
-        definition: string;
+    type: 'short';
+    term: string;
+    definition: string;
 }
 
 export interface InsertCardsReducerOutput {
-        explicitCardIdsToInsert: string[];
-        shortCardIdsToInsert: string[];
-        cardIdsOrderToInsert: string[];
+    explicitCardIdsToInsert: string[];
+    shortCardIdsToInsert: string[];
+    cardIdsOrderToInsert: string[];
 }
 
 export interface DeleteCardsReducerOutput {
-        explicitCardIdsToDelete: string[];
-        shortCardIdsToDelete: string[];
-        cardIdsOrderToDelete: string[];
+    explicitCardIdsToDelete: string[];
+    shortCardIdsToDelete: string[];
+    cardIdsOrderToDelete: string[];
 }
 
 export interface UpdateCardsReducerOutput {
-        explicitCardIdsToInsertAfterTypeChange: string[];
-        explicitCardIdsToDeleteAfterTypeChange: string[];
-        shortCardIdsToInsertAfterTypeChange: string[];
-        shortCardIdsToDeleteAfterTypeChange: string[];
+    explicitCardIdsToInsertAfterTypeChange: string[];
+    explicitCardIdsToDeleteAfterTypeChange: string[];
+    shortCardIdsToInsertAfterTypeChange: string[];
+    shortCardIdsToDeleteAfterTypeChange: string[];
 }
 
 export type ReducerInsertCallback = (
-        _acc: Promise<InsertCardsReducerOutput>,
-        card: FullCardFromText | FullTermDefinitionCardFromText
+    _acc: Promise<InsertCardsReducerOutput>,
+    card: FullCardFromText | FullTermDefinitionCardFromText
 ) => Promise<InsertCardsReducerOutput>;
 
 export type ReducerDeleteCallback = (
-        _acc: Promise<DeleteCardsReducerOutput>,
-        cardId: string
+    _acc: Promise<DeleteCardsReducerOutput>,
+    cardId: string
 ) => Promise<DeleteCardsReducerOutput>;
 
 export type CardUpdateReducer = (
-        _acc: Promise<UpdateCardsReducerOutput>,
-        card: FullCardFromText | FullTermDefinitionCardFromText,
-        index: number
+    _acc: Promise<UpdateCardsReducerOutput>,
+    card: FullCardFromText | FullTermDefinitionCardFromText,
+    index: number
 ) => Promise<UpdateCardsReducerOutput>;
 
 export type WithId = {
-        id: string;
+    id: string;
 };
 
 export type InsertOptionReducer = (
-        acc: Promise<string[]>,
-        option: FullOptionFromText
+    acc: Promise<string[]>,
+    option: FullOptionFromText
 ) => Promise<string[]>;
 export type DeleteOptionReducer = (
-        acc: Promise<string[]>,
-        deleteOptionId: string
+    acc: Promise<string[]>,
+    deleteOptionId: string
 ) => Promise<string[]>;
 export type UpdateOptionCallback = (
-        option: FullOptionFromText,
-        index: number
+    option: FullOptionFromText,
+    index: number
 ) => Promise<void>;
 
 export type MarkupModes = 'mixed' | 'short-only';
 export type MarkupModesUiList = {
-        modeId: MarkupModes;
-        title: string;
-        testId: string
+    modeId: MarkupModes;
+    title: string;
+    testId: string;
 }[];
 
 export type ShortCardOnlyInsertReducer = (
-        acc: Promise<string[]>,
-        card: FullTermDefinitionCardFromText,
+    acc: Promise<string[]>,
+    card: FullTermDefinitionCardFromText
 ) => Promise<string[]>;
 export type ShortCardOnlyDeleteReducer = (
-        acc: Promise<string[]>,
-        cardIdToDelete: string
+    acc: Promise<string[]>,
+    cardIdToDelete: string
 ) => Promise<string[]>;

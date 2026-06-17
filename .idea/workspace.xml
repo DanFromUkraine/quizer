@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="412a1176-ee35-4bfb-ae04-b6574c4f8b35" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/styles/__animations.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/styles/__variables.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/styles/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.storybook/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/.storybook/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.storybook/preview.ts" beforeDir="false" afterPath="$PROJECT_DIR$/.storybook/preview.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(books)/loading.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(books)/loading.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/(books)/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/(books)/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/edit/error.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/edit/error.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/edit/loading.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/edit/loading.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/edit/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/edit/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/globals.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/history/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/history/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/history/view/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/history/view/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/play/error.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/play/error.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/play/loading.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/play/loading.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/play/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/play/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/next.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/next.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/playwright.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/playwright.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/AddBookButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/AddBookButton/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/BookStoryDialog/CreateNewStoryButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/BookStoryDialog/CreateNewStoryButton/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/BookStoryDialog/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/BookStoryDialog/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/Header/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/Header/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/NewStoryParamsDialog/UI.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/NewStoryParamsDialog/UI.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/NewStoryParamsDialog/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/NewStoryParamsDialog/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/NewStoryParamsDialog/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/NewStoryParamsDialog/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/BookTitle/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/BookTitle/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/BookToolbar/DeleteButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/BookToolbar/DeleteButton/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/BookToolbar/EditButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/BookToolbar/EditButton/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/BookToolbar/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/BookToolbar/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/Description/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/Description/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/OtherInfo/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/OtherInfo/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/StudyButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/StudyButton/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/RenderBooks/Book/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/books_page/RenderBooks/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/books_page/RenderBooks/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/AddCardButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/AddCardButton/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/Description/UI.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/Description/UI.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/Description/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/Description/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/EditCardsAsText/UI.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/EditCardsAsText/UI.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/EditCardsAsText/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/EditCardsAsText/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/EditCardsAsText/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/EditCardsAsText/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/Header/UI.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/Header/UI.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/Header/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/Header/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/OpenEditCardsModalButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/OpenEditCardsModalButton/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/CardHeader/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/CardHeader/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/CardHeader/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/CardHeader/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/Explanation/UI.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/Explanation/UI.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/Explanation/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/Explanation/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/QuestionTitle/UI.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/QuestionTitle/UI.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/QuestionTitle/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/QuestionTitle/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/QuestionTitle/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/QuestionTitle/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/AddEmtpyOptionButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/AddEmtpyOptionButton/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/CorrectnessMarkerButton/UI.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/CorrectnessMarkerButton/UI.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/CorrectnessMarkerButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/CorrectnessMarkerButton/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/DeleteOptionBtn/UI.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/DeleteOptionBtn/UI.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/DeleteOptionBtn/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/DeleteOptionBtn/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/OptionTitle/UI.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/OptionTitle/UI.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/OptionTitle/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/OptionTitle/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/Option/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/UI.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/UI.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/RenderOptions/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/ExplicitCardContent/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/TermDeterminationContent/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/TermDeterminationContent/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/TermDeterminationContent/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/TermDeterminationContent/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/Card/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/edit_book_page/RenderCards/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/Bread/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/Bread/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/ButtonWithShortcut/RenderShortcutKeys/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/ButtonWithShortcut/RenderShortcutKeys/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/ButtonWithShortcut/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/ButtonWithShortcut/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/DateBread/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/DateBread/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/Dialog/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/Dialog/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/ExtendableInput/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/ExtendableInput/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/Hr/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/Hr/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/IndexMarker/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/IndexMarker/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/Input/UI.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/Input/UI.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/Input/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/Input/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/Input/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/Input/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/Input/types.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/Input/types.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/InputSwitch/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/InputSwitch/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/NothingYet/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/NothingYet/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/Quoted/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/Quoted/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/Snackbar/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/Snackbar/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/StableInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/StableInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/StoryItem/CompletionRate/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/StoryItem/CompletionRate/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/StoryItem/CreationDate/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/StoryItem/CreationDate/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/StoryItem/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/StoryItem/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/StoryItem/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/StoryItem/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/WarningDialog/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/WarningDialog/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/interfacesUI/explanation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/interfacesUI/explanation.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/interfacesUI/option.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/general/interfacesUI/option.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/general/interfacesUI/subtitle.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/history_page/ByBookStoriesList/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/history_page/ByBookStoriesList/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/history_page/ByBookStoriesList/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/history_page/ByBookStoriesList/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/history_page/SortTools/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/history_page/SortTools/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/history_page/SortTools/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/history_page/SortTools/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/history_page/Story/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/history_page/Story/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/history_page/Title/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/history_page/Title/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/initializers/InitMainDbAtoms.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/initializers/InitMainDbAtoms.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/layout/Sidebar/ColorStatusBar/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/layout/Sidebar/ColorStatusBar/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/layout/Sidebar/UI.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/layout/Sidebar/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/layout/Sidebar/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/layout/Sidebar/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/layout/Sidebar/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/CardsList/ExplicitCard/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/CardsList/ExplicitCard/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/CardsList/ExplicitCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/CardsList/ExplicitCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/CardsList/IsCorrectCard/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/CardsList/IsCorrectCard/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/CardsList/IsCorrectCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/CardsList/IsCorrectCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/CardsList/TypeInCard/client.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/CardsList/TypeInCard/client.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/CardsList/TypeInCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/CardsList/TypeInCard/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/CardsList/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/CardsList/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/FinishButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/FinishButton/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/Results/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/Results/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/play_page/Title/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/play_page/Title/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/cardsAsText.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/cardsAsText.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/dbNames.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/dbNames.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/emptyObjects.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/emptyObjects.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/errors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/errors.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/indexation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/indexation.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/mainDb.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/mainDb.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/newCardParams.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/newCardParams.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/storiesSortTools.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/storiesSortTools.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/testIds.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/testIds.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/edit_book_page/useUpdateCardsFromTextOnDialogClose.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/edit_book_page/useUpdateCardsFromTextOnDialogClose.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/historyRelated/onStudyBtnClick.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/historyRelated/onStudyBtnClick.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/jotaiRelated/initializers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/jotaiRelated/initializers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/jotaiRelated/jotaiDeferedInput.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/jotaiRelated/jotaiDeferedInput.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/jotaiRelated/useHydrateBookIdAtom.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/jotaiRelated/useHydrateBookIdAtom.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/useCloseModalWhenClickOutOfContainer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useCloseModalWhenClickOutOfContainer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/useShortcut.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useShortcut.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jotai/bookAtoms.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jotai/bookAtoms.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jotai/cardAtoms.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jotai/cardAtoms.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jotai/cardsAsTextAtoms.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jotai/cardsAsTextAtoms.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jotai/dialogVisibilityFamily.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jotai/dialogVisibilityFamily.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jotai/explicitCardStoryAtoms.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jotai/explicitCardStoryAtoms.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jotai/historyAtoms.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jotai/historyAtoms.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jotai/idManagers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jotai/idManagers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jotai/isCorrectCardStoryAtoms.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jotai/isCorrectCardStoryAtoms.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jotai/mainAtoms.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jotai/mainAtoms.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jotai/newStoryParamsModal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jotai/newStoryParamsModal.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jotai/optionAtoms.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jotai/optionAtoms.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jotai/snackbarAtoms.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jotai/snackbarAtoms.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jotai/storiesForBookDialogInfoAtoms.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jotai/storiesForBookDialogInfoAtoms.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/jotai/typeInCardStoryAtoms.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/jotai/typeInCardStoryAtoms.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/globals.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/globals.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/historyPage.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/historyPage.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/jotai/cardsTextParserFactories.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/jotai/cardsTextParserFactories.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/jotaiGlobal.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/jotaiGlobal.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/mainDbGlobal.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/mainDbGlobal.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/newStory.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/newStory.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/stories.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/stories.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/updateCardsFromText.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/updateCardsFromText.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/cardsAsText/fromCardsToText.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/cardsAsText/fromCardsToText.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/cardsAsText/fromTextToCards.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/cardsAsText/fromTextToCards.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/cardsAsText/helpers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/cardsAsText/helpers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/cardsAsText/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/cardsAsText/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/createNewStory/getAllCards.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/createNewStory/getAllCards.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/createNewStory/getIsCorrectCards.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/createNewStory/getIsCorrectCards.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/createNewStory/getNormalCards.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/createNewStory/getNormalCards.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/createNewStory/getTypeInCards.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/createNewStory/getTypeInCards.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/createNewStory/helpers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/createNewStory/helpers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/createPropsProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/createPropsProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/errorHandling/catchCallbackEnhanced.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/errorHandling/catchCallbackEnhanced.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/fisherYatesShafle.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/fisherYatesShafle.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/getDefPathToPlayPage.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/getDefPathToPlayPage.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/getInputChangeCallback.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/getInputChangeCallback.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/getUniqueID.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/getUniqueID.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/idb/createStoreEnhanced.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/idb/createStoreEnhanced.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/idb/getDb.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/idb/getDb.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/idb/idUtils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/idb/idUtils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/idb/main/actions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/idb/main/actions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/idb/main/factories.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/idb/main/factories.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/idb/main/templates.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/idb/main/templates.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/jotai/atomAdapters.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/jotai/atomAdapters.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/jotai/computeBooksAndStoriesAssociations.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/jotai/computeBooksAndStoriesAssociations.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/jotai/getDerivedAtomWithIdb.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/jotai/getDerivedAtomWithIdb.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/jotai/helpers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/jotai/helpers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/jotai/idsBank.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/jotai/idsBank.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/jotai/mainDbUtils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/jotai/mainDbUtils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/jotai/updateCardsFromTextReducers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/jotai/updateCardsFromTextReducers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/lists.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/lists.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/Button.stories.ts" beforeDir="false" afterPath="$PROJECT_DIR$/stories/Button.stories.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/Button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/stories/Button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/Configure.mdx" beforeDir="false" afterPath="$PROJECT_DIR$/stories/Configure.mdx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/Header.stories.ts" beforeDir="false" afterPath="$PROJECT_DIR$/stories/Header.stories.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/stories/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/Page.stories.ts" beforeDir="false" afterPath="$PROJECT_DIR$/stories/Page.stories.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/Page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/stories/Page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/assets/accessibility.svg" beforeDir="false" afterPath="$PROJECT_DIR$/stories/assets/accessibility.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/assets/discord.svg" beforeDir="false" afterPath="$PROJECT_DIR$/stories/assets/discord.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/assets/github.svg" beforeDir="false" afterPath="$PROJECT_DIR$/stories/assets/github.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/assets/tutorials.svg" beforeDir="false" afterPath="$PROJECT_DIR$/stories/assets/tutorials.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/assets/youtube.svg" beforeDir="false" afterPath="$PROJECT_DIR$/stories/assets/youtube.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/button.css" beforeDir="false" afterPath="$PROJECT_DIR$/stories/button.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/stories/header.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stories/page.css" beforeDir="false" afterPath="$PROJECT_DIR$/stories/page.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/BooksPage/books-page.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/BooksPage/books-page.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/BooksPage/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/BooksPage/selectors.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/BooksPage/steps.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/BooksPage/steps.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/EditBookPage/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/EditBookPage/constants.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/EditBookPage/edit-book-page.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/EditBookPage/edit-book-page.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/EditBookPage/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/EditBookPage/selectors.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/EditBookPage/steps.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/EditBookPage/steps.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/EditBookPage/types.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/EditBookPage/types.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/EditBookPage/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/EditBookPage/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/PlayPage/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/PlayPage/constants.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/PlayPage/play-page.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/PlayPage/play-page.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/PlayPage/selectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/PlayPage/selectors.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/PlayPage/steps.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/PlayPage/steps.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/PlayPage/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/PlayPage/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/PlayPage/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/PlayPage/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/commonSelectors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/commonSelectors.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/end-to-end/helpers.ts" beforeDir="false" afterPath="$PROJECT_DIR$/tests/end-to-end/helpers.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vitest.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vitest.config.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="256" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0" />
+      <entry key="S5" value="1.0" />
+      <entry key="S10" value="1.0" />
+      <entry key="S30" value="1.0000000000423515" />
+      <entry key="S60" value="1.000006507793933" />
+      <entry key="M2" value="1.0025510378404603" />
+      <entry key="M5" value="1.0919211852015387" />
+      <entry key="M10" value="1.3327415503447915" />
+      <entry key="M15" value="1.6289667808006345" />
+      <entry key="M30" value="2.7872800687984824" />
+      <entry key="H1" value="5.065905712354351" />
+      <entry key="H2" value="9.540220451651804" />
+      <entry key="H4" value="51.2437360989442" />
+      <entry key="D1" value="1705.7874066750273" />
+      <entry key="W1" value="3275.464889091691" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="9.342185663009215E-231" />
+      <entry key="M5" value="1.0083791592693569E-92" />
+      <entry key="M10" value="1.3886358724441529E-46" />
+      <entry key="M15" value="4.268494949350538E-31" />
+      <entry key="M30" value="1.8472318358171928E-15" />
+      <entry key="H1" value="1.5321860420147765E-7" />
+      <entry key="H2" value="0.0015166420888365552" />
+      <entry key="H4" value="0.15450166509687088" />
+      <entry key="D1" value="7.374868569002287" />
+      <entry key="W1" value="14.323706709184679" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="1.6081753917104408E-8" />
+      <entry key="MS500" value="0.027622735345739717" />
+      <entry key="S2" value="0.4076774319516771" />
+      <entry key="S5" value="0.6984360833230859" />
+      <entry key="S10" value="0.8357248849490398" />
+      <entry key="S30" value="0.9419353836237154" />
+      <entry key="S60" value="0.9705400325778624" />
+      <entry key="M2" value="0.9877015009128342" />
+      <entry key="M5" value="1.0858684578235351" />
+      <entry key="M10" value="1.32959572860971" />
+      <entry key="M15" value="1.626778833717568" />
+      <entry key="M30" value="2.786026055975924" />
+      <entry key="H1" value="5.065158706306185" />
+      <entry key="H2" value="9.541305599924899" />
+      <entry key="H4" value="51.39791007057024" />
+      <entry key="D1" value="1713.1614863545967" />
+      <entry key="W1" value="3289.7883822461376" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3F8Nk6MODDVM3iqYHSu27s4HJ3B" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
+    &quot;js.debugger.nextJs.config.created.client&quot;: &quot;true&quot;,
+    &quot;js.debugger.nextJs.config.created.server&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/linkava/Desktop/projects/fsd1&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/home/linkava/Desktop/projects/quizer/node_modules/prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMThirdPartyAiProvidersConfigurable&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/linkava/Desktop/projects/quizer/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RunManager" selected="npm.Next.js: server-side">
+    <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3000/">
+      <method v="2" />
+    </configuration>
+    <configuration name="Next.js: server-side" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-WS-261.25134.101" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="412a1176-ee35-4bfb-ae04-b6574c4f8b35" name="Changes" comment="" />
+      <created>1781452876501</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1781452876501</updated>
+      <workItem from="1781452877525" duration="3214000" />
+      <workItem from="1781458575578" duration="10199000" />
+      <workItem from="1781543246720" duration="1108000" />
+      <workItem from="1781544366540" duration="3128000" />
+      <workItem from="1781547504482" duration="15410000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

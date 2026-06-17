@@ -1,0 +1,44 @@
+@theme {
+    --color-lightGray: #d9d9d9;
+    --color-lightestGray: #fafafa;
+    --color-lightBg: #f6f6f6;
+    --color-icon: #5c5e64;
+    --color-primary: #396eff;
+    --color-primaryHover: #2f5df0;
+    --color-blueAccent: var(--color-primary);
+    --color-editCardsTextButton: #5d6bf7;
+    --color-editCardsTextButtonHover: #5260ed;
+
+    --color-lightBgV2: #e5e5e5;
+    --color-blueAccentV2: #3b82f6;
+    --color-secondary: #737373;
+    --color-fillbg: #e6e6e6;
+
+    --color-darker: #7a7289;
+    --color-questTextColor: #444444;
+    --color-darkBlueOne: #001d75;
+    --color-darkerBlueOne: #00185e;
+    --color-lightBlueOne: #0040ff;
+    --color-muted: #ececf0;
+    --color-muted-foreground: #717182;
+
+    --color-statusBarLinearPrimary: linear-gradient(
+        270deg,
+        var(--color-primary),
+        #6ecaff,
+        var(--color-primary)
+    );
+    --color-statusBarLinearBlue: var(--color-statusBarLinearPrimary);
+}
+
+@theme {
+    --breakpoint-mobile: 352px;
+    --breakpoint-sm-mobile: 320px;
+    --breakpoint-lg-mobile: 400px;
+    --breakpoint-xl-mobile: 500px;
+}
+
+@theme {
+    --container-sidebarNavTextVisible: 200px;
+    --radius-normal: 8px;
+}

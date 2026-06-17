@@ -1,51 +1,25 @@
-'use client';
+import { Suspense } from 'react';
 
-import PageTitle from '@/src/components/play_page/Title';
-import CardsList from '@/src/components/play_page/CardsList';
-import Initializer_CLIENT_ONLY from '@/src/components/initializers/InitMainDbAtoms';
-import FinishButton from '@/src/components/play_page/FinishButton';
-import { useSearchParams } from 'next/navigation';
-import { createPropsProvider } from '@/src/utils/createPropsProvider';
-import { useAtomValue } from 'jotai';
-import { storiesAtomFamily } from '@/src/jotai/mainAtoms';
-import Results from '@/src/components/play_page/Results';
+export const dynamic = 'force-dynamic';
 
-interface PlayModeProps {
-        showAnswersImmediately: boolean;
-        isCompleted: boolean;
-        storyId: string;
-}
-export const {
-        Provider: PlayCardsListProvider,
-        usePropsContext: usePlayModeProps
-} = createPropsProvider<PlayModeProps>('play cards list');
+type PageProps = {
+    searchParams?: Promise<{
+        storyId?: string;
+    }>;
+};
 
-export default function PlayPage() {
-        const searchParams = useSearchParams();
-        const storyId = searchParams.get('storyId');
-        if (typeof storyId !== 'string') throw new Error('No Story ID in URL');
+export default async function Page({ searchParams }: PageProps) {
+    const storyId = (await searchParams)?.storyId;
 
-        const { showAnswersImmediately, isCompleted } = useAtomValue(
-                storiesAtomFamily(storyId)
-        );
+    if (typeof storyId !== 'string') {
+        return <div>loading...</div>;
+    }
 
-        return (
-                <>
-                        <Initializer_CLIENT_ONLY />
-                        <PlayCardsListProvider
-                                {...{
-                                        showAnswersImmediately,
-                                        isCompleted,
-                                        storyId
-                                }}>
-                                <main className='mainContainer'>
-                                        <PageTitle />
-                                        <Results />
+    const { PlayPage, PlayPageFallback } = await import('@/src/pages/play');
 
-                                        <CardsList />
-                                        <FinishButton />
-                                </main>
-                        </PlayCardsListProvider>
-                </>
-        );
+    return (
+        <Suspense fallback={<PlayPageFallback />}>
+            <PlayPage storyId={storyId} />
+        </Suspense>
+    );
 }
