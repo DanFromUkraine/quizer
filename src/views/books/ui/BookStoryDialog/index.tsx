@@ -1,8 +1,8 @@
 'use client';
 
-import Dialog from '@/src/components/general/Dialog';
+import Dialog from '@/src/shared/ui/Dialog';
 import { useAtomValue } from 'jotai';
-import StoryItem from '@/src/components/general/StoryItem';
+import StoryItem from '@/src/views/books/ui/BookStoryDialog/StoryItem';
 import { storiesForBookDialogInfoAtom } from '@/src/jotai/storiesForBookDialogInfoAtoms';
 import CreateNewStoryButton from '@/src/views/books/ui/BookStoryDialog/CreateNewStoryButton';
 import { BP_TEST_IDS } from '@/src/constants/testIds';

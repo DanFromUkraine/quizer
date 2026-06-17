@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { WritableAtom } from 'jotai';
-import Quoted from '@/src/components/general/Quoted';
+import Quoted from '@/src/shared/ui/Quoted';
 import useJotaiDeferredUpdateAdapter from '@/src/hooks/jotaiRelated/jotaiDeferedInput';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import {

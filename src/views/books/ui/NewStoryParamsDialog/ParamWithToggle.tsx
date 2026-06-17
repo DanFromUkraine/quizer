@@ -1,5 +1,5 @@
-import InputSwitch from '@/src/components/general/InputSwitch';
-import { HrWrapper } from '@/src/components/general/Hr';
+import InputSwitch from '@/src/shared/ui/InputSwitch';
+import { HrWrapper } from '@/src/shared/ui/Hr';
 
 export default function ParamWithToggle({
     currState,

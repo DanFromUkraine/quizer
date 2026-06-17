@@ -4,8 +4,8 @@ import { useEditBookProps } from '@/src/views/edit/model/edit-book-props';
 import { useAtom } from 'jotai';
 import { useMemo, useRef } from 'react';
 import { getBookTitleFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
-import Quoted from '@/src/components/general/Quoted';
-import StableInput from '@/src/components/general/StableInput';
+import Quoted from '@/src/shared/ui/Quoted';
+import StableInput from '@/src/shared/ui/StableInput';
 import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function BookTitleInput() {

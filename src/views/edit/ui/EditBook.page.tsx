@@ -8,7 +8,7 @@ import OpenEditCardsModalButton from '@/src/views/edit/ui/OpenEditModalButton';
 import EditCardsAsTextDialog from '@/src/views/edit/ui/EditCardsAsText';
 import useHydrateBookIdAtom from '@/src/hooks/jotaiRelated/useHydrateBookIdAtom';
 import AddCardButtons from '@/src/views/edit/ui/AddCardButton';
-import WarningDialogWithAction from '@/src/components/general/WarningDialog';
+import WarningDialogWithAction from '@/src/shared/ui/WarningDialog';
 import { EditBookPropsProvider } from '../model/edit-book-props';
 
 type EditBookPageProps = {

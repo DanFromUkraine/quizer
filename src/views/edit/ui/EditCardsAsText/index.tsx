@@ -1,6 +1,6 @@
 'use client';
 
-import Dialog from '@/src/components/general/Dialog';
+import Dialog from '@/src/shared/ui/Dialog';
 import { EP_TEST_IDS } from '@/src/constants/testIds';
 import { useAtomCallback } from 'jotai/utils';
 import {

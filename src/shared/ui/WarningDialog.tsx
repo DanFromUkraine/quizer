@@ -1,5 +1,5 @@
 'use client';
-import Dialog from '@/src/components/general/Dialog';
+import Dialog from '@/src/shared/ui/Dialog';
 import { useAtomValue, useSetAtom } from 'jotai';
 import {
     actionNeededDataAtom,

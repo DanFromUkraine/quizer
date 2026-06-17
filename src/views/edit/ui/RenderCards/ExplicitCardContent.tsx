@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import ExtendableTextArea from '@/src/components/general/ExtendableInput';
+import ExtendableTextArea from '@/src/shared/ui/ExtendableInput';
 import useJotaiDeferredUpdateAdapter from '@/src/hooks/jotaiRelated/jotaiDeferedInput';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
 import {

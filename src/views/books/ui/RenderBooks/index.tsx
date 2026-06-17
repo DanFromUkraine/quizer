@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 import { useAtomValue } from 'jotai';
-import NothingYetMessage from '@/src/components/general/NothingYet';
+import NothingYetMessage from '@/src/shared/ui/NothingYet';
 import { BP_TEST_IDS } from '@/src/constants/testIds';
 import { booksIdsAtom } from '@/src/jotai/idManagers';
 import { booksAtomFamily } from '@/src/jotai/mainAtoms';

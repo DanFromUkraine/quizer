@@ -5,7 +5,7 @@ import {
     addEmptyExplicitCardAtom,
     addEmptyTermShortCard
 } from '@/src/jotai/cardAtoms';
-import BtnWithShortcut from '@/src/components/general/ButtonWithShortcut';
+import BtnWithShortcut from '@/src/shared/ui/ButtonWithShortcut';
 import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function AddCardButtons() {

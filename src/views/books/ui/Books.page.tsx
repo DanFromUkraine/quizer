@@ -4,7 +4,7 @@ import Header from '@/src/views/books/ui/Header';
 import RenderBooks from '@/src/views/books/ui/RenderBooks';
 import AddBookButton from '@/src/views/books/ui/AddBookButton';
 import Initializer_CLIENT_ONLY from '@/src/components/initializers/InitMainDbAtoms';
-import Snackbar from '@/src/components/general/Snackbar';
+import Snackbar from '@/src/shared/ui/Snackbar';
 import BookStoryDialog from '@/src/views/books/ui/BookStoryDialog';
 import NewStoryParamsDialog from '@/src/views/books/ui/NewStoryParamsDialog';
 

@@ -1,4 +1,4 @@
-import Bread from '@/src/components/general/Bread';
+import Bread from '@/src/shared/ui/Bread';
 
 export default function DateBread({
     timeMs,

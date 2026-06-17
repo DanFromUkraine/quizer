@@ -1,7 +1,7 @@
 'use client';
 
 import { useAtom, useAtomValue } from 'jotai';
-import { Hr } from '@/src/components/general/Hr';
+import { Hr } from '@/src/shared/ui/Hr';
 import { NewStoryParam } from '@/src/constants/newCardParams';
 import { getNewStoryIsSmartModeParamAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 

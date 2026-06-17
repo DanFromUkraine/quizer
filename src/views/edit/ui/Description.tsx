@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { getBookDescriptionFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
 import { useAtom } from 'jotai';
 import getInputChangeCallback from '@/src/utils/getInputChangeCallback';
-import ExtendableTextArea from '@/src/components/general/ExtendableInput';
+import ExtendableTextArea from '@/src/shared/ui/ExtendableInput';
 import { EP_TEST_IDS } from '@/src/constants/testIds';
 
 export default function BookDescriptionInput() {

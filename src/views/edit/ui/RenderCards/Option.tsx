@@ -3,7 +3,7 @@ import { useAtom, useSetAtom } from 'jotai';
 import { IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { FaXmark } from 'react-icons/fa6';
 import { MdDeleteOutline } from 'react-icons/md';
-import IndexMarker from '@/src/components/general/IndexMarker';
+import IndexMarker from '@/src/shared/ui/IndexMarker';
 import { deleteOptionAtom } from '@/src/jotai/optionAtoms';
 import {
     getCardOptionTitleFamilyAdapterAtom,

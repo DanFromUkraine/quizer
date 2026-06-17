@@ -1,4 +1,4 @@
-import Dialog from '@/src/components/general/Dialog';
+import Dialog from '@/src/shared/ui/Dialog';
 import { BP_TEST_IDS } from '@/src/constants/testIds';
 import CustomParamsList from '@/src/views/books/ui/NewStoryParamsDialog/CustomParamsList';
 import IsSmartModeToggle from '@/src/views/books/ui/NewStoryParamsDialog/IsSmartModeToggle';
