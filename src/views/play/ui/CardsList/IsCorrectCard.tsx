@@ -1,46 +1,28 @@
 'use client';
 
-import { useAtom, useAtomValue } from 'jotai';
-import { isCorrectCardStoriesAtomFamily } from '@/src/jotai/mainAtoms';
-import { useCallback, useMemo } from 'react';
-import { getIsCorrectCardStoryCurrValFamilyAdapterAtom } from '@/src/utils/jotai/atomAdapters';
-import { usePlayModeProps } from '@/src/views/play/model/play-mode-props';
 import { PP_TEST_IDS } from '@/src/constants/testIds';
+import { isCorrectCardStoriesAtomFamily } from '@/src/jotai/mainAtoms';
+import {
+    useIsCorrectCardCurrVal,
+    useIsCorrectCardStatus
+} from '@/src/views/play/model/CardsList/hooks';
+import { useAtomValue } from 'jotai';
 
-function useCurrVal(cardId: string) {
-    const { showAnswersImmediately, isCompleted } = usePlayModeProps();
-    const currValAdapterAtom = useMemo(
-        () => getIsCorrectCardStoryCurrValFamilyAdapterAtom(cardId),
-        []
+export default function IsCorrectCard({ cardId }: { cardId: string }) {
+    const cardStatus = useIsCorrectCardStatus(cardId);
+
+    return (
+        <li
+            data-testid={PP_TEST_IDS.isCorrectCard.me}
+            data-status={cardStatus}
+            className='questionCard w-full data-[status=correct]:bg-green-100 data-[status=incorrect]:bg-red-100'>
+            <TermDefinitionTitle cardId={cardId} />
+            <BooleanButtons cardId={cardId} />
+        </li>
     );
-    const [currVal, setCurrVal_localOnly] = useAtom(currValAdapterAtom);
-
-    const setCurrVal = useCallback(
-        (newVal: boolean) => {
-            if ((showAnswersImmediately && currVal !== null) || isCompleted)
-                return;
-            void setCurrVal_localOnly(newVal);
-        },
-        [currVal, showAnswersImmediately]
-    );
-
-    return [currVal, setCurrVal] as const;
 }
 
-type CardStatus = 'correct' | 'incorrect' | 'unchosen';
-
-export function useIsCorrectCardStatus(cardId: string): CardStatus {
-    const { showAnswersImmediately, isCompleted } = usePlayModeProps();
-    const { currentValue, isCorrect } = useAtomValue(
-        isCorrectCardStoriesAtomFamily(cardId)
-    );
-
-    if (!(showAnswersImmediately || isCompleted)) return 'unchosen';
-    if (currentValue === isCorrect) return 'correct';
-    else return 'incorrect';
-}
-
-export function TermDefinitionTitle({ cardId }: { cardId: string }) {
+function TermDefinitionTitle({ cardId }: { cardId: string }) {
     const { term, definition } = useAtomValue(
         isCorrectCardStoriesAtomFamily(cardId)
     );
@@ -53,7 +35,7 @@ export function TermDefinitionTitle({ cardId }: { cardId: string }) {
                 {term} -{' '}
             </h2>
             <h2
-                className='heading-2 !font-normal'
+                className='heading-2 font-normal!'
                 data-testid={PP_TEST_IDS.isCorrectCard.definition}>
                 {definition}
             </h2>
@@ -61,7 +43,7 @@ export function TermDefinitionTitle({ cardId }: { cardId: string }) {
     );
 }
 
-export function OneBooleanButton({
+function OneBooleanButton({
     textContent,
     onClickAction,
     isSelected,
@@ -84,8 +66,8 @@ export function OneBooleanButton({
     );
 }
 
-export function BooleanButtons({ cardId }: { cardId: string }) {
-    const [currVal, setCurrVal] = useCurrVal(cardId);
+function BooleanButtons({ cardId }: { cardId: string }) {
+    const [currVal, setCurrVal] = useIsCorrectCardCurrVal(cardId);
     const setTrue = () => setCurrVal(true);
     const setFalse = () => setCurrVal(false);
 

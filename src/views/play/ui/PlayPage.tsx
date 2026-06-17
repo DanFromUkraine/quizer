@@ -1,13 +1,13 @@
 'use client';
 
 import { useAtomValue } from 'jotai';
-import PageTitle from '@/src/components/play_page/Title';
-import CardsList from '@/src/components/play_page/CardsList';
 import Initializer_CLIENT_ONLY from '@/src/components/initializers/InitMainDbAtoms';
-import FinishButton from '@/src/components/play_page/FinishButton';
 import { storiesAtomFamily } from '@/src/jotai/mainAtoms';
-import Results from '@/src/components/play_page/Results';
 import { PlayCardsListProvider } from '../model/play-mode-props';
+import CardsList from './CardsList';
+import FinishButton from './FinishButton';
+import Results from './Results';
+import PageTitle from './Title';
 
 type PlayPageProps = {
     storyId?: string;

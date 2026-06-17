@@ -2,12 +2,12 @@
 
 import { useAtomValue } from 'jotai';
 import { storiesAtomFamily } from '@/src/jotai/mainAtoms';
-import ExplicitCard from '@/src/components/play_page/CardsList/ExplicitCard';
-import TypeInCard from '@/src/components/play_page/CardsList/TypeInCard';
-import IsCorrectCard from '@/src/components/play_page/CardsList/IsCorrectCard';
 import { getPlayCardType } from '@/src/utils/lists';
 import { usePlayModeProps } from '@/src/views/play/model/play-mode-props';
 import { PP_TEST_IDS } from '@/src/constants/testIds';
+import ExplicitCard from './ExplicitCard';
+import IsCorrectCard from './IsCorrectCard';
+import TypeInCard from './TypeInCard';
 
 export default function PlayCardsList() {
     const { storyId } = usePlayModeProps();
